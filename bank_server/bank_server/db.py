@@ -2,9 +2,7 @@
 This module implements an interface to the bank_server database.
 It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
-
-import sqlite3
-import os
+from pymongo import MongoClient
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
@@ -25,8 +23,9 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        return self.modify("UPDATE cards SET balance = (?) WHERE \
-                                    card_id = (?);", (balance, card_id,))
+        updated = self.users.update_one({'card_id': card_id}, {"$set": {'balance': balance}}).acknowledged
+        return updated.acknowledged and updated.raw_result['updatedExisting']
+
 
     def get_balance(self, card_id):
         """get balance of account: card_id
@@ -34,11 +33,11 @@ class DB(object):
         Returns:
             (string or None): Returns balance on Success. None otherwise.
         """
-        self.cur.execute("SELECT balance FROM cards WHERE card_id = (?);", (card_id,))
-        result = self.cur.fetchone()
-        if result is None:
-            return None
-        return result[0]
+        account = self.users.find_one({'account_name':card_id})
+        if account is None:
+            return False
+        else:
+            return account['balance']
 
     def get_atm(self, atm_id):
         """get atm_id of atm: atm_id
@@ -47,11 +46,10 @@ class DB(object):
         Returns:
             (string or None): Returns atm_id on Success. None otherwise.
         """
-        self.cur.execute("SELECT atm_id FROM atms WHERE atm_id = (?);", (atm_id,))
-        result = self.cur.fetchone()
-        if result is None:
+        atm = self.atms.find_one({'atm_id': atm_id})
+        if atm is None:
             return None
-        return result[0]
+        return atm['atm_id']
 
     def get_atm_num_bills(self, atm_id):
         """get number of bills in atm: atm_id
@@ -59,11 +57,10 @@ class DB(object):
         Returns:
             (string or None): Returns atm_id on Success. None otherwise.
         """
-        self.cur.execute("SELECT num_bills FROM atms WHERE atm_id = (?);", (atm_id,))
-        result = self.cur.fetchone()
-        if result is None:
+        atm = self.atms.find_one({'atm_id': atm_id})
+        if atm is None:
             return None
-        return result[0]
+        return atm['num_bills']
 
     def set_atm_num_bills(self, atm_id, num_bills):
         """set number of bills in atm: atm_id
@@ -71,8 +68,8 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        return self.modify("UPDATE atms SET num_bills = (?) WHERE \
-                                    atm_id = (?);", (num_bills, atm_id,))
+        updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_bills': num_bills}}).acknowledged
+        return updated.acknowledged and updated.raw_result['updatedExisting']
 
     #############################
     # ADMIN INTERFACE FUNCTIONS #
@@ -114,11 +111,11 @@ class DB(object):
         else:
             return account['balance']
 
-    @lock_db
     def admin_set_balance(self, account_name, balance):
         """set balance of account: card_id
 
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        self.users.update_one({'name':'test2'},{"$set": {'balance': 87654321}}).acknowledged
+        updated = self.users.update_one({'name':account_name},{"$set": {'balance': balance}})
+        return updated.acknowledged and updated.raw_result['updatedExisting']
