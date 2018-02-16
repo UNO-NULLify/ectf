@@ -117,5 +117,5 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        updated = self.users.update_one({'name':account_name},{"$set": {'balance': balance}})
+        updated = self.users.update_one({'account_name':account_name},{"$set": {'balance': balance}})
         return updated.acknowledged and updated.raw_result['updatedExisting']

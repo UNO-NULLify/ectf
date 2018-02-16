@@ -17,11 +17,9 @@ WORKDIR /bank
 ADD bank_server ./bank_server
 RUN mkdir /bank/bank_server/logs
 RUN python -m pip install pymongo
-
-#ADD setup.py ./setup.py
-#ADD README.md ./README.md
-
-#RUN python -m pip install pyyaml nose
-#RUN python setup.py install
+ADD setup.py ./setup.py
+ADD README.md ./README.md
+RUN python -m pip install pyyaml nose
+RUN python setup.py install
 
 CMD /bin/sh /bank/bank_server/setup.sh && /bin/sh

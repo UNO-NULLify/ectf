@@ -81,10 +81,7 @@ class AdminBackend(object):
         super(AdminBackend, self).__init__()
         self.admin_host = config['admin']['host']
         self.admin_port = config['admin']['port']
-        self.db_path = config['database']['db_path']
-        self.db_mutex = db_mutex
-
-        self.db_obj = DB(db_path=self.db_path)
+        self.db_obj = DB()
         server = SimpleXMLRPCServer((self.admin_host, self.admin_port))
         server.register_introspection_functions()
         server.register_function(self.hello)

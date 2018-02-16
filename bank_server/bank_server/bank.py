@@ -50,10 +50,7 @@ class Bank(object):
         super(Bank, self).__init__()
         self.bank_host = config['bank']['host']
         self.bank_port = int(config['bank']['port'])
-        self.db_init = config['database']['db_init']
-        self.db_path = config['database']['db_path']
-        self.db_mutex = db_mutex
-        self.db_obj = DB(db_mutex=self.db_mutex, db_init=self.db_init, db_path=self.db_path)
+        self.db_obj = DB()
         self.server = SimpleXMLRPCServer((self.bank_host, self.bank_port))
         self.server.register_function(self.withdraw)
         self.server.register_function(self.check_balance)
