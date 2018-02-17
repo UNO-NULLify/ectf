@@ -46,7 +46,7 @@ class Bank(object):
     "OKAY <amount>\n"
     "ERROR\n"
     """
-    def __init__(self, config, db_mutex):
+    def __init__(self, config):
         super(Bank, self).__init__()
         self.bank_host = config['bank']['host']
         self.bank_port = int(config['bank']['port'])

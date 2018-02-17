@@ -70,7 +70,7 @@ class AdminBackend(object):
     also expose to ease service discovery on the client-side.
 
     """
-    def __init__(self, config, db_mutex):
+    def __init__(self, config):
         """ __init__ reads config object and registers interface to xmlrpc
 
         Args:

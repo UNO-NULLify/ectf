@@ -6,7 +6,7 @@ from pymongo import MongoClient
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
-    def __init__(self, db_mutex=None, db_init=None, db_path=None):
+    def __init__(self):
         super(DB, self).__init__()
         self.client = MongoClient()
         self.db = self.client['bank_server']
@@ -25,7 +25,6 @@ class DB(object):
         """
         updated = self.users.update_one({'card_id': card_id}, {"$set": {'balance': balance}}).acknowledged
         return updated.acknowledged and updated.raw_result['updatedExisting']
-
 
     def get_balance(self, card_id):
         """get balance of account: card_id
@@ -84,7 +83,8 @@ class DB(object):
         new_account = {
             'account_name' : account_name,
             'card_id' : card_id,
-            'balance' : amount
+            'balance' : amount,
+            'pin': None
         }
         return self.users.insert_one(new_account).acknowledged
 
@@ -95,7 +95,8 @@ class DB(object):
             (bool): Returns True on Success. False otherwise.
         """
         new_atm = {
-            'atm_id' : atm_id
+            'atm_id' : atm_id,
+            'bills' : []
         }
         return self.atm.insert_one(new_atm).ackknowledged
 
