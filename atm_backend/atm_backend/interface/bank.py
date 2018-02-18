@@ -60,3 +60,17 @@ class Bank:
         else:
             return response.json()['bill_otps']
         return False
+
+    def change_pin(self, card_id, signed_message, pin, new_pin):
+        logging.info('change pin: Sending request to Bank')
+        headers = {'content-type': 'application/json'}
+        data_to_send = {'card_id': card_id,
+                        'signed_message': signed_message,
+                        'pin':pin,
+                        'new_pin': new_pin
+                       }
+        response = requests.post(self.ip_address + 'change_pin', headers=headers, data=json.dumps(data_to_send))
+        if response.status_code == 403:
+            return 'Transaction could not be verified.'
+        else:
+            return True

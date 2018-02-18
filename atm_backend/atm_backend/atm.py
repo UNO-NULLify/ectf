@@ -37,12 +37,13 @@ class ATM(object):
 
         try:
             logging.info('check_balance: Requesting card_id using inputted pin')
-            card_id = self.card.check_balance(pin)
+            card_id = self.card.get_card_id()
+            signed_message = self.card.get_signed_message()
 
             # get balance from bank if card accepted PIN
-            if card_id:
+            if (card_id is not None) and (signed_message is not None):
                 logging.info('check_balance: Requesting balance from Bank')
-                res = self.bank.check_balance(card_id)
+                res = self.bank.check_balance(card_id, signed_message, pin)
                 if res:
                     return res
             logging.info('check_balance failed')
@@ -69,10 +70,18 @@ class ATM(object):
         if not self.card.inserted():
             logging.info('No card inserted')
             return False
+
         try:
-            logging.info('change_pin: Sending PIN change request to card')
-            if self.card.change_pin(old_pin, new_pin):
-                return True
+            logging.info('check_balance: Requesting pin change using inputted pin')
+            card_id = self.card.get_card_id()
+            signed_message = self.card.get_signed_message()
+
+            # get balance from bank if card accepted PIN
+            if card_id is not None and signed_message is not None:
+                logging.info('check_balance: Requesting balance from Bank')
+                response = self.bank.change_pin(card_id, signed_message, old_pin, new_pin)
+                if response:
+                    return response
             logging.info('change_pin failed')
             return False
         except DeviceRemoved:
@@ -81,6 +90,7 @@ class ATM(object):
         except NotProvisioned:
             logging.info('ATM card has not been provisioned!')
             return False
+
 
     def withdraw(self, pin, amount):
         """Tries to withdraw money from the account associated with the
@@ -105,10 +115,11 @@ class ATM(object):
 
         try:
             logging.info('withdraw: Requesting card_id from card')
-            card_id = self.card.withdraw(pin)
+            card_id = self.card.get_card_id()
+            signed_message = self.card.get_signed_message()
 
             # request UUID from HSM if card accepts PIN
-            if card_id:
+            if (card_id is not None) and (signed_message is not None) :
                 logging.info('withdraw: Requesting hsm_id from hsm')
                 hsm_id = self.hsm.get_uuid()
 
