@@ -27,9 +27,11 @@ returns:
 """
 
 import uuid
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+import time
+from flask import Flask, jsonify
 from bank_server import DB
 
+server = Flask(__name__)
 
 class Bank(object):
     """
@@ -50,48 +52,61 @@ class Bank(object):
         super(Bank, self).__init__()
         self.bank_host = config['bank']['host']
         self.bank_port = int(config['bank']['port'])
-        self.db_obj = DB()
-        self.server = SimpleXMLRPCServer((self.bank_host, self.bank_port))
-        self.server.register_function(self.withdraw)
-        self.server.register_function(self.check_balance)
-        self.server.serve_forever()
+        self.db = DB()
 
+    @server.route('/withdraw')
     def withdraw(self, atm_id, card_id, amount):
         try:
             amount = int(amount)
         except ValueError:
-            return 'ERROR withdraw command usage: withdraw <atm_id> <card_id> <amount>'
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
-        atm = self.db_obj.get_atm(atm_id)
+        atm = self.db.get_atm(atm_id)
         if atm is None:
-            return 'ERROR could not lookup atm \'' + str(atm_id) + '\''
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
-        num_bills = self.db_obj.get_atm_num_bills(atm_id)
+        num_bills = self.db.get_atm_num_bills(atm_id)
         if num_bills is None:
-            return 'ERROR could not lookup atm \'' + str(atm_id) + '\''
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
         if num_bills < amount:
-            return 'ERROR insufficient funds in atm \'' + str(atm_id) + '\''
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
-        balance = self.db_obj.get_balance(card_id)
+        balance = self.db.get_balance(card_id)
         if balance is None:
-            return 'ERROR could not lookup card \'' + str(card_id) + '\''
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
         final_amount = balance - amount
         if final_amount >= 0:
-            self.db_obj.set_balance(card_id, final_amount)
-            self.db_obj.set_atm_num_bills(atm_id, num_bills - amount)
-            return 'OKAY ' + atm_id
+            self.db.set_balance(card_id, final_amount)
+            self.db.set_atm_num_bills(atm_id, num_bills - amount)
+            return jsonify({'OKAY': str(atm_id)})
         else:
-            return 'ERROR insufficient funds'
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
+    @server.route('/balance')
     def check_balance(self, card_id):
         try:
             uuid.UUID(str('{'+card_id+'}'))
         except ValueError:
-            return 'ERROR check_balance command usage: balance <card_id>'
-        balance = self.db_obj.get_balance(card_id)
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+        balance = self.db.get_balance(card_id)
         if balance is None:
-            return 'ERROR could not lookup account \'' + str(card_id) + '\''
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
         else:
-            return 'OKAY ' + str(balance)
+            return jsonify({'OKAY': str(balance)})
+
+    @server.route('/test')
+    def index():
+        return "Flask is working."
+
+server.run(host='0.0.0.0', port=1337)
+server.run(debug=True)
