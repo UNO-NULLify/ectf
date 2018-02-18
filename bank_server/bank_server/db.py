@@ -23,7 +23,7 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        updated = self.users.update_one({'card_id': card_id}, {"$set": {'balance': balance}}).acknowledged
+        updated = self.users.update_one({'card_id': card_id}, {"$set": {'balance': balance}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def get_balance(self, card_id):
@@ -32,11 +32,22 @@ class DB(object):
         Returns:
             (string or None): Returns balance on Success. None otherwise.
         """
-        account = self.users.find_one({'account_name':card_id})
+        account = self.users.find_one({'card_id':card_id})
         if account is None:
             return False
         else:
             return account['balance']
+
+    def set_pin(self, card_id, new_pin):
+        updated = self.users.update_one({'card_id': card_id}, {"$set": {'pin': int(new_pin)}})
+        return updated.acknowledged and updated.raw_result['updatedExisting']
+
+    def get_pin(self, card_id):
+        account = self.users.find_one({'card_id':card_id})
+        if account is None:
+            return False
+        else:
+            return account['pin']
 
     def get_atm(self, atm_id):
         """get atm_id of atm: atm_id
@@ -67,7 +78,7 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_bills': num_bills}}).acknowledged
+        updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_bills': num_bills}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     #############################

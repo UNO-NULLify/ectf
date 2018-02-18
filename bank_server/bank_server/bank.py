@@ -55,7 +55,7 @@ class Bank(object):
         self.db = DB()
 
     @server.route('/withdraw')
-    def withdraw(self, atm_id, card_id, amount):
+    def withdraw(self, atm_id, card_id, pin, amount):
         try:
             amount = int(amount)
         except ValueError:
@@ -82,7 +82,7 @@ class Bank(object):
             return jsonify({'ERROR': 'Could not validate transaction'})
 
         final_amount = balance - amount
-        if final_amount >= 0:
+        if final_amount >= 0 and int(pin) == self.db.get_pin(card_id):
             self.db.set_balance(card_id, final_amount)
             self.db.set_atm_num_bills(atm_id, num_bills - amount)
             return jsonify({'OKAY': str(atm_id)})
@@ -91,7 +91,7 @@ class Bank(object):
             return jsonify({'ERROR': 'Could not validate transaction'})
 
     @server.route('/balance')
-    def check_balance(self, card_id):
+    def check_balance(self, card_id, pin):
         try:
             uuid.UUID(str('{'+card_id+'}'))
         except ValueError:
@@ -101,8 +101,23 @@ class Bank(object):
         if balance is None:
             time.sleep(5)
             return jsonify({'ERROR': 'Could not validate transaction'})
-        else:
+        if int(pin) == self.db.get_pin(card_id):
             return jsonify({'OKAY': str(balance)})
+
+    @server.route('/change_pin')
+    def change_pin(self, card_id, pin, new_pin):
+        if card_id is None:
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+        if pin is None:
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+        if new_pin is None:
+            time.sleep(5)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+        if int(pin) == self.db.get_pin(card_id):
+            self.db.set_pin(card_id, int(new_pin))
+            return jsonify({'OKAY': 'Pin has been changed.'})
 
     @server.route('/test')
     def index():
