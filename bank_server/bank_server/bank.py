@@ -53,6 +53,8 @@ class Bank(object):
         self.bank_host = config['bank']['host']
         self.bank_port = int(config['bank']['port'])
         self.db = DB()
+        server.run(host='0.0.0.0', port=1337)
+        server.run(debug=True)
 
     @server.route('/withdraw')
     def withdraw(self, atm_id, card_id, pin, amount):
@@ -118,5 +120,3 @@ class Bank(object):
     def index(self):
         return "Flask is working."
 
-server.run(host='0.0.0.0', port=1337)
-server.run(debug=True)

@@ -18,8 +18,8 @@ ADD bank_server ./bank_server
 RUN mkdir /bank/bank_server/logs
 RUN python -m pip install pymongo
 ADD setup.py ./setup.py
+ADD setup.sh ./setup.sh
 ADD README.md ./README.md
 RUN python -m pip install pyyaml nose flask
 RUN python setup.py install
-
-CMD /bin/sh /bank/bank_server/setup.sh && /bin/sh
+CMD /bin/sh /bank/setup.sh && /bin/sh

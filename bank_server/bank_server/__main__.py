@@ -43,7 +43,7 @@ def main():
 
     logging.info('Config loaded and logging initialized')
 
-    thread_obj = threading.Thread(target=AdminBackend, args=(config))
+    thread_obj = threading.Thread(target=AdminBackend, args=(config,))
     thread_obj.daemon = True
     thread_obj.start()
 
