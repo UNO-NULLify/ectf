@@ -3,6 +3,7 @@ This module implements an interface to the bank_server database.
 It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
+import hashlib
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
@@ -12,6 +13,7 @@ class DB(object):
         self.db = self.client['bank_server']
         self.atms =  self.db['atm']
         self.users = self.db['users']
+        self.sha_512 = hashlib.sha512()
 
     ############################
     # BANK INTERFACE FUNCTIONS #

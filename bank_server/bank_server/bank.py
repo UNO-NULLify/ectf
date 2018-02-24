@@ -118,6 +118,19 @@ class Bank(object):
             db.set_pin(str(request.json['card_id']), int(request.json['new_pin']))
             return jsonify({'OKAY': 'Pin has been changed.'})
 
+    @server.route('/initalize_card')
+    def new_card():
+        if not request.json or not 'card_id' in request.json or not 'pin' in request.json:
+            old_pin = db.get_pin(request.json['card_id'])
+            if old_pin == False:
+                return jsonify({'ERROR': 'Could not validate transaction'})
+            elif old_pin != None:
+                return jsonify({'ERROR': 'Could not validate transaction'})
+            else:
+                db.set_pin(request.json['card_id'], request.json['pin'])
+                return jsonify({'OKAY': 'Pin has been changed.'})
+
+
     @server.route('/test')
     def test():
         return "Flask is working."
