@@ -4,7 +4,7 @@ It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
 from passlib.hash import argon2
-from passlib.hash import sha512_crypt
+from passlib.hash import sha256_crypt
 import datetime
 import ed25519
 import string
@@ -47,20 +47,6 @@ class DB(object):
     def set_pin(self, card_id, new_pin):
         updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'pin': self.hash_pin(card_id, new_pin)}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
-
-
-    def empty_pin(self, card_id):
-        """Checks if account has a pin. 
-        (DOES NOT CHECK IF ACCOUNT IS NONE)
-
-        Returns:
-            (bool): Returns True if pin is empty. False otherwise.
-        """
-        account = self.get_account(card_id)
-        if(account['pin'] is None or account['pin'] == ''):
-            return True
-        else:
-            False
 
     def get_atm(self, atm_id):
         """get atm_id of atm: atm_id
@@ -115,7 +101,7 @@ class DB(object):
             (string): Returns hashed string.
         """ 
 
-        hash = sha512_crypt.using(salt_size=0).hash(str(string))
+        hash = sha256_crypt.using(salt_size=0,rounds=53500).hash(str(string))
         return hash[-86:]
 
     def hash_pin(self, card_id, pin):
@@ -124,25 +110,22 @@ class DB(object):
         Returns:
             (string): Returns hashed string.
         """
-        hash = argon2.using(salt=card_id,digest_size=64,rounds=250).hash(str(pin))
+        hash = argon2.using(salt=bytes(card_id),digest_size=64,rounds=50).hash(str(pin))
         return hash[-86:]
 
-    def verify_pin(self, pin, card_id):
+    def verify_pin(self, pin, card_id,account):
         """verifies if pin matches database
 
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        account = self.get_account(card_id)
         if pin is None:
             return False
         elif account is None:
             return False
-        elif self.empty_pin(card_id):
+        elif account['pin'] == None or account['pin'] == '':
             return False
-        else:
-            db_pin = account['pin']
-        return argon2.verify(pin, db_pin)
+        return argon2.using(salt=bytes(card_id),digest_size=64,rounds=50).hash(str(pin))[-86:] == account['pin']
 
     def get_time(self, card_id):
         account = self.get_account(card_id)
@@ -153,21 +136,15 @@ class DB(object):
 
     def get_challenge(self, card_id):
         chall = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
-        account = self.get_account(card_id)
-        if account is None:
-            return False
-        else:
-            self.atms.update_one({'card_id':account['card_id']},{"$set": {'chall': chall}})
-            self.atms.update_one({'card_id':account['card_id']},{"$set": {'time': datetime.datetime.now() + datetime.timedelta(seconds=15)}})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'chall': chall, 'time': datetime.datetime.now() + datetime.timedelta(seconds=15)}})
+        if updated.acknowledged and updated.raw_result['updatedExisting']:
             return chall
-
-    def set_key(self, card_id, key):
-        account = self.get_account(card_id)
-        if account is None:
-            return False
         else:
-            self.atms.update_one({'card_id':account['card_id']},{"$set": {'key': key}})
-            return True
+            return False
+
+    def initialize_card(self, card_id, key, new_pin):
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'key': key,'pin': self.hash_pin(card_id, new_pin) }})
+        return updated.acknowledged and updated.raw_result['updatedExisting']
     
     def verify_challenge(self, card_id, chall_sig):
         account = self.get_account(card_id)

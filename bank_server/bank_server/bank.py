@@ -98,17 +98,13 @@ class Bank(object):
     def check_balance():
         if not request.json or not 'card_id' in request.json or not 'pin' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        try:
-            uuid.UUID(str(request.json['card_id']))
-        except ValueError:
-            time.sleep(5)
+
+        account = db.get_account(request.json['card_id'])
+        if account is None:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        balance = db.get_balance(request.json['card_id'])
-        if balance is None:
-            time.sleep(5)
-            return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.verify_pin(request.json['pin'],request.json['card_id']):
-            return jsonify({'OKAY': str(balance)})
+
+        if db.verify_pin(request.json['pin'], request.json['card_id'], account):
+            return jsonify({'OK': str(account['balance'])})
         else:
             return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -117,30 +113,45 @@ class Bank(object):
     def change_pin():
         if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.verify_pin(request.json['pin'],request.json['card_id']):
+
+        account = db.get_account(request.json['card_id'])
+        if account is None:
+            return jsonify({'ERROR': 'Could not validate transaction'})
+
+        if db.verify_pin(request.json['pin'],request.json['card_id'], account):
             db.set_pin(request.json['card_id'], request.json['new_pin'])
             return jsonify({'OKAY': 'Pin has been changed.'})
+        else:
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
     @server.route('/initalize_card', methods = ['POST'])
     def new_card():
         if not request.json or not 'card_id' in request.json or not 'new_pin' in request.json or not 'key' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.get_account(request.json['card_id']) is None or not db.empty_pin(request.json['card_id']):
+
+        account = db.get_account(request.json['card_id'])
+        if account is None:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        else:
-            db.set_pin(request.json['card_id'], request.json['pin'])
-            db.set_key(request.json['card_id'], request.json['key'])
-            return jsonify({'OKAY': 'Pin has been changed.'})
+
+        if account['pin'] == None and account['key'] == None:
+            success = db.initialize_card(request.json['card_id'], request.json['key'], request.json['new_pin'])
+            if success:
+                return jsonify({'OKAY': 'Card has been provisioned!'})
+            else:
+                return jsonify({'ERROR': 'Could not validate transaction'})
+        return jsonify({'ERROR': 'Could not validate transaction'})
 
     @server.route('/get_challenge', methods = ['POST'])
     def get_chall():
-        if not request.json or not 'card_id' in request.json:
-            return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.get_account(request.json['card_id']) is None:
-            return jsonify({'ERROR': 'Could not validate transaction'})
+        if not request.json:
+            return jsonify({'ERROR': 'Could not validate transaction1'})
+        if not 'card_id' in request.json:
+            return jsonify({'ERROR': 'Could not validate transaction2'})
+        challenge = db.get_challenge(request.json['card_id'])
+        if challenge != False:
+            return jsonify({'OK': challenge})
         else:
-            db.set_key(request.json['card_id'], request.json['key'])
-            return db.get_challenge(request.json['card_id'])
+            return jsonify({'ERROR': 'Could not validate transaction3'})
 
 
     @server.route('/test')
