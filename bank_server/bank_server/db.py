@@ -5,9 +5,10 @@ need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
 from passlib.hash import argon2
 from passlib.hash import sha512_crypt
+import datetime
+import ed25519
 import string
 import random
-import datetime
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
@@ -167,7 +168,18 @@ class DB(object):
         else:
             self.atms.update_one({'card_id':account['card_id']},{"$set": {'key': key}})
             return True
-        
+    
+    def verify_challenge(self, card_id, chall_sig):
+        account = self.get_account(card_id)
+        if datetime.datetime.now() <= account['time']:
+            verifying_key = ed25519.VerifyingKey(account['key'], encoding="hex")
+            try:
+                verifying_key.verify(chall_sig, account['chall'], encoding="base64")
+                return True
+            except ed25519.BadSignatureError:
+                return False
+        else:
+            return False
 
 
     #############################
