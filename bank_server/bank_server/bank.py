@@ -48,8 +48,7 @@ class Bank(object):
     "ERROR\n"
     """
     server = Flask(__name__)
-    global db
-    db = DB()
+    global db = DB()
 
     def __init__(self, config):
         super(Bank, self).__init__()
