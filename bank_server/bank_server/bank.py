@@ -125,7 +125,7 @@ class Bank(object):
     def new_card():
         if not request.json or not 'card_id' in request.json or not 'new_pin' in request.json or not 'key' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.get_account(card_id) is None or not db.empty_pin(card_id):
+        if db.get_account(request.json['card_id']) is None or not db.empty_pin(request.json['card_id']):
             return jsonify({'ERROR': 'Could not validate transaction'})
         else:
             db.set_pin(request.json['card_id'], request.json['pin'])
@@ -136,7 +136,7 @@ class Bank(object):
     def get_chall():
         if not request.json or not 'card_id' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
-        if db.get_account(card_id) is None:
+        if db.get_account(request.json['card_id']) is None:
             return jsonify({'ERROR': 'Could not validate transaction'})
         else:
             db.set_key(request.json['card_id'], request.json['key'])
