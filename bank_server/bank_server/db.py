@@ -3,7 +3,7 @@ This module implements an interface to the bank_server database.
 It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
-from passlib import argon2
+from passlib.hash import argon2
 import string
 import random
 import datetime
@@ -27,7 +27,7 @@ class DB(object):
         Returns:
             (bool): Returns True on Success. False otherwise.
         """
-        updated = self.users.update_one({'card_id': self.hash(card_id)}, {"$set": {'balance': balance}})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'balance': balance}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def get_balance(self, card_id):
@@ -36,14 +36,14 @@ class DB(object):
         Returns:
             (string or None): Returns balance on Success. None otherwise.
         """
-        account = self.users.find_one({'card_id':self.hash(card_id)})
+        account = self.users.find_one({'card_id':self.hash_card(card_id)})
         if account is None:
             return False
         else:
             return account['balance']
 
     def set_pin(self, card_id, new_pin):
-        updated = self.users.update_one({'card_id': self.hash(card_id)}, {"$set": {'pin': self.hash(new_pin)}})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'pin': self.hash_pin(new_pin, card_id)}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
 
@@ -80,7 +80,7 @@ class DB(object):
         Returns:
             (string or None): Returns atm_id on Success. None otherwise.
         """
-        account = self.users.find_one({'card_id':self.hash(card_id)})
+        account = self.users.find_one({'card_id':self.hash_card(card_id)})
         if account is None:
             return None
         else:
@@ -106,13 +106,36 @@ class DB(object):
         updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_bills': num_bills}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
-    def hash(self, string):
-        """create a hash of input string (card_id or pin)
+    def hash_card(self, card_id):
+        """create a hash of input card_id
 
         Returns:
             (string): Returns hashed string.
         """
-        return argon2.using(rounds=100000).hash(str(string))
+        return argon2.using(rounds=100000).hash(str(card_id))
+
+    def hash_pin(self, pin, card_id):
+        """create a hash of input pin
+
+        Returns:
+            (string): Returns hashed string.
+        """
+        return argon2.using(salt=card_id,rounds=100000).hash(str(pin))
+
+    def verify_card(self, card_id):
+        """verifies if card_id matches database
+
+        Returns:
+            (bool): Returns True on Success. False otherwise.
+        """
+        account = self.get_account(card_id)
+        if card_id is None:
+            return False
+        elif account is None:
+            return False
+        else:
+            db_card = account['card_id']
+        return argon2.verify(card_id, db_card)
 
     def verify_pin(self, pin, card_id):
         """verifies if pin matches database
@@ -122,7 +145,7 @@ class DB(object):
         """
         account = self.get_account(card_id)
         if pin is None:
-            return False
+            return Fazlse
         elif account is None:
             return False
         elif self.empty_pin(card_id):
@@ -131,16 +154,16 @@ class DB(object):
             db_pin = account['pin']
         return argon2.verify(pin, db_pin)
 
-    def get_time(self, card_id)
+    def get_time(self, card_id):
         account = self.get_account(card_id)
         if account is None:
             return None
         else:
             return account['time']
 
-    def get_challenge(self, card_id)
+    def get_challenge(self, card_id):
         chall = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
-         account = self.get_account(card_id)
+        account = self.get_account(card_id)
         if account is None:
             return False
         else:
@@ -148,17 +171,13 @@ class DB(object):
             self.atms.update_one({'card_id':account['card_id']},{"$set": {'time': datetime.datetime.now() + datetime.timedelta(seconds=15)}})
             return chall
 
-    def set_key(self, card_id, key)
+    def set_key(self, card_id, key):
         account = self.get_account(card_id)
         if account is None:
             return False
         else:
             self.atms.update_one({'card_id':account['card_id']},{"$set": {'key': key}})
             return True
-
-
-    def verify_challenge(self, card_id, sig_chall)
-        if datetime.datetime.now() <= self.get_time(card_id) and :
         
 
 
@@ -166,7 +185,7 @@ class DB(object):
     # ADMIN INTERFACE FUNCTIONS #
     #############################
 
-    def admin_create_account(self, account_name, card_id, amount, key):
+    def admin_create_account(self, account_name, card_id, amount):
         """create account with account_name, card_id, and amount
 
         Returns:
@@ -174,7 +193,7 @@ class DB(object):
         """
         new_account = {
             'account_name' : account_name,
-            'card_id' : self.hash(card_id),
+            'card_id' : self.hash_card(card_id),
             'balance' : amount,
             'key' : None,
             'pin' : None,
