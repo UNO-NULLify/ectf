@@ -48,7 +48,8 @@ class Bank(object):
     "ERROR\n"
     """
     server = Flask(__name__)
-    global db = DB()
+    global db
+    db = DB()
 
     def __init__(self, config):
         super(Bank, self).__init__()
@@ -57,7 +58,7 @@ class Bank(object):
         self.server.run(host='0.0.0.0', port=1337,ssl_context=('/data/certs/cert.pem','/data/certs/key.pem'))
         self.server.run(debug=True)
 
-    @server.route('/withdraw')
+    @server.route('/withdraw', methods = ['POST'])
     def withdraw():
         try:
             amount = int(request.json['amount'])
@@ -93,7 +94,7 @@ class Bank(object):
             time.sleep(5)
             return jsonify({'ERROR': 'Could not validate transaction'})
 
-    @server.route('/balance')
+    @server.route('/balance', methods = ['POST'])
     def check_balance():
         if not request.json or not 'card_id' in request.json or not 'pin' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
@@ -112,7 +113,7 @@ class Bank(object):
             return jsonify({'ERROR': 'Could not validate transaction'})
 
 
-    @server.route('/change_pin')
+    @server.route('/change_pin', methods = ['POST'])
     def change_pin():
         if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
@@ -120,7 +121,7 @@ class Bank(object):
             db.set_pin(request.json['card_id'], request.json['new_pin'])
             return jsonify({'OKAY': 'Pin has been changed.'})
 
-    @server.route('/initalize_card')
+    @server.route('/initalize_card', methods = ['POST'])
     def new_card():
         if not request.json or not 'card_id' in request.json or not 'new_pin' in request.json or not 'key' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})
@@ -131,7 +132,7 @@ class Bank(object):
             db.set_key(request.json['card_id'], request.json['key'])
             return jsonify({'OKAY': 'Pin has been changed.'})
 
-    @server.route('/get_challenge')
+    @server.route('/get_challenge', methods = ['POST'])
     def get_chall():
         if not request.json or not 'card_id' in request.json:
             return jsonify({'ERROR': 'Could not validate transaction'})

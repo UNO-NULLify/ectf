@@ -4,6 +4,7 @@ It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
 from passlib.hash import argon2
+from passlib.hash import sha512_crypt
 import string
 import random
 import datetime
@@ -111,36 +112,19 @@ class DB(object):
 
         Returns:
             (string): Returns hashed string.
-        """
-        
-        if self.verify_card(card_id):
-            account = self.get_account(card_id)
-            return account['card_id']
-        else:
-            return argon2.using(rounds=1000).hash(str(card_id))
+        """ 
 
-    def hash_pin(self, pin, card_id):
+        hash = sha512_crypt.using(salt_size=0).hash(str(string))
+        return hash[-86:]
+
+    def hash_pin(self, card_id, pin):
         """create a hash of input pin
 
         Returns:
             (string): Returns hashed string.
         """
-        return argon2.using(salt=card_id,rounds=1000).hash(str(pin))
-
-    def verify_card(self, card_id):
-        """verifies if card_id matches database
-
-        Returns:
-            (bool): Returns True on Success. False otherwise.
-        """
-        account = self.get_account(card_id)
-        if card_id is None:
-            return False
-        elif account is None:
-            return False
-        else:
-            db_card = account['card_id']
-        return argon2.verify(card_id, db_card)
+        hash = argon2.using(salt=card_id,digest_size=64,rounds=250).hash(str(pin))
+        return hash[-86:]
 
     def verify_pin(self, pin, card_id):
         """verifies if pin matches database

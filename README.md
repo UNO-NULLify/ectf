@@ -22,8 +22,9 @@
     - Bank verifies card_id and account balance.
     - Bank sends signed message of bills to give out to ATM which is forwared to HSM
     - HSM verifies signed message, only gives out bills if signature is valid
+    
 * **PIN Extraction:**
     - PIN is not stored on card.
 
 * **Data Breach:**
-    - Bank contains db of hashed data.
+    - Bank contains db of hashed PINs.
