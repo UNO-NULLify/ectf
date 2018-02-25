@@ -13,6 +13,7 @@ class Card(Psoc):
     """
     def __init__(self, port=None, verbose=False):
         super(Card, self).__init__('CARD', port, verbose)
+        self.SIGNED_RESPONSE = 2
         self.GET_UUID = 3
 
     def _send_op(self, op):
@@ -29,7 +30,24 @@ class Card(Psoc):
             self._vp('Card hasn\'t received op', logging.error)
         self._vp('Card received op')
 
-    def get_uuid(self, old_pin, new_pin):
+    def get_uuid(self):
+        """Requests for a pin to be changed
+
+        Args:
+            old_pin (str): Challenge PIN
+            new_pin (str): New PIN to change to
+
+        Returns:
+            bool: True if PIN was changed, False otherwise
+        """
+        self._sync(False)
+        self._send_op(self.GET_UUID)
+        self._vp('Getting Pin')
+        uuid = self._pull_msg()
+        self._vp('Card sent response %s' % uuid)
+        return uuid
+
+    def get_signed_response(self, challenge):
         """Requests for a pin to be changed
 
         Args:
@@ -41,12 +59,14 @@ class Card(Psoc):
         """
         self._sync(False)
 
-        self._send_op(self.GET_UUID)
+        self._send_op(self.SIGNED_RESPONSE)
+        self._vp('Getting Signed Response')
 
-        self._vp('Getting Pin')
-        resp = self._pull_msg()
-        self._vp('Card sent response %s' % resp)
-        return resp
+        self._push_msg(challenge)
+        signed_response = self._pull_msg()
+
+        self._vp('Card sent response %s' % signed_response)
+        return signed_response
 
 
     def provision(self, uuid):
