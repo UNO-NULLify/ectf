@@ -4,6 +4,9 @@ It uses a mutex because both the bank_interface and admin_interface
 need access to database. (sqlite3 does not gurantee concurrent operations)"""
 from pymongo import MongoClient
 from passlib import argon2
+import string
+import random
+import datetime
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
@@ -128,11 +131,42 @@ class DB(object):
             db_pin = account['pin']
         return argon2.verify(pin, db_pin)
 
+    def get_time(self, card_id)
+        account = self.get_account(card_id)
+        if account is None:
+            return None
+        else:
+            return account['time']
+
+    def get_challenge(self, card_id)
+        chall = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
+         account = self.get_account(card_id)
+        if account is None:
+            return False
+        else:
+            self.atms.update_one({'card_id':account['card_id']},{"$set": {'chall': chall}})
+            self.atms.update_one({'card_id':account['card_id']},{"$set": {'time': datetime.datetime.now() + datetime.timedelta(seconds=15)}})
+            return chall
+
+    def set_key(self, card_id, key)
+        account = self.get_account(card_id)
+        if account is None:
+            return False
+        else:
+            self.atms.update_one({'card_id':account['card_id']},{"$set": {'key': key}})
+            return True
+
+
+    def verify_challenge(self, card_id, sig_chall)
+        if datetime.datetime.now() <= self.get_time(card_id) and :
+        
+
+
     #############################
     # ADMIN INTERFACE FUNCTIONS #
     #############################
 
-    def admin_create_account(self, account_name, card_id, amount):
+    def admin_create_account(self, account_name, card_id, amount, key):
         """create account with account_name, card_id, and amount
 
         Returns:
@@ -142,7 +176,10 @@ class DB(object):
             'account_name' : account_name,
             'card_id' : self.hash(card_id),
             'balance' : amount,
-            'pin': None
+            'key' : None,
+            'pin' : None,
+            'chall' : None,
+            'time' : None
         }
         return self.users.insert_one(new_account).acknowledged
 
