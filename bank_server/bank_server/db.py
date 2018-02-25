@@ -117,7 +117,7 @@ class DB(object):
             account = self.get_account(card_id)
             return account['card_id']
         else:
-            return argon2.using(rounds=1000).hash(str(card_id))
+            return argon2.using(rounds=250).hash(str(card_id))
 
     def hash_pin(self, pin, card_id):
         """create a hash of input pin
@@ -125,7 +125,7 @@ class DB(object):
         Returns:
             (string): Returns hashed string.
         """
-        return argon2.using(salt=card_id,rounds=1000).hash(str(pin))
+        return argon2.using(salt=card_id,rounds=250).hash(str(pin))
 
     def verify_card(self, card_id):
         """verifies if card_id matches database
