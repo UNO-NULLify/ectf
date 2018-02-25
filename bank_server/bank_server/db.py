@@ -44,7 +44,7 @@ class DB(object):
             return account['balance']
 
     def set_pin(self, card_id, new_pin):
-        updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'pin': self.hash_pin(new_pin, card_id)}})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'pin': self.hash_pin(card_id, new_pin)}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
 
