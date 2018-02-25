@@ -9,7 +9,7 @@ FROM python:2.7-alpine
 
 EXPOSE 1336
 
-RUN python -m pip install pyserial pyyaml
+RUN python -m pip install pyserial pyyaml requests
 
 WORKDIR /atm
 ADD atm_backend ./atm_backend

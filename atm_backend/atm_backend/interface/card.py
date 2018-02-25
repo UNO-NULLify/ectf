@@ -13,35 +13,8 @@ class Card(Psoc):
     """
     def __init__(self, port=None, verbose=False):
         super(Card, self).__init__('CARD', port, verbose)
-        self.CHECK_BAL = 1
-        self.WITHDRAW = 2
-        self.CHANGE_PIN = 3
-
-    def _authenticate(self, pin):
-        """Requests authentication from the ATM card
-
-        Args:
-            pin (str): Challenge PIN
-
-        Returns:
-            bool: True if ATM card verified authentication, False otherwise
-        """
-        self._vp('Sending pin %s' % pin)
-        self._push_msg(pin)
-
-        resp = self._pull_msg()
-        self._vp('Card response was %s' % resp)
-        return resp == 'OK'
-
-    def _get_uuid(self):
-        """Retrieves the UUID from the ATM card
-
-        Returns:
-            str: UUID of ATM card
-        """
-        uuid = self._pull_msg()
-        self._vp('Card sent UUID %s' % uuid)
-        return uuid
+        self.SIGNED_RESPONSE = 2
+        self.GET_UUID = 3
 
     def _send_op(self, op):
         """Sends requested operation to ATM card
@@ -57,7 +30,24 @@ class Card(Psoc):
             self._vp('Card hasn\'t received op', logging.error)
         self._vp('Card received op')
 
-    def change_pin(self, old_pin, new_pin):
+    def get_uuid(self):
+        """Requests for a pin to be changed
+
+        Args:
+            old_pin (str): Challenge PIN
+            new_pin (str): New PIN to change to
+
+        Returns:
+            bool: True if PIN was changed, False otherwise
+        """
+        self._sync(False)
+        self._send_op(self.GET_UUID)
+        self._vp('Getting Pin')
+        uuid = self._pull_msg()
+        self._vp('Card sent response %s' % uuid)
+        return uuid
+
+    def get_signed_response(self, challenge):
         """Requests for a pin to be changed
 
         Args:
@@ -69,57 +59,17 @@ class Card(Psoc):
         """
         self._sync(False)
 
-        if not self._authenticate(old_pin):
-            return False
+        self._send_op(self.SIGNED_RESPONSE)
+        self._vp('Getting Signed Response')
 
-        self._send_op(self.CHANGE_PIN)
+        self._push_msg(challenge)
+        signed_response = self._pull_msg()
 
-        self._vp('Sending PIN %s' % new_pin)
-        self._push_msg(new_pin)
+        self._vp('Card sent response %s' % signed_response)
+        return signed_response
 
-        resp = self._pull_msg()
-        self._vp('Card sent response %s' % resp)
-        return resp == 'SUCCESS'
 
-    def check_balance(self, pin):
-        """Requests for a balance to be checked
-
-        Args:
-            pin (str): Challenge PIN
-
-        Returns:
-            str: UUID of ATM card on success
-            bool: False if PIN didn't match
-        """
-        self._sync(False)
-
-        if not self._authenticate(pin):
-            return False
-
-        self._send_op(self.CHECK_BAL)
-
-        return self._get_uuid()
-
-    def withdraw(self, pin):
-        """Requests to withdraw from ATM
-
-        Args:
-            pin (str): Challenge PIN
-
-        Returns:
-            str: UUID of ATM card on success
-            bool: False if PIN didn't match
-        """
-        self._sync(False)
-
-        if not self._authenticate(pin):
-            return False
-
-        self._send_op(self.WITHDRAW)
-
-        return self._get_uuid()
-
-    def provision(self, uuid, pin):
+    def provision(self, uuid):
         """Attempts to provision a new ATM card
 
         Args:
@@ -136,11 +86,6 @@ class Card(Psoc):
             self._vp('Card alredy provisioned!', logging.error)
             return False
         self._vp('Card sent provisioning message')
-
-        self._push_msg('%s\00' % pin)
-        while self._pull_msg() != 'K':
-            self._vp('Card hasn\'t accepted PIN', logging.error)
-        self._vp('Card accepted PIN')
 
         self._push_msg('%s\00' % uuid)
         while self._pull_msg() != 'K':

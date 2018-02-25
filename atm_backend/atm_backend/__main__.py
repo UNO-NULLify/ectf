@@ -100,7 +100,7 @@ import sys
 import SimpleXMLRPCServer
 import yaml
 from . import ATM, ProvisionTool
-from . import Bank, Card, HSM, DummyBank, DummyCard, DummyHSM
+from . import Bank, Card, HSM, DummyCard, DummyHSM
 
 
 def main():
@@ -127,11 +127,8 @@ def main():
     # Create Bank object which creates connection with bank server
     # a dummy counterpart is also available for use
     logging.info('Initializing Bank...')
-    if config['devices']['bank']['dummy']:
-        bank = DummyBank()
-    else:
-        bank = Bank(config['devices']['bank']['host'],
-                    config['devices']['bank']['port'])
+    bank = Bank(config['devices']['bank']['host'],
+                config['devices']['bank']['port'])
     logging.info('Bank initialized.')
 
     # Create secmod object which creates connection with secmod psoc

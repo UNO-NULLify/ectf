@@ -43,13 +43,11 @@ def main():
 
     logging.info('Config loaded and logging initialized')
 
-    # Create db mutex for use by admin and bank backends
-    db_mutex = threading.Lock()
-    thread_obj = threading.Thread(target=AdminBackend, args=(config, db_mutex))
+    thread_obj = threading.Thread(target=AdminBackend, args=(config,))
     thread_obj.daemon = True
     thread_obj.start()
 
-    Bank(config, db_mutex)
+    Bank(config)
 
 
 if __name__ == "__main__":
