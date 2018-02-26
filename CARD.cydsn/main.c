@@ -15,15 +15,14 @@
 #include "usbserialprotocol.h"
 #include "SW1.h"
 #include "Reset_isr.h"
+#include "aes.h"
 
-#define PIN_LEN 8
-#define UUID_LEN 36
-#define PINCHG_SUC "SUCCESS"
+#define CARD_ID_LEN 36
 #define PROV_MSG "P"
-#define RECV_OK "K"
-#define PIN_OK "OK"
-#define PIN_BAD "BAD"
-#define CHANGE_PIN '3'
+#define RECV_K "K"
+#define GIVE_CARD_ID '1'
+#define GIVE_SIG '2'
+#define GIVE_PUB '3'
 
 //CARD
 
@@ -41,8 +40,7 @@
  */
 
 // global EEPROM read variables
-static const uint8 PIN[PIN_LEN] = {0x36, 0x35, 0x34, 0x33, 0x35, 0x34, 0x34, 0x36}; //eCTF
-static const uint8 UUID[UUID_LEN] = {0x37, 0x33, 0x36, 0x35, 0x36, 0x33, 0x37, 0x35, 0x37, 0x32, 0x36, 0x39, 0x37, 0x34, 0x37, 0x39}; //security
+static const uint8 CARD_ID[CARD_ID_LEN] = {}; //security
 
 
 // reset interrupt on button press
@@ -57,21 +55,33 @@ CY_ISR(Reset_ISR)
 void provision()
 {
     uint8 message[64];
+    unsigned int KEY;
     
     // synchronize with bank
     syncConnection(SYNC_PROV);
  
     pushMessage((uint8*)PROV_MSG, (uint8)strlen(PROV_MSG));
-        
-    // set PIN
-    pullMessage(message);
-    USER_INFO_Write(message, PIN, PIN_LEN);
-    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     
     // set account number
     pullMessage(message);
-    USER_INFO_Write(message, UUID, UUID_LEN);
-    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+    USER_INFO_Write(message, CARD_ID, CARD_ID_LEN);
+
+    // Send back K
+    pushMessage((uint8*)RECV_K, strlen(RECV_K));
+    
+    // Pull 3
+    pullMessage(message);
+    
+    //Generate Public/Private Key.
+    
+
+    //Check the message that was received
+    if(message[0] == '3')
+    {
+        pushMessage((uint8*)KEY, 32); // Public Key
+    }
+    //Memset Public Key    
+    memset(&KEY, 0, 64);
 }
 
 
@@ -116,26 +126,14 @@ int main(void)
         
         // receive pin number from ATM
         pullMessage(message);
-        
-        if (strncmp((char*)message, (char*)PIN, PIN_LEN)) {
-            pushMessage((uint8*)PIN_BAD, strlen(PIN_BAD));
-        } else {
-            pushMessage((uint8*)PIN_OK, strlen(PIN_OK));
+        // change PIN or broadcast UUID
+        if(message[0] == GIVE_CARD_ID)
+        {
+            pushMessage(CARD_ID, CARD_ID_LEN);
+        }
+        if(message[1] == GIVE_SIG)
+        {
             
-            // get command
-            pullMessage(message);
-            pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
-            
-            // change PIN or broadcast UUID
-            if(message[0] == CHANGE_PIN)
-            {
-                pullMessage(message);
-                USER_INFO_Write(message, PIN, PIN_LEN);
-                
-                pushMessage((uint8*)PINCHG_SUC, strlen(PINCHG_SUC));
-            } else {
-                pushMessage(UUID, UUID_LEN);   
-            }
         }
     }
 }

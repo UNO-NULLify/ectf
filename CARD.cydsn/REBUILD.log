@@ -1,0 +1,123 @@
+--------------- Rebuild Started: 02/25/2018 23:16:01 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\main.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\aes.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\cymetadata.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\ATM_UART.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\ATM_UART_PM.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\ATM_UART_INT.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\ATM_UART_BOOT.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USER_INFO.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART_INT.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_PM.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_UART.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_BOOT.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_UART_BOOT.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\Reset_isr.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\SW1.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\SW1_PM.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\ATM_UART_IntClock.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_SCBCLK.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_tx.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_tx_PM.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_SCB_IRQ.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_rx.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\USB_UART_rx_PM.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\Cm0Start.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CyFlash.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CyLib.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\cyPm.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\cyutils.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CyLFClk.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CARD.hex"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\CARD.map"
+Deleting file ".\CARD.cycdx"
+Deleting file ".\CARD.svd"
+Deleting file ".\CARD.rpt"
+Deleting file ".\CARD_timing.html"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\.deps\SOURCE_C__ARM_GCC_GENERIC.P"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\.deps\SOURCE_ASM__ARM_GCC_GENERIC.P"
+cydsfit.exe -.appdatapath "C:\Users\Nighdragon\AppData\Local\Cypress Semiconductor\PSoC Creator\4.1" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CARD.cyprj -d CY8C4245AXI-483 -s C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
+Elaborating Design...
+HDL Generation...
+Synthesis...
+Tech Mapping...
+Analog Placement...
+Analog Routing...
+Analog Code Generation...
+Digital Placement...
+Digital Routing...
+Bitstream Generation...
+Bitstream Verification...
+Static timing analysis...
+API Generation...
+Dependency Generation...
+Cleanup...
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/usbserialprotocol.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c usbserialprotocol.c -o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/aes.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c aes.c -o .\CortexM0\ARM_GCC_541\Debug\aes.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cyfitter_cfg.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cyfitter_cfg.c -o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cymetadata.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cymetadata.c -o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/ATM_UART.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\ATM_UART.c -o .\CortexM0\ARM_GCC_541\Debug\ATM_UART.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/ATM_UART_PM.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\ATM_UART_PM.c -o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_PM.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/ATM_UART_INT.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\ATM_UART_INT.c -o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_INT.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/ATM_UART_BOOT.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\ATM_UART_BOOT.c -o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_BOOT.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USER_INFO.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USER_INFO.c -o .\CortexM0\ARM_GCC_541\Debug\USER_INFO.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_SPI_UART.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_SPI_UART.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_SPI_UART_INT.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_SPI_UART_INT.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART_INT.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_PM.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_PM.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_PM.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_UART.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_UART.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_BOOT.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_BOOT.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_BOOT.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_UART_BOOT.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_UART_BOOT.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART_BOOT.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/Reset_isr.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\Reset_isr.c -o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/SW1.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\SW1.c -o .\CortexM0\ARM_GCC_541\Debug\SW1.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/SW1_PM.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\SW1_PM.c -o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/ATM_UART_IntClock.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\ATM_UART_IntClock.c -o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_IntClock.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_SCBCLK.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_SCBCLK.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCBCLK.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_tx.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_tx.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_tx_PM.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_tx_PM.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx_PM.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_SCB_IRQ.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_SCB_IRQ.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCB_IRQ.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_rx.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_rx.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/USB_UART_rx_PM.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\USB_UART_rx_PM.c -o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx_PM.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/Cm0Start.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\Cm0Start.c -o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/CyFlash.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\CyFlash.c -o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/CyLib.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\CyLib.c -o .\CortexM0\ARM_GCC_541\Debug\CyLib.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cyPm.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cyPm.c -o .\CortexM0\ARM_GCC_541\Debug\cyPm.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cyutils.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cyutils.c -o .\CortexM0\ARM_GCC_541\Debug\cyutils.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/CyLFClk.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\CyLFClk.c -o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o
+arm-none-eabi-as.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=.\CortexM0\ARM_GCC_541\Debug/CyBootAsmGnu.lst -g -W -o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o Generated_Source\PSoC4\CyBootAsmGnu.s
+arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_541\Debug\CARD.a .\CortexM0\ARM_GCC_541\Debug\ATM_UART.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USER_INFO.o .\CortexM0\ARM_GCC_541\Debug\USB_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o .\CortexM0\ARM_GCC_541\Debug\SW1.o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_IntClock.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCBCLK.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCB_IRQ.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx_PM.o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o .\CortexM0\ARM_GCC_541\Debug\CyLib.o .\CortexM0\ARM_GCC_541\Debug\cyPm.o .\CortexM0\ARM_GCC_541\Debug\cyutils.o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o
+arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_541\Debug\CARD.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\aes.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\CARD.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/CARD.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `AES_init_ctx':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:226: multiple definition of `AES_init_ctx'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:226: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_init_ctx_iv'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_ctx_set_iv'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_ECB_encrypt'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_ECB_decrypt'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_CBC_encrypt_buffer'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_CBC_decrypt_buffer'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+.\CortexM0\ARM_GCC_541\Debug\aes.o: In function `KeyExpansion':
+C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: multiple definition of `AES_CTR_xcrypt_buffer'
+.\CortexM0\ARM_GCC_541\Debug\main.o:C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn/aes.c:153: first defined here
+collect2.exe: error: ld returned 1 exit status
+--------------- Rebuild Failed: 02/25/2018 23:16:11 ---------------

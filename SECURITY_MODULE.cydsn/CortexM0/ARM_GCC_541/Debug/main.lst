@@ -1,0 +1,2270 @@
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.Reset_ISR,"ax",%progbits
+  20              		.align	2
+  21              		.global	Reset_ISR
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	Reset_ISR, %function
+  25              	Reset_ISR:
+  26              	.LFB34:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** #include "project.h"
+  13:main.c        **** #include <stdlib.h>
+  14:main.c        **** #include <string.h>
+  15:main.c        **** //This is needed for the default communication between the BANK and DISPLAY over the USB-UART
+  16:main.c        **** #include "usbserialprotocol.h"
+  17:main.c        **** #include "SW1.h"
+  18:main.c        **** 
+  19:main.c        **** // SECURITY MODULE
+  20:main.c        **** 
+  21:main.c        **** #define MAX_BILLS 128
+  22:main.c        **** #define BILL_LEN 16
+  23:main.c        **** #define UUID_LEN 36
+  24:main.c        **** #define PROV_MSG "P"
+  25:main.c        **** #define WITH_OK "K"
+  26:main.c        **** #define WITH_BAD "BAD"
+  27:main.c        **** #define RECV_OK "K"
+  28:main.c        **** #define EMPTY "EMPTY"
+  29:main.c        **** #define EMPTY_BILL "*****EMPTY*****"
+  30:main.c        **** 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 2
+
+
+  31:main.c        **** /* 
+  32:main.c        ****  * How to read from EEPROM (persistent memory):
+  33:main.c        ****  * 
+  34:main.c        ****  * // read variable:
+  35:main.c        ****  * static const uint8 EEPROM_BUF_VAR[len] = { val1, val2, ... };
+  36:main.c        ****  * // write variable:
+  37:main.c        ****  * volatile const uint8 *ptr = EEPROM_BUF_VAR;
+  38:main.c        ****  * 
+  39:main.c        ****  * uint8 val1 = *ptr;
+  40:main.c        ****  * uint8 buf[4] = { 0x01, 0x02, 0x03, 0x04 };
+  41:main.c        ****  * USER_INFO_Write(message, EEPROM_BUF_VAR, 4u); 
+  42:main.c        ****  */
+  43:main.c        **** 
+  44:main.c        **** // global EEPROM read variables
+  45:main.c        **** static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
+  46:main.c        **** static const uint8 UUID[UUID_LEN + 1] = {'b', 'l', 'a', 'n', 'k', ' ', 
+  47:main.c        ****                                         'u', 'u', 'i', 'd', '!', 0x00 };
+  48:main.c        **** static const uint8 BILLS_LEFT[1] = {0x00};
+  49:main.c        **** 
+  50:main.c        **** 
+  51:main.c        **** // reset interrupt on button press
+  52:main.c        **** CY_ISR(Reset_ISR)
+  53:main.c        **** {
+  28              		.loc 1 53 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  54:main.c        ****     pushMessage((uint8*)"In interrupt\n", strlen("In interrupt\n"));
+  36              		.loc 1 54 0
+  37 0002 0D21     		movs	r1, #13
+  38 0004 0348     		ldr	r0, .L2
+  39 0006 FFF7FEFF 		bl	pushMessage
+  40              	.LVL0:
+  55:main.c        ****     SW1_ClearInterrupt();
+  41              		.loc 1 55 0
+  42 000a FFF7FEFF 		bl	SW1_ClearInterrupt
+  43              	.LVL1:
+  56:main.c        ****     CySoftwareReset();
+  44              		.loc 1 56 0
+  45 000e FFF7FEFF 		bl	CySoftwareReset
+  46              	.LVL2:
+  57:main.c        **** }
+  47              		.loc 1 57 0
+  48              		@ sp needed
+  49 0012 10BD     		pop	{r4, pc}
+  50              	.L3:
+  51              		.align	2
+  52              	.L2:
+  53 0014 00000000 		.word	.LC0
+  54              		.cfi_endproc
+  55              	.LFE34:
+  56              		.size	Reset_ISR, .-Reset_ISR
+  57              		.section	.text.provision,"ax",%progbits
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 3
+
+
+  58              		.align	2
+  59              		.global	provision
+  60              		.code	16
+  61              		.thumb_func
+  62              		.type	provision, %function
+  63              	provision:
+  64              	.LFB35:
+  58:main.c        **** 
+  59:main.c        **** 
+  60:main.c        **** // provisions HSM (should only ever be called once)
+  61:main.c        **** void provision()
+  62:main.c        **** {
+  65              		.loc 1 62 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 72
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69 0000 70B5     		push	{r4, r5, r6, lr}
+  70              		.cfi_def_cfa_offset 16
+  71              		.cfi_offset 4, -16
+  72              		.cfi_offset 5, -12
+  73              		.cfi_offset 6, -8
+  74              		.cfi_offset 14, -4
+  75 0002 92B0     		sub	sp, sp, #72
+  76              		.cfi_def_cfa_offset 88
+  77              	.LVL3:
+  63:main.c        ****     int i;
+  64:main.c        ****     uint8 message[64], numbills;
+  65:main.c        ****     
+  66:main.c        ****     for(i = 0; i < 128; i++) {
+  78              		.loc 1 66 0
+  79 0004 0024     		movs	r4, #0
+  80 0006 07E0     		b	.L5
+  81              	.LVL4:
+  82              	.L6:
+  67:main.c        ****         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
+  83              		.loc 1 67 0 discriminator 3
+  84 0008 2301     		lsls	r3, r4, #4
+  85 000a 2849     		ldr	r1, .L9
+  86 000c C918     		adds	r1, r1, r3
+  87 000e 1022     		movs	r2, #16
+  88 0010 2748     		ldr	r0, .L9+4
+  89 0012 FFF7FEFF 		bl	PIGGY_BANK_Write
+  90              	.LVL5:
+  66:main.c        ****         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
+  91              		.loc 1 66 0 discriminator 3
+  92 0016 0134     		adds	r4, r4, #1
+  93              	.LVL6:
+  94              	.L5:
+  66:main.c        ****         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
+  95              		.loc 1 66 0 is_stmt 0 discriminator 1
+  96 0018 7F2C     		cmp	r4, #127
+  97 001a F5DD     		ble	.L6
+  68:main.c        ****     }
+  69:main.c        ****     
+  70:main.c        ****     // synchronize with atm
+  71:main.c        ****     syncConnection(SYNC_PROV);
+  98              		.loc 1 71 0 is_stmt 1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 4
+
+
+  99 001c 0120     		movs	r0, #1
+ 100 001e FFF7FEFF 		bl	syncConnection
+ 101              	.LVL7:
+  72:main.c        ****  
+  73:main.c        ****     memset(message, 0u, 64);
+ 102              		.loc 1 73 0
+ 103 0022 02AC     		add	r4, sp, #8
+ 104              	.LVL8:
+ 105 0024 4022     		movs	r2, #64
+ 106 0026 0021     		movs	r1, #0
+ 107 0028 2000     		movs	r0, r4
+ 108 002a FFF7FEFF 		bl	memset
+ 109              	.LVL9:
+  74:main.c        ****     strcpy((char*)message, PROV_MSG);
+ 110              		.loc 1 74 0
+ 111 002e 5023     		movs	r3, #80
+ 112 0030 2380     		strh	r3, [r4]
+  75:main.c        ****     pushMessage(message, (uint8)strlen(PROV_MSG));
+ 113              		.loc 1 75 0
+ 114 0032 0121     		movs	r1, #1
+ 115 0034 2000     		movs	r0, r4
+ 116 0036 FFF7FEFF 		bl	pushMessage
+ 117              	.LVL10:
+  76:main.c        ****         
+  77:main.c        ****     // Set UUID
+  78:main.c        ****     pullMessage(message);
+ 118              		.loc 1 78 0
+ 119 003a 2000     		movs	r0, r4
+ 120 003c FFF7FEFF 		bl	pullMessage
+ 121              	.LVL11:
+  79:main.c        ****     PIGGY_BANK_Write(message, UUID, strlen((char*)message) + 1);
+ 122              		.loc 1 79 0
+ 123 0040 2000     		movs	r0, r4
+ 124 0042 FFF7FEFF 		bl	strlen
+ 125              	.LVL12:
+ 126 0046 421C     		adds	r2, r0, #1
+ 127 0048 1A4D     		ldr	r5, .L9+8
+ 128 004a 2900     		movs	r1, r5
+ 129 004c 2000     		movs	r0, r4
+ 130 004e FFF7FEFF 		bl	PIGGY_BANK_Write
+ 131              	.LVL13:
+  80:main.c        ****     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+ 132              		.loc 1 80 0
+ 133 0052 194E     		ldr	r6, .L9+12
+ 134 0054 0121     		movs	r1, #1
+ 135 0056 3000     		movs	r0, r6
+ 136 0058 FFF7FEFF 		bl	pushMessage
+ 137              	.LVL14:
+  81:main.c        ****     
+  82:main.c        ****     // Get numbills
+  83:main.c        ****     pullMessage(message);
+ 138              		.loc 1 83 0
+ 139 005c 2000     		movs	r0, r4
+ 140 005e FFF7FEFF 		bl	pullMessage
+ 141              	.LVL15:
+  84:main.c        ****     numbills = message[0];
+ 142              		.loc 1 84 0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 5
+
+
+ 143 0062 2378     		ldrb	r3, [r4]
+ 144 0064 6A46     		mov	r2, sp
+ 145 0066 D01D     		adds	r0, r2, #7
+ 146 0068 0370     		strb	r3, [r0]
+  85:main.c        ****     PIGGY_BANK_Write(&numbills, BILLS_LEFT, 1u);
+ 147              		.loc 1 85 0
+ 148 006a 2900     		movs	r1, r5
+ 149 006c 2831     		adds	r1, r1, #40
+ 150 006e 0122     		movs	r2, #1
+ 151 0070 FFF7FEFF 		bl	PIGGY_BANK_Write
+ 152              	.LVL16:
+  86:main.c        ****     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+ 153              		.loc 1 86 0
+ 154 0074 0121     		movs	r1, #1
+ 155 0076 3000     		movs	r0, r6
+ 156 0078 FFF7FEFF 		bl	pushMessage
+ 157              	.LVL17:
+  87:main.c        ****     
+  88:main.c        ****     // Load bills
+  89:main.c        ****     for (i = 0; i < numbills; i++) {
+ 158              		.loc 1 89 0
+ 159 007c 0024     		movs	r4, #0
+ 160 007e 0EE0     		b	.L7
+ 161              	.LVL18:
+ 162              	.L8:
+  90:main.c        ****         pullMessage(message);
+ 163              		.loc 1 90 0 discriminator 3
+ 164 0080 02A8     		add	r0, sp, #8
+ 165 0082 FFF7FEFF 		bl	pullMessage
+ 166              	.LVL19:
+  91:main.c        ****         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
+ 167              		.loc 1 91 0 discriminator 3
+ 168 0086 2301     		lsls	r3, r4, #4
+ 169 0088 0849     		ldr	r1, .L9
+ 170 008a C918     		adds	r1, r1, r3
+ 171 008c 1022     		movs	r2, #16
+ 172 008e 02A8     		add	r0, sp, #8
+ 173 0090 FFF7FEFF 		bl	PIGGY_BANK_Write
+ 174              	.LVL20:
+  92:main.c        ****         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+ 175              		.loc 1 92 0 discriminator 3
+ 176 0094 0121     		movs	r1, #1
+ 177 0096 0848     		ldr	r0, .L9+12
+ 178 0098 FFF7FEFF 		bl	pushMessage
+ 179              	.LVL21:
+  89:main.c        ****         pullMessage(message);
+ 180              		.loc 1 89 0 discriminator 3
+ 181 009c 0134     		adds	r4, r4, #1
+ 182              	.LVL22:
+ 183              	.L7:
+  89:main.c        ****         pullMessage(message);
+ 184              		.loc 1 89 0 is_stmt 0 discriminator 1
+ 185 009e 6B46     		mov	r3, sp
+ 186 00a0 0733     		adds	r3, r3, #7
+ 187 00a2 1B78     		ldrb	r3, [r3]
+ 188 00a4 9C42     		cmp	r4, r3
+ 189 00a6 EBDB     		blt	.L8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 6
+
+
+  93:main.c        ****     }
+  94:main.c        **** }
+ 190              		.loc 1 94 0 is_stmt 1
+ 191 00a8 12B0     		add	sp, sp, #72
+ 192              		@ sp needed
+ 193              	.LVL23:
+ 194 00aa 70BD     		pop	{r4, r5, r6, pc}
+ 195              	.L10:
+ 196              		.align	2
+ 197              	.L9:
+ 198 00ac 00000000 		.word	.LANCHOR0
+ 199 00b0 10000000 		.word	.LC3
+ 200 00b4 00080000 		.word	.LANCHOR1
+ 201 00b8 20000000 		.word	.LC6
+ 202              		.cfi_endproc
+ 203              	.LFE35:
+ 204              		.size	provision, .-provision
+ 205              		.section	.text.dispenseBill,"ax",%progbits
+ 206              		.align	2
+ 207              		.global	dispenseBill
+ 208              		.code	16
+ 209              		.thumb_func
+ 210              		.type	dispenseBill, %function
+ 211              	dispenseBill:
+ 212              	.LFB36:
+  95:main.c        **** 
+  96:main.c        **** 
+  97:main.c        **** void dispenseBill()
+  98:main.c        **** {
+ 213              		.loc 1 98 0
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 16
+ 216              		@ frame_needed = 0, uses_anonymous_args = 0
+ 217 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 218              		.cfi_def_cfa_offset 20
+ 219              		.cfi_offset 4, -20
+ 220              		.cfi_offset 5, -16
+ 221              		.cfi_offset 6, -12
+ 222              		.cfi_offset 7, -8
+ 223              		.cfi_offset 14, -4
+ 224 0002 85B0     		sub	sp, sp, #20
+ 225              		.cfi_def_cfa_offset 40
+  99:main.c        ****     static uint8 stackloc = 0;
+ 100:main.c        ****     uint8 message[16];
+ 101:main.c        ****     volatile const uint8* ptr; 
+ 102:main.c        ****     
+ 103:main.c        ****     ptr = MONEY[stackloc];
+ 226              		.loc 1 103 0
+ 227 0004 124D     		ldr	r5, .L12
+ 228 0006 2C78     		ldrb	r4, [r5]
+ 229              	.LVL24:
+ 104:main.c        ****     
+ 105:main.c        ****     memset(message, 0u, 16);
+ 230              		.loc 1 105 0
+ 231 0008 1022     		movs	r2, #16
+ 232 000a 0021     		movs	r1, #0
+ 233 000c 6846     		mov	r0, sp
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 7
+
+
+ 234 000e FFF7FEFF 		bl	memset
+ 235              	.LVL25:
+ 106:main.c        ****     memcpy(message, (void*)ptr, BILL_LEN);
+ 236              		.loc 1 106 0
+ 237 0012 104F     		ldr	r7, .L12+4
+ 238 0014 2301     		lsls	r3, r4, #4
+ 239 0016 6A46     		mov	r2, sp
+ 240 0018 FB18     		adds	r3, r7, r3
+ 241 001a 13CB     		ldmia	r3!, {r0, r1, r4}
+ 242 001c 13C2     		stmia	r2!, {r0, r1, r4}
+ 243              	.LVL26:
+ 244 001e 1B68     		ldr	r3, [r3]
+ 245 0020 1360     		str	r3, [r2]
+ 107:main.c        **** 
+ 108:main.c        ****     pushMessage(message, BILL_LEN);
+ 246              		.loc 1 108 0
+ 247 0022 1021     		movs	r1, #16
+ 248 0024 6846     		mov	r0, sp
+ 249 0026 FFF7FEFF 		bl	pushMessage
+ 250              	.LVL27:
+ 109:main.c        ****     
+ 110:main.c        ****     PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
+ 251              		.loc 1 110 0
+ 252 002a 2978     		ldrb	r1, [r5]
+ 253 002c 0901     		lsls	r1, r1, #4
+ 254 002e 7918     		adds	r1, r7, r1
+ 255 0030 1022     		movs	r2, #16
+ 256 0032 0948     		ldr	r0, .L12+8
+ 257 0034 FFF7FEFF 		bl	PIGGY_BANK_Write
+ 258              	.LVL28:
+ 111:main.c        ****     stackloc = (stackloc + 1) % 128;
+ 259              		.loc 1 111 0
+ 260 0038 2B78     		ldrb	r3, [r5]
+ 261 003a 0133     		adds	r3, r3, #1
+ 262 003c DA17     		asrs	r2, r3, #31
+ 263 003e 520E     		lsrs	r2, r2, #25
+ 264 0040 9B18     		adds	r3, r3, r2
+ 265 0042 7F21     		movs	r1, #127
+ 266 0044 0B40     		ands	r3, r1
+ 267 0046 9B1A     		subs	r3, r3, r2
+ 268 0048 2B70     		strb	r3, [r5]
+ 112:main.c        **** }
+ 269              		.loc 1 112 0
+ 270 004a 05B0     		add	sp, sp, #20
+ 271              		@ sp needed
+ 272 004c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 273              	.L13:
+ 274 004e C046     		.align	2
+ 275              	.L12:
+ 276 0050 00000000 		.word	.LANCHOR2
+ 277 0054 00000000 		.word	.LANCHOR0
+ 278 0058 10000000 		.word	.LC3
+ 279              		.cfi_endproc
+ 280              	.LFE36:
+ 281              		.size	dispenseBill, .-dispenseBill
+ 282              		.section	.text.main,"ax",%progbits
+ 283              		.align	2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 8
+
+
+ 284              		.global	main
+ 285              		.code	16
+ 286              		.thumb_func
+ 287              		.type	main, %function
+ 288              	main:
+ 289              	.LFB37:
+ 113:main.c        **** 
+ 114:main.c        **** 
+ 115:main.c        **** int main(void)
+ 116:main.c        **** {
+ 290              		.loc 1 116 0
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 72
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294 0000 10B5     		push	{r4, lr}
+ 295              		.cfi_def_cfa_offset 8
+ 296              		.cfi_offset 4, -8
+ 297              		.cfi_offset 14, -4
+ 298 0002 92B0     		sub	sp, sp, #72
+ 299              		.cfi_def_cfa_offset 80
+ 117:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+ 300              		.loc 1 117 0
+ 301              		.syntax divided
+ 302              	@ 117 "main.c" 1
+ 303 0004 62B6     		CPSIE   i
+ 304              	@ 0 "" 2
+ 118:main.c        ****     
+ 119:main.c        ****     // start reset button
+ 120:main.c        ****     Reset_isr_StartEx(Reset_ISR);
+ 305              		.loc 1 120 0
+ 306              		.thumb
+ 307              		.syntax unified
+ 308 0006 3248     		ldr	r0, .L22
+ 309 0008 FFF7FEFF 		bl	Reset_isr_StartEx
+ 310              	.LVL29:
+ 121:main.c        ****     
+ 122:main.c        ****     /* Declare vairables here */
+ 123:main.c        ****     
+ 124:main.c        ****     uint8 numbills, i, bills_left;
+ 125:main.c        ****     uint8 message[64];
+ 126:main.c        ****     
+ 127:main.c        ****     /*
+ 128:main.c        ****      * Note:
+ 129:main.c        ****      *  To write to EEPROM, write to static const uint8 []
+ 130:main.c        ****      *  To read from EEPROM, read from volatile const uint8 * 
+ 131:main.c        ****      *      set to write variable
+ 132:main.c        ****      *
+ 133:main.c        ****      * PSoC EEPROM is very finnicky if this format is not followed
+ 134:main.c        ****      */
+ 135:main.c        ****     static const uint8 PROVISIONED[1] = {0x00}; // write variable
+ 136:main.c        ****     volatile const uint8* ptr = PROVISIONED;    // read variable
+ 137:main.c        ****     
+ 138:main.c        ****     
+ 139:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+ 140:main.c        ****     
+ 141:main.c        ****     PIGGY_BANK_Start();
+ 311              		.loc 1 141 0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 9
+
+
+ 312 000c FFF7FEFF 		bl	PIGGY_BANK_Start
+ 313              	.LVL30:
+ 142:main.c        ****     DB_UART_Start();
+ 314              		.loc 1 142 0
+ 315 0010 FFF7FEFF 		bl	DB_UART_Start
+ 316              	.LVL31:
+ 143:main.c        ****     
+ 144:main.c        ****     // provision security module on first boot
+ 145:main.c        ****     if(*ptr == 0x00)
+ 317              		.loc 1 145 0
+ 318 0014 2C23     		movs	r3, #44
+ 319 0016 2F4A     		ldr	r2, .L22+4
+ 320 0018 D35C     		ldrb	r3, [r2, r3]
+ 321 001a 002B     		cmp	r3, #0
+ 322 001c 0AD1     		bne	.L16
+ 146:main.c        ****     {
+ 147:main.c        ****         provision();
+ 323              		.loc 1 147 0
+ 324 001e FFF7FEFF 		bl	provision
+ 325              	.LVL32:
+ 148:main.c        ****         
+ 149:main.c        ****         // Mark as provisioned
+ 150:main.c        ****         i = 0x01;
+ 326              		.loc 1 150 0
+ 327 0022 4720     		movs	r0, #71
+ 328 0024 6844     		add	r0, r0, sp
+ 329 0026 0123     		movs	r3, #1
+ 330 0028 0370     		strb	r3, [r0]
+ 151:main.c        ****         PIGGY_BANK_Write(&i, PROVISIONED,1u);
+ 331              		.loc 1 151 0
+ 332 002a 0122     		movs	r2, #1
+ 333 002c 2949     		ldr	r1, .L22+4
+ 334 002e 2C31     		adds	r1, r1, #44
+ 335 0030 FFF7FEFF 		bl	PIGGY_BANK_Write
+ 336              	.LVL33:
+ 337              	.L16:
+ 152:main.c        ****     }
+ 153:main.c        ****     
+ 154:main.c        ****     // Go into infinite loop
+ 155:main.c        ****     while (1) {
+ 156:main.c        ****         /* Place your application code here. */
+ 157:main.c        **** 
+ 158:main.c        ****         // synchronize with bank
+ 159:main.c        ****         syncConnection(SYNC_NORM);
+ 338              		.loc 1 159 0
+ 339 0034 0020     		movs	r0, #0
+ 340 0036 FFF7FEFF 		bl	syncConnection
+ 341              	.LVL34:
+ 160:main.c        ****             
+ 161:main.c        ****         // send UUID
+ 162:main.c        ****         ptr = UUID;
+ 163:main.c        ****         pushMessage((uint8*)ptr, strlen((char*)ptr));
+ 342              		.loc 1 163 0
+ 343 003a 264C     		ldr	r4, .L22+4
+ 344 003c 2000     		movs	r0, r4
+ 345 003e FFF7FEFF 		bl	strlen
+ 346              	.LVL35:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 10
+
+
+ 347 0042 C1B2     		uxtb	r1, r0
+ 348 0044 2000     		movs	r0, r4
+ 349 0046 FFF7FEFF 		bl	pushMessage
+ 350              	.LVL36:
+ 164:main.c        ****         
+ 165:main.c        ****         // get returned UUID
+ 166:main.c        ****         pullMessage(message);
+ 351              		.loc 1 166 0
+ 352 004a 01A8     		add	r0, sp, #4
+ 353 004c FFF7FEFF 		bl	pullMessage
+ 354              	.LVL37:
+ 167:main.c        ****         
+ 168:main.c        ****         // compare UUID with stored UUID
+ 169:main.c        ****         if (strcmp((char*)message, (char*)UUID)) {
+ 355              		.loc 1 169 0
+ 356 0050 2100     		movs	r1, r4
+ 357 0052 01A8     		add	r0, sp, #4
+ 358 0054 FFF7FEFF 		bl	strcmp
+ 359              	.LVL38:
+ 360 0058 0028     		cmp	r0, #0
+ 361 005a 04D0     		beq	.L17
+ 170:main.c        ****             pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+ 362              		.loc 1 170 0
+ 363 005c 0321     		movs	r1, #3
+ 364 005e 1E48     		ldr	r0, .L22+8
+ 365 0060 FFF7FEFF 		bl	pushMessage
+ 366              	.LVL39:
+ 367 0064 E6E7     		b	.L16
+ 368              	.L17:
+ 171:main.c        ****         } else {
+ 172:main.c        ****             pushMessage((uint8*)WITH_OK, strlen(WITH_OK));
+ 369              		.loc 1 172 0
+ 370 0066 0121     		movs	r1, #1
+ 371 0068 1C48     		ldr	r0, .L22+12
+ 372 006a FFF7FEFF 		bl	pushMessage
+ 373              	.LVL40:
+ 173:main.c        ****             
+ 174:main.c        ****             // get number of bills
+ 175:main.c        ****             pullMessage(message);
+ 374              		.loc 1 175 0
+ 375 006e 01AC     		add	r4, sp, #4
+ 376 0070 2000     		movs	r0, r4
+ 377 0072 FFF7FEFF 		bl	pullMessage
+ 378              	.LVL41:
+ 176:main.c        ****             numbills = message[0];
+ 379              		.loc 1 176 0
+ 380 0076 2478     		ldrb	r4, [r4]
+ 381              	.LVL42:
+ 177:main.c        ****             
+ 178:main.c        ****             ptr = BILLS_LEFT;
+ 179:main.c        ****             if (*ptr < numbills) {
+ 382              		.loc 1 179 0
+ 383 0078 2823     		movs	r3, #40
+ 384 007a 164A     		ldr	r2, .L22+4
+ 385 007c D35C     		ldrb	r3, [r2, r3]
+ 386 007e DBB2     		uxtb	r3, r3
+ 387 0080 9C42     		cmp	r4, r3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 11
+
+
+ 388 0082 04D9     		bls	.L19
+ 180:main.c        ****                 pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+ 389              		.loc 1 180 0
+ 390 0084 0321     		movs	r1, #3
+ 391 0086 1448     		ldr	r0, .L22+8
+ 392 0088 FFF7FEFF 		bl	pushMessage
+ 393              	.LVL43:
+ 181:main.c        ****                 continue;
+ 394              		.loc 1 181 0
+ 395 008c D2E7     		b	.L16
+ 396              	.L19:
+ 182:main.c        ****             } else {
+ 183:main.c        ****                 pushMessage((uint8*)WITH_OK, strlen(WITH_OK));
+ 397              		.loc 1 183 0
+ 398 008e 0121     		movs	r1, #1
+ 399 0090 1248     		ldr	r0, .L22+12
+ 400 0092 FFF7FEFF 		bl	pushMessage
+ 401              	.LVL44:
+ 184:main.c        ****                 bills_left = *ptr - numbills;
+ 402              		.loc 1 184 0
+ 403 0096 0F49     		ldr	r1, .L22+4
+ 404 0098 2823     		movs	r3, #40
+ 405 009a CB5C     		ldrb	r3, [r1, r3]
+ 406 009c 4620     		movs	r0, #70
+ 407 009e 6844     		add	r0, r0, sp
+ 408 00a0 1B1B     		subs	r3, r3, r4
+ 409 00a2 0370     		strb	r3, [r0]
+ 185:main.c        ****                 PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+ 410              		.loc 1 185 0
+ 411 00a4 2831     		adds	r1, r1, #40
+ 412 00a6 0122     		movs	r2, #1
+ 413 00a8 FFF7FEFF 		bl	PIGGY_BANK_Write
+ 414              	.LVL45:
+ 186:main.c        ****             }
+ 187:main.c        ****             
+ 188:main.c        ****             for (i = 0; i < numbills; i++) {
+ 415              		.loc 1 188 0
+ 416 00ac 0022     		movs	r2, #0
+ 417 00ae 4723     		movs	r3, #71
+ 418 00b0 6B44     		add	r3, r3, sp
+ 419 00b2 1A70     		strb	r2, [r3]
+ 420 00b4 06E0     		b	.L20
+ 421              	.L21:
+ 189:main.c        ****                 dispenseBill();
+ 422              		.loc 1 189 0 discriminator 3
+ 423 00b6 FFF7FEFF 		bl	dispenseBill
+ 424              	.LVL46:
+ 188:main.c        ****                 dispenseBill();
+ 425              		.loc 1 188 0 discriminator 3
+ 426 00ba 4722     		movs	r2, #71
+ 427 00bc 6A44     		add	r2, r2, sp
+ 428 00be 1378     		ldrb	r3, [r2]
+ 429 00c0 0133     		adds	r3, r3, #1
+ 430 00c2 1370     		strb	r3, [r2]
+ 431              	.L20:
+ 188:main.c        ****                 dispenseBill();
+ 432              		.loc 1 188 0 is_stmt 0 discriminator 1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 12
+
+
+ 433 00c4 4723     		movs	r3, #71
+ 434 00c6 6B44     		add	r3, r3, sp
+ 435 00c8 1B78     		ldrb	r3, [r3]
+ 436 00ca 9C42     		cmp	r4, r3
+ 437 00cc F3D8     		bhi	.L21
+ 438 00ce B1E7     		b	.L16
+ 439              	.L23:
+ 440              		.align	2
+ 441              	.L22:
+ 442 00d0 00000000 		.word	Reset_ISR
+ 443 00d4 00080000 		.word	.LANCHOR1
+ 444 00d8 24000000 		.word	.LC14
+ 445 00dc 20000000 		.word	.LC6
+ 446              		.cfi_endproc
+ 447              	.LFE37:
+ 448              		.size	main, .-main
+ 449              		.section	.rodata
+ 450              		.align	2
+ 451              		.set	.LANCHOR0,. + 0
+ 452              		.set	.LANCHOR1,. + 2048
+ 453              		.type	MONEY, %object
+ 454              		.size	MONEY, 2048
+ 455              	MONEY:
+ 456 0000 2A2A2A2A 		.ascii	"*****EMPTY*****\000"
+ 456      2A454D50 
+ 456      54592A2A 
+ 456      2A2A2A00 
+ 457 0010 00000000 		.space	2032
+ 457      00000000 
+ 457      00000000 
+ 457      00000000 
+ 457      00000000 
+ 458              		.type	UUID, %object
+ 459              		.size	UUID, 37
+ 460              	UUID:
+ 461 0800 62       		.byte	98
+ 462 0801 6C       		.byte	108
+ 463 0802 61       		.byte	97
+ 464 0803 6E       		.byte	110
+ 465 0804 6B       		.byte	107
+ 466 0805 20       		.byte	32
+ 467 0806 75       		.byte	117
+ 468 0807 75       		.byte	117
+ 469 0808 69       		.byte	105
+ 470 0809 64       		.byte	100
+ 471 080a 21       		.byte	33
+ 472 080b 00       		.byte	0
+ 473 080c 00000000 		.space	25
+ 473      00000000 
+ 473      00000000 
+ 473      00000000 
+ 473      00000000 
+ 474 0825 000000   		.space	3
+ 475              		.type	BILLS_LEFT, %object
+ 476              		.size	BILLS_LEFT, 1
+ 477              	BILLS_LEFT:
+ 478 0828 00       		.space	1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 13
+
+
+ 479 0829 000000   		.space	3
+ 480              		.type	PROVISIONED.5836, %object
+ 481              		.size	PROVISIONED.5836, 1
+ 482              	PROVISIONED.5836:
+ 483 082c 00       		.space	1
+ 484              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 485              		.align	2
+ 486              	.LC0:
+ 487 0000 496E2069 		.ascii	"In interrupt\012\000"
+ 487      6E746572 
+ 487      72757074 
+ 487      0A00
+ 488 000e 0000     		.space	2
+ 489              	.LC3:
+ 490 0010 2A2A2A2A 		.ascii	"*****EMPTY*****\000"
+ 490      2A454D50 
+ 490      54592A2A 
+ 490      2A2A2A00 
+ 491              	.LC6:
+ 492 0020 4B00     		.ascii	"K\000"
+ 493 0022 0000     		.space	2
+ 494              	.LC14:
+ 495 0024 42414400 		.ascii	"BAD\000"
+ 496              		.bss
+ 497              		.set	.LANCHOR2,. + 0
+ 498              		.type	stackloc.5826, %object
+ 499              		.size	stackloc.5826, 1
+ 500              	stackloc.5826:
+ 501 0000 00       		.space	1
+ 502              		.text
+ 503              	.Letext0:
+ 504              		.file 2 "usbserialprotocol.h"
+ 505              		.file 3 "Generated_Source\\PSoC4/SW1.h"
+ 506              		.file 4 "Generated_Source\\PSoC4/CyLib.h"
+ 507              		.file 5 "Generated_Source\\PSoC4/PIGGY_BANK.h"
+ 508              		.file 6 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 509              		.file 7 "Generated_Source\\PSoC4/Reset_isr.h"
+ 510              		.file 8 "Generated_Source\\PSoC4/DB_UART.h"
+ 511              		.file 9 "Generated_Source\\PSoC4/cytypes.h"
+ 512              		.section	.debug_info,"",%progbits
+ 513              	.Ldebug_info0:
+ 514 0000 2A060000 		.4byte	0x62a
+ 515 0004 0400     		.2byte	0x4
+ 516 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 517 000a 04       		.byte	0x4
+ 518 000b 01       		.uleb128 0x1
+ 519 000c 28010000 		.4byte	.LASF35
+ 520 0010 0C       		.byte	0xc
+ 521 0011 E0010000 		.4byte	.LASF36
+ 522 0015 48020000 		.4byte	.LASF37
+ 523 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 524 001d 00000000 		.4byte	0
+ 525 0021 00000000 		.4byte	.Ldebug_line0
+ 526 0025 02       		.uleb128 0x2
+ 527 0026 01       		.byte	0x1
+ 528 0027 06       		.byte	0x6
+ 529 0028 3C020000 		.4byte	.LASF0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 14
+
+
+ 530 002c 02       		.uleb128 0x2
+ 531 002d 01       		.byte	0x1
+ 532 002e 08       		.byte	0x8
+ 533 002f 8D000000 		.4byte	.LASF1
+ 534 0033 02       		.uleb128 0x2
+ 535 0034 02       		.byte	0x2
+ 536 0035 05       		.byte	0x5
+ 537 0036 F6010000 		.4byte	.LASF2
+ 538 003a 02       		.uleb128 0x2
+ 539 003b 02       		.byte	0x2
+ 540 003c 07       		.byte	0x7
+ 541 003d 59000000 		.4byte	.LASF3
+ 542 0041 02       		.uleb128 0x2
+ 543 0042 04       		.byte	0x4
+ 544 0043 05       		.byte	0x5
+ 545 0044 27020000 		.4byte	.LASF4
+ 546 0048 02       		.uleb128 0x2
+ 547 0049 04       		.byte	0x4
+ 548 004a 07       		.byte	0x7
+ 549 004b AE000000 		.4byte	.LASF5
+ 550 004f 02       		.uleb128 0x2
+ 551 0050 08       		.byte	0x8
+ 552 0051 05       		.byte	0x5
+ 553 0052 D2010000 		.4byte	.LASF6
+ 554 0056 02       		.uleb128 0x2
+ 555 0057 08       		.byte	0x8
+ 556 0058 07       		.byte	0x7
+ 557 0059 11010000 		.4byte	.LASF7
+ 558 005d 03       		.uleb128 0x3
+ 559 005e 04       		.byte	0x4
+ 560 005f 05       		.byte	0x5
+ 561 0060 696E7400 		.ascii	"int\000"
+ 562 0064 02       		.uleb128 0x2
+ 563 0065 04       		.byte	0x4
+ 564 0066 07       		.byte	0x7
+ 565 0067 FE000000 		.4byte	.LASF8
+ 566 006b 04       		.uleb128 0x4
+ 567 006c C0000000 		.4byte	.LASF38
+ 568 0070 09       		.byte	0x9
+ 569 0071 B901     		.2byte	0x1b9
+ 570 0073 2C000000 		.4byte	0x2c
+ 571 0077 02       		.uleb128 0x2
+ 572 0078 04       		.byte	0x4
+ 573 0079 04       		.byte	0x4
+ 574 007a 37000000 		.4byte	.LASF9
+ 575 007e 02       		.uleb128 0x2
+ 576 007f 08       		.byte	0x8
+ 577 0080 04       		.byte	0x4
+ 578 0081 DA000000 		.4byte	.LASF10
+ 579 0085 02       		.uleb128 0x2
+ 580 0086 01       		.byte	0x1
+ 581 0087 08       		.byte	0x8
+ 582 0088 E7010000 		.4byte	.LASF11
+ 583 008c 02       		.uleb128 0x2
+ 584 008d 08       		.byte	0x8
+ 585 008e 04       		.byte	0x4
+ 586 008f 30020000 		.4byte	.LASF12
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 15
+
+
+ 587 0093 02       		.uleb128 0x2
+ 588 0094 04       		.byte	0x4
+ 589 0095 07       		.byte	0x7
+ 590 0096 BD010000 		.4byte	.LASF13
+ 591 009a 05       		.uleb128 0x5
+ 592 009b EC010000 		.4byte	.LASF39
+ 593 009f 01       		.byte	0x1
+ 594 00a0 34       		.byte	0x34
+ 595 00a1 00000000 		.4byte	.LFB34
+ 596 00a5 18000000 		.4byte	.LFE34-.LFB34
+ 597 00a9 01       		.uleb128 0x1
+ 598 00aa 9C       		.byte	0x9c
+ 599 00ab DE000000 		.4byte	0xde
+ 600 00af 06       		.uleb128 0x6
+ 601 00b0 0A000000 		.4byte	.LVL0
+ 602 00b4 AB050000 		.4byte	0x5ab
+ 603 00b8 CB000000 		.4byte	0xcb
+ 604 00bc 07       		.uleb128 0x7
+ 605 00bd 01       		.uleb128 0x1
+ 606 00be 50       		.byte	0x50
+ 607 00bf 05       		.uleb128 0x5
+ 608 00c0 03       		.byte	0x3
+ 609 00c1 00000000 		.4byte	.LC0
+ 610 00c5 07       		.uleb128 0x7
+ 611 00c6 01       		.uleb128 0x1
+ 612 00c7 51       		.byte	0x51
+ 613 00c8 01       		.uleb128 0x1
+ 614 00c9 3D       		.byte	0x3d
+ 615 00ca 00       		.byte	0
+ 616 00cb 08       		.uleb128 0x8
+ 617 00cc 0E000000 		.4byte	.LVL1
+ 618 00d0 B6050000 		.4byte	0x5b6
+ 619 00d4 08       		.uleb128 0x8
+ 620 00d5 12000000 		.4byte	.LVL2
+ 621 00d9 C1050000 		.4byte	0x5c1
+ 622 00dd 00       		.byte	0
+ 623 00de 09       		.uleb128 0x9
+ 624 00df F4000000 		.4byte	.LASF16
+ 625 00e3 01       		.byte	0x1
+ 626 00e4 3D       		.byte	0x3d
+ 627 00e5 00000000 		.4byte	.LFB35
+ 628 00e9 BC000000 		.4byte	.LFE35-.LFB35
+ 629 00ed 01       		.uleb128 0x1
+ 630 00ee 9C       		.byte	0x9c
+ 631 00ef 8D020000 		.4byte	0x28d
+ 632 00f3 0A       		.uleb128 0xa
+ 633 00f4 6900     		.ascii	"i\000"
+ 634 00f6 01       		.byte	0x1
+ 635 00f7 3F       		.byte	0x3f
+ 636 00f8 5D000000 		.4byte	0x5d
+ 637 00fc 00000000 		.4byte	.LLST0
+ 638 0100 0B       		.uleb128 0xb
+ 639 0101 00000000 		.4byte	.LASF14
+ 640 0105 01       		.byte	0x1
+ 641 0106 40       		.byte	0x40
+ 642 0107 8D020000 		.4byte	0x28d
+ 643 010b 03       		.uleb128 0x3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 16
+
+
+ 644 010c 91       		.byte	0x91
+ 645 010d B07F     		.sleb128 -80
+ 646 010f 0B       		.uleb128 0xb
+ 647 0110 7D000000 		.4byte	.LASF15
+ 648 0114 01       		.byte	0x1
+ 649 0115 40       		.byte	0x40
+ 650 0116 6B000000 		.4byte	0x6b
+ 651 011a 03       		.uleb128 0x3
+ 652 011b 91       		.byte	0x91
+ 653 011c AF7F     		.sleb128 -81
+ 654 011e 06       		.uleb128 0x6
+ 655 011f 16000000 		.4byte	.LVL5
+ 656 0123 CC050000 		.4byte	0x5cc
+ 657 0127 48010000 		.4byte	0x148
+ 658 012b 07       		.uleb128 0x7
+ 659 012c 01       		.uleb128 0x1
+ 660 012d 50       		.byte	0x50
+ 661 012e 05       		.uleb128 0x5
+ 662 012f 03       		.byte	0x3
+ 663 0130 10000000 		.4byte	.LC3
+ 664 0134 07       		.uleb128 0x7
+ 665 0135 01       		.uleb128 0x1
+ 666 0136 51       		.byte	0x51
+ 667 0137 0A       		.uleb128 0xa
+ 668 0138 74       		.byte	0x74
+ 669 0139 00       		.sleb128 0
+ 670 013a 34       		.byte	0x34
+ 671 013b 24       		.byte	0x24
+ 672 013c 03       		.byte	0x3
+ 673 013d 00000000 		.4byte	.LANCHOR0
+ 674 0141 22       		.byte	0x22
+ 675 0142 07       		.uleb128 0x7
+ 676 0143 01       		.uleb128 0x1
+ 677 0144 52       		.byte	0x52
+ 678 0145 01       		.uleb128 0x1
+ 679 0146 40       		.byte	0x40
+ 680 0147 00       		.byte	0
+ 681 0148 06       		.uleb128 0x6
+ 682 0149 22000000 		.4byte	.LVL7
+ 683 014d D7050000 		.4byte	0x5d7
+ 684 0151 5B010000 		.4byte	0x15b
+ 685 0155 07       		.uleb128 0x7
+ 686 0156 01       		.uleb128 0x1
+ 687 0157 50       		.byte	0x50
+ 688 0158 01       		.uleb128 0x1
+ 689 0159 31       		.byte	0x31
+ 690 015a 00       		.byte	0
+ 691 015b 06       		.uleb128 0x6
+ 692 015c 2E000000 		.4byte	.LVL9
+ 693 0160 E2050000 		.4byte	0x5e2
+ 694 0164 7A010000 		.4byte	0x17a
+ 695 0168 07       		.uleb128 0x7
+ 696 0169 01       		.uleb128 0x1
+ 697 016a 50       		.byte	0x50
+ 698 016b 02       		.uleb128 0x2
+ 699 016c 74       		.byte	0x74
+ 700 016d 00       		.sleb128 0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 17
+
+
+ 701 016e 07       		.uleb128 0x7
+ 702 016f 01       		.uleb128 0x1
+ 703 0170 51       		.byte	0x51
+ 704 0171 01       		.uleb128 0x1
+ 705 0172 30       		.byte	0x30
+ 706 0173 07       		.uleb128 0x7
+ 707 0174 01       		.uleb128 0x1
+ 708 0175 52       		.byte	0x52
+ 709 0176 02       		.uleb128 0x2
+ 710 0177 08       		.byte	0x8
+ 711 0178 40       		.byte	0x40
+ 712 0179 00       		.byte	0
+ 713 017a 06       		.uleb128 0x6
+ 714 017b 3A000000 		.4byte	.LVL10
+ 715 017f AB050000 		.4byte	0x5ab
+ 716 0183 93010000 		.4byte	0x193
+ 717 0187 07       		.uleb128 0x7
+ 718 0188 01       		.uleb128 0x1
+ 719 0189 50       		.byte	0x50
+ 720 018a 02       		.uleb128 0x2
+ 721 018b 74       		.byte	0x74
+ 722 018c 00       		.sleb128 0
+ 723 018d 07       		.uleb128 0x7
+ 724 018e 01       		.uleb128 0x1
+ 725 018f 51       		.byte	0x51
+ 726 0190 01       		.uleb128 0x1
+ 727 0191 31       		.byte	0x31
+ 728 0192 00       		.byte	0
+ 729 0193 06       		.uleb128 0x6
+ 730 0194 40000000 		.4byte	.LVL11
+ 731 0198 EB050000 		.4byte	0x5eb
+ 732 019c A7010000 		.4byte	0x1a7
+ 733 01a0 07       		.uleb128 0x7
+ 734 01a1 01       		.uleb128 0x1
+ 735 01a2 50       		.byte	0x50
+ 736 01a3 02       		.uleb128 0x2
+ 737 01a4 74       		.byte	0x74
+ 738 01a5 00       		.sleb128 0
+ 739 01a6 00       		.byte	0
+ 740 01a7 06       		.uleb128 0x6
+ 741 01a8 46000000 		.4byte	.LVL12
+ 742 01ac F6050000 		.4byte	0x5f6
+ 743 01b0 BB010000 		.4byte	0x1bb
+ 744 01b4 07       		.uleb128 0x7
+ 745 01b5 01       		.uleb128 0x1
+ 746 01b6 50       		.byte	0x50
+ 747 01b7 02       		.uleb128 0x2
+ 748 01b8 74       		.byte	0x74
+ 749 01b9 00       		.sleb128 0
+ 750 01ba 00       		.byte	0
+ 751 01bb 06       		.uleb128 0x6
+ 752 01bc 52000000 		.4byte	.LVL13
+ 753 01c0 CC050000 		.4byte	0x5cc
+ 754 01c4 D5010000 		.4byte	0x1d5
+ 755 01c8 07       		.uleb128 0x7
+ 756 01c9 01       		.uleb128 0x1
+ 757 01ca 50       		.byte	0x50
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 18
+
+
+ 758 01cb 02       		.uleb128 0x2
+ 759 01cc 74       		.byte	0x74
+ 760 01cd 00       		.sleb128 0
+ 761 01ce 07       		.uleb128 0x7
+ 762 01cf 01       		.uleb128 0x1
+ 763 01d0 51       		.byte	0x51
+ 764 01d1 02       		.uleb128 0x2
+ 765 01d2 75       		.byte	0x75
+ 766 01d3 00       		.sleb128 0
+ 767 01d4 00       		.byte	0
+ 768 01d5 06       		.uleb128 0x6
+ 769 01d6 5C000000 		.4byte	.LVL14
+ 770 01da AB050000 		.4byte	0x5ab
+ 771 01de EE010000 		.4byte	0x1ee
+ 772 01e2 07       		.uleb128 0x7
+ 773 01e3 01       		.uleb128 0x1
+ 774 01e4 50       		.byte	0x50
+ 775 01e5 02       		.uleb128 0x2
+ 776 01e6 76       		.byte	0x76
+ 777 01e7 00       		.sleb128 0
+ 778 01e8 07       		.uleb128 0x7
+ 779 01e9 01       		.uleb128 0x1
+ 780 01ea 51       		.byte	0x51
+ 781 01eb 01       		.uleb128 0x1
+ 782 01ec 31       		.byte	0x31
+ 783 01ed 00       		.byte	0
+ 784 01ee 06       		.uleb128 0x6
+ 785 01ef 62000000 		.4byte	.LVL15
+ 786 01f3 EB050000 		.4byte	0x5eb
+ 787 01f7 02020000 		.4byte	0x202
+ 788 01fb 07       		.uleb128 0x7
+ 789 01fc 01       		.uleb128 0x1
+ 790 01fd 50       		.byte	0x50
+ 791 01fe 02       		.uleb128 0x2
+ 792 01ff 74       		.byte	0x74
+ 793 0200 00       		.sleb128 0
+ 794 0201 00       		.byte	0
+ 795 0202 06       		.uleb128 0x6
+ 796 0203 74000000 		.4byte	.LVL16
+ 797 0207 CC050000 		.4byte	0x5cc
+ 798 020b 21020000 		.4byte	0x221
+ 799 020f 07       		.uleb128 0x7
+ 800 0210 01       		.uleb128 0x1
+ 801 0211 50       		.byte	0x50
+ 802 0212 02       		.uleb128 0x2
+ 803 0213 7D       		.byte	0x7d
+ 804 0214 07       		.sleb128 7
+ 805 0215 07       		.uleb128 0x7
+ 806 0216 01       		.uleb128 0x1
+ 807 0217 51       		.byte	0x51
+ 808 0218 02       		.uleb128 0x2
+ 809 0219 75       		.byte	0x75
+ 810 021a 28       		.sleb128 40
+ 811 021b 07       		.uleb128 0x7
+ 812 021c 01       		.uleb128 0x1
+ 813 021d 52       		.byte	0x52
+ 814 021e 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 19
+
+
+ 815 021f 31       		.byte	0x31
+ 816 0220 00       		.byte	0
+ 817 0221 06       		.uleb128 0x6
+ 818 0222 7C000000 		.4byte	.LVL17
+ 819 0226 AB050000 		.4byte	0x5ab
+ 820 022a 3A020000 		.4byte	0x23a
+ 821 022e 07       		.uleb128 0x7
+ 822 022f 01       		.uleb128 0x1
+ 823 0230 50       		.byte	0x50
+ 824 0231 02       		.uleb128 0x2
+ 825 0232 76       		.byte	0x76
+ 826 0233 00       		.sleb128 0
+ 827 0234 07       		.uleb128 0x7
+ 828 0235 01       		.uleb128 0x1
+ 829 0236 51       		.byte	0x51
+ 830 0237 01       		.uleb128 0x1
+ 831 0238 31       		.byte	0x31
+ 832 0239 00       		.byte	0
+ 833 023a 06       		.uleb128 0x6
+ 834 023b 86000000 		.4byte	.LVL19
+ 835 023f EB050000 		.4byte	0x5eb
+ 836 0243 4F020000 		.4byte	0x24f
+ 837 0247 07       		.uleb128 0x7
+ 838 0248 01       		.uleb128 0x1
+ 839 0249 50       		.byte	0x50
+ 840 024a 03       		.uleb128 0x3
+ 841 024b 91       		.byte	0x91
+ 842 024c B07F     		.sleb128 -80
+ 843 024e 00       		.byte	0
+ 844 024f 06       		.uleb128 0x6
+ 845 0250 94000000 		.4byte	.LVL20
+ 846 0254 CC050000 		.4byte	0x5cc
+ 847 0258 77020000 		.4byte	0x277
+ 848 025c 07       		.uleb128 0x7
+ 849 025d 01       		.uleb128 0x1
+ 850 025e 50       		.byte	0x50
+ 851 025f 03       		.uleb128 0x3
+ 852 0260 91       		.byte	0x91
+ 853 0261 B07F     		.sleb128 -80
+ 854 0263 07       		.uleb128 0x7
+ 855 0264 01       		.uleb128 0x1
+ 856 0265 51       		.byte	0x51
+ 857 0266 0A       		.uleb128 0xa
+ 858 0267 74       		.byte	0x74
+ 859 0268 00       		.sleb128 0
+ 860 0269 34       		.byte	0x34
+ 861 026a 24       		.byte	0x24
+ 862 026b 03       		.byte	0x3
+ 863 026c 00000000 		.4byte	.LANCHOR0
+ 864 0270 22       		.byte	0x22
+ 865 0271 07       		.uleb128 0x7
+ 866 0272 01       		.uleb128 0x1
+ 867 0273 52       		.byte	0x52
+ 868 0274 01       		.uleb128 0x1
+ 869 0275 40       		.byte	0x40
+ 870 0276 00       		.byte	0
+ 871 0277 0C       		.uleb128 0xc
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 20
+
+
+ 872 0278 9C000000 		.4byte	.LVL21
+ 873 027c AB050000 		.4byte	0x5ab
+ 874 0280 07       		.uleb128 0x7
+ 875 0281 01       		.uleb128 0x1
+ 876 0282 50       		.byte	0x50
+ 877 0283 02       		.uleb128 0x2
+ 878 0284 76       		.byte	0x76
+ 879 0285 00       		.sleb128 0
+ 880 0286 07       		.uleb128 0x7
+ 881 0287 01       		.uleb128 0x1
+ 882 0288 51       		.byte	0x51
+ 883 0289 01       		.uleb128 0x1
+ 884 028a 31       		.byte	0x31
+ 885 028b 00       		.byte	0
+ 886 028c 00       		.byte	0
+ 887 028d 0D       		.uleb128 0xd
+ 888 028e 6B000000 		.4byte	0x6b
+ 889 0292 9D020000 		.4byte	0x29d
+ 890 0296 0E       		.uleb128 0xe
+ 891 0297 93000000 		.4byte	0x93
+ 892 029b 3F       		.byte	0x3f
+ 893 029c 00       		.byte	0
+ 894 029d 09       		.uleb128 0x9
+ 895 029e C6000000 		.4byte	.LASF17
+ 896 02a2 01       		.byte	0x1
+ 897 02a3 61       		.byte	0x61
+ 898 02a4 00000000 		.4byte	.LFB36
+ 899 02a8 5C000000 		.4byte	.LFE36-.LFB36
+ 900 02ac 01       		.uleb128 0x1
+ 901 02ad 9C       		.byte	0x9c
+ 902 02ae 30030000 		.4byte	0x330
+ 903 02b2 0B       		.uleb128 0xb
+ 904 02b3 2E000000 		.4byte	.LASF18
+ 905 02b7 01       		.byte	0x1
+ 906 02b8 63       		.byte	0x63
+ 907 02b9 6B000000 		.4byte	0x6b
+ 908 02bd 05       		.uleb128 0x5
+ 909 02be 03       		.byte	0x3
+ 910 02bf 00000000 		.4byte	stackloc.5826
+ 911 02c3 0B       		.uleb128 0xb
+ 912 02c4 00000000 		.4byte	.LASF14
+ 913 02c8 01       		.byte	0x1
+ 914 02c9 64       		.byte	0x64
+ 915 02ca 30030000 		.4byte	0x330
+ 916 02ce 02       		.uleb128 0x2
+ 917 02cf 91       		.byte	0x91
+ 918 02d0 58       		.sleb128 -40
+ 919 02d1 0A       		.uleb128 0xa
+ 920 02d2 70747200 		.ascii	"ptr\000"
+ 921 02d6 01       		.byte	0x1
+ 922 02d7 65       		.byte	0x65
+ 923 02d8 40030000 		.4byte	0x340
+ 924 02dc 36000000 		.4byte	.LLST1
+ 925 02e0 06       		.uleb128 0x6
+ 926 02e1 12000000 		.4byte	.LVL25
+ 927 02e5 E2050000 		.4byte	0x5e2
+ 928 02e9 FE020000 		.4byte	0x2fe
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 21
+
+
+ 929 02ed 07       		.uleb128 0x7
+ 930 02ee 01       		.uleb128 0x1
+ 931 02ef 50       		.byte	0x50
+ 932 02f0 02       		.uleb128 0x2
+ 933 02f1 7D       		.byte	0x7d
+ 934 02f2 00       		.sleb128 0
+ 935 02f3 07       		.uleb128 0x7
+ 936 02f4 01       		.uleb128 0x1
+ 937 02f5 51       		.byte	0x51
+ 938 02f6 01       		.uleb128 0x1
+ 939 02f7 30       		.byte	0x30
+ 940 02f8 07       		.uleb128 0x7
+ 941 02f9 01       		.uleb128 0x1
+ 942 02fa 52       		.byte	0x52
+ 943 02fb 01       		.uleb128 0x1
+ 944 02fc 40       		.byte	0x40
+ 945 02fd 00       		.byte	0
+ 946 02fe 06       		.uleb128 0x6
+ 947 02ff 2A000000 		.4byte	.LVL27
+ 948 0303 AB050000 		.4byte	0x5ab
+ 949 0307 17030000 		.4byte	0x317
+ 950 030b 07       		.uleb128 0x7
+ 951 030c 01       		.uleb128 0x1
+ 952 030d 50       		.byte	0x50
+ 953 030e 02       		.uleb128 0x2
+ 954 030f 7D       		.byte	0x7d
+ 955 0310 00       		.sleb128 0
+ 956 0311 07       		.uleb128 0x7
+ 957 0312 01       		.uleb128 0x1
+ 958 0313 51       		.byte	0x51
+ 959 0314 01       		.uleb128 0x1
+ 960 0315 40       		.byte	0x40
+ 961 0316 00       		.byte	0
+ 962 0317 0C       		.uleb128 0xc
+ 963 0318 38000000 		.4byte	.LVL28
+ 964 031c CC050000 		.4byte	0x5cc
+ 965 0320 07       		.uleb128 0x7
+ 966 0321 01       		.uleb128 0x1
+ 967 0322 50       		.byte	0x50
+ 968 0323 05       		.uleb128 0x5
+ 969 0324 03       		.byte	0x3
+ 970 0325 10000000 		.4byte	.LC3
+ 971 0329 07       		.uleb128 0x7
+ 972 032a 01       		.uleb128 0x1
+ 973 032b 52       		.byte	0x52
+ 974 032c 01       		.uleb128 0x1
+ 975 032d 40       		.byte	0x40
+ 976 032e 00       		.byte	0
+ 977 032f 00       		.byte	0
+ 978 0330 0D       		.uleb128 0xd
+ 979 0331 6B000000 		.4byte	0x6b
+ 980 0335 40030000 		.4byte	0x340
+ 981 0339 0E       		.uleb128 0xe
+ 982 033a 93000000 		.4byte	0x93
+ 983 033e 0F       		.byte	0xf
+ 984 033f 00       		.byte	0
+ 985 0340 0F       		.uleb128 0xf
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 22
+
+
+ 986 0341 04       		.byte	0x4
+ 987 0342 4B030000 		.4byte	0x34b
+ 988 0346 10       		.uleb128 0x10
+ 989 0347 6B000000 		.4byte	0x6b
+ 990 034b 11       		.uleb128 0x11
+ 991 034c 46030000 		.4byte	0x346
+ 992 0350 12       		.uleb128 0x12
+ 993 0351 E1000000 		.4byte	.LASF40
+ 994 0355 01       		.byte	0x1
+ 995 0356 73       		.byte	0x73
+ 996 0357 5D000000 		.4byte	0x5d
+ 997 035b 00000000 		.4byte	.LFB37
+ 998 035f E0000000 		.4byte	.LFE37-.LFB37
+ 999 0363 01       		.uleb128 0x1
+ 1000 0364 9C       		.byte	0x9c
+ 1001 0365 2E050000 		.4byte	0x52e
+ 1002 0369 0B       		.uleb128 0xb
+ 1003 036a 7D000000 		.4byte	.LASF15
+ 1004 036e 01       		.byte	0x1
+ 1005 036f 7C       		.byte	0x7c
+ 1006 0370 6B000000 		.4byte	0x6b
+ 1007 0374 01       		.uleb128 0x1
+ 1008 0375 54       		.byte	0x54
+ 1009 0376 13       		.uleb128 0x13
+ 1010 0377 6900     		.ascii	"i\000"
+ 1011 0379 01       		.byte	0x1
+ 1012 037a 7C       		.byte	0x7c
+ 1013 037b 6B000000 		.4byte	0x6b
+ 1014 037f 02       		.uleb128 0x2
+ 1015 0380 91       		.byte	0x91
+ 1016 0381 77       		.sleb128 -9
+ 1017 0382 0B       		.uleb128 0xb
+ 1018 0383 1C020000 		.4byte	.LASF19
+ 1019 0387 01       		.byte	0x1
+ 1020 0388 7C       		.byte	0x7c
+ 1021 0389 6B000000 		.4byte	0x6b
+ 1022 038d 02       		.uleb128 0x2
+ 1023 038e 91       		.byte	0x91
+ 1024 038f 76       		.sleb128 -10
+ 1025 0390 0B       		.uleb128 0xb
+ 1026 0391 00000000 		.4byte	.LASF14
+ 1027 0395 01       		.byte	0x1
+ 1028 0396 7D       		.byte	0x7d
+ 1029 0397 8D020000 		.4byte	0x28d
+ 1030 039b 03       		.uleb128 0x3
+ 1031 039c 91       		.byte	0x91
+ 1032 039d B47F     		.sleb128 -76
+ 1033 039f 0B       		.uleb128 0xb
+ 1034 03a0 00020000 		.4byte	.LASF20
+ 1035 03a4 01       		.byte	0x1
+ 1036 03a5 87       		.byte	0x87
+ 1037 03a6 3E050000 		.4byte	0x53e
+ 1038 03aa 05       		.uleb128 0x5
+ 1039 03ab 03       		.byte	0x3
+ 1040 03ac 2C080000 		.4byte	PROVISIONED.5836
+ 1041 03b0 0A       		.uleb128 0xa
+ 1042 03b1 70747200 		.ascii	"ptr\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 23
+
+
+ 1043 03b5 01       		.byte	0x1
+ 1044 03b6 88       		.byte	0x88
+ 1045 03b7 40030000 		.4byte	0x340
+ 1046 03bb 53000000 		.4byte	.LLST2
+ 1047 03bf 06       		.uleb128 0x6
+ 1048 03c0 0C000000 		.4byte	.LVL29
+ 1049 03c4 01060000 		.4byte	0x601
+ 1050 03c8 D6030000 		.4byte	0x3d6
+ 1051 03cc 07       		.uleb128 0x7
+ 1052 03cd 01       		.uleb128 0x1
+ 1053 03ce 50       		.byte	0x50
+ 1054 03cf 05       		.uleb128 0x5
+ 1055 03d0 03       		.byte	0x3
+ 1056 03d1 00000000 		.4byte	Reset_ISR
+ 1057 03d5 00       		.byte	0
+ 1058 03d6 08       		.uleb128 0x8
+ 1059 03d7 10000000 		.4byte	.LVL30
+ 1060 03db 0C060000 		.4byte	0x60c
+ 1061 03df 08       		.uleb128 0x8
+ 1062 03e0 14000000 		.4byte	.LVL31
+ 1063 03e4 17060000 		.4byte	0x617
+ 1064 03e8 08       		.uleb128 0x8
+ 1065 03e9 22000000 		.4byte	.LVL32
+ 1066 03ed DE000000 		.4byte	0xde
+ 1067 03f1 06       		.uleb128 0x6
+ 1068 03f2 34000000 		.4byte	.LVL33
+ 1069 03f6 CC050000 		.4byte	0x5cc
+ 1070 03fa 13040000 		.4byte	0x413
+ 1071 03fe 07       		.uleb128 0x7
+ 1072 03ff 01       		.uleb128 0x1
+ 1073 0400 50       		.byte	0x50
+ 1074 0401 02       		.uleb128 0x2
+ 1075 0402 91       		.byte	0x91
+ 1076 0403 77       		.sleb128 -9
+ 1077 0404 07       		.uleb128 0x7
+ 1078 0405 01       		.uleb128 0x1
+ 1079 0406 51       		.byte	0x51
+ 1080 0407 05       		.uleb128 0x5
+ 1081 0408 03       		.byte	0x3
+ 1082 0409 2C080000 		.4byte	.LANCHOR1+44
+ 1083 040d 07       		.uleb128 0x7
+ 1084 040e 01       		.uleb128 0x1
+ 1085 040f 52       		.byte	0x52
+ 1086 0410 01       		.uleb128 0x1
+ 1087 0411 31       		.byte	0x31
+ 1088 0412 00       		.byte	0
+ 1089 0413 06       		.uleb128 0x6
+ 1090 0414 3A000000 		.4byte	.LVL34
+ 1091 0418 D7050000 		.4byte	0x5d7
+ 1092 041c 26040000 		.4byte	0x426
+ 1093 0420 07       		.uleb128 0x7
+ 1094 0421 01       		.uleb128 0x1
+ 1095 0422 50       		.byte	0x50
+ 1096 0423 01       		.uleb128 0x1
+ 1097 0424 30       		.byte	0x30
+ 1098 0425 00       		.byte	0
+ 1099 0426 06       		.uleb128 0x6
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 24
+
+
+ 1100 0427 42000000 		.4byte	.LVL35
+ 1101 042b F6050000 		.4byte	0x5f6
+ 1102 042f 3A040000 		.4byte	0x43a
+ 1103 0433 07       		.uleb128 0x7
+ 1104 0434 01       		.uleb128 0x1
+ 1105 0435 50       		.byte	0x50
+ 1106 0436 02       		.uleb128 0x2
+ 1107 0437 74       		.byte	0x74
+ 1108 0438 00       		.sleb128 0
+ 1109 0439 00       		.byte	0
+ 1110 043a 06       		.uleb128 0x6
+ 1111 043b 4A000000 		.4byte	.LVL36
+ 1112 043f AB050000 		.4byte	0x5ab
+ 1113 0443 4E040000 		.4byte	0x44e
+ 1114 0447 07       		.uleb128 0x7
+ 1115 0448 01       		.uleb128 0x1
+ 1116 0449 50       		.byte	0x50
+ 1117 044a 02       		.uleb128 0x2
+ 1118 044b 74       		.byte	0x74
+ 1119 044c 00       		.sleb128 0
+ 1120 044d 00       		.byte	0
+ 1121 044e 06       		.uleb128 0x6
+ 1122 044f 50000000 		.4byte	.LVL37
+ 1123 0453 EB050000 		.4byte	0x5eb
+ 1124 0457 63040000 		.4byte	0x463
+ 1125 045b 07       		.uleb128 0x7
+ 1126 045c 01       		.uleb128 0x1
+ 1127 045d 50       		.byte	0x50
+ 1128 045e 03       		.uleb128 0x3
+ 1129 045f 91       		.byte	0x91
+ 1130 0460 B47F     		.sleb128 -76
+ 1131 0462 00       		.byte	0
+ 1132 0463 06       		.uleb128 0x6
+ 1133 0464 58000000 		.4byte	.LVL38
+ 1134 0468 22060000 		.4byte	0x622
+ 1135 046c 7E040000 		.4byte	0x47e
+ 1136 0470 07       		.uleb128 0x7
+ 1137 0471 01       		.uleb128 0x1
+ 1138 0472 50       		.byte	0x50
+ 1139 0473 03       		.uleb128 0x3
+ 1140 0474 91       		.byte	0x91
+ 1141 0475 B47F     		.sleb128 -76
+ 1142 0477 07       		.uleb128 0x7
+ 1143 0478 01       		.uleb128 0x1
+ 1144 0479 51       		.byte	0x51
+ 1145 047a 02       		.uleb128 0x2
+ 1146 047b 74       		.byte	0x74
+ 1147 047c 00       		.sleb128 0
+ 1148 047d 00       		.byte	0
+ 1149 047e 06       		.uleb128 0x6
+ 1150 047f 64000000 		.4byte	.LVL39
+ 1151 0483 AB050000 		.4byte	0x5ab
+ 1152 0487 9A040000 		.4byte	0x49a
+ 1153 048b 07       		.uleb128 0x7
+ 1154 048c 01       		.uleb128 0x1
+ 1155 048d 50       		.byte	0x50
+ 1156 048e 05       		.uleb128 0x5
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 25
+
+
+ 1157 048f 03       		.byte	0x3
+ 1158 0490 24000000 		.4byte	.LC14
+ 1159 0494 07       		.uleb128 0x7
+ 1160 0495 01       		.uleb128 0x1
+ 1161 0496 51       		.byte	0x51
+ 1162 0497 01       		.uleb128 0x1
+ 1163 0498 33       		.byte	0x33
+ 1164 0499 00       		.byte	0
+ 1165 049a 06       		.uleb128 0x6
+ 1166 049b 6E000000 		.4byte	.LVL40
+ 1167 049f AB050000 		.4byte	0x5ab
+ 1168 04a3 B6040000 		.4byte	0x4b6
+ 1169 04a7 07       		.uleb128 0x7
+ 1170 04a8 01       		.uleb128 0x1
+ 1171 04a9 50       		.byte	0x50
+ 1172 04aa 05       		.uleb128 0x5
+ 1173 04ab 03       		.byte	0x3
+ 1174 04ac 20000000 		.4byte	.LC6
+ 1175 04b0 07       		.uleb128 0x7
+ 1176 04b1 01       		.uleb128 0x1
+ 1177 04b2 51       		.byte	0x51
+ 1178 04b3 01       		.uleb128 0x1
+ 1179 04b4 31       		.byte	0x31
+ 1180 04b5 00       		.byte	0
+ 1181 04b6 06       		.uleb128 0x6
+ 1182 04b7 76000000 		.4byte	.LVL41
+ 1183 04bb EB050000 		.4byte	0x5eb
+ 1184 04bf CA040000 		.4byte	0x4ca
+ 1185 04c3 07       		.uleb128 0x7
+ 1186 04c4 01       		.uleb128 0x1
+ 1187 04c5 50       		.byte	0x50
+ 1188 04c6 02       		.uleb128 0x2
+ 1189 04c7 74       		.byte	0x74
+ 1190 04c8 00       		.sleb128 0
+ 1191 04c9 00       		.byte	0
+ 1192 04ca 06       		.uleb128 0x6
+ 1193 04cb 8C000000 		.4byte	.LVL43
+ 1194 04cf AB050000 		.4byte	0x5ab
+ 1195 04d3 E6040000 		.4byte	0x4e6
+ 1196 04d7 07       		.uleb128 0x7
+ 1197 04d8 01       		.uleb128 0x1
+ 1198 04d9 50       		.byte	0x50
+ 1199 04da 05       		.uleb128 0x5
+ 1200 04db 03       		.byte	0x3
+ 1201 04dc 24000000 		.4byte	.LC14
+ 1202 04e0 07       		.uleb128 0x7
+ 1203 04e1 01       		.uleb128 0x1
+ 1204 04e2 51       		.byte	0x51
+ 1205 04e3 01       		.uleb128 0x1
+ 1206 04e4 33       		.byte	0x33
+ 1207 04e5 00       		.byte	0
+ 1208 04e6 06       		.uleb128 0x6
+ 1209 04e7 96000000 		.4byte	.LVL44
+ 1210 04eb AB050000 		.4byte	0x5ab
+ 1211 04ef 02050000 		.4byte	0x502
+ 1212 04f3 07       		.uleb128 0x7
+ 1213 04f4 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 26
+
+
+ 1214 04f5 50       		.byte	0x50
+ 1215 04f6 05       		.uleb128 0x5
+ 1216 04f7 03       		.byte	0x3
+ 1217 04f8 20000000 		.4byte	.LC6
+ 1218 04fc 07       		.uleb128 0x7
+ 1219 04fd 01       		.uleb128 0x1
+ 1220 04fe 51       		.byte	0x51
+ 1221 04ff 01       		.uleb128 0x1
+ 1222 0500 31       		.byte	0x31
+ 1223 0501 00       		.byte	0
+ 1224 0502 06       		.uleb128 0x6
+ 1225 0503 AC000000 		.4byte	.LVL45
+ 1226 0507 CC050000 		.4byte	0x5cc
+ 1227 050b 24050000 		.4byte	0x524
+ 1228 050f 07       		.uleb128 0x7
+ 1229 0510 01       		.uleb128 0x1
+ 1230 0511 50       		.byte	0x50
+ 1231 0512 02       		.uleb128 0x2
+ 1232 0513 91       		.byte	0x91
+ 1233 0514 76       		.sleb128 -10
+ 1234 0515 07       		.uleb128 0x7
+ 1235 0516 01       		.uleb128 0x1
+ 1236 0517 51       		.byte	0x51
+ 1237 0518 05       		.uleb128 0x5
+ 1238 0519 03       		.byte	0x3
+ 1239 051a 28080000 		.4byte	.LANCHOR1+40
+ 1240 051e 07       		.uleb128 0x7
+ 1241 051f 01       		.uleb128 0x1
+ 1242 0520 52       		.byte	0x52
+ 1243 0521 01       		.uleb128 0x1
+ 1244 0522 31       		.byte	0x31
+ 1245 0523 00       		.byte	0
+ 1246 0524 08       		.uleb128 0x8
+ 1247 0525 BA000000 		.4byte	.LVL46
+ 1248 0529 9D020000 		.4byte	0x29d
+ 1249 052d 00       		.byte	0
+ 1250 052e 0D       		.uleb128 0xd
+ 1251 052f 46030000 		.4byte	0x346
+ 1252 0533 3E050000 		.4byte	0x53e
+ 1253 0537 0E       		.uleb128 0xe
+ 1254 0538 93000000 		.4byte	0x93
+ 1255 053c 00       		.byte	0
+ 1256 053d 00       		.byte	0
+ 1257 053e 10       		.uleb128 0x10
+ 1258 053f 2E050000 		.4byte	0x52e
+ 1259 0543 0D       		.uleb128 0xd
+ 1260 0544 46030000 		.4byte	0x346
+ 1261 0548 59050000 		.4byte	0x559
+ 1262 054c 0E       		.uleb128 0xe
+ 1263 054d 93000000 		.4byte	0x93
+ 1264 0551 7F       		.byte	0x7f
+ 1265 0552 0E       		.uleb128 0xe
+ 1266 0553 93000000 		.4byte	0x93
+ 1267 0557 0F       		.byte	0xf
+ 1268 0558 00       		.byte	0
+ 1269 0559 0B       		.uleb128 0xb
+ 1270 055a 0B010000 		.4byte	.LASF21
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 27
+
+
+ 1271 055e 01       		.byte	0x1
+ 1272 055f 2D       		.byte	0x2d
+ 1273 0560 6A050000 		.4byte	0x56a
+ 1274 0564 05       		.uleb128 0x5
+ 1275 0565 03       		.byte	0x3
+ 1276 0566 00000000 		.4byte	MONEY
+ 1277 056a 10       		.uleb128 0x10
+ 1278 056b 43050000 		.4byte	0x543
+ 1279 056f 0D       		.uleb128 0xd
+ 1280 0570 46030000 		.4byte	0x346
+ 1281 0574 7F050000 		.4byte	0x57f
+ 1282 0578 0E       		.uleb128 0xe
+ 1283 0579 93000000 		.4byte	0x93
+ 1284 057d 24       		.byte	0x24
+ 1285 057e 00       		.byte	0
+ 1286 057f 0B       		.uleb128 0xb
+ 1287 0580 08000000 		.4byte	.LASF22
+ 1288 0584 01       		.byte	0x1
+ 1289 0585 2E       		.byte	0x2e
+ 1290 0586 90050000 		.4byte	0x590
+ 1291 058a 05       		.uleb128 0x5
+ 1292 058b 03       		.byte	0x3
+ 1293 058c 00080000 		.4byte	UUID
+ 1294 0590 10       		.uleb128 0x10
+ 1295 0591 6F050000 		.4byte	0x56f
+ 1296 0595 0B       		.uleb128 0xb
+ 1297 0596 4E000000 		.4byte	.LASF23
+ 1298 059a 01       		.byte	0x1
+ 1299 059b 30       		.byte	0x30
+ 1300 059c A6050000 		.4byte	0x5a6
+ 1301 05a0 05       		.uleb128 0x5
+ 1302 05a1 03       		.byte	0x3
+ 1303 05a2 28080000 		.4byte	BILLS_LEFT
+ 1304 05a6 10       		.uleb128 0x10
+ 1305 05a7 2E050000 		.4byte	0x52e
+ 1306 05ab 14       		.uleb128 0x14
+ 1307 05ac C6010000 		.4byte	.LASF24
+ 1308 05b0 C6010000 		.4byte	.LASF24
+ 1309 05b4 02       		.byte	0x2
+ 1310 05b5 1E       		.byte	0x1e
+ 1311 05b6 14       		.uleb128 0x14
+ 1312 05b7 9B000000 		.4byte	.LASF25
+ 1313 05bb 9B000000 		.4byte	.LASF25
+ 1314 05bf 03       		.byte	0x3
+ 1315 05c0 39       		.byte	0x39
+ 1316 05c1 14       		.uleb128 0x14
+ 1317 05c2 0C020000 		.4byte	.LASF26
+ 1318 05c6 0C020000 		.4byte	.LASF26
+ 1319 05ca 04       		.byte	0x4
+ 1320 05cb E4       		.byte	0xe4
+ 1321 05cc 14       		.uleb128 0x14
+ 1322 05cd 6C000000 		.4byte	.LASF27
+ 1323 05d1 6C000000 		.4byte	.LASF27
+ 1324 05d5 05       		.byte	0x5
+ 1325 05d6 2F       		.byte	0x2f
+ 1326 05d7 14       		.uleb128 0x14
+ 1327 05d8 0D000000 		.4byte	.LASF28
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 28
+
+
+ 1328 05dc 0D000000 		.4byte	.LASF28
+ 1329 05e0 02       		.byte	0x2
+ 1330 05e1 2B       		.byte	0x2b
+ 1331 05e2 15       		.uleb128 0x15
+ 1332 05e3 D3000000 		.4byte	.LASF41
+ 1333 05e7 D3000000 		.4byte	.LASF41
+ 1334 05eb 14       		.uleb128 0x14
+ 1335 05ec 88020000 		.4byte	.LASF29
+ 1336 05f0 88020000 		.4byte	.LASF29
+ 1337 05f4 02       		.byte	0x2
+ 1338 05f5 25       		.byte	0x25
+ 1339 05f6 14       		.uleb128 0x14
+ 1340 05f7 86000000 		.4byte	.LASF30
+ 1341 05fb 86000000 		.4byte	.LASF30
+ 1342 05ff 06       		.byte	0x6
+ 1343 0600 21       		.byte	0x21
+ 1344 0601 14       		.uleb128 0x14
+ 1345 0602 1C000000 		.4byte	.LASF31
+ 1346 0606 1C000000 		.4byte	.LASF31
+ 1347 060a 07       		.byte	0x7
+ 1348 060b 18       		.byte	0x18
+ 1349 060c 14       		.uleb128 0x14
+ 1350 060d 3D000000 		.4byte	.LASF32
+ 1351 0611 3D000000 		.4byte	.LASF32
+ 1352 0615 05       		.byte	0x5
+ 1353 0616 29       		.byte	0x29
+ 1354 0617 14       		.uleb128 0x14
+ 1355 0618 E6000000 		.4byte	.LASF33
+ 1356 061c E6000000 		.4byte	.LASF33
+ 1357 0620 08       		.byte	0x8
+ 1358 0621 6E       		.byte	0x6e
+ 1359 0622 14       		.uleb128 0x14
+ 1360 0623 B6010000 		.4byte	.LASF34
+ 1361 0627 B6010000 		.4byte	.LASF34
+ 1362 062b 06       		.byte	0x6
+ 1363 062c 1C       		.byte	0x1c
+ 1364 062d 00       		.byte	0
+ 1365              		.section	.debug_abbrev,"",%progbits
+ 1366              	.Ldebug_abbrev0:
+ 1367 0000 01       		.uleb128 0x1
+ 1368 0001 11       		.uleb128 0x11
+ 1369 0002 01       		.byte	0x1
+ 1370 0003 25       		.uleb128 0x25
+ 1371 0004 0E       		.uleb128 0xe
+ 1372 0005 13       		.uleb128 0x13
+ 1373 0006 0B       		.uleb128 0xb
+ 1374 0007 03       		.uleb128 0x3
+ 1375 0008 0E       		.uleb128 0xe
+ 1376 0009 1B       		.uleb128 0x1b
+ 1377 000a 0E       		.uleb128 0xe
+ 1378 000b 55       		.uleb128 0x55
+ 1379 000c 17       		.uleb128 0x17
+ 1380 000d 11       		.uleb128 0x11
+ 1381 000e 01       		.uleb128 0x1
+ 1382 000f 10       		.uleb128 0x10
+ 1383 0010 17       		.uleb128 0x17
+ 1384 0011 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 29
+
+
+ 1385 0012 00       		.byte	0
+ 1386 0013 02       		.uleb128 0x2
+ 1387 0014 24       		.uleb128 0x24
+ 1388 0015 00       		.byte	0
+ 1389 0016 0B       		.uleb128 0xb
+ 1390 0017 0B       		.uleb128 0xb
+ 1391 0018 3E       		.uleb128 0x3e
+ 1392 0019 0B       		.uleb128 0xb
+ 1393 001a 03       		.uleb128 0x3
+ 1394 001b 0E       		.uleb128 0xe
+ 1395 001c 00       		.byte	0
+ 1396 001d 00       		.byte	0
+ 1397 001e 03       		.uleb128 0x3
+ 1398 001f 24       		.uleb128 0x24
+ 1399 0020 00       		.byte	0
+ 1400 0021 0B       		.uleb128 0xb
+ 1401 0022 0B       		.uleb128 0xb
+ 1402 0023 3E       		.uleb128 0x3e
+ 1403 0024 0B       		.uleb128 0xb
+ 1404 0025 03       		.uleb128 0x3
+ 1405 0026 08       		.uleb128 0x8
+ 1406 0027 00       		.byte	0
+ 1407 0028 00       		.byte	0
+ 1408 0029 04       		.uleb128 0x4
+ 1409 002a 16       		.uleb128 0x16
+ 1410 002b 00       		.byte	0
+ 1411 002c 03       		.uleb128 0x3
+ 1412 002d 0E       		.uleb128 0xe
+ 1413 002e 3A       		.uleb128 0x3a
+ 1414 002f 0B       		.uleb128 0xb
+ 1415 0030 3B       		.uleb128 0x3b
+ 1416 0031 05       		.uleb128 0x5
+ 1417 0032 49       		.uleb128 0x49
+ 1418 0033 13       		.uleb128 0x13
+ 1419 0034 00       		.byte	0
+ 1420 0035 00       		.byte	0
+ 1421 0036 05       		.uleb128 0x5
+ 1422 0037 2E       		.uleb128 0x2e
+ 1423 0038 01       		.byte	0x1
+ 1424 0039 3F       		.uleb128 0x3f
+ 1425 003a 19       		.uleb128 0x19
+ 1426 003b 03       		.uleb128 0x3
+ 1427 003c 0E       		.uleb128 0xe
+ 1428 003d 3A       		.uleb128 0x3a
+ 1429 003e 0B       		.uleb128 0xb
+ 1430 003f 3B       		.uleb128 0x3b
+ 1431 0040 0B       		.uleb128 0xb
+ 1432 0041 27       		.uleb128 0x27
+ 1433 0042 19       		.uleb128 0x19
+ 1434 0043 11       		.uleb128 0x11
+ 1435 0044 01       		.uleb128 0x1
+ 1436 0045 12       		.uleb128 0x12
+ 1437 0046 06       		.uleb128 0x6
+ 1438 0047 40       		.uleb128 0x40
+ 1439 0048 18       		.uleb128 0x18
+ 1440 0049 9742     		.uleb128 0x2117
+ 1441 004b 19       		.uleb128 0x19
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 30
+
+
+ 1442 004c 01       		.uleb128 0x1
+ 1443 004d 13       		.uleb128 0x13
+ 1444 004e 00       		.byte	0
+ 1445 004f 00       		.byte	0
+ 1446 0050 06       		.uleb128 0x6
+ 1447 0051 898201   		.uleb128 0x4109
+ 1448 0054 01       		.byte	0x1
+ 1449 0055 11       		.uleb128 0x11
+ 1450 0056 01       		.uleb128 0x1
+ 1451 0057 31       		.uleb128 0x31
+ 1452 0058 13       		.uleb128 0x13
+ 1453 0059 01       		.uleb128 0x1
+ 1454 005a 13       		.uleb128 0x13
+ 1455 005b 00       		.byte	0
+ 1456 005c 00       		.byte	0
+ 1457 005d 07       		.uleb128 0x7
+ 1458 005e 8A8201   		.uleb128 0x410a
+ 1459 0061 00       		.byte	0
+ 1460 0062 02       		.uleb128 0x2
+ 1461 0063 18       		.uleb128 0x18
+ 1462 0064 9142     		.uleb128 0x2111
+ 1463 0066 18       		.uleb128 0x18
+ 1464 0067 00       		.byte	0
+ 1465 0068 00       		.byte	0
+ 1466 0069 08       		.uleb128 0x8
+ 1467 006a 898201   		.uleb128 0x4109
+ 1468 006d 00       		.byte	0
+ 1469 006e 11       		.uleb128 0x11
+ 1470 006f 01       		.uleb128 0x1
+ 1471 0070 31       		.uleb128 0x31
+ 1472 0071 13       		.uleb128 0x13
+ 1473 0072 00       		.byte	0
+ 1474 0073 00       		.byte	0
+ 1475 0074 09       		.uleb128 0x9
+ 1476 0075 2E       		.uleb128 0x2e
+ 1477 0076 01       		.byte	0x1
+ 1478 0077 3F       		.uleb128 0x3f
+ 1479 0078 19       		.uleb128 0x19
+ 1480 0079 03       		.uleb128 0x3
+ 1481 007a 0E       		.uleb128 0xe
+ 1482 007b 3A       		.uleb128 0x3a
+ 1483 007c 0B       		.uleb128 0xb
+ 1484 007d 3B       		.uleb128 0x3b
+ 1485 007e 0B       		.uleb128 0xb
+ 1486 007f 11       		.uleb128 0x11
+ 1487 0080 01       		.uleb128 0x1
+ 1488 0081 12       		.uleb128 0x12
+ 1489 0082 06       		.uleb128 0x6
+ 1490 0083 40       		.uleb128 0x40
+ 1491 0084 18       		.uleb128 0x18
+ 1492 0085 9742     		.uleb128 0x2117
+ 1493 0087 19       		.uleb128 0x19
+ 1494 0088 01       		.uleb128 0x1
+ 1495 0089 13       		.uleb128 0x13
+ 1496 008a 00       		.byte	0
+ 1497 008b 00       		.byte	0
+ 1498 008c 0A       		.uleb128 0xa
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 31
+
+
+ 1499 008d 34       		.uleb128 0x34
+ 1500 008e 00       		.byte	0
+ 1501 008f 03       		.uleb128 0x3
+ 1502 0090 08       		.uleb128 0x8
+ 1503 0091 3A       		.uleb128 0x3a
+ 1504 0092 0B       		.uleb128 0xb
+ 1505 0093 3B       		.uleb128 0x3b
+ 1506 0094 0B       		.uleb128 0xb
+ 1507 0095 49       		.uleb128 0x49
+ 1508 0096 13       		.uleb128 0x13
+ 1509 0097 02       		.uleb128 0x2
+ 1510 0098 17       		.uleb128 0x17
+ 1511 0099 00       		.byte	0
+ 1512 009a 00       		.byte	0
+ 1513 009b 0B       		.uleb128 0xb
+ 1514 009c 34       		.uleb128 0x34
+ 1515 009d 00       		.byte	0
+ 1516 009e 03       		.uleb128 0x3
+ 1517 009f 0E       		.uleb128 0xe
+ 1518 00a0 3A       		.uleb128 0x3a
+ 1519 00a1 0B       		.uleb128 0xb
+ 1520 00a2 3B       		.uleb128 0x3b
+ 1521 00a3 0B       		.uleb128 0xb
+ 1522 00a4 49       		.uleb128 0x49
+ 1523 00a5 13       		.uleb128 0x13
+ 1524 00a6 02       		.uleb128 0x2
+ 1525 00a7 18       		.uleb128 0x18
+ 1526 00a8 00       		.byte	0
+ 1527 00a9 00       		.byte	0
+ 1528 00aa 0C       		.uleb128 0xc
+ 1529 00ab 898201   		.uleb128 0x4109
+ 1530 00ae 01       		.byte	0x1
+ 1531 00af 11       		.uleb128 0x11
+ 1532 00b0 01       		.uleb128 0x1
+ 1533 00b1 31       		.uleb128 0x31
+ 1534 00b2 13       		.uleb128 0x13
+ 1535 00b3 00       		.byte	0
+ 1536 00b4 00       		.byte	0
+ 1537 00b5 0D       		.uleb128 0xd
+ 1538 00b6 01       		.uleb128 0x1
+ 1539 00b7 01       		.byte	0x1
+ 1540 00b8 49       		.uleb128 0x49
+ 1541 00b9 13       		.uleb128 0x13
+ 1542 00ba 01       		.uleb128 0x1
+ 1543 00bb 13       		.uleb128 0x13
+ 1544 00bc 00       		.byte	0
+ 1545 00bd 00       		.byte	0
+ 1546 00be 0E       		.uleb128 0xe
+ 1547 00bf 21       		.uleb128 0x21
+ 1548 00c0 00       		.byte	0
+ 1549 00c1 49       		.uleb128 0x49
+ 1550 00c2 13       		.uleb128 0x13
+ 1551 00c3 2F       		.uleb128 0x2f
+ 1552 00c4 0B       		.uleb128 0xb
+ 1553 00c5 00       		.byte	0
+ 1554 00c6 00       		.byte	0
+ 1555 00c7 0F       		.uleb128 0xf
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 32
+
+
+ 1556 00c8 0F       		.uleb128 0xf
+ 1557 00c9 00       		.byte	0
+ 1558 00ca 0B       		.uleb128 0xb
+ 1559 00cb 0B       		.uleb128 0xb
+ 1560 00cc 49       		.uleb128 0x49
+ 1561 00cd 13       		.uleb128 0x13
+ 1562 00ce 00       		.byte	0
+ 1563 00cf 00       		.byte	0
+ 1564 00d0 10       		.uleb128 0x10
+ 1565 00d1 26       		.uleb128 0x26
+ 1566 00d2 00       		.byte	0
+ 1567 00d3 49       		.uleb128 0x49
+ 1568 00d4 13       		.uleb128 0x13
+ 1569 00d5 00       		.byte	0
+ 1570 00d6 00       		.byte	0
+ 1571 00d7 11       		.uleb128 0x11
+ 1572 00d8 35       		.uleb128 0x35
+ 1573 00d9 00       		.byte	0
+ 1574 00da 49       		.uleb128 0x49
+ 1575 00db 13       		.uleb128 0x13
+ 1576 00dc 00       		.byte	0
+ 1577 00dd 00       		.byte	0
+ 1578 00de 12       		.uleb128 0x12
+ 1579 00df 2E       		.uleb128 0x2e
+ 1580 00e0 01       		.byte	0x1
+ 1581 00e1 3F       		.uleb128 0x3f
+ 1582 00e2 19       		.uleb128 0x19
+ 1583 00e3 03       		.uleb128 0x3
+ 1584 00e4 0E       		.uleb128 0xe
+ 1585 00e5 3A       		.uleb128 0x3a
+ 1586 00e6 0B       		.uleb128 0xb
+ 1587 00e7 3B       		.uleb128 0x3b
+ 1588 00e8 0B       		.uleb128 0xb
+ 1589 00e9 27       		.uleb128 0x27
+ 1590 00ea 19       		.uleb128 0x19
+ 1591 00eb 49       		.uleb128 0x49
+ 1592 00ec 13       		.uleb128 0x13
+ 1593 00ed 8701     		.uleb128 0x87
+ 1594 00ef 19       		.uleb128 0x19
+ 1595 00f0 11       		.uleb128 0x11
+ 1596 00f1 01       		.uleb128 0x1
+ 1597 00f2 12       		.uleb128 0x12
+ 1598 00f3 06       		.uleb128 0x6
+ 1599 00f4 40       		.uleb128 0x40
+ 1600 00f5 18       		.uleb128 0x18
+ 1601 00f6 9742     		.uleb128 0x2117
+ 1602 00f8 19       		.uleb128 0x19
+ 1603 00f9 01       		.uleb128 0x1
+ 1604 00fa 13       		.uleb128 0x13
+ 1605 00fb 00       		.byte	0
+ 1606 00fc 00       		.byte	0
+ 1607 00fd 13       		.uleb128 0x13
+ 1608 00fe 34       		.uleb128 0x34
+ 1609 00ff 00       		.byte	0
+ 1610 0100 03       		.uleb128 0x3
+ 1611 0101 08       		.uleb128 0x8
+ 1612 0102 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 33
+
+
+ 1613 0103 0B       		.uleb128 0xb
+ 1614 0104 3B       		.uleb128 0x3b
+ 1615 0105 0B       		.uleb128 0xb
+ 1616 0106 49       		.uleb128 0x49
+ 1617 0107 13       		.uleb128 0x13
+ 1618 0108 02       		.uleb128 0x2
+ 1619 0109 18       		.uleb128 0x18
+ 1620 010a 00       		.byte	0
+ 1621 010b 00       		.byte	0
+ 1622 010c 14       		.uleb128 0x14
+ 1623 010d 2E       		.uleb128 0x2e
+ 1624 010e 00       		.byte	0
+ 1625 010f 3F       		.uleb128 0x3f
+ 1626 0110 19       		.uleb128 0x19
+ 1627 0111 3C       		.uleb128 0x3c
+ 1628 0112 19       		.uleb128 0x19
+ 1629 0113 6E       		.uleb128 0x6e
+ 1630 0114 0E       		.uleb128 0xe
+ 1631 0115 03       		.uleb128 0x3
+ 1632 0116 0E       		.uleb128 0xe
+ 1633 0117 3A       		.uleb128 0x3a
+ 1634 0118 0B       		.uleb128 0xb
+ 1635 0119 3B       		.uleb128 0x3b
+ 1636 011a 0B       		.uleb128 0xb
+ 1637 011b 00       		.byte	0
+ 1638 011c 00       		.byte	0
+ 1639 011d 15       		.uleb128 0x15
+ 1640 011e 2E       		.uleb128 0x2e
+ 1641 011f 00       		.byte	0
+ 1642 0120 3F       		.uleb128 0x3f
+ 1643 0121 19       		.uleb128 0x19
+ 1644 0122 3C       		.uleb128 0x3c
+ 1645 0123 19       		.uleb128 0x19
+ 1646 0124 6E       		.uleb128 0x6e
+ 1647 0125 0E       		.uleb128 0xe
+ 1648 0126 03       		.uleb128 0x3
+ 1649 0127 0E       		.uleb128 0xe
+ 1650 0128 00       		.byte	0
+ 1651 0129 00       		.byte	0
+ 1652 012a 00       		.byte	0
+ 1653              		.section	.debug_loc,"",%progbits
+ 1654              	.Ldebug_loc0:
+ 1655              	.LLST0:
+ 1656 0000 04000000 		.4byte	.LVL3
+ 1657 0004 08000000 		.4byte	.LVL4
+ 1658 0008 0200     		.2byte	0x2
+ 1659 000a 30       		.byte	0x30
+ 1660 000b 9F       		.byte	0x9f
+ 1661 000c 08000000 		.4byte	.LVL4
+ 1662 0010 24000000 		.4byte	.LVL8
+ 1663 0014 0100     		.2byte	0x1
+ 1664 0016 54       		.byte	0x54
+ 1665 0017 7C000000 		.4byte	.LVL17
+ 1666 001b 80000000 		.4byte	.LVL18
+ 1667 001f 0200     		.2byte	0x2
+ 1668 0021 30       		.byte	0x30
+ 1669 0022 9F       		.byte	0x9f
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 34
+
+
+ 1670 0023 80000000 		.4byte	.LVL18
+ 1671 0027 AA000000 		.4byte	.LVL23
+ 1672 002b 0100     		.2byte	0x1
+ 1673 002d 54       		.byte	0x54
+ 1674 002e 00000000 		.4byte	0
+ 1675 0032 00000000 		.4byte	0
+ 1676              	.LLST1:
+ 1677 0036 08000000 		.4byte	.LVL24
+ 1678 003a 1E000000 		.4byte	.LVL26
+ 1679 003e 0B00     		.2byte	0xb
+ 1680 0040 74       		.byte	0x74
+ 1681 0041 00       		.sleb128 0
+ 1682 0042 34       		.byte	0x34
+ 1683 0043 24       		.byte	0x24
+ 1684 0044 03       		.byte	0x3
+ 1685 0045 00000000 		.4byte	MONEY
+ 1686 0049 22       		.byte	0x22
+ 1687 004a 9F       		.byte	0x9f
+ 1688 004b 00000000 		.4byte	0
+ 1689 004f 00000000 		.4byte	0
+ 1690              	.LLST2:
+ 1691 0053 0C000000 		.4byte	.LVL29
+ 1692 0057 34000000 		.4byte	.LVL33
+ 1693 005b 0600     		.2byte	0x6
+ 1694 005d 03       		.byte	0x3
+ 1695 005e 2C080000 		.4byte	PROVISIONED.5836
+ 1696 0062 9F       		.byte	0x9f
+ 1697 0063 3A000000 		.4byte	.LVL34
+ 1698 0067 78000000 		.4byte	.LVL42
+ 1699 006b 0600     		.2byte	0x6
+ 1700 006d 03       		.byte	0x3
+ 1701 006e 00080000 		.4byte	UUID
+ 1702 0072 9F       		.byte	0x9f
+ 1703 0073 78000000 		.4byte	.LVL42
+ 1704 0077 E0000000 		.4byte	.LFE37
+ 1705 007b 0600     		.2byte	0x6
+ 1706 007d 03       		.byte	0x3
+ 1707 007e 28080000 		.4byte	BILLS_LEFT
+ 1708 0082 9F       		.byte	0x9f
+ 1709 0083 00000000 		.4byte	0
+ 1710 0087 00000000 		.4byte	0
+ 1711              		.section	.debug_aranges,"",%progbits
+ 1712 0000 34000000 		.4byte	0x34
+ 1713 0004 0200     		.2byte	0x2
+ 1714 0006 00000000 		.4byte	.Ldebug_info0
+ 1715 000a 04       		.byte	0x4
+ 1716 000b 00       		.byte	0
+ 1717 000c 0000     		.2byte	0
+ 1718 000e 0000     		.2byte	0
+ 1719 0010 00000000 		.4byte	.LFB34
+ 1720 0014 18000000 		.4byte	.LFE34-.LFB34
+ 1721 0018 00000000 		.4byte	.LFB35
+ 1722 001c BC000000 		.4byte	.LFE35-.LFB35
+ 1723 0020 00000000 		.4byte	.LFB36
+ 1724 0024 5C000000 		.4byte	.LFE36-.LFB36
+ 1725 0028 00000000 		.4byte	.LFB37
+ 1726 002c E0000000 		.4byte	.LFE37-.LFB37
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 35
+
+
+ 1727 0030 00000000 		.4byte	0
+ 1728 0034 00000000 		.4byte	0
+ 1729              		.section	.debug_ranges,"",%progbits
+ 1730              	.Ldebug_ranges0:
+ 1731 0000 00000000 		.4byte	.LFB34
+ 1732 0004 18000000 		.4byte	.LFE34
+ 1733 0008 00000000 		.4byte	.LFB35
+ 1734 000c BC000000 		.4byte	.LFE35
+ 1735 0010 00000000 		.4byte	.LFB36
+ 1736 0014 5C000000 		.4byte	.LFE36
+ 1737 0018 00000000 		.4byte	.LFB37
+ 1738 001c E0000000 		.4byte	.LFE37
+ 1739 0020 00000000 		.4byte	0
+ 1740 0024 00000000 		.4byte	0
+ 1741              		.section	.debug_line,"",%progbits
+ 1742              	.Ldebug_line0:
+ 1743 0000 BE010000 		.section	.debug_str,"MS",%progbits,1
+ 1743      02000C01 
+ 1743      00000201 
+ 1743      FB0E0D00 
+ 1743      01010101 
+ 1744              	.LASF14:
+ 1745 0000 6D657373 		.ascii	"message\000"
+ 1745      61676500 
+ 1746              	.LASF22:
+ 1747 0008 55554944 		.ascii	"UUID\000"
+ 1747      00
+ 1748              	.LASF28:
+ 1749 000d 73796E63 		.ascii	"syncConnection\000"
+ 1749      436F6E6E 
+ 1749      65637469 
+ 1749      6F6E00
+ 1750              	.LASF31:
+ 1751 001c 52657365 		.ascii	"Reset_isr_StartEx\000"
+ 1751      745F6973 
+ 1751      725F5374 
+ 1751      61727445 
+ 1751      7800
+ 1752              	.LASF18:
+ 1753 002e 73746163 		.ascii	"stackloc\000"
+ 1753      6B6C6F63 
+ 1753      00
+ 1754              	.LASF9:
+ 1755 0037 666C6F61 		.ascii	"float\000"
+ 1755      7400
+ 1756              	.LASF32:
+ 1757 003d 50494747 		.ascii	"PIGGY_BANK_Start\000"
+ 1757      595F4241 
+ 1757      4E4B5F53 
+ 1757      74617274 
+ 1757      00
+ 1758              	.LASF23:
+ 1759 004e 42494C4C 		.ascii	"BILLS_LEFT\000"
+ 1759      535F4C45 
+ 1759      465400
+ 1760              	.LASF3:
+ 1761 0059 73686F72 		.ascii	"short unsigned int\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 36
+
+
+ 1761      7420756E 
+ 1761      7369676E 
+ 1761      65642069 
+ 1761      6E7400
+ 1762              	.LASF27:
+ 1763 006c 50494747 		.ascii	"PIGGY_BANK_Write\000"
+ 1763      595F4241 
+ 1763      4E4B5F57 
+ 1763      72697465 
+ 1763      00
+ 1764              	.LASF15:
+ 1765 007d 6E756D62 		.ascii	"numbills\000"
+ 1765      696C6C73 
+ 1765      00
+ 1766              	.LASF30:
+ 1767 0086 7374726C 		.ascii	"strlen\000"
+ 1767      656E00
+ 1768              	.LASF1:
+ 1769 008d 756E7369 		.ascii	"unsigned char\000"
+ 1769      676E6564 
+ 1769      20636861 
+ 1769      7200
+ 1770              	.LASF25:
+ 1771 009b 5357315F 		.ascii	"SW1_ClearInterrupt\000"
+ 1771      436C6561 
+ 1771      72496E74 
+ 1771      65727275 
+ 1771      707400
+ 1772              	.LASF5:
+ 1773 00ae 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1773      20756E73 
+ 1773      69676E65 
+ 1773      6420696E 
+ 1773      7400
+ 1774              	.LASF38:
+ 1775 00c0 75696E74 		.ascii	"uint8\000"
+ 1775      3800
+ 1776              	.LASF17:
+ 1777 00c6 64697370 		.ascii	"dispenseBill\000"
+ 1777      656E7365 
+ 1777      42696C6C 
+ 1777      00
+ 1778              	.LASF41:
+ 1779 00d3 6D656D73 		.ascii	"memset\000"
+ 1779      657400
+ 1780              	.LASF10:
+ 1781 00da 646F7562 		.ascii	"double\000"
+ 1781      6C6500
+ 1782              	.LASF40:
+ 1783 00e1 6D61696E 		.ascii	"main\000"
+ 1783      00
+ 1784              	.LASF33:
+ 1785 00e6 44425F55 		.ascii	"DB_UART_Start\000"
+ 1785      4152545F 
+ 1785      53746172 
+ 1785      7400
+ 1786              	.LASF16:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 37
+
+
+ 1787 00f4 70726F76 		.ascii	"provision\000"
+ 1787      6973696F 
+ 1787      6E00
+ 1788              	.LASF8:
+ 1789 00fe 756E7369 		.ascii	"unsigned int\000"
+ 1789      676E6564 
+ 1789      20696E74 
+ 1789      00
+ 1790              	.LASF21:
+ 1791 010b 4D4F4E45 		.ascii	"MONEY\000"
+ 1791      5900
+ 1792              	.LASF7:
+ 1793 0111 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1793      206C6F6E 
+ 1793      6720756E 
+ 1793      7369676E 
+ 1793      65642069 
+ 1794              	.LASF35:
+ 1795 0128 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1795      43313120 
+ 1795      352E342E 
+ 1795      31203230 
+ 1795      31363036 
+ 1796 015b 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1796      20726576 
+ 1796      6973696F 
+ 1796      6E203233 
+ 1796      37373135 
+ 1797 018e 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1797      66756E63 
+ 1797      74696F6E 
+ 1797      2D736563 
+ 1797      74696F6E 
+ 1798              	.LASF34:
+ 1799 01b6 73747263 		.ascii	"strcmp\000"
+ 1799      6D7000
+ 1800              	.LASF13:
+ 1801 01bd 73697A65 		.ascii	"sizetype\000"
+ 1801      74797065 
+ 1801      00
+ 1802              	.LASF24:
+ 1803 01c6 70757368 		.ascii	"pushMessage\000"
+ 1803      4D657373 
+ 1803      61676500 
+ 1804              	.LASF6:
+ 1805 01d2 6C6F6E67 		.ascii	"long long int\000"
+ 1805      206C6F6E 
+ 1805      6720696E 
+ 1805      7400
+ 1806              	.LASF36:
+ 1807 01e0 6D61696E 		.ascii	"main.c\000"
+ 1807      2E6300
+ 1808              	.LASF11:
+ 1809 01e7 63686172 		.ascii	"char\000"
+ 1809      00
+ 1810              	.LASF39:
+ 1811 01ec 52657365 		.ascii	"Reset_ISR\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccTRWonS.s 			page 38
+
+
+ 1811      745F4953 
+ 1811      5200
+ 1812              	.LASF2:
+ 1813 01f6 73686F72 		.ascii	"short int\000"
+ 1813      7420696E 
+ 1813      7400
+ 1814              	.LASF20:
+ 1815 0200 50524F56 		.ascii	"PROVISIONED\000"
+ 1815      4953494F 
+ 1815      4E454400 
+ 1816              	.LASF26:
+ 1817 020c 4379536F 		.ascii	"CySoftwareReset\000"
+ 1817      66747761 
+ 1817      72655265 
+ 1817      73657400 
+ 1818              	.LASF19:
+ 1819 021c 62696C6C 		.ascii	"bills_left\000"
+ 1819      735F6C65 
+ 1819      667400
+ 1820              	.LASF4:
+ 1821 0227 6C6F6E67 		.ascii	"long int\000"
+ 1821      20696E74 
+ 1821      00
+ 1822              	.LASF12:
+ 1823 0230 6C6F6E67 		.ascii	"long double\000"
+ 1823      20646F75 
+ 1823      626C6500 
+ 1824              	.LASF0:
+ 1825 023c 7369676E 		.ascii	"signed char\000"
+ 1825      65642063 
+ 1825      68617200 
+ 1826              	.LASF37:
+ 1827 0248 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\SEC"
+ 1827      73657273 
+ 1827      5C4E6967 
+ 1827      68647261 
+ 1827      676F6E5C 
+ 1828 0275 55524954 		.ascii	"URITY_MODULE.cydsn\000"
+ 1828      595F4D4F 
+ 1828      44554C45 
+ 1828      2E637964 
+ 1828      736E00
+ 1829              	.LASF29:
+ 1830 0288 70756C6C 		.ascii	"pullMessage\000"
+ 1830      4D657373 
+ 1830      61676500 
+ 1831              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

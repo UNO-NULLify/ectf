@@ -1,0 +1,2625 @@
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"verify.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.consttime_equal,"ax",%progbits
+  20              		.align	2
+  21              		.code	16
+  22              		.thumb_func
+  23              		.type	consttime_equal, %function
+  24              	consttime_equal:
+  25              	.LFB0:
+  26              		.file 1 "verify.c"
+   1:verify.c      **** #include "ed25519.h"
+   2:verify.c      **** #include "sha512.h"
+   3:verify.c      **** #include "ge.h"
+   4:verify.c      **** #include "sc.h"
+   5:verify.c      **** 
+   6:verify.c      **** static int consttime_equal(const unsigned char *x, const unsigned char *y) {
+  27              		.loc 1 6 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36              	.LVL1:
+   7:verify.c      ****     unsigned char r = 0;
+   8:verify.c      **** 
+   9:verify.c      ****     r = x[0] ^ y[0];
+  37              		.loc 1 9 0
+  38 0002 0278     		ldrb	r2, [r0]
+  39 0004 0B78     		ldrb	r3, [r1]
+  40 0006 5A40     		eors	r2, r3
+  41              	.LVL2:
+  10:verify.c      ****     #define F(i) r |= x[i] ^ y[i]
+  11:verify.c      ****     F(1);
+  42              		.loc 1 11 0
+  43 0008 4478     		ldrb	r4, [r0, #1]
+  44 000a 4B78     		ldrb	r3, [r1, #1]
+  45 000c 6340     		eors	r3, r4
+  46 000e 1A43     		orrs	r2, r3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 2
+
+
+  47              	.LVL3:
+  48 0010 1400     		movs	r4, r2
+  49              	.LVL4:
+  12:verify.c      ****     F(2);
+  50              		.loc 1 12 0
+  51 0012 8278     		ldrb	r2, [r0, #2]
+  52 0014 8B78     		ldrb	r3, [r1, #2]
+  53 0016 5340     		eors	r3, r2
+  54 0018 2200     		movs	r2, r4
+  55 001a 1A43     		orrs	r2, r3
+  56              	.LVL5:
+  13:verify.c      ****     F(3);
+  57              		.loc 1 13 0
+  58 001c C478     		ldrb	r4, [r0, #3]
+  59 001e CB78     		ldrb	r3, [r1, #3]
+  60 0020 6340     		eors	r3, r4
+  61 0022 1A43     		orrs	r2, r3
+  62              	.LVL6:
+  63 0024 1400     		movs	r4, r2
+  64              	.LVL7:
+  14:verify.c      ****     F(4);
+  65              		.loc 1 14 0
+  66 0026 0279     		ldrb	r2, [r0, #4]
+  67 0028 0B79     		ldrb	r3, [r1, #4]
+  68 002a 5340     		eors	r3, r2
+  69 002c 2200     		movs	r2, r4
+  70 002e 1A43     		orrs	r2, r3
+  71              	.LVL8:
+  15:verify.c      ****     F(5);
+  72              		.loc 1 15 0
+  73 0030 4479     		ldrb	r4, [r0, #5]
+  74 0032 4B79     		ldrb	r3, [r1, #5]
+  75 0034 6340     		eors	r3, r4
+  76 0036 1A43     		orrs	r2, r3
+  77              	.LVL9:
+  78 0038 1400     		movs	r4, r2
+  79              	.LVL10:
+  16:verify.c      ****     F(6);
+  80              		.loc 1 16 0
+  81 003a 8279     		ldrb	r2, [r0, #6]
+  82 003c 8B79     		ldrb	r3, [r1, #6]
+  83 003e 5340     		eors	r3, r2
+  84 0040 2200     		movs	r2, r4
+  85 0042 1A43     		orrs	r2, r3
+  86              	.LVL11:
+  17:verify.c      ****     F(7);
+  87              		.loc 1 17 0
+  88 0044 C479     		ldrb	r4, [r0, #7]
+  89 0046 CB79     		ldrb	r3, [r1, #7]
+  90 0048 6340     		eors	r3, r4
+  91 004a 1A43     		orrs	r2, r3
+  92              	.LVL12:
+  93 004c 1400     		movs	r4, r2
+  94              	.LVL13:
+  18:verify.c      ****     F(8);
+  95              		.loc 1 18 0
+  96 004e 027A     		ldrb	r2, [r0, #8]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 3
+
+
+  97 0050 0B7A     		ldrb	r3, [r1, #8]
+  98 0052 5340     		eors	r3, r2
+  99 0054 2200     		movs	r2, r4
+ 100 0056 1A43     		orrs	r2, r3
+ 101              	.LVL14:
+  19:verify.c      ****     F(9);
+ 102              		.loc 1 19 0
+ 103 0058 447A     		ldrb	r4, [r0, #9]
+ 104 005a 4B7A     		ldrb	r3, [r1, #9]
+ 105 005c 6340     		eors	r3, r4
+ 106 005e 1A43     		orrs	r2, r3
+ 107              	.LVL15:
+ 108 0060 1400     		movs	r4, r2
+ 109              	.LVL16:
+  20:verify.c      ****     F(10);
+ 110              		.loc 1 20 0
+ 111 0062 827A     		ldrb	r2, [r0, #10]
+ 112 0064 8B7A     		ldrb	r3, [r1, #10]
+ 113 0066 5340     		eors	r3, r2
+ 114 0068 2200     		movs	r2, r4
+ 115 006a 1A43     		orrs	r2, r3
+ 116              	.LVL17:
+  21:verify.c      ****     F(11);
+ 117              		.loc 1 21 0
+ 118 006c C47A     		ldrb	r4, [r0, #11]
+ 119 006e CB7A     		ldrb	r3, [r1, #11]
+ 120 0070 6340     		eors	r3, r4
+ 121 0072 1A43     		orrs	r2, r3
+ 122              	.LVL18:
+ 123 0074 1400     		movs	r4, r2
+ 124              	.LVL19:
+  22:verify.c      ****     F(12);
+ 125              		.loc 1 22 0
+ 126 0076 027B     		ldrb	r2, [r0, #12]
+ 127 0078 0B7B     		ldrb	r3, [r1, #12]
+ 128 007a 5340     		eors	r3, r2
+ 129 007c 2200     		movs	r2, r4
+ 130 007e 1A43     		orrs	r2, r3
+ 131              	.LVL20:
+  23:verify.c      ****     F(13);
+ 132              		.loc 1 23 0
+ 133 0080 447B     		ldrb	r4, [r0, #13]
+ 134 0082 4B7B     		ldrb	r3, [r1, #13]
+ 135 0084 6340     		eors	r3, r4
+ 136 0086 1A43     		orrs	r2, r3
+ 137              	.LVL21:
+ 138 0088 1400     		movs	r4, r2
+ 139              	.LVL22:
+  24:verify.c      ****     F(14);
+ 140              		.loc 1 24 0
+ 141 008a 827B     		ldrb	r2, [r0, #14]
+ 142 008c 8B7B     		ldrb	r3, [r1, #14]
+ 143 008e 5340     		eors	r3, r2
+ 144 0090 2200     		movs	r2, r4
+ 145 0092 1A43     		orrs	r2, r3
+ 146              	.LVL23:
+  25:verify.c      ****     F(15);
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 4
+
+
+ 147              		.loc 1 25 0
+ 148 0094 C47B     		ldrb	r4, [r0, #15]
+ 149 0096 CB7B     		ldrb	r3, [r1, #15]
+ 150 0098 6340     		eors	r3, r4
+ 151 009a 1A43     		orrs	r2, r3
+ 152              	.LVL24:
+ 153 009c 1400     		movs	r4, r2
+ 154              	.LVL25:
+  26:verify.c      ****     F(16);
+ 155              		.loc 1 26 0
+ 156 009e 027C     		ldrb	r2, [r0, #16]
+ 157 00a0 0B7C     		ldrb	r3, [r1, #16]
+ 158 00a2 5340     		eors	r3, r2
+ 159 00a4 2200     		movs	r2, r4
+ 160 00a6 1A43     		orrs	r2, r3
+ 161              	.LVL26:
+  27:verify.c      ****     F(17);
+ 162              		.loc 1 27 0
+ 163 00a8 447C     		ldrb	r4, [r0, #17]
+ 164 00aa 4B7C     		ldrb	r3, [r1, #17]
+ 165 00ac 6340     		eors	r3, r4
+ 166 00ae 1A43     		orrs	r2, r3
+ 167              	.LVL27:
+ 168 00b0 1400     		movs	r4, r2
+ 169              	.LVL28:
+  28:verify.c      ****     F(18);
+ 170              		.loc 1 28 0
+ 171 00b2 827C     		ldrb	r2, [r0, #18]
+ 172 00b4 8B7C     		ldrb	r3, [r1, #18]
+ 173 00b6 5340     		eors	r3, r2
+ 174 00b8 2200     		movs	r2, r4
+ 175 00ba 1A43     		orrs	r2, r3
+ 176              	.LVL29:
+  29:verify.c      ****     F(19);
+ 177              		.loc 1 29 0
+ 178 00bc C47C     		ldrb	r4, [r0, #19]
+ 179 00be CB7C     		ldrb	r3, [r1, #19]
+ 180 00c0 6340     		eors	r3, r4
+ 181 00c2 1A43     		orrs	r2, r3
+ 182              	.LVL30:
+ 183 00c4 1400     		movs	r4, r2
+ 184              	.LVL31:
+  30:verify.c      ****     F(20);
+ 185              		.loc 1 30 0
+ 186 00c6 027D     		ldrb	r2, [r0, #20]
+ 187 00c8 0B7D     		ldrb	r3, [r1, #20]
+ 188 00ca 5340     		eors	r3, r2
+ 189 00cc 2200     		movs	r2, r4
+ 190 00ce 1A43     		orrs	r2, r3
+ 191              	.LVL32:
+  31:verify.c      ****     F(21);
+ 192              		.loc 1 31 0
+ 193 00d0 447D     		ldrb	r4, [r0, #21]
+ 194 00d2 4B7D     		ldrb	r3, [r1, #21]
+ 195 00d4 6340     		eors	r3, r4
+ 196 00d6 1A43     		orrs	r2, r3
+ 197              	.LVL33:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 5
+
+
+ 198 00d8 1400     		movs	r4, r2
+ 199              	.LVL34:
+  32:verify.c      ****     F(22);
+ 200              		.loc 1 32 0
+ 201 00da 827D     		ldrb	r2, [r0, #22]
+ 202 00dc 8B7D     		ldrb	r3, [r1, #22]
+ 203 00de 5340     		eors	r3, r2
+ 204 00e0 2200     		movs	r2, r4
+ 205 00e2 1A43     		orrs	r2, r3
+ 206              	.LVL35:
+  33:verify.c      ****     F(23);
+ 207              		.loc 1 33 0
+ 208 00e4 C47D     		ldrb	r4, [r0, #23]
+ 209 00e6 CB7D     		ldrb	r3, [r1, #23]
+ 210 00e8 6340     		eors	r3, r4
+ 211 00ea 1A43     		orrs	r2, r3
+ 212              	.LVL36:
+ 213 00ec 1400     		movs	r4, r2
+ 214              	.LVL37:
+  34:verify.c      ****     F(24);
+ 215              		.loc 1 34 0
+ 216 00ee 027E     		ldrb	r2, [r0, #24]
+ 217 00f0 0B7E     		ldrb	r3, [r1, #24]
+ 218 00f2 5340     		eors	r3, r2
+ 219 00f4 2200     		movs	r2, r4
+ 220 00f6 1A43     		orrs	r2, r3
+ 221              	.LVL38:
+  35:verify.c      ****     F(25);
+ 222              		.loc 1 35 0
+ 223 00f8 447E     		ldrb	r4, [r0, #25]
+ 224 00fa 4B7E     		ldrb	r3, [r1, #25]
+ 225 00fc 6340     		eors	r3, r4
+ 226 00fe 1A43     		orrs	r2, r3
+ 227              	.LVL39:
+ 228 0100 1400     		movs	r4, r2
+ 229              	.LVL40:
+  36:verify.c      ****     F(26);
+ 230              		.loc 1 36 0
+ 231 0102 827E     		ldrb	r2, [r0, #26]
+ 232 0104 8B7E     		ldrb	r3, [r1, #26]
+ 233 0106 5340     		eors	r3, r2
+ 234 0108 2200     		movs	r2, r4
+ 235 010a 1A43     		orrs	r2, r3
+ 236              	.LVL41:
+  37:verify.c      ****     F(27);
+ 237              		.loc 1 37 0
+ 238 010c C47E     		ldrb	r4, [r0, #27]
+ 239 010e CB7E     		ldrb	r3, [r1, #27]
+ 240 0110 6340     		eors	r3, r4
+ 241 0112 1A43     		orrs	r2, r3
+ 242              	.LVL42:
+ 243 0114 1400     		movs	r4, r2
+ 244              	.LVL43:
+  38:verify.c      ****     F(28);
+ 245              		.loc 1 38 0
+ 246 0116 027F     		ldrb	r2, [r0, #28]
+ 247 0118 0B7F     		ldrb	r3, [r1, #28]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 6
+
+
+ 248 011a 5340     		eors	r3, r2
+ 249 011c 2200     		movs	r2, r4
+ 250 011e 1A43     		orrs	r2, r3
+ 251              	.LVL44:
+  39:verify.c      ****     F(29);
+ 252              		.loc 1 39 0
+ 253 0120 447F     		ldrb	r4, [r0, #29]
+ 254 0122 4B7F     		ldrb	r3, [r1, #29]
+ 255 0124 6340     		eors	r3, r4
+ 256 0126 1A43     		orrs	r2, r3
+ 257              	.LVL45:
+ 258 0128 1400     		movs	r4, r2
+ 259              	.LVL46:
+  40:verify.c      ****     F(30);
+ 260              		.loc 1 40 0
+ 261 012a 827F     		ldrb	r2, [r0, #30]
+ 262 012c 8B7F     		ldrb	r3, [r1, #30]
+ 263 012e 5340     		eors	r3, r2
+ 264 0130 2200     		movs	r2, r4
+ 265 0132 1A43     		orrs	r2, r3
+ 266              	.LVL47:
+  41:verify.c      ****     F(31);
+ 267              		.loc 1 41 0
+ 268 0134 C07F     		ldrb	r0, [r0, #31]
+ 269              	.LVL48:
+ 270 0136 CB7F     		ldrb	r3, [r1, #31]
+ 271 0138 4340     		eors	r3, r0
+ 272 013a 1A43     		orrs	r2, r3
+ 273              	.LVL49:
+ 274 013c 1000     		movs	r0, r2
+ 275              	.LVL50:
+  42:verify.c      ****     #undef F
+  43:verify.c      **** 
+  44:verify.c      ****     return !r;
+ 276              		.loc 1 44 0
+ 277 013e 4342     		rsbs	r3, r0, #0
+ 278 0140 5841     		adcs	r0, r0, r3
+ 279              	.LVL51:
+  45:verify.c      **** }
+ 280              		.loc 1 45 0
+ 281              		@ sp needed
+ 282 0142 10BD     		pop	{r4, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE0:
+ 285              		.size	consttime_equal, .-consttime_equal
+ 286              		.section	.text.ed25519_verify,"ax",%progbits
+ 287              		.align	2
+ 288              		.global	ed25519_verify
+ 289              		.code	16
+ 290              		.thumb_func
+ 291              		.type	ed25519_verify, %function
+ 292              	ed25519_verify:
+ 293              	.LFB1:
+  46:verify.c      **** 
+  47:verify.c      **** int ed25519_verify(const unsigned char *signature, const unsigned char *message, size_t message_len
+ 294              		.loc 1 47 0
+ 295              		.cfi_startproc
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 7
+
+
+ 296              		@ args = 0, pretend = 0, frame = 584
+ 297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298              	.LVL52:
+ 299 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 300              		.cfi_def_cfa_offset 20
+ 301              		.cfi_offset 4, -20
+ 302              		.cfi_offset 5, -16
+ 303              		.cfi_offset 6, -12
+ 304              		.cfi_offset 7, -8
+ 305              		.cfi_offset 14, -4
+ 306 0002 224C     		ldr	r4, .L7
+ 307 0004 A544     		add	sp, sp, r4
+ 308              		.cfi_def_cfa_offset 608
+ 309 0006 0700     		movs	r7, r0
+ 310 0008 0D00     		movs	r5, r1
+ 311 000a 1600     		movs	r6, r2
+ 312 000c 1C00     		movs	r4, r3
+  48:verify.c      ****     unsigned char h[64];
+  49:verify.c      ****     unsigned char checker[32];
+  50:verify.c      ****     sha512_context hash;
+  51:verify.c      ****     ge_p3 A;
+  52:verify.c      ****     ge_p2 R;
+  53:verify.c      **** 
+  54:verify.c      ****     if (signature[63] & 224) {
+ 313              		.loc 1 54 0
+ 314 000e 3F23     		movs	r3, #63
+ 315              	.LVL53:
+ 316 0010 C35C     		ldrb	r3, [r0, r3]
+ 317 0012 1F22     		movs	r2, #31
+ 318              	.LVL54:
+ 319 0014 9343     		bics	r3, r2
+ 320 0016 30D1     		bne	.L4
+  55:verify.c      ****         return 0;
+  56:verify.c      ****     }
+  57:verify.c      **** 
+  58:verify.c      ****     if (ge_frombytes_negate_vartime(&A, public_key) != 0) {
+ 321              		.loc 1 58 0
+ 322 0018 2100     		movs	r1, r4
+ 323              	.LVL55:
+ 324 001a 1EA8     		add	r0, sp, #120
+ 325              	.LVL56:
+ 326 001c FFF7FEFF 		bl	ge_frombytes_negate_vartime
+ 327              	.LVL57:
+ 328 0020 0028     		cmp	r0, #0
+ 329 0022 2CD1     		bne	.L5
+  59:verify.c      ****         return 0;
+  60:verify.c      ****     }
+  61:verify.c      **** 
+  62:verify.c      ****     sha512_init(&hash);
+ 330              		.loc 1 62 0
+ 331 0024 46A8     		add	r0, sp, #280
+ 332 0026 FFF7FEFF 		bl	sha512_init
+ 333              	.LVL58:
+  63:verify.c      ****     sha512_update(&hash, signature, 32);
+ 334              		.loc 1 63 0
+ 335 002a 2022     		movs	r2, #32
+ 336 002c 3900     		movs	r1, r7
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 8
+
+
+ 337 002e 46A8     		add	r0, sp, #280
+ 338 0030 FFF7FEFF 		bl	sha512_update
+ 339              	.LVL59:
+  64:verify.c      ****     sha512_update(&hash, public_key, 32);
+ 340              		.loc 1 64 0
+ 341 0034 2022     		movs	r2, #32
+ 342 0036 2100     		movs	r1, r4
+ 343 0038 46A8     		add	r0, sp, #280
+ 344 003a FFF7FEFF 		bl	sha512_update
+ 345              	.LVL60:
+  65:verify.c      ****     sha512_update(&hash, message, message_len);
+ 346              		.loc 1 65 0
+ 347 003e 3200     		movs	r2, r6
+ 348 0040 2900     		movs	r1, r5
+ 349 0042 46A8     		add	r0, sp, #280
+ 350 0044 FFF7FEFF 		bl	sha512_update
+ 351              	.LVL61:
+  66:verify.c      ****     sha512_final(&hash, h);
+ 352              		.loc 1 66 0
+ 353 0048 82A9     		add	r1, sp, #520
+ 354 004a 46A8     		add	r0, sp, #280
+ 355 004c FFF7FEFF 		bl	sha512_final
+ 356              	.LVL62:
+  67:verify.c      ****     
+  68:verify.c      ****     sc_reduce(h);
+ 357              		.loc 1 68 0
+ 358 0050 82A8     		add	r0, sp, #520
+ 359 0052 FFF7FEFF 		bl	sc_reduce
+ 360              	.LVL63:
+  69:verify.c      ****     ge_double_scalarmult_vartime(&R, h, &A, signature + 32);
+ 361              		.loc 1 69 0
+ 362 0056 3B00     		movs	r3, r7
+ 363 0058 2033     		adds	r3, r3, #32
+ 364 005a 1EAA     		add	r2, sp, #120
+ 365 005c 82A9     		add	r1, sp, #520
+ 366 005e 6846     		mov	r0, sp
+ 367 0060 FFF7FEFF 		bl	ge_double_scalarmult_vartime
+ 368              	.LVL64:
+  70:verify.c      ****     ge_tobytes(checker, &R);
+ 369              		.loc 1 70 0
+ 370 0064 6946     		mov	r1, sp
+ 371 0066 7AA8     		add	r0, sp, #488
+ 372 0068 FFF7FEFF 		bl	ge_tobytes
+ 373              	.LVL65:
+  71:verify.c      **** 
+  72:verify.c      ****     if (!consttime_equal(checker, signature)) {
+ 374              		.loc 1 72 0
+ 375 006c 3900     		movs	r1, r7
+ 376 006e 7AA8     		add	r0, sp, #488
+ 377 0070 FFF7FEFF 		bl	consttime_equal
+ 378              	.LVL66:
+ 379 0074 0028     		cmp	r0, #0
+ 380 0076 04D1     		bne	.L6
+ 381 0078 04E0     		b	.L3
+ 382              	.LVL67:
+ 383              	.L4:
+  55:verify.c      ****     }
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 9
+
+
+ 384              		.loc 1 55 0
+ 385 007a 0020     		movs	r0, #0
+ 386              	.LVL68:
+ 387 007c 02E0     		b	.L3
+ 388              	.LVL69:
+ 389              	.L5:
+  59:verify.c      ****     }
+ 390              		.loc 1 59 0
+ 391 007e 0020     		movs	r0, #0
+ 392 0080 00E0     		b	.L3
+ 393              	.L6:
+  73:verify.c      ****         return 0;
+  74:verify.c      ****     }
+  75:verify.c      **** 
+  76:verify.c      ****     return 1;
+ 394              		.loc 1 76 0
+ 395 0082 0120     		movs	r0, #1
+ 396              	.L3:
+  77:verify.c      **** }
+ 397              		.loc 1 77 0
+ 398 0084 9323     		movs	r3, #147
+ 399 0086 9B00     		lsls	r3, r3, #2
+ 400 0088 9D44     		add	sp, sp, r3
+ 401              		@ sp needed
+ 402              	.LVL70:
+ 403              	.LVL71:
+ 404              	.LVL72:
+ 405              	.LVL73:
+ 406 008a F0BD     		pop	{r4, r5, r6, r7, pc}
+ 407              	.L8:
+ 408              		.align	2
+ 409              	.L7:
+ 410 008c B4FDFFFF 		.word	-588
+ 411              		.cfi_endproc
+ 412              	.LFE1:
+ 413              		.size	ed25519_verify, .-ed25519_verify
+ 414              		.text
+ 415              	.Letext0:
+ 416              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 417              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 418              		.file 4 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 419              		.file 5 "sha512.h"
+ 420              		.file 6 "ge.h"
+ 421              		.file 7 "sc.h"
+ 422              		.file 8 "fe.h"
+ 423              		.section	.debug_info,"",%progbits
+ 424              	.Ldebug_info0:
+ 425 0000 0F040000 		.4byte	0x40f
+ 426 0004 0400     		.2byte	0x4
+ 427 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 428 000a 04       		.byte	0x4
+ 429 000b 01       		.uleb128 0x1
+ 430 000c 5D000000 		.4byte	.LASF35
+ 431 0010 0C       		.byte	0xc
+ 432 0011 4C000000 		.4byte	.LASF36
+ 433 0015 64010000 		.4byte	.LASF37
+ 434 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 10
+
+
+ 435 001d 00000000 		.4byte	0
+ 436 0021 00000000 		.4byte	.Ldebug_line0
+ 437 0025 02       		.uleb128 0x2
+ 438 0026 04       		.byte	0x4
+ 439 0027 05       		.byte	0x5
+ 440 0028 696E7400 		.ascii	"int\000"
+ 441 002c 03       		.uleb128 0x3
+ 442 002d 3C000000 		.4byte	.LASF7
+ 443 0031 02       		.byte	0x2
+ 444 0032 D8       		.byte	0xd8
+ 445 0033 37000000 		.4byte	0x37
+ 446 0037 04       		.uleb128 0x4
+ 447 0038 04       		.byte	0x4
+ 448 0039 07       		.byte	0x7
+ 449 003a BC010000 		.4byte	.LASF0
+ 450 003e 04       		.uleb128 0x4
+ 451 003f 08       		.byte	0x8
+ 452 0040 05       		.byte	0x5
+ 453 0041 0B010000 		.4byte	.LASF1
+ 454 0045 04       		.uleb128 0x4
+ 455 0046 08       		.byte	0x8
+ 456 0047 04       		.byte	0x4
+ 457 0048 4A010000 		.4byte	.LASF2
+ 458 004c 04       		.uleb128 0x4
+ 459 004d 01       		.byte	0x1
+ 460 004e 06       		.byte	0x6
+ 461 004f 99010000 		.4byte	.LASF3
+ 462 0053 04       		.uleb128 0x4
+ 463 0054 01       		.byte	0x1
+ 464 0055 08       		.byte	0x8
+ 465 0056 56010000 		.4byte	.LASF4
+ 466 005a 04       		.uleb128 0x4
+ 467 005b 02       		.byte	0x2
+ 468 005c 05       		.byte	0x5
+ 469 005d 32000000 		.4byte	.LASF5
+ 470 0061 04       		.uleb128 0x4
+ 471 0062 02       		.byte	0x2
+ 472 0063 07       		.byte	0x7
+ 473 0064 C9010000 		.4byte	.LASF6
+ 474 0068 03       		.uleb128 0x3
+ 475 0069 48020000 		.4byte	.LASF8
+ 476 006d 03       		.byte	0x3
+ 477 006e 3F       		.byte	0x3f
+ 478 006f 73000000 		.4byte	0x73
+ 479 0073 04       		.uleb128 0x4
+ 480 0074 04       		.byte	0x4
+ 481 0075 05       		.byte	0x5
+ 482 0076 35010000 		.4byte	.LASF9
+ 483 007a 04       		.uleb128 0x4
+ 484 007b 04       		.byte	0x4
+ 485 007c 07       		.byte	0x7
+ 486 007d 27020000 		.4byte	.LASF10
+ 487 0081 03       		.uleb128 0x3
+ 488 0082 0C020000 		.4byte	.LASF11
+ 489 0086 03       		.byte	0x3
+ 490 0087 5B       		.byte	0x5b
+ 491 0088 8C000000 		.4byte	0x8c
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 11
+
+
+ 492 008c 04       		.uleb128 0x4
+ 493 008d 08       		.byte	0x8
+ 494 008e 07       		.byte	0x7
+ 495 008f A5010000 		.4byte	.LASF12
+ 496 0093 03       		.uleb128 0x3
+ 497 0094 EE010000 		.4byte	.LASF13
+ 498 0098 04       		.byte	0x4
+ 499 0099 2C       		.byte	0x2c
+ 500 009a 68000000 		.4byte	0x68
+ 501 009e 03       		.uleb128 0x3
+ 502 009f 29000000 		.4byte	.LASF14
+ 503 00a3 04       		.byte	0x4
+ 504 00a4 3C       		.byte	0x3c
+ 505 00a5 81000000 		.4byte	0x81
+ 506 00a9 05       		.uleb128 0x5
+ 507 00aa 17020000 		.4byte	.LASF38
+ 508 00ae D0       		.byte	0xd0
+ 509 00af 05       		.byte	0x5
+ 510 00b0 09       		.byte	0x9
+ 511 00b1 E6000000 		.4byte	0xe6
+ 512 00b5 06       		.uleb128 0x6
+ 513 00b6 F6000000 		.4byte	.LASF15
+ 514 00ba 05       		.byte	0x5
+ 515 00bb 0A       		.byte	0xa
+ 516 00bc 9E000000 		.4byte	0x9e
+ 517 00c0 00       		.byte	0
+ 518 00c1 06       		.uleb128 0x6
+ 519 00c2 23000000 		.4byte	.LASF16
+ 520 00c6 05       		.byte	0x5
+ 521 00c7 0A       		.byte	0xa
+ 522 00c8 E6000000 		.4byte	0xe6
+ 523 00cc 08       		.byte	0x8
+ 524 00cd 06       		.uleb128 0x6
+ 525 00ce DC010000 		.4byte	.LASF17
+ 526 00d2 05       		.byte	0x5
+ 527 00d3 0B       		.byte	0xb
+ 528 00d4 2C000000 		.4byte	0x2c
+ 529 00d8 48       		.byte	0x48
+ 530 00d9 07       		.uleb128 0x7
+ 531 00da 62756600 		.ascii	"buf\000"
+ 532 00de 05       		.byte	0x5
+ 533 00df 0C       		.byte	0xc
+ 534 00e0 FD000000 		.4byte	0xfd
+ 535 00e4 4C       		.byte	0x4c
+ 536 00e5 00       		.byte	0
+ 537 00e6 08       		.uleb128 0x8
+ 538 00e7 9E000000 		.4byte	0x9e
+ 539 00eb F6000000 		.4byte	0xf6
+ 540 00ef 09       		.uleb128 0x9
+ 541 00f0 F6000000 		.4byte	0xf6
+ 542 00f4 07       		.byte	0x7
+ 543 00f5 00       		.byte	0
+ 544 00f6 04       		.uleb128 0x4
+ 545 00f7 04       		.byte	0x4
+ 546 00f8 07       		.byte	0x7
+ 547 00f9 43000000 		.4byte	.LASF18
+ 548 00fd 08       		.uleb128 0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 12
+
+
+ 549 00fe 53000000 		.4byte	0x53
+ 550 0102 0D010000 		.4byte	0x10d
+ 551 0106 09       		.uleb128 0x9
+ 552 0107 F6000000 		.4byte	0xf6
+ 553 010b 7F       		.byte	0x7f
+ 554 010c 00       		.byte	0
+ 555 010d 03       		.uleb128 0x3
+ 556 010e 39020000 		.4byte	.LASF19
+ 557 0112 05       		.byte	0x5
+ 558 0113 0D       		.byte	0xd
+ 559 0114 A9000000 		.4byte	0xa9
+ 560 0118 0A       		.uleb128 0xa
+ 561 0119 666500   		.ascii	"fe\000"
+ 562 011c 08       		.byte	0x8
+ 563 011d 10       		.byte	0x10
+ 564 011e 22010000 		.4byte	0x122
+ 565 0122 08       		.uleb128 0x8
+ 566 0123 93000000 		.4byte	0x93
+ 567 0127 32010000 		.4byte	0x132
+ 568 012b 09       		.uleb128 0x9
+ 569 012c F6000000 		.4byte	0xf6
+ 570 0130 09       		.byte	0x9
+ 571 0131 00       		.byte	0
+ 572 0132 0B       		.uleb128 0xb
+ 573 0133 78       		.byte	0x78
+ 574 0134 06       		.byte	0x6
+ 575 0135 15       		.byte	0x15
+ 576 0136 59010000 		.4byte	0x159
+ 577 013a 07       		.uleb128 0x7
+ 578 013b 5800     		.ascii	"X\000"
+ 579 013d 06       		.byte	0x6
+ 580 013e 16       		.byte	0x16
+ 581 013f 18010000 		.4byte	0x118
+ 582 0143 00       		.byte	0
+ 583 0144 07       		.uleb128 0x7
+ 584 0145 5900     		.ascii	"Y\000"
+ 585 0147 06       		.byte	0x6
+ 586 0148 17       		.byte	0x17
+ 587 0149 18010000 		.4byte	0x118
+ 588 014d 28       		.byte	0x28
+ 589 014e 07       		.uleb128 0x7
+ 590 014f 5A00     		.ascii	"Z\000"
+ 591 0151 06       		.byte	0x6
+ 592 0152 18       		.byte	0x18
+ 593 0153 18010000 		.4byte	0x118
+ 594 0157 50       		.byte	0x50
+ 595 0158 00       		.byte	0
+ 596 0159 03       		.uleb128 0x3
+ 597 015a 3E010000 		.4byte	.LASF20
+ 598 015e 06       		.byte	0x6
+ 599 015f 19       		.byte	0x19
+ 600 0160 32010000 		.4byte	0x132
+ 601 0164 0B       		.uleb128 0xb
+ 602 0165 A0       		.byte	0xa0
+ 603 0166 06       		.byte	0x6
+ 604 0167 1B       		.byte	0x1b
+ 605 0168 95010000 		.4byte	0x195
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 13
+
+
+ 606 016c 07       		.uleb128 0x7
+ 607 016d 5800     		.ascii	"X\000"
+ 608 016f 06       		.byte	0x6
+ 609 0170 1C       		.byte	0x1c
+ 610 0171 18010000 		.4byte	0x118
+ 611 0175 00       		.byte	0
+ 612 0176 07       		.uleb128 0x7
+ 613 0177 5900     		.ascii	"Y\000"
+ 614 0179 06       		.byte	0x6
+ 615 017a 1D       		.byte	0x1d
+ 616 017b 18010000 		.4byte	0x118
+ 617 017f 28       		.byte	0x28
+ 618 0180 07       		.uleb128 0x7
+ 619 0181 5A00     		.ascii	"Z\000"
+ 620 0183 06       		.byte	0x6
+ 621 0184 1E       		.byte	0x1e
+ 622 0185 18010000 		.4byte	0x118
+ 623 0189 50       		.byte	0x50
+ 624 018a 07       		.uleb128 0x7
+ 625 018b 5400     		.ascii	"T\000"
+ 626 018d 06       		.byte	0x6
+ 627 018e 1F       		.byte	0x1f
+ 628 018f 18010000 		.4byte	0x118
+ 629 0193 78       		.byte	0x78
+ 630 0194 00       		.byte	0
+ 631 0195 03       		.uleb128 0x3
+ 632 0196 44010000 		.4byte	.LASF21
+ 633 019a 06       		.byte	0x6
+ 634 019b 20       		.byte	0x20
+ 635 019c 64010000 		.4byte	0x164
+ 636 01a0 0C       		.uleb128 0xc
+ 637 01a1 5C020000 		.4byte	.LASF39
+ 638 01a5 01       		.byte	0x1
+ 639 01a6 06       		.byte	0x6
+ 640 01a7 25000000 		.4byte	0x25
+ 641 01ab 00000000 		.4byte	.LFB0
+ 642 01af 44010000 		.4byte	.LFE0-.LFB0
+ 643 01b3 01       		.uleb128 0x1
+ 644 01b4 9C       		.byte	0x9c
+ 645 01b5 DF010000 		.4byte	0x1df
+ 646 01b9 0D       		.uleb128 0xd
+ 647 01ba 7800     		.ascii	"x\000"
+ 648 01bc 01       		.byte	0x1
+ 649 01bd 06       		.byte	0x6
+ 650 01be DF010000 		.4byte	0x1df
+ 651 01c2 00000000 		.4byte	.LLST0
+ 652 01c6 0E       		.uleb128 0xe
+ 653 01c7 7900     		.ascii	"y\000"
+ 654 01c9 01       		.byte	0x1
+ 655 01ca 06       		.byte	0x6
+ 656 01cb DF010000 		.4byte	0x1df
+ 657 01cf 01       		.uleb128 0x1
+ 658 01d0 51       		.byte	0x51
+ 659 01d1 0F       		.uleb128 0xf
+ 660 01d2 7200     		.ascii	"r\000"
+ 661 01d4 01       		.byte	0x1
+ 662 01d5 07       		.byte	0x7
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 14
+
+
+ 663 01d6 53000000 		.4byte	0x53
+ 664 01da 21000000 		.4byte	.LLST1
+ 665 01de 00       		.byte	0
+ 666 01df 10       		.uleb128 0x10
+ 667 01e0 04       		.byte	0x4
+ 668 01e1 E5010000 		.4byte	0x1e5
+ 669 01e5 11       		.uleb128 0x11
+ 670 01e6 53000000 		.4byte	0x53
+ 671 01ea 12       		.uleb128 0x12
+ 672 01eb 14000000 		.4byte	.LASF40
+ 673 01ef 01       		.byte	0x1
+ 674 01f0 2F       		.byte	0x2f
+ 675 01f1 25000000 		.4byte	0x25
+ 676 01f5 00000000 		.4byte	.LFB1
+ 677 01f9 90000000 		.4byte	.LFE1-.LFB1
+ 678 01fd 01       		.uleb128 0x1
+ 679 01fe 9C       		.byte	0x9c
+ 680 01ff A5030000 		.4byte	0x3a5
+ 681 0203 13       		.uleb128 0x13
+ 682 0204 52020000 		.4byte	.LASF22
+ 683 0208 01       		.byte	0x1
+ 684 0209 2F       		.byte	0x2f
+ 685 020a DF010000 		.4byte	0x1df
+ 686 020e 3C040000 		.4byte	.LLST2
+ 687 0212 13       		.uleb128 0x13
+ 688 0213 55000000 		.4byte	.LASF23
+ 689 0217 01       		.byte	0x1
+ 690 0218 2F       		.byte	0x2f
+ 691 0219 DF010000 		.4byte	0x1df
+ 692 021d 7E040000 		.4byte	.LLST3
+ 693 0221 13       		.uleb128 0x13
+ 694 0222 00020000 		.4byte	.LASF24
+ 695 0226 01       		.byte	0x1
+ 696 0227 2F       		.byte	0x2f
+ 697 0228 2C000000 		.4byte	0x2c
+ 698 022c C0040000 		.4byte	.LLST4
+ 699 0230 13       		.uleb128 0x13
+ 700 0231 E3010000 		.4byte	.LASF25
+ 701 0235 01       		.byte	0x1
+ 702 0236 2F       		.byte	0x2f
+ 703 0237 DF010000 		.4byte	0x1df
+ 704 023b EC040000 		.4byte	.LLST5
+ 705 023f 14       		.uleb128 0x14
+ 706 0240 6800     		.ascii	"h\000"
+ 707 0242 01       		.byte	0x1
+ 708 0243 30       		.byte	0x30
+ 709 0244 A5030000 		.4byte	0x3a5
+ 710 0248 03       		.uleb128 0x3
+ 711 0249 91       		.byte	0x91
+ 712 024a A87F     		.sleb128 -88
+ 713 024c 15       		.uleb128 0x15
+ 714 024d 0C000000 		.4byte	.LASF26
+ 715 0251 01       		.byte	0x1
+ 716 0252 31       		.byte	0x31
+ 717 0253 B5030000 		.4byte	0x3b5
+ 718 0257 03       		.uleb128 0x3
+ 719 0258 91       		.byte	0x91
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 15
+
+
+ 720 0259 887F     		.sleb128 -120
+ 721 025b 15       		.uleb128 0x15
+ 722 025c 96020000 		.4byte	.LASF27
+ 723 0260 01       		.byte	0x1
+ 724 0261 32       		.byte	0x32
+ 725 0262 0D010000 		.4byte	0x10d
+ 726 0266 03       		.uleb128 0x3
+ 727 0267 91       		.byte	0x91
+ 728 0268 B87D     		.sleb128 -328
+ 729 026a 14       		.uleb128 0x14
+ 730 026b 4100     		.ascii	"A\000"
+ 731 026d 01       		.byte	0x1
+ 732 026e 33       		.byte	0x33
+ 733 026f 95010000 		.4byte	0x195
+ 734 0273 03       		.uleb128 0x3
+ 735 0274 91       		.byte	0x91
+ 736 0275 987C     		.sleb128 -488
+ 737 0277 14       		.uleb128 0x14
+ 738 0278 5200     		.ascii	"R\000"
+ 739 027a 01       		.byte	0x1
+ 740 027b 34       		.byte	0x34
+ 741 027c 59010000 		.4byte	0x159
+ 742 0280 03       		.uleb128 0x3
+ 743 0281 91       		.byte	0x91
+ 744 0282 A07B     		.sleb128 -608
+ 745 0284 16       		.uleb128 0x16
+ 746 0285 20000000 		.4byte	.LVL57
+ 747 0289 C5030000 		.4byte	0x3c5
+ 748 028d 9F020000 		.4byte	0x29f
+ 749 0291 17       		.uleb128 0x17
+ 750 0292 01       		.uleb128 0x1
+ 751 0293 50       		.byte	0x50
+ 752 0294 03       		.uleb128 0x3
+ 753 0295 91       		.byte	0x91
+ 754 0296 987C     		.sleb128 -488
+ 755 0298 17       		.uleb128 0x17
+ 756 0299 01       		.uleb128 0x1
+ 757 029a 51       		.byte	0x51
+ 758 029b 02       		.uleb128 0x2
+ 759 029c 74       		.byte	0x74
+ 760 029d 00       		.sleb128 0
+ 761 029e 00       		.byte	0
+ 762 029f 16       		.uleb128 0x16
+ 763 02a0 2A000000 		.4byte	.LVL58
+ 764 02a4 D0030000 		.4byte	0x3d0
+ 765 02a8 B4020000 		.4byte	0x2b4
+ 766 02ac 17       		.uleb128 0x17
+ 767 02ad 01       		.uleb128 0x1
+ 768 02ae 50       		.byte	0x50
+ 769 02af 03       		.uleb128 0x3
+ 770 02b0 91       		.byte	0x91
+ 771 02b1 B87D     		.sleb128 -328
+ 772 02b3 00       		.byte	0
+ 773 02b4 16       		.uleb128 0x16
+ 774 02b5 34000000 		.4byte	.LVL59
+ 775 02b9 DB030000 		.4byte	0x3db
+ 776 02bd D5020000 		.4byte	0x2d5
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 16
+
+
+ 777 02c1 17       		.uleb128 0x17
+ 778 02c2 01       		.uleb128 0x1
+ 779 02c3 50       		.byte	0x50
+ 780 02c4 03       		.uleb128 0x3
+ 781 02c5 91       		.byte	0x91
+ 782 02c6 B87D     		.sleb128 -328
+ 783 02c8 17       		.uleb128 0x17
+ 784 02c9 01       		.uleb128 0x1
+ 785 02ca 51       		.byte	0x51
+ 786 02cb 02       		.uleb128 0x2
+ 787 02cc 77       		.byte	0x77
+ 788 02cd 00       		.sleb128 0
+ 789 02ce 17       		.uleb128 0x17
+ 790 02cf 01       		.uleb128 0x1
+ 791 02d0 52       		.byte	0x52
+ 792 02d1 02       		.uleb128 0x2
+ 793 02d2 08       		.byte	0x8
+ 794 02d3 20       		.byte	0x20
+ 795 02d4 00       		.byte	0
+ 796 02d5 16       		.uleb128 0x16
+ 797 02d6 3E000000 		.4byte	.LVL60
+ 798 02da DB030000 		.4byte	0x3db
+ 799 02de F6020000 		.4byte	0x2f6
+ 800 02e2 17       		.uleb128 0x17
+ 801 02e3 01       		.uleb128 0x1
+ 802 02e4 50       		.byte	0x50
+ 803 02e5 03       		.uleb128 0x3
+ 804 02e6 91       		.byte	0x91
+ 805 02e7 B87D     		.sleb128 -328
+ 806 02e9 17       		.uleb128 0x17
+ 807 02ea 01       		.uleb128 0x1
+ 808 02eb 51       		.byte	0x51
+ 809 02ec 02       		.uleb128 0x2
+ 810 02ed 74       		.byte	0x74
+ 811 02ee 00       		.sleb128 0
+ 812 02ef 17       		.uleb128 0x17
+ 813 02f0 01       		.uleb128 0x1
+ 814 02f1 52       		.byte	0x52
+ 815 02f2 02       		.uleb128 0x2
+ 816 02f3 08       		.byte	0x8
+ 817 02f4 20       		.byte	0x20
+ 818 02f5 00       		.byte	0
+ 819 02f6 16       		.uleb128 0x16
+ 820 02f7 48000000 		.4byte	.LVL61
+ 821 02fb DB030000 		.4byte	0x3db
+ 822 02ff 17030000 		.4byte	0x317
+ 823 0303 17       		.uleb128 0x17
+ 824 0304 01       		.uleb128 0x1
+ 825 0305 50       		.byte	0x50
+ 826 0306 03       		.uleb128 0x3
+ 827 0307 91       		.byte	0x91
+ 828 0308 B87D     		.sleb128 -328
+ 829 030a 17       		.uleb128 0x17
+ 830 030b 01       		.uleb128 0x1
+ 831 030c 51       		.byte	0x51
+ 832 030d 02       		.uleb128 0x2
+ 833 030e 75       		.byte	0x75
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 17
+
+
+ 834 030f 00       		.sleb128 0
+ 835 0310 17       		.uleb128 0x17
+ 836 0311 01       		.uleb128 0x1
+ 837 0312 52       		.byte	0x52
+ 838 0313 02       		.uleb128 0x2
+ 839 0314 76       		.byte	0x76
+ 840 0315 00       		.sleb128 0
+ 841 0316 00       		.byte	0
+ 842 0317 16       		.uleb128 0x16
+ 843 0318 50000000 		.4byte	.LVL62
+ 844 031c E6030000 		.4byte	0x3e6
+ 845 0320 33030000 		.4byte	0x333
+ 846 0324 17       		.uleb128 0x17
+ 847 0325 01       		.uleb128 0x1
+ 848 0326 50       		.byte	0x50
+ 849 0327 03       		.uleb128 0x3
+ 850 0328 91       		.byte	0x91
+ 851 0329 B87D     		.sleb128 -328
+ 852 032b 17       		.uleb128 0x17
+ 853 032c 01       		.uleb128 0x1
+ 854 032d 51       		.byte	0x51
+ 855 032e 03       		.uleb128 0x3
+ 856 032f 91       		.byte	0x91
+ 857 0330 A87F     		.sleb128 -88
+ 858 0332 00       		.byte	0
+ 859 0333 16       		.uleb128 0x16
+ 860 0334 56000000 		.4byte	.LVL63
+ 861 0338 F1030000 		.4byte	0x3f1
+ 862 033c 48030000 		.4byte	0x348
+ 863 0340 17       		.uleb128 0x17
+ 864 0341 01       		.uleb128 0x1
+ 865 0342 50       		.byte	0x50
+ 866 0343 03       		.uleb128 0x3
+ 867 0344 91       		.byte	0x91
+ 868 0345 A87F     		.sleb128 -88
+ 869 0347 00       		.byte	0
+ 870 0348 16       		.uleb128 0x16
+ 871 0349 64000000 		.4byte	.LVL64
+ 872 034d FC030000 		.4byte	0x3fc
+ 873 0351 71030000 		.4byte	0x371
+ 874 0355 17       		.uleb128 0x17
+ 875 0356 01       		.uleb128 0x1
+ 876 0357 50       		.byte	0x50
+ 877 0358 03       		.uleb128 0x3
+ 878 0359 91       		.byte	0x91
+ 879 035a A07B     		.sleb128 -608
+ 880 035c 17       		.uleb128 0x17
+ 881 035d 01       		.uleb128 0x1
+ 882 035e 51       		.byte	0x51
+ 883 035f 03       		.uleb128 0x3
+ 884 0360 91       		.byte	0x91
+ 885 0361 A87F     		.sleb128 -88
+ 886 0363 17       		.uleb128 0x17
+ 887 0364 01       		.uleb128 0x1
+ 888 0365 52       		.byte	0x52
+ 889 0366 03       		.uleb128 0x3
+ 890 0367 91       		.byte	0x91
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 18
+
+
+ 891 0368 987C     		.sleb128 -488
+ 892 036a 17       		.uleb128 0x17
+ 893 036b 01       		.uleb128 0x1
+ 894 036c 53       		.byte	0x53
+ 895 036d 02       		.uleb128 0x2
+ 896 036e 77       		.byte	0x77
+ 897 036f 20       		.sleb128 32
+ 898 0370 00       		.byte	0
+ 899 0371 16       		.uleb128 0x16
+ 900 0372 6C000000 		.4byte	.LVL65
+ 901 0376 07040000 		.4byte	0x407
+ 902 037a 8D030000 		.4byte	0x38d
+ 903 037e 17       		.uleb128 0x17
+ 904 037f 01       		.uleb128 0x1
+ 905 0380 50       		.byte	0x50
+ 906 0381 03       		.uleb128 0x3
+ 907 0382 91       		.byte	0x91
+ 908 0383 887F     		.sleb128 -120
+ 909 0385 17       		.uleb128 0x17
+ 910 0386 01       		.uleb128 0x1
+ 911 0387 51       		.byte	0x51
+ 912 0388 03       		.uleb128 0x3
+ 913 0389 91       		.byte	0x91
+ 914 038a A07B     		.sleb128 -608
+ 915 038c 00       		.byte	0
+ 916 038d 18       		.uleb128 0x18
+ 917 038e 74000000 		.4byte	.LVL66
+ 918 0392 A0010000 		.4byte	0x1a0
+ 919 0396 17       		.uleb128 0x17
+ 920 0397 01       		.uleb128 0x1
+ 921 0398 50       		.byte	0x50
+ 922 0399 03       		.uleb128 0x3
+ 923 039a 91       		.byte	0x91
+ 924 039b 887F     		.sleb128 -120
+ 925 039d 17       		.uleb128 0x17
+ 926 039e 01       		.uleb128 0x1
+ 927 039f 51       		.byte	0x51
+ 928 03a0 02       		.uleb128 0x2
+ 929 03a1 77       		.byte	0x77
+ 930 03a2 00       		.sleb128 0
+ 931 03a3 00       		.byte	0
+ 932 03a4 00       		.byte	0
+ 933 03a5 08       		.uleb128 0x8
+ 934 03a6 53000000 		.4byte	0x53
+ 935 03aa B5030000 		.4byte	0x3b5
+ 936 03ae 09       		.uleb128 0x9
+ 937 03af F6000000 		.4byte	0xf6
+ 938 03b3 3F       		.byte	0x3f
+ 939 03b4 00       		.byte	0
+ 940 03b5 08       		.uleb128 0x8
+ 941 03b6 53000000 		.4byte	0x53
+ 942 03ba C5030000 		.4byte	0x3c5
+ 943 03be 09       		.uleb128 0x9
+ 944 03bf F6000000 		.4byte	0xf6
+ 945 03c3 1F       		.byte	0x1f
+ 946 03c4 00       		.byte	0
+ 947 03c5 19       		.uleb128 0x19
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 19
+
+
+ 948 03c6 19010000 		.4byte	.LASF28
+ 949 03ca 19010000 		.4byte	.LASF28
+ 950 03ce 06       		.byte	0x6
+ 951 03cf 38       		.byte	0x38
+ 952 03d0 19       		.uleb128 0x19
+ 953 03d1 00000000 		.4byte	.LASF29
+ 954 03d5 00000000 		.4byte	.LASF29
+ 955 03d9 05       		.byte	0x5
+ 956 03da 10       		.byte	0x10
+ 957 03db 19       		.uleb128 0x19
+ 958 03dc FD000000 		.4byte	.LASF30
+ 959 03e0 FD000000 		.4byte	.LASF30
+ 960 03e4 05       		.byte	0x5
+ 961 03e5 12       		.byte	0x12
+ 962 03e6 19       		.uleb128 0x19
+ 963 03e7 89020000 		.4byte	.LASF31
+ 964 03eb 89020000 		.4byte	.LASF31
+ 965 03ef 05       		.byte	0x5
+ 966 03f0 11       		.byte	0x11
+ 967 03f1 19       		.uleb128 0x19
+ 968 03f2 F6010000 		.4byte	.LASF32
+ 969 03f6 F6010000 		.4byte	.LASF32
+ 970 03fa 07       		.byte	0x7
+ 971 03fb 09       		.byte	0x9
+ 972 03fc 19       		.uleb128 0x19
+ 973 03fd 6C020000 		.4byte	.LASF33
+ 974 0401 6C020000 		.4byte	.LASF33
+ 975 0405 06       		.byte	0x6
+ 976 0406 3C       		.byte	0x3c
+ 977 0407 19       		.uleb128 0x19
+ 978 0408 EB000000 		.4byte	.LASF34
+ 979 040c EB000000 		.4byte	.LASF34
+ 980 0410 06       		.byte	0x6
+ 981 0411 37       		.byte	0x37
+ 982 0412 00       		.byte	0
+ 983              		.section	.debug_abbrev,"",%progbits
+ 984              	.Ldebug_abbrev0:
+ 985 0000 01       		.uleb128 0x1
+ 986 0001 11       		.uleb128 0x11
+ 987 0002 01       		.byte	0x1
+ 988 0003 25       		.uleb128 0x25
+ 989 0004 0E       		.uleb128 0xe
+ 990 0005 13       		.uleb128 0x13
+ 991 0006 0B       		.uleb128 0xb
+ 992 0007 03       		.uleb128 0x3
+ 993 0008 0E       		.uleb128 0xe
+ 994 0009 1B       		.uleb128 0x1b
+ 995 000a 0E       		.uleb128 0xe
+ 996 000b 55       		.uleb128 0x55
+ 997 000c 17       		.uleb128 0x17
+ 998 000d 11       		.uleb128 0x11
+ 999 000e 01       		.uleb128 0x1
+ 1000 000f 10       		.uleb128 0x10
+ 1001 0010 17       		.uleb128 0x17
+ 1002 0011 00       		.byte	0
+ 1003 0012 00       		.byte	0
+ 1004 0013 02       		.uleb128 0x2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 20
+
+
+ 1005 0014 24       		.uleb128 0x24
+ 1006 0015 00       		.byte	0
+ 1007 0016 0B       		.uleb128 0xb
+ 1008 0017 0B       		.uleb128 0xb
+ 1009 0018 3E       		.uleb128 0x3e
+ 1010 0019 0B       		.uleb128 0xb
+ 1011 001a 03       		.uleb128 0x3
+ 1012 001b 08       		.uleb128 0x8
+ 1013 001c 00       		.byte	0
+ 1014 001d 00       		.byte	0
+ 1015 001e 03       		.uleb128 0x3
+ 1016 001f 16       		.uleb128 0x16
+ 1017 0020 00       		.byte	0
+ 1018 0021 03       		.uleb128 0x3
+ 1019 0022 0E       		.uleb128 0xe
+ 1020 0023 3A       		.uleb128 0x3a
+ 1021 0024 0B       		.uleb128 0xb
+ 1022 0025 3B       		.uleb128 0x3b
+ 1023 0026 0B       		.uleb128 0xb
+ 1024 0027 49       		.uleb128 0x49
+ 1025 0028 13       		.uleb128 0x13
+ 1026 0029 00       		.byte	0
+ 1027 002a 00       		.byte	0
+ 1028 002b 04       		.uleb128 0x4
+ 1029 002c 24       		.uleb128 0x24
+ 1030 002d 00       		.byte	0
+ 1031 002e 0B       		.uleb128 0xb
+ 1032 002f 0B       		.uleb128 0xb
+ 1033 0030 3E       		.uleb128 0x3e
+ 1034 0031 0B       		.uleb128 0xb
+ 1035 0032 03       		.uleb128 0x3
+ 1036 0033 0E       		.uleb128 0xe
+ 1037 0034 00       		.byte	0
+ 1038 0035 00       		.byte	0
+ 1039 0036 05       		.uleb128 0x5
+ 1040 0037 13       		.uleb128 0x13
+ 1041 0038 01       		.byte	0x1
+ 1042 0039 03       		.uleb128 0x3
+ 1043 003a 0E       		.uleb128 0xe
+ 1044 003b 0B       		.uleb128 0xb
+ 1045 003c 0B       		.uleb128 0xb
+ 1046 003d 3A       		.uleb128 0x3a
+ 1047 003e 0B       		.uleb128 0xb
+ 1048 003f 3B       		.uleb128 0x3b
+ 1049 0040 0B       		.uleb128 0xb
+ 1050 0041 01       		.uleb128 0x1
+ 1051 0042 13       		.uleb128 0x13
+ 1052 0043 00       		.byte	0
+ 1053 0044 00       		.byte	0
+ 1054 0045 06       		.uleb128 0x6
+ 1055 0046 0D       		.uleb128 0xd
+ 1056 0047 00       		.byte	0
+ 1057 0048 03       		.uleb128 0x3
+ 1058 0049 0E       		.uleb128 0xe
+ 1059 004a 3A       		.uleb128 0x3a
+ 1060 004b 0B       		.uleb128 0xb
+ 1061 004c 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 21
+
+
+ 1062 004d 0B       		.uleb128 0xb
+ 1063 004e 49       		.uleb128 0x49
+ 1064 004f 13       		.uleb128 0x13
+ 1065 0050 38       		.uleb128 0x38
+ 1066 0051 0B       		.uleb128 0xb
+ 1067 0052 00       		.byte	0
+ 1068 0053 00       		.byte	0
+ 1069 0054 07       		.uleb128 0x7
+ 1070 0055 0D       		.uleb128 0xd
+ 1071 0056 00       		.byte	0
+ 1072 0057 03       		.uleb128 0x3
+ 1073 0058 08       		.uleb128 0x8
+ 1074 0059 3A       		.uleb128 0x3a
+ 1075 005a 0B       		.uleb128 0xb
+ 1076 005b 3B       		.uleb128 0x3b
+ 1077 005c 0B       		.uleb128 0xb
+ 1078 005d 49       		.uleb128 0x49
+ 1079 005e 13       		.uleb128 0x13
+ 1080 005f 38       		.uleb128 0x38
+ 1081 0060 0B       		.uleb128 0xb
+ 1082 0061 00       		.byte	0
+ 1083 0062 00       		.byte	0
+ 1084 0063 08       		.uleb128 0x8
+ 1085 0064 01       		.uleb128 0x1
+ 1086 0065 01       		.byte	0x1
+ 1087 0066 49       		.uleb128 0x49
+ 1088 0067 13       		.uleb128 0x13
+ 1089 0068 01       		.uleb128 0x1
+ 1090 0069 13       		.uleb128 0x13
+ 1091 006a 00       		.byte	0
+ 1092 006b 00       		.byte	0
+ 1093 006c 09       		.uleb128 0x9
+ 1094 006d 21       		.uleb128 0x21
+ 1095 006e 00       		.byte	0
+ 1096 006f 49       		.uleb128 0x49
+ 1097 0070 13       		.uleb128 0x13
+ 1098 0071 2F       		.uleb128 0x2f
+ 1099 0072 0B       		.uleb128 0xb
+ 1100 0073 00       		.byte	0
+ 1101 0074 00       		.byte	0
+ 1102 0075 0A       		.uleb128 0xa
+ 1103 0076 16       		.uleb128 0x16
+ 1104 0077 00       		.byte	0
+ 1105 0078 03       		.uleb128 0x3
+ 1106 0079 08       		.uleb128 0x8
+ 1107 007a 3A       		.uleb128 0x3a
+ 1108 007b 0B       		.uleb128 0xb
+ 1109 007c 3B       		.uleb128 0x3b
+ 1110 007d 0B       		.uleb128 0xb
+ 1111 007e 49       		.uleb128 0x49
+ 1112 007f 13       		.uleb128 0x13
+ 1113 0080 00       		.byte	0
+ 1114 0081 00       		.byte	0
+ 1115 0082 0B       		.uleb128 0xb
+ 1116 0083 13       		.uleb128 0x13
+ 1117 0084 01       		.byte	0x1
+ 1118 0085 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 22
+
+
+ 1119 0086 0B       		.uleb128 0xb
+ 1120 0087 3A       		.uleb128 0x3a
+ 1121 0088 0B       		.uleb128 0xb
+ 1122 0089 3B       		.uleb128 0x3b
+ 1123 008a 0B       		.uleb128 0xb
+ 1124 008b 01       		.uleb128 0x1
+ 1125 008c 13       		.uleb128 0x13
+ 1126 008d 00       		.byte	0
+ 1127 008e 00       		.byte	0
+ 1128 008f 0C       		.uleb128 0xc
+ 1129 0090 2E       		.uleb128 0x2e
+ 1130 0091 01       		.byte	0x1
+ 1131 0092 03       		.uleb128 0x3
+ 1132 0093 0E       		.uleb128 0xe
+ 1133 0094 3A       		.uleb128 0x3a
+ 1134 0095 0B       		.uleb128 0xb
+ 1135 0096 3B       		.uleb128 0x3b
+ 1136 0097 0B       		.uleb128 0xb
+ 1137 0098 27       		.uleb128 0x27
+ 1138 0099 19       		.uleb128 0x19
+ 1139 009a 49       		.uleb128 0x49
+ 1140 009b 13       		.uleb128 0x13
+ 1141 009c 11       		.uleb128 0x11
+ 1142 009d 01       		.uleb128 0x1
+ 1143 009e 12       		.uleb128 0x12
+ 1144 009f 06       		.uleb128 0x6
+ 1145 00a0 40       		.uleb128 0x40
+ 1146 00a1 18       		.uleb128 0x18
+ 1147 00a2 9742     		.uleb128 0x2117
+ 1148 00a4 19       		.uleb128 0x19
+ 1149 00a5 01       		.uleb128 0x1
+ 1150 00a6 13       		.uleb128 0x13
+ 1151 00a7 00       		.byte	0
+ 1152 00a8 00       		.byte	0
+ 1153 00a9 0D       		.uleb128 0xd
+ 1154 00aa 05       		.uleb128 0x5
+ 1155 00ab 00       		.byte	0
+ 1156 00ac 03       		.uleb128 0x3
+ 1157 00ad 08       		.uleb128 0x8
+ 1158 00ae 3A       		.uleb128 0x3a
+ 1159 00af 0B       		.uleb128 0xb
+ 1160 00b0 3B       		.uleb128 0x3b
+ 1161 00b1 0B       		.uleb128 0xb
+ 1162 00b2 49       		.uleb128 0x49
+ 1163 00b3 13       		.uleb128 0x13
+ 1164 00b4 02       		.uleb128 0x2
+ 1165 00b5 17       		.uleb128 0x17
+ 1166 00b6 00       		.byte	0
+ 1167 00b7 00       		.byte	0
+ 1168 00b8 0E       		.uleb128 0xe
+ 1169 00b9 05       		.uleb128 0x5
+ 1170 00ba 00       		.byte	0
+ 1171 00bb 03       		.uleb128 0x3
+ 1172 00bc 08       		.uleb128 0x8
+ 1173 00bd 3A       		.uleb128 0x3a
+ 1174 00be 0B       		.uleb128 0xb
+ 1175 00bf 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 23
+
+
+ 1176 00c0 0B       		.uleb128 0xb
+ 1177 00c1 49       		.uleb128 0x49
+ 1178 00c2 13       		.uleb128 0x13
+ 1179 00c3 02       		.uleb128 0x2
+ 1180 00c4 18       		.uleb128 0x18
+ 1181 00c5 00       		.byte	0
+ 1182 00c6 00       		.byte	0
+ 1183 00c7 0F       		.uleb128 0xf
+ 1184 00c8 34       		.uleb128 0x34
+ 1185 00c9 00       		.byte	0
+ 1186 00ca 03       		.uleb128 0x3
+ 1187 00cb 08       		.uleb128 0x8
+ 1188 00cc 3A       		.uleb128 0x3a
+ 1189 00cd 0B       		.uleb128 0xb
+ 1190 00ce 3B       		.uleb128 0x3b
+ 1191 00cf 0B       		.uleb128 0xb
+ 1192 00d0 49       		.uleb128 0x49
+ 1193 00d1 13       		.uleb128 0x13
+ 1194 00d2 02       		.uleb128 0x2
+ 1195 00d3 17       		.uleb128 0x17
+ 1196 00d4 00       		.byte	0
+ 1197 00d5 00       		.byte	0
+ 1198 00d6 10       		.uleb128 0x10
+ 1199 00d7 0F       		.uleb128 0xf
+ 1200 00d8 00       		.byte	0
+ 1201 00d9 0B       		.uleb128 0xb
+ 1202 00da 0B       		.uleb128 0xb
+ 1203 00db 49       		.uleb128 0x49
+ 1204 00dc 13       		.uleb128 0x13
+ 1205 00dd 00       		.byte	0
+ 1206 00de 00       		.byte	0
+ 1207 00df 11       		.uleb128 0x11
+ 1208 00e0 26       		.uleb128 0x26
+ 1209 00e1 00       		.byte	0
+ 1210 00e2 49       		.uleb128 0x49
+ 1211 00e3 13       		.uleb128 0x13
+ 1212 00e4 00       		.byte	0
+ 1213 00e5 00       		.byte	0
+ 1214 00e6 12       		.uleb128 0x12
+ 1215 00e7 2E       		.uleb128 0x2e
+ 1216 00e8 01       		.byte	0x1
+ 1217 00e9 3F       		.uleb128 0x3f
+ 1218 00ea 19       		.uleb128 0x19
+ 1219 00eb 03       		.uleb128 0x3
+ 1220 00ec 0E       		.uleb128 0xe
+ 1221 00ed 3A       		.uleb128 0x3a
+ 1222 00ee 0B       		.uleb128 0xb
+ 1223 00ef 3B       		.uleb128 0x3b
+ 1224 00f0 0B       		.uleb128 0xb
+ 1225 00f1 27       		.uleb128 0x27
+ 1226 00f2 19       		.uleb128 0x19
+ 1227 00f3 49       		.uleb128 0x49
+ 1228 00f4 13       		.uleb128 0x13
+ 1229 00f5 11       		.uleb128 0x11
+ 1230 00f6 01       		.uleb128 0x1
+ 1231 00f7 12       		.uleb128 0x12
+ 1232 00f8 06       		.uleb128 0x6
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 24
+
+
+ 1233 00f9 40       		.uleb128 0x40
+ 1234 00fa 18       		.uleb128 0x18
+ 1235 00fb 9742     		.uleb128 0x2117
+ 1236 00fd 19       		.uleb128 0x19
+ 1237 00fe 01       		.uleb128 0x1
+ 1238 00ff 13       		.uleb128 0x13
+ 1239 0100 00       		.byte	0
+ 1240 0101 00       		.byte	0
+ 1241 0102 13       		.uleb128 0x13
+ 1242 0103 05       		.uleb128 0x5
+ 1243 0104 00       		.byte	0
+ 1244 0105 03       		.uleb128 0x3
+ 1245 0106 0E       		.uleb128 0xe
+ 1246 0107 3A       		.uleb128 0x3a
+ 1247 0108 0B       		.uleb128 0xb
+ 1248 0109 3B       		.uleb128 0x3b
+ 1249 010a 0B       		.uleb128 0xb
+ 1250 010b 49       		.uleb128 0x49
+ 1251 010c 13       		.uleb128 0x13
+ 1252 010d 02       		.uleb128 0x2
+ 1253 010e 17       		.uleb128 0x17
+ 1254 010f 00       		.byte	0
+ 1255 0110 00       		.byte	0
+ 1256 0111 14       		.uleb128 0x14
+ 1257 0112 34       		.uleb128 0x34
+ 1258 0113 00       		.byte	0
+ 1259 0114 03       		.uleb128 0x3
+ 1260 0115 08       		.uleb128 0x8
+ 1261 0116 3A       		.uleb128 0x3a
+ 1262 0117 0B       		.uleb128 0xb
+ 1263 0118 3B       		.uleb128 0x3b
+ 1264 0119 0B       		.uleb128 0xb
+ 1265 011a 49       		.uleb128 0x49
+ 1266 011b 13       		.uleb128 0x13
+ 1267 011c 02       		.uleb128 0x2
+ 1268 011d 18       		.uleb128 0x18
+ 1269 011e 00       		.byte	0
+ 1270 011f 00       		.byte	0
+ 1271 0120 15       		.uleb128 0x15
+ 1272 0121 34       		.uleb128 0x34
+ 1273 0122 00       		.byte	0
+ 1274 0123 03       		.uleb128 0x3
+ 1275 0124 0E       		.uleb128 0xe
+ 1276 0125 3A       		.uleb128 0x3a
+ 1277 0126 0B       		.uleb128 0xb
+ 1278 0127 3B       		.uleb128 0x3b
+ 1279 0128 0B       		.uleb128 0xb
+ 1280 0129 49       		.uleb128 0x49
+ 1281 012a 13       		.uleb128 0x13
+ 1282 012b 02       		.uleb128 0x2
+ 1283 012c 18       		.uleb128 0x18
+ 1284 012d 00       		.byte	0
+ 1285 012e 00       		.byte	0
+ 1286 012f 16       		.uleb128 0x16
+ 1287 0130 898201   		.uleb128 0x4109
+ 1288 0133 01       		.byte	0x1
+ 1289 0134 11       		.uleb128 0x11
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 25
+
+
+ 1290 0135 01       		.uleb128 0x1
+ 1291 0136 31       		.uleb128 0x31
+ 1292 0137 13       		.uleb128 0x13
+ 1293 0138 01       		.uleb128 0x1
+ 1294 0139 13       		.uleb128 0x13
+ 1295 013a 00       		.byte	0
+ 1296 013b 00       		.byte	0
+ 1297 013c 17       		.uleb128 0x17
+ 1298 013d 8A8201   		.uleb128 0x410a
+ 1299 0140 00       		.byte	0
+ 1300 0141 02       		.uleb128 0x2
+ 1301 0142 18       		.uleb128 0x18
+ 1302 0143 9142     		.uleb128 0x2111
+ 1303 0145 18       		.uleb128 0x18
+ 1304 0146 00       		.byte	0
+ 1305 0147 00       		.byte	0
+ 1306 0148 18       		.uleb128 0x18
+ 1307 0149 898201   		.uleb128 0x4109
+ 1308 014c 01       		.byte	0x1
+ 1309 014d 11       		.uleb128 0x11
+ 1310 014e 01       		.uleb128 0x1
+ 1311 014f 31       		.uleb128 0x31
+ 1312 0150 13       		.uleb128 0x13
+ 1313 0151 00       		.byte	0
+ 1314 0152 00       		.byte	0
+ 1315 0153 19       		.uleb128 0x19
+ 1316 0154 2E       		.uleb128 0x2e
+ 1317 0155 00       		.byte	0
+ 1318 0156 3F       		.uleb128 0x3f
+ 1319 0157 19       		.uleb128 0x19
+ 1320 0158 3C       		.uleb128 0x3c
+ 1321 0159 19       		.uleb128 0x19
+ 1322 015a 6E       		.uleb128 0x6e
+ 1323 015b 0E       		.uleb128 0xe
+ 1324 015c 03       		.uleb128 0x3
+ 1325 015d 0E       		.uleb128 0xe
+ 1326 015e 3A       		.uleb128 0x3a
+ 1327 015f 0B       		.uleb128 0xb
+ 1328 0160 3B       		.uleb128 0x3b
+ 1329 0161 0B       		.uleb128 0xb
+ 1330 0162 00       		.byte	0
+ 1331 0163 00       		.byte	0
+ 1332 0164 00       		.byte	0
+ 1333              		.section	.debug_loc,"",%progbits
+ 1334              	.Ldebug_loc0:
+ 1335              	.LLST0:
+ 1336 0000 00000000 		.4byte	.LVL0
+ 1337 0004 36010000 		.4byte	.LVL48
+ 1338 0008 0100     		.2byte	0x1
+ 1339 000a 50       		.byte	0x50
+ 1340 000b 36010000 		.4byte	.LVL48
+ 1341 000f 44010000 		.4byte	.LFE0
+ 1342 0013 0400     		.2byte	0x4
+ 1343 0015 F3       		.byte	0xf3
+ 1344 0016 01       		.uleb128 0x1
+ 1345 0017 50       		.byte	0x50
+ 1346 0018 9F       		.byte	0x9f
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 26
+
+
+ 1347 0019 00000000 		.4byte	0
+ 1348 001d 00000000 		.4byte	0
+ 1349              	.LLST1:
+ 1350 0021 02000000 		.4byte	.LVL1
+ 1351 0025 08000000 		.4byte	.LVL2
+ 1352 0029 0200     		.2byte	0x2
+ 1353 002b 30       		.byte	0x30
+ 1354 002c 9F       		.byte	0x9f
+ 1355 002d 08000000 		.4byte	.LVL2
+ 1356 0031 10000000 		.4byte	.LVL3
+ 1357 0035 0100     		.2byte	0x1
+ 1358 0037 52       		.byte	0x52
+ 1359 0038 10000000 		.4byte	.LVL3
+ 1360 003c 12000000 		.4byte	.LVL4
+ 1361 0040 1000     		.2byte	0x10
+ 1362 0042 70       		.byte	0x70
+ 1363 0043 00       		.sleb128 0
+ 1364 0044 94       		.byte	0x94
+ 1365 0045 01       		.byte	0x1
+ 1366 0046 08       		.byte	0x8
+ 1367 0047 FF       		.byte	0xff
+ 1368 0048 1A       		.byte	0x1a
+ 1369 0049 71       		.byte	0x71
+ 1370 004a 00       		.sleb128 0
+ 1371 004b 94       		.byte	0x94
+ 1372 004c 01       		.byte	0x1
+ 1373 004d 08       		.byte	0x8
+ 1374 004e FF       		.byte	0xff
+ 1375 004f 1A       		.byte	0x1a
+ 1376 0050 27       		.byte	0x27
+ 1377 0051 9F       		.byte	0x9f
+ 1378 0052 12000000 		.4byte	.LVL4
+ 1379 0056 1C000000 		.4byte	.LVL5
+ 1380 005a 0100     		.2byte	0x1
+ 1381 005c 54       		.byte	0x54
+ 1382 005d 1C000000 		.4byte	.LVL5
+ 1383 0061 24000000 		.4byte	.LVL6
+ 1384 0065 0100     		.2byte	0x1
+ 1385 0067 52       		.byte	0x52
+ 1386 0068 24000000 		.4byte	.LVL6
+ 1387 006c 26000000 		.4byte	.LVL7
+ 1388 0070 3000     		.2byte	0x30
+ 1389 0072 70       		.byte	0x70
+ 1390 0073 00       		.sleb128 0
+ 1391 0074 94       		.byte	0x94
+ 1392 0075 01       		.byte	0x1
+ 1393 0076 08       		.byte	0x8
+ 1394 0077 FF       		.byte	0xff
+ 1395 0078 1A       		.byte	0x1a
+ 1396 0079 71       		.byte	0x71
+ 1397 007a 00       		.sleb128 0
+ 1398 007b 94       		.byte	0x94
+ 1399 007c 01       		.byte	0x1
+ 1400 007d 08       		.byte	0x8
+ 1401 007e FF       		.byte	0xff
+ 1402 007f 1A       		.byte	0x1a
+ 1403 0080 27       		.byte	0x27
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 27
+
+
+ 1404 0081 71       		.byte	0x71
+ 1405 0082 01       		.sleb128 1
+ 1406 0083 94       		.byte	0x94
+ 1407 0084 01       		.byte	0x1
+ 1408 0085 08       		.byte	0x8
+ 1409 0086 FF       		.byte	0xff
+ 1410 0087 1A       		.byte	0x1a
+ 1411 0088 70       		.byte	0x70
+ 1412 0089 01       		.sleb128 1
+ 1413 008a 94       		.byte	0x94
+ 1414 008b 01       		.byte	0x1
+ 1415 008c 08       		.byte	0x8
+ 1416 008d FF       		.byte	0xff
+ 1417 008e 1A       		.byte	0x1a
+ 1418 008f 27       		.byte	0x27
+ 1419 0090 21       		.byte	0x21
+ 1420 0091 71       		.byte	0x71
+ 1421 0092 02       		.sleb128 2
+ 1422 0093 94       		.byte	0x94
+ 1423 0094 01       		.byte	0x1
+ 1424 0095 08       		.byte	0x8
+ 1425 0096 FF       		.byte	0xff
+ 1426 0097 1A       		.byte	0x1a
+ 1427 0098 70       		.byte	0x70
+ 1428 0099 02       		.sleb128 2
+ 1429 009a 94       		.byte	0x94
+ 1430 009b 01       		.byte	0x1
+ 1431 009c 08       		.byte	0x8
+ 1432 009d FF       		.byte	0xff
+ 1433 009e 1A       		.byte	0x1a
+ 1434 009f 27       		.byte	0x27
+ 1435 00a0 21       		.byte	0x21
+ 1436 00a1 9F       		.byte	0x9f
+ 1437 00a2 26000000 		.4byte	.LVL7
+ 1438 00a6 30000000 		.4byte	.LVL8
+ 1439 00aa 0100     		.2byte	0x1
+ 1440 00ac 54       		.byte	0x54
+ 1441 00ad 30000000 		.4byte	.LVL8
+ 1442 00b1 38000000 		.4byte	.LVL9
+ 1443 00b5 0100     		.2byte	0x1
+ 1444 00b7 52       		.byte	0x52
+ 1445 00b8 38000000 		.4byte	.LVL9
+ 1446 00bc 3A000000 		.4byte	.LVL10
+ 1447 00c0 5000     		.2byte	0x50
+ 1448 00c2 70       		.byte	0x70
+ 1449 00c3 00       		.sleb128 0
+ 1450 00c4 94       		.byte	0x94
+ 1451 00c5 01       		.byte	0x1
+ 1452 00c6 08       		.byte	0x8
+ 1453 00c7 FF       		.byte	0xff
+ 1454 00c8 1A       		.byte	0x1a
+ 1455 00c9 71       		.byte	0x71
+ 1456 00ca 00       		.sleb128 0
+ 1457 00cb 94       		.byte	0x94
+ 1458 00cc 01       		.byte	0x1
+ 1459 00cd 08       		.byte	0x8
+ 1460 00ce FF       		.byte	0xff
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 28
+
+
+ 1461 00cf 1A       		.byte	0x1a
+ 1462 00d0 27       		.byte	0x27
+ 1463 00d1 71       		.byte	0x71
+ 1464 00d2 01       		.sleb128 1
+ 1465 00d3 94       		.byte	0x94
+ 1466 00d4 01       		.byte	0x1
+ 1467 00d5 08       		.byte	0x8
+ 1468 00d6 FF       		.byte	0xff
+ 1469 00d7 1A       		.byte	0x1a
+ 1470 00d8 70       		.byte	0x70
+ 1471 00d9 01       		.sleb128 1
+ 1472 00da 94       		.byte	0x94
+ 1473 00db 01       		.byte	0x1
+ 1474 00dc 08       		.byte	0x8
+ 1475 00dd FF       		.byte	0xff
+ 1476 00de 1A       		.byte	0x1a
+ 1477 00df 27       		.byte	0x27
+ 1478 00e0 21       		.byte	0x21
+ 1479 00e1 71       		.byte	0x71
+ 1480 00e2 02       		.sleb128 2
+ 1481 00e3 94       		.byte	0x94
+ 1482 00e4 01       		.byte	0x1
+ 1483 00e5 08       		.byte	0x8
+ 1484 00e6 FF       		.byte	0xff
+ 1485 00e7 1A       		.byte	0x1a
+ 1486 00e8 70       		.byte	0x70
+ 1487 00e9 02       		.sleb128 2
+ 1488 00ea 94       		.byte	0x94
+ 1489 00eb 01       		.byte	0x1
+ 1490 00ec 08       		.byte	0x8
+ 1491 00ed FF       		.byte	0xff
+ 1492 00ee 1A       		.byte	0x1a
+ 1493 00ef 27       		.byte	0x27
+ 1494 00f0 21       		.byte	0x21
+ 1495 00f1 71       		.byte	0x71
+ 1496 00f2 03       		.sleb128 3
+ 1497 00f3 94       		.byte	0x94
+ 1498 00f4 01       		.byte	0x1
+ 1499 00f5 08       		.byte	0x8
+ 1500 00f6 FF       		.byte	0xff
+ 1501 00f7 1A       		.byte	0x1a
+ 1502 00f8 70       		.byte	0x70
+ 1503 00f9 03       		.sleb128 3
+ 1504 00fa 94       		.byte	0x94
+ 1505 00fb 01       		.byte	0x1
+ 1506 00fc 08       		.byte	0x8
+ 1507 00fd FF       		.byte	0xff
+ 1508 00fe 1A       		.byte	0x1a
+ 1509 00ff 27       		.byte	0x27
+ 1510 0100 21       		.byte	0x21
+ 1511 0101 71       		.byte	0x71
+ 1512 0102 04       		.sleb128 4
+ 1513 0103 94       		.byte	0x94
+ 1514 0104 01       		.byte	0x1
+ 1515 0105 08       		.byte	0x8
+ 1516 0106 FF       		.byte	0xff
+ 1517 0107 1A       		.byte	0x1a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 29
+
+
+ 1518 0108 70       		.byte	0x70
+ 1519 0109 04       		.sleb128 4
+ 1520 010a 94       		.byte	0x94
+ 1521 010b 01       		.byte	0x1
+ 1522 010c 08       		.byte	0x8
+ 1523 010d FF       		.byte	0xff
+ 1524 010e 1A       		.byte	0x1a
+ 1525 010f 27       		.byte	0x27
+ 1526 0110 21       		.byte	0x21
+ 1527 0111 9F       		.byte	0x9f
+ 1528 0112 3A000000 		.4byte	.LVL10
+ 1529 0116 44000000 		.4byte	.LVL11
+ 1530 011a 0100     		.2byte	0x1
+ 1531 011c 54       		.byte	0x54
+ 1532 011d 44000000 		.4byte	.LVL11
+ 1533 0121 4C000000 		.4byte	.LVL12
+ 1534 0125 0100     		.2byte	0x1
+ 1535 0127 52       		.byte	0x52
+ 1536 0128 4C000000 		.4byte	.LVL12
+ 1537 012c 4E000000 		.4byte	.LVL13
+ 1538 0130 7000     		.2byte	0x70
+ 1539 0132 70       		.byte	0x70
+ 1540 0133 00       		.sleb128 0
+ 1541 0134 94       		.byte	0x94
+ 1542 0135 01       		.byte	0x1
+ 1543 0136 08       		.byte	0x8
+ 1544 0137 FF       		.byte	0xff
+ 1545 0138 1A       		.byte	0x1a
+ 1546 0139 71       		.byte	0x71
+ 1547 013a 00       		.sleb128 0
+ 1548 013b 94       		.byte	0x94
+ 1549 013c 01       		.byte	0x1
+ 1550 013d 08       		.byte	0x8
+ 1551 013e FF       		.byte	0xff
+ 1552 013f 1A       		.byte	0x1a
+ 1553 0140 27       		.byte	0x27
+ 1554 0141 71       		.byte	0x71
+ 1555 0142 01       		.sleb128 1
+ 1556 0143 94       		.byte	0x94
+ 1557 0144 01       		.byte	0x1
+ 1558 0145 08       		.byte	0x8
+ 1559 0146 FF       		.byte	0xff
+ 1560 0147 1A       		.byte	0x1a
+ 1561 0148 70       		.byte	0x70
+ 1562 0149 01       		.sleb128 1
+ 1563 014a 94       		.byte	0x94
+ 1564 014b 01       		.byte	0x1
+ 1565 014c 08       		.byte	0x8
+ 1566 014d FF       		.byte	0xff
+ 1567 014e 1A       		.byte	0x1a
+ 1568 014f 27       		.byte	0x27
+ 1569 0150 21       		.byte	0x21
+ 1570 0151 71       		.byte	0x71
+ 1571 0152 02       		.sleb128 2
+ 1572 0153 94       		.byte	0x94
+ 1573 0154 01       		.byte	0x1
+ 1574 0155 08       		.byte	0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 30
+
+
+ 1575 0156 FF       		.byte	0xff
+ 1576 0157 1A       		.byte	0x1a
+ 1577 0158 70       		.byte	0x70
+ 1578 0159 02       		.sleb128 2
+ 1579 015a 94       		.byte	0x94
+ 1580 015b 01       		.byte	0x1
+ 1581 015c 08       		.byte	0x8
+ 1582 015d FF       		.byte	0xff
+ 1583 015e 1A       		.byte	0x1a
+ 1584 015f 27       		.byte	0x27
+ 1585 0160 21       		.byte	0x21
+ 1586 0161 71       		.byte	0x71
+ 1587 0162 03       		.sleb128 3
+ 1588 0163 94       		.byte	0x94
+ 1589 0164 01       		.byte	0x1
+ 1590 0165 08       		.byte	0x8
+ 1591 0166 FF       		.byte	0xff
+ 1592 0167 1A       		.byte	0x1a
+ 1593 0168 70       		.byte	0x70
+ 1594 0169 03       		.sleb128 3
+ 1595 016a 94       		.byte	0x94
+ 1596 016b 01       		.byte	0x1
+ 1597 016c 08       		.byte	0x8
+ 1598 016d FF       		.byte	0xff
+ 1599 016e 1A       		.byte	0x1a
+ 1600 016f 27       		.byte	0x27
+ 1601 0170 21       		.byte	0x21
+ 1602 0171 71       		.byte	0x71
+ 1603 0172 04       		.sleb128 4
+ 1604 0173 94       		.byte	0x94
+ 1605 0174 01       		.byte	0x1
+ 1606 0175 08       		.byte	0x8
+ 1607 0176 FF       		.byte	0xff
+ 1608 0177 1A       		.byte	0x1a
+ 1609 0178 70       		.byte	0x70
+ 1610 0179 04       		.sleb128 4
+ 1611 017a 94       		.byte	0x94
+ 1612 017b 01       		.byte	0x1
+ 1613 017c 08       		.byte	0x8
+ 1614 017d FF       		.byte	0xff
+ 1615 017e 1A       		.byte	0x1a
+ 1616 017f 27       		.byte	0x27
+ 1617 0180 21       		.byte	0x21
+ 1618 0181 71       		.byte	0x71
+ 1619 0182 05       		.sleb128 5
+ 1620 0183 94       		.byte	0x94
+ 1621 0184 01       		.byte	0x1
+ 1622 0185 08       		.byte	0x8
+ 1623 0186 FF       		.byte	0xff
+ 1624 0187 1A       		.byte	0x1a
+ 1625 0188 70       		.byte	0x70
+ 1626 0189 05       		.sleb128 5
+ 1627 018a 94       		.byte	0x94
+ 1628 018b 01       		.byte	0x1
+ 1629 018c 08       		.byte	0x8
+ 1630 018d FF       		.byte	0xff
+ 1631 018e 1A       		.byte	0x1a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 31
+
+
+ 1632 018f 27       		.byte	0x27
+ 1633 0190 21       		.byte	0x21
+ 1634 0191 71       		.byte	0x71
+ 1635 0192 06       		.sleb128 6
+ 1636 0193 94       		.byte	0x94
+ 1637 0194 01       		.byte	0x1
+ 1638 0195 08       		.byte	0x8
+ 1639 0196 FF       		.byte	0xff
+ 1640 0197 1A       		.byte	0x1a
+ 1641 0198 70       		.byte	0x70
+ 1642 0199 06       		.sleb128 6
+ 1643 019a 94       		.byte	0x94
+ 1644 019b 01       		.byte	0x1
+ 1645 019c 08       		.byte	0x8
+ 1646 019d FF       		.byte	0xff
+ 1647 019e 1A       		.byte	0x1a
+ 1648 019f 27       		.byte	0x27
+ 1649 01a0 21       		.byte	0x21
+ 1650 01a1 9F       		.byte	0x9f
+ 1651 01a2 4E000000 		.4byte	.LVL13
+ 1652 01a6 58000000 		.4byte	.LVL14
+ 1653 01aa 0100     		.2byte	0x1
+ 1654 01ac 54       		.byte	0x54
+ 1655 01ad 58000000 		.4byte	.LVL14
+ 1656 01b1 60000000 		.4byte	.LVL15
+ 1657 01b5 0100     		.2byte	0x1
+ 1658 01b7 52       		.byte	0x52
+ 1659 01b8 60000000 		.4byte	.LVL15
+ 1660 01bc 62000000 		.4byte	.LVL16
+ 1661 01c0 9000     		.2byte	0x90
+ 1662 01c2 70       		.byte	0x70
+ 1663 01c3 00       		.sleb128 0
+ 1664 01c4 94       		.byte	0x94
+ 1665 01c5 01       		.byte	0x1
+ 1666 01c6 08       		.byte	0x8
+ 1667 01c7 FF       		.byte	0xff
+ 1668 01c8 1A       		.byte	0x1a
+ 1669 01c9 71       		.byte	0x71
+ 1670 01ca 00       		.sleb128 0
+ 1671 01cb 94       		.byte	0x94
+ 1672 01cc 01       		.byte	0x1
+ 1673 01cd 08       		.byte	0x8
+ 1674 01ce FF       		.byte	0xff
+ 1675 01cf 1A       		.byte	0x1a
+ 1676 01d0 27       		.byte	0x27
+ 1677 01d1 71       		.byte	0x71
+ 1678 01d2 01       		.sleb128 1
+ 1679 01d3 94       		.byte	0x94
+ 1680 01d4 01       		.byte	0x1
+ 1681 01d5 08       		.byte	0x8
+ 1682 01d6 FF       		.byte	0xff
+ 1683 01d7 1A       		.byte	0x1a
+ 1684 01d8 70       		.byte	0x70
+ 1685 01d9 01       		.sleb128 1
+ 1686 01da 94       		.byte	0x94
+ 1687 01db 01       		.byte	0x1
+ 1688 01dc 08       		.byte	0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 32
+
+
+ 1689 01dd FF       		.byte	0xff
+ 1690 01de 1A       		.byte	0x1a
+ 1691 01df 27       		.byte	0x27
+ 1692 01e0 21       		.byte	0x21
+ 1693 01e1 71       		.byte	0x71
+ 1694 01e2 02       		.sleb128 2
+ 1695 01e3 94       		.byte	0x94
+ 1696 01e4 01       		.byte	0x1
+ 1697 01e5 08       		.byte	0x8
+ 1698 01e6 FF       		.byte	0xff
+ 1699 01e7 1A       		.byte	0x1a
+ 1700 01e8 70       		.byte	0x70
+ 1701 01e9 02       		.sleb128 2
+ 1702 01ea 94       		.byte	0x94
+ 1703 01eb 01       		.byte	0x1
+ 1704 01ec 08       		.byte	0x8
+ 1705 01ed FF       		.byte	0xff
+ 1706 01ee 1A       		.byte	0x1a
+ 1707 01ef 27       		.byte	0x27
+ 1708 01f0 21       		.byte	0x21
+ 1709 01f1 71       		.byte	0x71
+ 1710 01f2 03       		.sleb128 3
+ 1711 01f3 94       		.byte	0x94
+ 1712 01f4 01       		.byte	0x1
+ 1713 01f5 08       		.byte	0x8
+ 1714 01f6 FF       		.byte	0xff
+ 1715 01f7 1A       		.byte	0x1a
+ 1716 01f8 70       		.byte	0x70
+ 1717 01f9 03       		.sleb128 3
+ 1718 01fa 94       		.byte	0x94
+ 1719 01fb 01       		.byte	0x1
+ 1720 01fc 08       		.byte	0x8
+ 1721 01fd FF       		.byte	0xff
+ 1722 01fe 1A       		.byte	0x1a
+ 1723 01ff 27       		.byte	0x27
+ 1724 0200 21       		.byte	0x21
+ 1725 0201 71       		.byte	0x71
+ 1726 0202 04       		.sleb128 4
+ 1727 0203 94       		.byte	0x94
+ 1728 0204 01       		.byte	0x1
+ 1729 0205 08       		.byte	0x8
+ 1730 0206 FF       		.byte	0xff
+ 1731 0207 1A       		.byte	0x1a
+ 1732 0208 70       		.byte	0x70
+ 1733 0209 04       		.sleb128 4
+ 1734 020a 94       		.byte	0x94
+ 1735 020b 01       		.byte	0x1
+ 1736 020c 08       		.byte	0x8
+ 1737 020d FF       		.byte	0xff
+ 1738 020e 1A       		.byte	0x1a
+ 1739 020f 27       		.byte	0x27
+ 1740 0210 21       		.byte	0x21
+ 1741 0211 71       		.byte	0x71
+ 1742 0212 05       		.sleb128 5
+ 1743 0213 94       		.byte	0x94
+ 1744 0214 01       		.byte	0x1
+ 1745 0215 08       		.byte	0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 33
+
+
+ 1746 0216 FF       		.byte	0xff
+ 1747 0217 1A       		.byte	0x1a
+ 1748 0218 70       		.byte	0x70
+ 1749 0219 05       		.sleb128 5
+ 1750 021a 94       		.byte	0x94
+ 1751 021b 01       		.byte	0x1
+ 1752 021c 08       		.byte	0x8
+ 1753 021d FF       		.byte	0xff
+ 1754 021e 1A       		.byte	0x1a
+ 1755 021f 27       		.byte	0x27
+ 1756 0220 21       		.byte	0x21
+ 1757 0221 71       		.byte	0x71
+ 1758 0222 06       		.sleb128 6
+ 1759 0223 94       		.byte	0x94
+ 1760 0224 01       		.byte	0x1
+ 1761 0225 08       		.byte	0x8
+ 1762 0226 FF       		.byte	0xff
+ 1763 0227 1A       		.byte	0x1a
+ 1764 0228 70       		.byte	0x70
+ 1765 0229 06       		.sleb128 6
+ 1766 022a 94       		.byte	0x94
+ 1767 022b 01       		.byte	0x1
+ 1768 022c 08       		.byte	0x8
+ 1769 022d FF       		.byte	0xff
+ 1770 022e 1A       		.byte	0x1a
+ 1771 022f 27       		.byte	0x27
+ 1772 0230 21       		.byte	0x21
+ 1773 0231 71       		.byte	0x71
+ 1774 0232 07       		.sleb128 7
+ 1775 0233 94       		.byte	0x94
+ 1776 0234 01       		.byte	0x1
+ 1777 0235 08       		.byte	0x8
+ 1778 0236 FF       		.byte	0xff
+ 1779 0237 1A       		.byte	0x1a
+ 1780 0238 70       		.byte	0x70
+ 1781 0239 07       		.sleb128 7
+ 1782 023a 94       		.byte	0x94
+ 1783 023b 01       		.byte	0x1
+ 1784 023c 08       		.byte	0x8
+ 1785 023d FF       		.byte	0xff
+ 1786 023e 1A       		.byte	0x1a
+ 1787 023f 27       		.byte	0x27
+ 1788 0240 21       		.byte	0x21
+ 1789 0241 71       		.byte	0x71
+ 1790 0242 08       		.sleb128 8
+ 1791 0243 94       		.byte	0x94
+ 1792 0244 01       		.byte	0x1
+ 1793 0245 08       		.byte	0x8
+ 1794 0246 FF       		.byte	0xff
+ 1795 0247 1A       		.byte	0x1a
+ 1796 0248 70       		.byte	0x70
+ 1797 0249 08       		.sleb128 8
+ 1798 024a 94       		.byte	0x94
+ 1799 024b 01       		.byte	0x1
+ 1800 024c 08       		.byte	0x8
+ 1801 024d FF       		.byte	0xff
+ 1802 024e 1A       		.byte	0x1a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 34
+
+
+ 1803 024f 27       		.byte	0x27
+ 1804 0250 21       		.byte	0x21
+ 1805 0251 9F       		.byte	0x9f
+ 1806 0252 62000000 		.4byte	.LVL16
+ 1807 0256 6C000000 		.4byte	.LVL17
+ 1808 025a 0100     		.2byte	0x1
+ 1809 025c 54       		.byte	0x54
+ 1810 025d 6C000000 		.4byte	.LVL17
+ 1811 0261 74000000 		.4byte	.LVL18
+ 1812 0265 0100     		.2byte	0x1
+ 1813 0267 52       		.byte	0x52
+ 1814 0268 74000000 		.4byte	.LVL18
+ 1815 026c 76000000 		.4byte	.LVL19
+ 1816 0270 B000     		.2byte	0xb0
+ 1817 0272 70       		.byte	0x70
+ 1818 0273 00       		.sleb128 0
+ 1819 0274 94       		.byte	0x94
+ 1820 0275 01       		.byte	0x1
+ 1821 0276 08       		.byte	0x8
+ 1822 0277 FF       		.byte	0xff
+ 1823 0278 1A       		.byte	0x1a
+ 1824 0279 71       		.byte	0x71
+ 1825 027a 00       		.sleb128 0
+ 1826 027b 94       		.byte	0x94
+ 1827 027c 01       		.byte	0x1
+ 1828 027d 08       		.byte	0x8
+ 1829 027e FF       		.byte	0xff
+ 1830 027f 1A       		.byte	0x1a
+ 1831 0280 27       		.byte	0x27
+ 1832 0281 71       		.byte	0x71
+ 1833 0282 01       		.sleb128 1
+ 1834 0283 94       		.byte	0x94
+ 1835 0284 01       		.byte	0x1
+ 1836 0285 08       		.byte	0x8
+ 1837 0286 FF       		.byte	0xff
+ 1838 0287 1A       		.byte	0x1a
+ 1839 0288 70       		.byte	0x70
+ 1840 0289 01       		.sleb128 1
+ 1841 028a 94       		.byte	0x94
+ 1842 028b 01       		.byte	0x1
+ 1843 028c 08       		.byte	0x8
+ 1844 028d FF       		.byte	0xff
+ 1845 028e 1A       		.byte	0x1a
+ 1846 028f 27       		.byte	0x27
+ 1847 0290 21       		.byte	0x21
+ 1848 0291 71       		.byte	0x71
+ 1849 0292 02       		.sleb128 2
+ 1850 0293 94       		.byte	0x94
+ 1851 0294 01       		.byte	0x1
+ 1852 0295 08       		.byte	0x8
+ 1853 0296 FF       		.byte	0xff
+ 1854 0297 1A       		.byte	0x1a
+ 1855 0298 70       		.byte	0x70
+ 1856 0299 02       		.sleb128 2
+ 1857 029a 94       		.byte	0x94
+ 1858 029b 01       		.byte	0x1
+ 1859 029c 08       		.byte	0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 35
+
+
+ 1860 029d FF       		.byte	0xff
+ 1861 029e 1A       		.byte	0x1a
+ 1862 029f 27       		.byte	0x27
+ 1863 02a0 21       		.byte	0x21
+ 1864 02a1 71       		.byte	0x71
+ 1865 02a2 03       		.sleb128 3
+ 1866 02a3 94       		.byte	0x94
+ 1867 02a4 01       		.byte	0x1
+ 1868 02a5 08       		.byte	0x8
+ 1869 02a6 FF       		.byte	0xff
+ 1870 02a7 1A       		.byte	0x1a
+ 1871 02a8 70       		.byte	0x70
+ 1872 02a9 03       		.sleb128 3
+ 1873 02aa 94       		.byte	0x94
+ 1874 02ab 01       		.byte	0x1
+ 1875 02ac 08       		.byte	0x8
+ 1876 02ad FF       		.byte	0xff
+ 1877 02ae 1A       		.byte	0x1a
+ 1878 02af 27       		.byte	0x27
+ 1879 02b0 21       		.byte	0x21
+ 1880 02b1 71       		.byte	0x71
+ 1881 02b2 04       		.sleb128 4
+ 1882 02b3 94       		.byte	0x94
+ 1883 02b4 01       		.byte	0x1
+ 1884 02b5 08       		.byte	0x8
+ 1885 02b6 FF       		.byte	0xff
+ 1886 02b7 1A       		.byte	0x1a
+ 1887 02b8 70       		.byte	0x70
+ 1888 02b9 04       		.sleb128 4
+ 1889 02ba 94       		.byte	0x94
+ 1890 02bb 01       		.byte	0x1
+ 1891 02bc 08       		.byte	0x8
+ 1892 02bd FF       		.byte	0xff
+ 1893 02be 1A       		.byte	0x1a
+ 1894 02bf 27       		.byte	0x27
+ 1895 02c0 21       		.byte	0x21
+ 1896 02c1 71       		.byte	0x71
+ 1897 02c2 05       		.sleb128 5
+ 1898 02c3 94       		.byte	0x94
+ 1899 02c4 01       		.byte	0x1
+ 1900 02c5 08       		.byte	0x8
+ 1901 02c6 FF       		.byte	0xff
+ 1902 02c7 1A       		.byte	0x1a
+ 1903 02c8 70       		.byte	0x70
+ 1904 02c9 05       		.sleb128 5
+ 1905 02ca 94       		.byte	0x94
+ 1906 02cb 01       		.byte	0x1
+ 1907 02cc 08       		.byte	0x8
+ 1908 02cd FF       		.byte	0xff
+ 1909 02ce 1A       		.byte	0x1a
+ 1910 02cf 27       		.byte	0x27
+ 1911 02d0 21       		.byte	0x21
+ 1912 02d1 71       		.byte	0x71
+ 1913 02d2 06       		.sleb128 6
+ 1914 02d3 94       		.byte	0x94
+ 1915 02d4 01       		.byte	0x1
+ 1916 02d5 08       		.byte	0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 36
+
+
+ 1917 02d6 FF       		.byte	0xff
+ 1918 02d7 1A       		.byte	0x1a
+ 1919 02d8 70       		.byte	0x70
+ 1920 02d9 06       		.sleb128 6
+ 1921 02da 94       		.byte	0x94
+ 1922 02db 01       		.byte	0x1
+ 1923 02dc 08       		.byte	0x8
+ 1924 02dd FF       		.byte	0xff
+ 1925 02de 1A       		.byte	0x1a
+ 1926 02df 27       		.byte	0x27
+ 1927 02e0 21       		.byte	0x21
+ 1928 02e1 71       		.byte	0x71
+ 1929 02e2 07       		.sleb128 7
+ 1930 02e3 94       		.byte	0x94
+ 1931 02e4 01       		.byte	0x1
+ 1932 02e5 08       		.byte	0x8
+ 1933 02e6 FF       		.byte	0xff
+ 1934 02e7 1A       		.byte	0x1a
+ 1935 02e8 70       		.byte	0x70
+ 1936 02e9 07       		.sleb128 7
+ 1937 02ea 94       		.byte	0x94
+ 1938 02eb 01       		.byte	0x1
+ 1939 02ec 08       		.byte	0x8
+ 1940 02ed FF       		.byte	0xff
+ 1941 02ee 1A       		.byte	0x1a
+ 1942 02ef 27       		.byte	0x27
+ 1943 02f0 21       		.byte	0x21
+ 1944 02f1 71       		.byte	0x71
+ 1945 02f2 08       		.sleb128 8
+ 1946 02f3 94       		.byte	0x94
+ 1947 02f4 01       		.byte	0x1
+ 1948 02f5 08       		.byte	0x8
+ 1949 02f6 FF       		.byte	0xff
+ 1950 02f7 1A       		.byte	0x1a
+ 1951 02f8 70       		.byte	0x70
+ 1952 02f9 08       		.sleb128 8
+ 1953 02fa 94       		.byte	0x94
+ 1954 02fb 01       		.byte	0x1
+ 1955 02fc 08       		.byte	0x8
+ 1956 02fd FF       		.byte	0xff
+ 1957 02fe 1A       		.byte	0x1a
+ 1958 02ff 27       		.byte	0x27
+ 1959 0300 21       		.byte	0x21
+ 1960 0301 71       		.byte	0x71
+ 1961 0302 09       		.sleb128 9
+ 1962 0303 94       		.byte	0x94
+ 1963 0304 01       		.byte	0x1
+ 1964 0305 08       		.byte	0x8
+ 1965 0306 FF       		.byte	0xff
+ 1966 0307 1A       		.byte	0x1a
+ 1967 0308 70       		.byte	0x70
+ 1968 0309 09       		.sleb128 9
+ 1969 030a 94       		.byte	0x94
+ 1970 030b 01       		.byte	0x1
+ 1971 030c 08       		.byte	0x8
+ 1972 030d FF       		.byte	0xff
+ 1973 030e 1A       		.byte	0x1a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 37
+
+
+ 1974 030f 27       		.byte	0x27
+ 1975 0310 21       		.byte	0x21
+ 1976 0311 71       		.byte	0x71
+ 1977 0312 0A       		.sleb128 10
+ 1978 0313 94       		.byte	0x94
+ 1979 0314 01       		.byte	0x1
+ 1980 0315 08       		.byte	0x8
+ 1981 0316 FF       		.byte	0xff
+ 1982 0317 1A       		.byte	0x1a
+ 1983 0318 70       		.byte	0x70
+ 1984 0319 0A       		.sleb128 10
+ 1985 031a 94       		.byte	0x94
+ 1986 031b 01       		.byte	0x1
+ 1987 031c 08       		.byte	0x8
+ 1988 031d FF       		.byte	0xff
+ 1989 031e 1A       		.byte	0x1a
+ 1990 031f 27       		.byte	0x27
+ 1991 0320 21       		.byte	0x21
+ 1992 0321 9F       		.byte	0x9f
+ 1993 0322 76000000 		.4byte	.LVL19
+ 1994 0326 80000000 		.4byte	.LVL20
+ 1995 032a 0100     		.2byte	0x1
+ 1996 032c 54       		.byte	0x54
+ 1997 032d 80000000 		.4byte	.LVL20
+ 1998 0331 88000000 		.4byte	.LVL21
+ 1999 0335 0100     		.2byte	0x1
+ 2000 0337 52       		.byte	0x52
+ 2001 0338 8A000000 		.4byte	.LVL22
+ 2002 033c 94000000 		.4byte	.LVL23
+ 2003 0340 0100     		.2byte	0x1
+ 2004 0342 54       		.byte	0x54
+ 2005 0343 94000000 		.4byte	.LVL23
+ 2006 0347 9C000000 		.4byte	.LVL24
+ 2007 034b 0100     		.2byte	0x1
+ 2008 034d 52       		.byte	0x52
+ 2009 034e 9E000000 		.4byte	.LVL25
+ 2010 0352 A8000000 		.4byte	.LVL26
+ 2011 0356 0100     		.2byte	0x1
+ 2012 0358 54       		.byte	0x54
+ 2013 0359 A8000000 		.4byte	.LVL26
+ 2014 035d B0000000 		.4byte	.LVL27
+ 2015 0361 0100     		.2byte	0x1
+ 2016 0363 52       		.byte	0x52
+ 2017 0364 B2000000 		.4byte	.LVL28
+ 2018 0368 BC000000 		.4byte	.LVL29
+ 2019 036c 0100     		.2byte	0x1
+ 2020 036e 54       		.byte	0x54
+ 2021 036f BC000000 		.4byte	.LVL29
+ 2022 0373 C4000000 		.4byte	.LVL30
+ 2023 0377 0100     		.2byte	0x1
+ 2024 0379 52       		.byte	0x52
+ 2025 037a C6000000 		.4byte	.LVL31
+ 2026 037e D0000000 		.4byte	.LVL32
+ 2027 0382 0100     		.2byte	0x1
+ 2028 0384 54       		.byte	0x54
+ 2029 0385 D0000000 		.4byte	.LVL32
+ 2030 0389 D8000000 		.4byte	.LVL33
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 38
+
+
+ 2031 038d 0100     		.2byte	0x1
+ 2032 038f 52       		.byte	0x52
+ 2033 0390 DA000000 		.4byte	.LVL34
+ 2034 0394 E4000000 		.4byte	.LVL35
+ 2035 0398 0100     		.2byte	0x1
+ 2036 039a 54       		.byte	0x54
+ 2037 039b E4000000 		.4byte	.LVL35
+ 2038 039f EC000000 		.4byte	.LVL36
+ 2039 03a3 0100     		.2byte	0x1
+ 2040 03a5 52       		.byte	0x52
+ 2041 03a6 EE000000 		.4byte	.LVL37
+ 2042 03aa F8000000 		.4byte	.LVL38
+ 2043 03ae 0100     		.2byte	0x1
+ 2044 03b0 54       		.byte	0x54
+ 2045 03b1 F8000000 		.4byte	.LVL38
+ 2046 03b5 00010000 		.4byte	.LVL39
+ 2047 03b9 0100     		.2byte	0x1
+ 2048 03bb 52       		.byte	0x52
+ 2049 03bc 02010000 		.4byte	.LVL40
+ 2050 03c0 0C010000 		.4byte	.LVL41
+ 2051 03c4 0100     		.2byte	0x1
+ 2052 03c6 54       		.byte	0x54
+ 2053 03c7 0C010000 		.4byte	.LVL41
+ 2054 03cb 14010000 		.4byte	.LVL42
+ 2055 03cf 0100     		.2byte	0x1
+ 2056 03d1 52       		.byte	0x52
+ 2057 03d2 16010000 		.4byte	.LVL43
+ 2058 03d6 20010000 		.4byte	.LVL44
+ 2059 03da 0100     		.2byte	0x1
+ 2060 03dc 54       		.byte	0x54
+ 2061 03dd 20010000 		.4byte	.LVL44
+ 2062 03e1 28010000 		.4byte	.LVL45
+ 2063 03e5 0100     		.2byte	0x1
+ 2064 03e7 52       		.byte	0x52
+ 2065 03e8 2A010000 		.4byte	.LVL46
+ 2066 03ec 34010000 		.4byte	.LVL47
+ 2067 03f0 0100     		.2byte	0x1
+ 2068 03f2 54       		.byte	0x54
+ 2069 03f3 34010000 		.4byte	.LVL47
+ 2070 03f7 3C010000 		.4byte	.LVL49
+ 2071 03fb 0100     		.2byte	0x1
+ 2072 03fd 52       		.byte	0x52
+ 2073 03fe 3C010000 		.4byte	.LVL49
+ 2074 0402 3E010000 		.4byte	.LVL50
+ 2075 0406 1600     		.2byte	0x16
+ 2076 0408 71       		.byte	0x71
+ 2077 0409 1E       		.sleb128 30
+ 2078 040a 94       		.byte	0x94
+ 2079 040b 01       		.byte	0x1
+ 2080 040c 08       		.byte	0x8
+ 2081 040d FF       		.byte	0xff
+ 2082 040e 1A       		.byte	0x1a
+ 2083 040f F3       		.byte	0xf3
+ 2084 0410 01       		.uleb128 0x1
+ 2085 0411 50       		.byte	0x50
+ 2086 0412 23       		.byte	0x23
+ 2087 0413 1E       		.uleb128 0x1e
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 39
+
+
+ 2088 0414 94       		.byte	0x94
+ 2089 0415 01       		.byte	0x1
+ 2090 0416 08       		.byte	0x8
+ 2091 0417 FF       		.byte	0xff
+ 2092 0418 1A       		.byte	0x1a
+ 2093 0419 27       		.byte	0x27
+ 2094 041a 74       		.byte	0x74
+ 2095 041b 00       		.sleb128 0
+ 2096 041c 21       		.byte	0x21
+ 2097 041d 9F       		.byte	0x9f
+ 2098 041e 3E010000 		.4byte	.LVL50
+ 2099 0422 42010000 		.4byte	.LVL51
+ 2100 0426 0100     		.2byte	0x1
+ 2101 0428 50       		.byte	0x50
+ 2102 0429 42010000 		.4byte	.LVL51
+ 2103 042d 44010000 		.4byte	.LFE0
+ 2104 0431 0100     		.2byte	0x1
+ 2105 0433 52       		.byte	0x52
+ 2106 0434 00000000 		.4byte	0
+ 2107 0438 00000000 		.4byte	0
+ 2108              	.LLST2:
+ 2109 043c 00000000 		.4byte	.LVL52
+ 2110 0440 1C000000 		.4byte	.LVL56
+ 2111 0444 0100     		.2byte	0x1
+ 2112 0446 50       		.byte	0x50
+ 2113 0447 1C000000 		.4byte	.LVL56
+ 2114 044b 7A000000 		.4byte	.LVL67
+ 2115 044f 0100     		.2byte	0x1
+ 2116 0451 57       		.byte	0x57
+ 2117 0452 7A000000 		.4byte	.LVL67
+ 2118 0456 7C000000 		.4byte	.LVL68
+ 2119 045a 0100     		.2byte	0x1
+ 2120 045c 50       		.byte	0x50
+ 2121 045d 7C000000 		.4byte	.LVL68
+ 2122 0461 8A000000 		.4byte	.LVL73
+ 2123 0465 0100     		.2byte	0x1
+ 2124 0467 57       		.byte	0x57
+ 2125 0468 8A000000 		.4byte	.LVL73
+ 2126 046c 90000000 		.4byte	.LFE1
+ 2127 0470 0400     		.2byte	0x4
+ 2128 0472 F3       		.byte	0xf3
+ 2129 0473 01       		.uleb128 0x1
+ 2130 0474 50       		.byte	0x50
+ 2131 0475 9F       		.byte	0x9f
+ 2132 0476 00000000 		.4byte	0
+ 2133 047a 00000000 		.4byte	0
+ 2134              	.LLST3:
+ 2135 047e 00000000 		.4byte	.LVL52
+ 2136 0482 1A000000 		.4byte	.LVL55
+ 2137 0486 0100     		.2byte	0x1
+ 2138 0488 51       		.byte	0x51
+ 2139 0489 1A000000 		.4byte	.LVL55
+ 2140 048d 7A000000 		.4byte	.LVL67
+ 2141 0491 0100     		.2byte	0x1
+ 2142 0493 55       		.byte	0x55
+ 2143 0494 7A000000 		.4byte	.LVL67
+ 2144 0498 7E000000 		.4byte	.LVL69
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 40
+
+
+ 2145 049c 0100     		.2byte	0x1
+ 2146 049e 51       		.byte	0x51
+ 2147 049f 7E000000 		.4byte	.LVL69
+ 2148 04a3 8A000000 		.4byte	.LVL71
+ 2149 04a7 0100     		.2byte	0x1
+ 2150 04a9 55       		.byte	0x55
+ 2151 04aa 8A000000 		.4byte	.LVL71
+ 2152 04ae 90000000 		.4byte	.LFE1
+ 2153 04b2 0400     		.2byte	0x4
+ 2154 04b4 F3       		.byte	0xf3
+ 2155 04b5 01       		.uleb128 0x1
+ 2156 04b6 51       		.byte	0x51
+ 2157 04b7 9F       		.byte	0x9f
+ 2158 04b8 00000000 		.4byte	0
+ 2159 04bc 00000000 		.4byte	0
+ 2160              	.LLST4:
+ 2161 04c0 00000000 		.4byte	.LVL52
+ 2162 04c4 14000000 		.4byte	.LVL54
+ 2163 04c8 0100     		.2byte	0x1
+ 2164 04ca 52       		.byte	0x52
+ 2165 04cb 14000000 		.4byte	.LVL54
+ 2166 04cf 8A000000 		.4byte	.LVL72
+ 2167 04d3 0100     		.2byte	0x1
+ 2168 04d5 56       		.byte	0x56
+ 2169 04d6 8A000000 		.4byte	.LVL72
+ 2170 04da 90000000 		.4byte	.LFE1
+ 2171 04de 0400     		.2byte	0x4
+ 2172 04e0 F3       		.byte	0xf3
+ 2173 04e1 01       		.uleb128 0x1
+ 2174 04e2 52       		.byte	0x52
+ 2175 04e3 9F       		.byte	0x9f
+ 2176 04e4 00000000 		.4byte	0
+ 2177 04e8 00000000 		.4byte	0
+ 2178              	.LLST5:
+ 2179 04ec 00000000 		.4byte	.LVL52
+ 2180 04f0 10000000 		.4byte	.LVL53
+ 2181 04f4 0100     		.2byte	0x1
+ 2182 04f6 53       		.byte	0x53
+ 2183 04f7 10000000 		.4byte	.LVL53
+ 2184 04fb 8A000000 		.4byte	.LVL70
+ 2185 04ff 0100     		.2byte	0x1
+ 2186 0501 54       		.byte	0x54
+ 2187 0502 8A000000 		.4byte	.LVL70
+ 2188 0506 90000000 		.4byte	.LFE1
+ 2189 050a 0400     		.2byte	0x4
+ 2190 050c F3       		.byte	0xf3
+ 2191 050d 01       		.uleb128 0x1
+ 2192 050e 53       		.byte	0x53
+ 2193 050f 9F       		.byte	0x9f
+ 2194 0510 00000000 		.4byte	0
+ 2195 0514 00000000 		.4byte	0
+ 2196              		.section	.debug_aranges,"",%progbits
+ 2197 0000 24000000 		.4byte	0x24
+ 2198 0004 0200     		.2byte	0x2
+ 2199 0006 00000000 		.4byte	.Ldebug_info0
+ 2200 000a 04       		.byte	0x4
+ 2201 000b 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 41
+
+
+ 2202 000c 0000     		.2byte	0
+ 2203 000e 0000     		.2byte	0
+ 2204 0010 00000000 		.4byte	.LFB0
+ 2205 0014 44010000 		.4byte	.LFE0-.LFB0
+ 2206 0018 00000000 		.4byte	.LFB1
+ 2207 001c 90000000 		.4byte	.LFE1-.LFB1
+ 2208 0020 00000000 		.4byte	0
+ 2209 0024 00000000 		.4byte	0
+ 2210              		.section	.debug_ranges,"",%progbits
+ 2211              	.Ldebug_ranges0:
+ 2212 0000 00000000 		.4byte	.LFB0
+ 2213 0004 44010000 		.4byte	.LFE0
+ 2214 0008 00000000 		.4byte	.LFB1
+ 2215 000c 90000000 		.4byte	.LFE1
+ 2216 0010 00000000 		.4byte	0
+ 2217 0014 00000000 		.4byte	0
+ 2218              		.section	.debug_line,"",%progbits
+ 2219              	.Ldebug_line0:
+ 2220 0000 19020000 		.section	.debug_str,"MS",%progbits,1
+ 2220      0200C201 
+ 2220      00000201 
+ 2220      FB0E0D00 
+ 2220      01010101 
+ 2221              	.LASF29:
+ 2222 0000 73686135 		.ascii	"sha512_init\000"
+ 2222      31325F69 
+ 2222      6E697400 
+ 2223              	.LASF26:
+ 2224 000c 63686563 		.ascii	"checker\000"
+ 2224      6B657200 
+ 2225              	.LASF40:
+ 2226 0014 65643235 		.ascii	"ed25519_verify\000"
+ 2226      3531395F 
+ 2226      76657269 
+ 2226      667900
+ 2227              	.LASF16:
+ 2228 0023 73746174 		.ascii	"state\000"
+ 2228      6500
+ 2229              	.LASF14:
+ 2230 0029 75696E74 		.ascii	"uint64_t\000"
+ 2230      36345F74 
+ 2230      00
+ 2231              	.LASF5:
+ 2232 0032 73686F72 		.ascii	"short int\000"
+ 2232      7420696E 
+ 2232      7400
+ 2233              	.LASF7:
+ 2234 003c 73697A65 		.ascii	"size_t\000"
+ 2234      5F7400
+ 2235              	.LASF18:
+ 2236 0043 73697A65 		.ascii	"sizetype\000"
+ 2236      74797065 
+ 2236      00
+ 2237              	.LASF36:
+ 2238 004c 76657269 		.ascii	"verify.c\000"
+ 2238      66792E63 
+ 2238      00
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 42
+
+
+ 2239              	.LASF23:
+ 2240 0055 6D657373 		.ascii	"message\000"
+ 2240      61676500 
+ 2241              	.LASF35:
+ 2242 005d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2242      43313120 
+ 2242      352E342E 
+ 2242      31203230 
+ 2242      31363036 
+ 2243 0090 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 2243      20726576 
+ 2243      6973696F 
+ 2243      6E203233 
+ 2243      37373135 
+ 2244 00c3 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2244      66756E63 
+ 2244      74696F6E 
+ 2244      2D736563 
+ 2244      74696F6E 
+ 2245              	.LASF34:
+ 2246 00eb 67655F74 		.ascii	"ge_tobytes\000"
+ 2246      6F627974 
+ 2246      657300
+ 2247              	.LASF15:
+ 2248 00f6 6C656E67 		.ascii	"length\000"
+ 2248      746800
+ 2249              	.LASF30:
+ 2250 00fd 73686135 		.ascii	"sha512_update\000"
+ 2250      31325F75 
+ 2250      70646174 
+ 2250      6500
+ 2251              	.LASF1:
+ 2252 010b 6C6F6E67 		.ascii	"long long int\000"
+ 2252      206C6F6E 
+ 2252      6720696E 
+ 2252      7400
+ 2253              	.LASF28:
+ 2254 0119 67655F66 		.ascii	"ge_frombytes_negate_vartime\000"
+ 2254      726F6D62 
+ 2254      79746573 
+ 2254      5F6E6567 
+ 2254      6174655F 
+ 2255              	.LASF9:
+ 2256 0135 6C6F6E67 		.ascii	"long int\000"
+ 2256      20696E74 
+ 2256      00
+ 2257              	.LASF20:
+ 2258 013e 67655F70 		.ascii	"ge_p2\000"
+ 2258      3200
+ 2259              	.LASF21:
+ 2260 0144 67655F70 		.ascii	"ge_p3\000"
+ 2260      3300
+ 2261              	.LASF2:
+ 2262 014a 6C6F6E67 		.ascii	"long double\000"
+ 2262      20646F75 
+ 2262      626C6500 
+ 2263              	.LASF4:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 43
+
+
+ 2264 0156 756E7369 		.ascii	"unsigned char\000"
+ 2264      676E6564 
+ 2264      20636861 
+ 2264      7200
+ 2265              	.LASF37:
+ 2266 0164 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\CAR"
+ 2266      73657273 
+ 2266      5C4E6967 
+ 2266      68647261 
+ 2266      676F6E5C 
+ 2267 0191 442E6379 		.ascii	"D.cydsn\000"
+ 2267      64736E00 
+ 2268              	.LASF3:
+ 2269 0199 7369676E 		.ascii	"signed char\000"
+ 2269      65642063 
+ 2269      68617200 
+ 2270              	.LASF12:
+ 2271 01a5 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2271      206C6F6E 
+ 2271      6720756E 
+ 2271      7369676E 
+ 2271      65642069 
+ 2272              	.LASF0:
+ 2273 01bc 756E7369 		.ascii	"unsigned int\000"
+ 2273      676E6564 
+ 2273      20696E74 
+ 2273      00
+ 2274              	.LASF6:
+ 2275 01c9 73686F72 		.ascii	"short unsigned int\000"
+ 2275      7420756E 
+ 2275      7369676E 
+ 2275      65642069 
+ 2275      6E7400
+ 2276              	.LASF17:
+ 2277 01dc 6375726C 		.ascii	"curlen\000"
+ 2277      656E00
+ 2278              	.LASF25:
+ 2279 01e3 7075626C 		.ascii	"public_key\000"
+ 2279      69635F6B 
+ 2279      657900
+ 2280              	.LASF13:
+ 2281 01ee 696E7433 		.ascii	"int32_t\000"
+ 2281      325F7400 
+ 2282              	.LASF32:
+ 2283 01f6 73635F72 		.ascii	"sc_reduce\000"
+ 2283      65647563 
+ 2283      6500
+ 2284              	.LASF24:
+ 2285 0200 6D657373 		.ascii	"message_len\000"
+ 2285      6167655F 
+ 2285      6C656E00 
+ 2286              	.LASF11:
+ 2287 020c 5F5F7569 		.ascii	"__uint64_t\000"
+ 2287      6E743634 
+ 2287      5F7400
+ 2288              	.LASF38:
+ 2289 0217 73686135 		.ascii	"sha512_context_\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccuusuHF.s 			page 44
+
+
+ 2289      31325F63 
+ 2289      6F6E7465 
+ 2289      78745F00 
+ 2290              	.LASF10:
+ 2291 0227 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2291      20756E73 
+ 2291      69676E65 
+ 2291      6420696E 
+ 2291      7400
+ 2292              	.LASF19:
+ 2293 0239 73686135 		.ascii	"sha512_context\000"
+ 2293      31325F63 
+ 2293      6F6E7465 
+ 2293      787400
+ 2294              	.LASF8:
+ 2295 0248 5F5F696E 		.ascii	"__int32_t\000"
+ 2295      7433325F 
+ 2295      7400
+ 2296              	.LASF22:
+ 2297 0252 7369676E 		.ascii	"signature\000"
+ 2297      61747572 
+ 2297      6500
+ 2298              	.LASF39:
+ 2299 025c 636F6E73 		.ascii	"consttime_equal\000"
+ 2299      7474696D 
+ 2299      655F6571 
+ 2299      75616C00 
+ 2300              	.LASF33:
+ 2301 026c 67655F64 		.ascii	"ge_double_scalarmult_vartime\000"
+ 2301      6F75626C 
+ 2301      655F7363 
+ 2301      616C6172 
+ 2301      6D756C74 
+ 2302              	.LASF31:
+ 2303 0289 73686135 		.ascii	"sha512_final\000"
+ 2303      31325F66 
+ 2303      696E616C 
+ 2303      00
+ 2304              	.LASF27:
+ 2305 0296 68617368 		.ascii	"hash\000"
+ 2305      00
+ 2306              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

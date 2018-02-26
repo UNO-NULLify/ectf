@@ -1,0 +1,4596 @@
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"sha512.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.sha512_compress,"ax",%progbits
+  20              		.align	2
+  21              		.code	16
+  22              		.thumb_func
+  23              		.type	sha512_compress, %function
+  24              	sha512_compress:
+  25              	.LFB0:
+  26              		.file 1 "sha512.c"
+   1:sha512.c      **** /* LibTomCrypt, modular cryptographic library -- Tom St Denis
+   2:sha512.c      ****  *
+   3:sha512.c      ****  * LibTomCrypt is a library that provides various cryptographic
+   4:sha512.c      ****  * algorithms in a highly modular and flexible manner.
+   5:sha512.c      ****  *
+   6:sha512.c      ****  * The library is free for all purposes without any express
+   7:sha512.c      ****  * guarantee it works.
+   8:sha512.c      ****  *
+   9:sha512.c      ****  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
+  10:sha512.c      ****  */
+  11:sha512.c      **** 
+  12:sha512.c      **** #include "fixedint.h"
+  13:sha512.c      **** #include "sha512.h"
+  14:sha512.c      **** 
+  15:sha512.c      **** /* the K array */
+  16:sha512.c      **** static const uint64_t K[80] = {
+  17:sha512.c      ****     UINT64_C(0x428a2f98d728ae22), UINT64_C(0x7137449123ef65cd), 
+  18:sha512.c      ****     UINT64_C(0xb5c0fbcfec4d3b2f), UINT64_C(0xe9b5dba58189dbbc),
+  19:sha512.c      ****     UINT64_C(0x3956c25bf348b538), UINT64_C(0x59f111f1b605d019), 
+  20:sha512.c      ****     UINT64_C(0x923f82a4af194f9b), UINT64_C(0xab1c5ed5da6d8118),
+  21:sha512.c      ****     UINT64_C(0xd807aa98a3030242), UINT64_C(0x12835b0145706fbe), 
+  22:sha512.c      ****     UINT64_C(0x243185be4ee4b28c), UINT64_C(0x550c7dc3d5ffb4e2),
+  23:sha512.c      ****     UINT64_C(0x72be5d74f27b896f), UINT64_C(0x80deb1fe3b1696b1), 
+  24:sha512.c      ****     UINT64_C(0x9bdc06a725c71235), UINT64_C(0xc19bf174cf692694),
+  25:sha512.c      ****     UINT64_C(0xe49b69c19ef14ad2), UINT64_C(0xefbe4786384f25e3), 
+  26:sha512.c      ****     UINT64_C(0x0fc19dc68b8cd5b5), UINT64_C(0x240ca1cc77ac9c65),
+  27:sha512.c      ****     UINT64_C(0x2de92c6f592b0275), UINT64_C(0x4a7484aa6ea6e483), 
+  28:sha512.c      ****     UINT64_C(0x5cb0a9dcbd41fbd4), UINT64_C(0x76f988da831153b5),
+  29:sha512.c      ****     UINT64_C(0x983e5152ee66dfab), UINT64_C(0xa831c66d2db43210), 
+  30:sha512.c      ****     UINT64_C(0xb00327c898fb213f), UINT64_C(0xbf597fc7beef0ee4),
+  31:sha512.c      ****     UINT64_C(0xc6e00bf33da88fc2), UINT64_C(0xd5a79147930aa725), 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 2
+
+
+  32:sha512.c      ****     UINT64_C(0x06ca6351e003826f), UINT64_C(0x142929670a0e6e70),
+  33:sha512.c      ****     UINT64_C(0x27b70a8546d22ffc), UINT64_C(0x2e1b21385c26c926), 
+  34:sha512.c      ****     UINT64_C(0x4d2c6dfc5ac42aed), UINT64_C(0x53380d139d95b3df),
+  35:sha512.c      ****     UINT64_C(0x650a73548baf63de), UINT64_C(0x766a0abb3c77b2a8), 
+  36:sha512.c      ****     UINT64_C(0x81c2c92e47edaee6), UINT64_C(0x92722c851482353b),
+  37:sha512.c      ****     UINT64_C(0xa2bfe8a14cf10364), UINT64_C(0xa81a664bbc423001),
+  38:sha512.c      ****     UINT64_C(0xc24b8b70d0f89791), UINT64_C(0xc76c51a30654be30),
+  39:sha512.c      ****     UINT64_C(0xd192e819d6ef5218), UINT64_C(0xd69906245565a910), 
+  40:sha512.c      ****     UINT64_C(0xf40e35855771202a), UINT64_C(0x106aa07032bbd1b8),
+  41:sha512.c      ****     UINT64_C(0x19a4c116b8d2d0c8), UINT64_C(0x1e376c085141ab53), 
+  42:sha512.c      ****     UINT64_C(0x2748774cdf8eeb99), UINT64_C(0x34b0bcb5e19b48a8),
+  43:sha512.c      ****     UINT64_C(0x391c0cb3c5c95a63), UINT64_C(0x4ed8aa4ae3418acb), 
+  44:sha512.c      ****     UINT64_C(0x5b9cca4f7763e373), UINT64_C(0x682e6ff3d6b2b8a3),
+  45:sha512.c      ****     UINT64_C(0x748f82ee5defb2fc), UINT64_C(0x78a5636f43172f60), 
+  46:sha512.c      ****     UINT64_C(0x84c87814a1f0ab72), UINT64_C(0x8cc702081a6439ec),
+  47:sha512.c      ****     UINT64_C(0x90befffa23631e28), UINT64_C(0xa4506cebde82bde9), 
+  48:sha512.c      ****     UINT64_C(0xbef9a3f7b2c67915), UINT64_C(0xc67178f2e372532b),
+  49:sha512.c      ****     UINT64_C(0xca273eceea26619c), UINT64_C(0xd186b8c721c0c207), 
+  50:sha512.c      ****     UINT64_C(0xeada7dd6cde0eb1e), UINT64_C(0xf57d4f7fee6ed178),
+  51:sha512.c      ****     UINT64_C(0x06f067aa72176fba), UINT64_C(0x0a637dc5a2c898a6), 
+  52:sha512.c      ****     UINT64_C(0x113f9804bef90dae), UINT64_C(0x1b710b35131c471b),
+  53:sha512.c      ****     UINT64_C(0x28db77f523047d84), UINT64_C(0x32caab7b40c72493), 
+  54:sha512.c      ****     UINT64_C(0x3c9ebe0a15c9bebc), UINT64_C(0x431d67c49c100d4c),
+  55:sha512.c      ****     UINT64_C(0x4cc5d4becb3e42b6), UINT64_C(0x597f299cfc657e2a), 
+  56:sha512.c      ****     UINT64_C(0x5fcb6fab3ad6faec), UINT64_C(0x6c44198c4a475817)
+  57:sha512.c      **** };
+  58:sha512.c      **** 
+  59:sha512.c      **** /* Various logical functions */
+  60:sha512.c      **** 
+  61:sha512.c      **** #define ROR64c(x, y) \
+  62:sha512.c      ****     ( ((((x)&UINT64_C(0xFFFFFFFFFFFFFFFF))>>((uint64_t)(y)&UINT64_C(63))) | \
+  63:sha512.c      ****       ((x)<<((uint64_t)(64-((y)&UINT64_C(63)))))) & UINT64_C(0xFFFFFFFFFFFFFFFF))
+  64:sha512.c      **** 
+  65:sha512.c      **** #define STORE64H(x, y)                                                                     \
+  66:sha512.c      ****    { (y)[0] = (unsigned char)(((x)>>56)&255); (y)[1] = (unsigned char)(((x)>>48)&255);     \
+  67:sha512.c      ****      (y)[2] = (unsigned char)(((x)>>40)&255); (y)[3] = (unsigned char)(((x)>>32)&255);     \
+  68:sha512.c      ****      (y)[4] = (unsigned char)(((x)>>24)&255); (y)[5] = (unsigned char)(((x)>>16)&255);     \
+  69:sha512.c      ****      (y)[6] = (unsigned char)(((x)>>8)&255); (y)[7] = (unsigned char)((x)&255); }
+  70:sha512.c      **** 
+  71:sha512.c      **** #define LOAD64H(x, y)                                                      \
+  72:sha512.c      ****    { x = (((uint64_t)((y)[0] & 255))<<56)|(((uint64_t)((y)[1] & 255))<<48) | \
+  73:sha512.c      ****          (((uint64_t)((y)[2] & 255))<<40)|(((uint64_t)((y)[3] & 255))<<32) | \
+  74:sha512.c      ****          (((uint64_t)((y)[4] & 255))<<24)|(((uint64_t)((y)[5] & 255))<<16) | \
+  75:sha512.c      ****          (((uint64_t)((y)[6] & 255))<<8)|(((uint64_t)((y)[7] & 255))); }
+  76:sha512.c      **** 
+  77:sha512.c      **** 
+  78:sha512.c      **** #define Ch(x,y,z)       (z ^ (x & (y ^ z)))
+  79:sha512.c      **** #define Maj(x,y,z)      (((x | y) & z) | (x & y)) 
+  80:sha512.c      **** #define S(x, n)         ROR64c(x, n)
+  81:sha512.c      **** #define R(x, n)         (((x) &UINT64_C(0xFFFFFFFFFFFFFFFF))>>((uint64_t)n))
+  82:sha512.c      **** #define Sigma0(x)       (S(x, 28) ^ S(x, 34) ^ S(x, 39))
+  83:sha512.c      **** #define Sigma1(x)       (S(x, 14) ^ S(x, 18) ^ S(x, 41))
+  84:sha512.c      **** #define Gamma0(x)       (S(x, 1) ^ S(x, 8) ^ R(x, 7))
+  85:sha512.c      **** #define Gamma1(x)       (S(x, 19) ^ S(x, 61) ^ R(x, 6))
+  86:sha512.c      **** #ifndef MIN
+  87:sha512.c      ****    #define MIN(x, y) ( ((x)<(y))?(x):(y) )
+  88:sha512.c      **** #endif
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 3
+
+
+  89:sha512.c      **** 
+  90:sha512.c      **** /* compress 1024-bits */
+  91:sha512.c      **** static int sha512_compress(sha512_context *md, unsigned char *buf)
+  92:sha512.c      **** {
+  27              		.loc 1 92 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 1032
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  33              		.cfi_def_cfa_offset 20
+  34              		.cfi_offset 4, -20
+  35              		.cfi_offset 5, -16
+  36              		.cfi_offset 6, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 5F46     		mov	r7, fp
+  40 0004 5646     		mov	r6, r10
+  41 0006 4D46     		mov	r5, r9
+  42 0008 4446     		mov	r4, r8
+  43 000a F0B4     		push	{r4, r5, r6, r7}
+  44              		.cfi_def_cfa_offset 36
+  45              		.cfi_offset 8, -36
+  46              		.cfi_offset 9, -32
+  47              		.cfi_offset 10, -28
+  48              		.cfi_offset 11, -24
+  49 000c 534C     		ldr	r4, .L12
+  50 000e A544     		add	sp, sp, r4
+  51              		.cfi_def_cfa_offset 1072
+  52 0010 0500     		movs	r5, r0
+  53 0012 5190     		str	r0, [sp, #324]
+  54              	.LVL1:
+  93:sha512.c      ****     uint64_t S[8], W[80], t0, t1;
+  94:sha512.c      ****     int i;
+  95:sha512.c      **** 
+  96:sha512.c      ****     /* copy state into S */
+  97:sha512.c      ****     for (i = 0; i < 8; i++) {
+  55              		.loc 1 97 0
+  56 0014 0020     		movs	r0, #0
+  57              	.LVL2:
+  58 0016 0BE0     		b	.L2
+  59              	.LVL3:
+  60              	.L3:
+  98:sha512.c      ****         S[i] = md->state[i];
+  61              		.loc 1 98 0 discriminator 3
+  62 0018 441C     		adds	r4, r0, #1
+  63 001a E300     		lsls	r3, r4, #3
+  64 001c EB18     		adds	r3, r5, r3
+  65 001e 1A68     		ldr	r2, [r3]
+  66 0020 5B68     		ldr	r3, [r3, #4]
+  67 0022 C000     		lsls	r0, r0, #3
+  68              	.LVL4:
+  69 0024 F2AE     		add	r6, sp, #968
+  70 0026 B446     		mov	ip, r6
+  71 0028 6044     		add	r0, r0, ip
+  72 002a 0260     		str	r2, [r0]
+  73 002c 4360     		str	r3, [r0, #4]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 4
+
+
+  97:sha512.c      ****         S[i] = md->state[i];
+  74              		.loc 1 97 0 discriminator 3
+  75 002e 2000     		movs	r0, r4
+  76              	.LVL5:
+  77              	.L2:
+  97:sha512.c      ****         S[i] = md->state[i];
+  78              		.loc 1 97 0 is_stmt 0 discriminator 1
+  79 0030 0728     		cmp	r0, #7
+  80 0032 F1DD     		ble	.L3
+  81 0034 0027     		movs	r7, #0
+  82 0036 1BE0     		b	.L4
+  83              	.LVL6:
+  84              	.L5:
+  99:sha512.c      ****     }
+ 100:sha512.c      **** 
+ 101:sha512.c      ****     /* copy the state into 1024-bits into W[0..15] */
+ 102:sha512.c      ****     for (i = 0; i < 16; i++) {
+ 103:sha512.c      ****         LOAD64H(W[i], buf + (8*i));
+  85              		.loc 1 103 0 is_stmt 1 discriminator 3
+  86 0038 FA00     		lsls	r2, r7, #3
+  87 003a 8D5C     		ldrb	r5, [r1, r2]
+  88 003c 2D06     		lsls	r5, r5, #24
+  89 003e 8B18     		adds	r3, r1, r2
+  90 0040 5878     		ldrb	r0, [r3, #1]
+  91 0042 0004     		lsls	r0, r0, #16
+  92 0044 2843     		orrs	r0, r5
+  93 0046 9D78     		ldrb	r5, [r3, #2]
+  94 0048 2D02     		lsls	r5, r5, #8
+  95 004a 0543     		orrs	r5, r0
+  96 004c DE78     		ldrb	r6, [r3, #3]
+  97 004e 1879     		ldrb	r0, [r3, #4]
+  98 0050 0406     		lsls	r4, r0, #24
+  99 0052 5879     		ldrb	r0, [r3, #5]
+ 100 0054 0004     		lsls	r0, r0, #16
+ 101 0056 2043     		orrs	r0, r4
+ 102 0058 9C79     		ldrb	r4, [r3, #6]
+ 103 005a 2402     		lsls	r4, r4, #8
+ 104 005c 2043     		orrs	r0, r4
+ 105 005e 3543     		orrs	r5, r6
+ 106 0060 DB79     		ldrb	r3, [r3, #7]
+ 107 0062 1843     		orrs	r0, r3
+ 108 0064 52AB     		add	r3, sp, #328
+ 109 0066 9C46     		mov	ip, r3
+ 110 0068 6244     		add	r2, r2, ip
+ 111 006a 1060     		str	r0, [r2]
+ 112 006c 5560     		str	r5, [r2, #4]
+ 102:sha512.c      ****         LOAD64H(W[i], buf + (8*i));
+ 113              		.loc 1 102 0 discriminator 3
+ 114 006e 0137     		adds	r7, r7, #1
+ 115              	.LVL7:
+ 116              	.L4:
+ 102:sha512.c      ****         LOAD64H(W[i], buf + (8*i));
+ 117              		.loc 1 102 0 is_stmt 0 discriminator 1
+ 118 0070 0F2F     		cmp	r7, #15
+ 119 0072 E1DD     		ble	.L5
+ 120 0074 1024     		movs	r4, #16
+ 121 0076 6AE0     		b	.L6
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 5
+
+
+ 122              	.LVL8:
+ 123              	.L7:
+ 104:sha512.c      ****     }
+ 105:sha512.c      **** 
+ 106:sha512.c      ****     /* fill W[16..79] */
+ 107:sha512.c      ****     for (i = 16; i < 80; i++) {
+ 108:sha512.c      ****         W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) + W[i - 16];
+ 124              		.loc 1 108 0 is_stmt 1 discriminator 3
+ 125 0078 A21E     		subs	r2, r4, #2
+ 126 007a D200     		lsls	r2, r2, #3
+ 127 007c 52AB     		add	r3, sp, #328
+ 128 007e 9C46     		mov	ip, r3
+ 129 0080 6244     		add	r2, r2, ip
+ 130 0082 1368     		ldr	r3, [r2]
+ 131 0084 5268     		ldr	r2, [r2, #4]
+ 132 0086 5003     		lsls	r0, r2, #13
+ 133 0088 D90C     		lsrs	r1, r3, #19
+ 134 008a 0843     		orrs	r0, r1
+ 135 008c 8446     		mov	ip, r0
+ 136 008e 5D03     		lsls	r5, r3, #13
+ 137 0090 D10C     		lsrs	r1, r2, #19
+ 138 0092 0D43     		orrs	r5, r1
+ 139 0094 580F     		lsrs	r0, r3, #29
+ 140 0096 D100     		lsls	r1, r2, #3
+ 141 0098 0143     		orrs	r1, r0
+ 142 009a 500F     		lsrs	r0, r2, #29
+ 143 009c 8046     		mov	r8, r0
+ 144 009e D800     		lsls	r0, r3, #3
+ 145 00a0 4646     		mov	r6, r8
+ 146 00a2 3043     		orrs	r0, r6
+ 147 00a4 6646     		mov	r6, ip
+ 148 00a6 7040     		eors	r0, r6
+ 149 00a8 6940     		eors	r1, r5
+ 150 00aa 9506     		lsls	r5, r2, #26
+ 151 00ac 9B09     		lsrs	r3, r3, #6
+ 152 00ae 2B43     		orrs	r3, r5
+ 153 00b0 9209     		lsrs	r2, r2, #6
+ 154 00b2 5840     		eors	r0, r3
+ 155 00b4 0090     		str	r0, [sp]
+ 156 00b6 5140     		eors	r1, r2
+ 157 00b8 0191     		str	r1, [sp, #4]
+ 158 00ba E31F     		subs	r3, r4, #7
+ 159 00bc DB00     		lsls	r3, r3, #3
+ 160 00be 52AA     		add	r2, sp, #328
+ 161 00c0 9446     		mov	ip, r2
+ 162 00c2 6344     		add	r3, r3, ip
+ 163 00c4 1868     		ldr	r0, [r3]
+ 164 00c6 5968     		ldr	r1, [r3, #4]
+ 165 00c8 009A     		ldr	r2, [sp]
+ 166 00ca 019B     		ldr	r3, [sp, #4]
+ 167 00cc 8018     		adds	r0, r0, r2
+ 168 00ce 5941     		adcs	r1, r1, r3
+ 169 00d0 2200     		movs	r2, r4
+ 170 00d2 0F3A     		subs	r2, r2, #15
+ 171 00d4 D200     		lsls	r2, r2, #3
+ 172 00d6 6244     		add	r2, r2, ip
+ 173 00d8 1368     		ldr	r3, [r2]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 6
+
+
+ 174 00da 5268     		ldr	r2, [r2, #4]
+ 175 00dc D507     		lsls	r5, r2, #31
+ 176 00de A946     		mov	r9, r5
+ 177 00e0 5D08     		lsrs	r5, r3, #1
+ 178 00e2 4E46     		mov	r6, r9
+ 179 00e4 2E43     		orrs	r6, r5
+ 180 00e6 B146     		mov	r9, r6
+ 181 00e8 DD07     		lsls	r5, r3, #31
+ 182 00ea A846     		mov	r8, r5
+ 183 00ec 5508     		lsrs	r5, r2, #1
+ 184 00ee 4646     		mov	r6, r8
+ 185 00f0 2E43     		orrs	r6, r5
+ 186 00f2 B046     		mov	r8, r6
+ 187 00f4 1506     		lsls	r5, r2, #24
+ 188 00f6 AC46     		mov	ip, r5
+ 189 00f8 1D0A     		lsrs	r5, r3, #8
+ 190 00fa 6646     		mov	r6, ip
+ 191 00fc 2E43     		orrs	r6, r5
+ 192 00fe B446     		mov	ip, r6
+ 193 0100 1D06     		lsls	r5, r3, #24
+ 194 0102 AA46     		mov	r10, r5
+ 195 0104 150A     		lsrs	r5, r2, #8
+ 196 0106 5646     		mov	r6, r10
+ 197 0108 3543     		orrs	r5, r6
+ 198 010a 4E46     		mov	r6, r9
+ 199 010c 6746     		mov	r7, ip
+ 200 010e 7E40     		eors	r6, r7
+ 201 0110 B446     		mov	ip, r6
+ 202 0112 4646     		mov	r6, r8
+ 203 0114 7540     		eors	r5, r6
+ 204 0116 5606     		lsls	r6, r2, #25
+ 205 0118 DB09     		lsrs	r3, r3, #7
+ 206 011a 3343     		orrs	r3, r6
+ 207 011c D209     		lsrs	r2, r2, #7
+ 208 011e 6646     		mov	r6, ip
+ 209 0120 5E40     		eors	r6, r3
+ 210 0122 0296     		str	r6, [sp, #8]
+ 211 0124 5540     		eors	r5, r2
+ 212 0126 0395     		str	r5, [sp, #12]
+ 213 0128 029A     		ldr	r2, [sp, #8]
+ 214 012a 039B     		ldr	r3, [sp, #12]
+ 215 012c 8018     		adds	r0, r0, r2
+ 216 012e 5941     		adcs	r1, r1, r3
+ 217 0130 2300     		movs	r3, r4
+ 218 0132 103B     		subs	r3, r3, #16
+ 219 0134 DB00     		lsls	r3, r3, #3
+ 220 0136 52AA     		add	r2, sp, #328
+ 221 0138 9446     		mov	ip, r2
+ 222 013a 6344     		add	r3, r3, ip
+ 223 013c 1A68     		ldr	r2, [r3]
+ 224 013e 5B68     		ldr	r3, [r3, #4]
+ 225 0140 8018     		adds	r0, r0, r2
+ 226 0142 5941     		adcs	r1, r1, r3
+ 227 0144 E300     		lsls	r3, r4, #3
+ 228 0146 6344     		add	r3, r3, ip
+ 229 0148 1860     		str	r0, [r3]
+ 230 014a 5960     		str	r1, [r3, #4]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 7
+
+
+ 107:sha512.c      ****         W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) + W[i - 16];
+ 231              		.loc 1 107 0 discriminator 3
+ 232 014c 0134     		adds	r4, r4, #1
+ 233              	.LVL9:
+ 234              	.L6:
+ 107:sha512.c      ****         W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) + W[i - 16];
+ 235              		.loc 1 107 0 is_stmt 0 discriminator 1
+ 236 014e 4F2C     		cmp	r4, #79
+ 237 0150 92DD     		ble	.L7
+ 238 0152 0023     		movs	r3, #0
+ 239 0154 9A46     		mov	r10, r3
+ 240 0156 00F030FD 		bl	.L8	@ far jump
+ 241              	.L13:
+ 242 015a C046     		.align	2
+ 243              	.L12:
+ 244 015c F4FBFFFF 		.word	-1036
+ 245              	.LVL10:
+ 246              	.L9:
+ 109:sha512.c      ****     }        
+ 110:sha512.c      **** 
+ 111:sha512.c      **** /* Compress */
+ 112:sha512.c      ****     #define RND(a,b,c,d,e,f,g,h,i) \
+ 113:sha512.c      ****     t0 = h + Sigma1(e) + Ch(e, f, g) + K[i] + W[i]; \
+ 114:sha512.c      ****     t1 = Sigma0(a) + Maj(a, b, c);\
+ 115:sha512.c      ****     d += t0; \
+ 116:sha512.c      ****     h  = t0 + t1;
+ 117:sha512.c      **** 
+ 118:sha512.c      ****     for (i = 0; i < 80; i += 8) {
+ 119:sha512.c      ****        RND(S[0],S[1],S[2],S[3],S[4],S[5],S[6],S[7],i+0);
+ 247              		.loc 1 119 0 is_stmt 1 discriminator 3
+ 248 0160 FFAB     		add	r3, sp, #1020
+ 249              	.LVL11:
+ 250 0162 0433     		adds	r3, r3, #4
+ 251 0164 5C68     		ldr	r4, [r3, #4]
+ 252 0166 1B68     		ldr	r3, [r3]
+ 253 0168 0093     		str	r3, [sp]
+ 254 016a 0194     		str	r4, [sp, #4]
+ 255 016c FA9B     		ldr	r3, [sp, #1000]
+ 256 016e FB9C     		ldr	r4, [sp, #1004]
+ 257 0170 1D00     		movs	r5, r3
+ 258 0172 2600     		movs	r6, r4
+ 259 0174 A204     		lsls	r2, r4, #18
+ 260 0176 AB0B     		lsrs	r3, r5, #14
+ 261 0178 1A43     		orrs	r2, r3
+ 262 017a 1400     		movs	r4, r2
+ 263 017c A904     		lsls	r1, r5, #18
+ 264 017e B30B     		lsrs	r3, r6, #14
+ 265 0180 1943     		orrs	r1, r3
+ 266 0182 B203     		lsls	r2, r6, #14
+ 267 0184 AB0C     		lsrs	r3, r5, #18
+ 268 0186 1A43     		orrs	r2, r3
+ 269 0188 1000     		movs	r0, r2
+ 270 018a AB03     		lsls	r3, r5, #14
+ 271 018c B20C     		lsrs	r2, r6, #18
+ 272 018e 1343     		orrs	r3, r2
+ 273 0190 2200     		movs	r2, r4
+ 274 0192 4240     		eors	r2, r0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 8
+
+
+ 275 0194 4B40     		eors	r3, r1
+ 276 0196 680A     		lsrs	r0, r5, #9
+ 277 0198 F105     		lsls	r1, r6, #23
+ 278 019a 0143     		orrs	r1, r0
+ 279 019c 740A     		lsrs	r4, r6, #9
+ 280 019e E805     		lsls	r0, r5, #23
+ 281 01a0 2043     		orrs	r0, r4
+ 282 01a2 4240     		eors	r2, r0
+ 283 01a4 1092     		str	r2, [sp, #64]
+ 284 01a6 4B40     		eors	r3, r1
+ 285 01a8 1193     		str	r3, [sp, #68]
+ 286 01aa 009A     		ldr	r2, [sp]
+ 287 01ac 019B     		ldr	r3, [sp, #4]
+ 288 01ae 1098     		ldr	r0, [sp, #64]
+ 289 01b0 1199     		ldr	r1, [sp, #68]
+ 290 01b2 1218     		adds	r2, r2, r0
+ 291 01b4 4B41     		adcs	r3, r3, r1
+ 292 01b6 0292     		str	r2, [sp, #8]
+ 293 01b8 0393     		str	r3, [sp, #12]
+ 294 01ba FC98     		ldr	r0, [sp, #1008]
+ 295 01bc FD99     		ldr	r1, [sp, #1012]
+ 296 01be FE9B     		ldr	r3, [sp, #1016]
+ 297 01c0 FF9C     		ldr	r4, [sp, #1020]
+ 298 01c2 0090     		str	r0, [sp]
+ 299 01c4 0191     		str	r1, [sp, #4]
+ 300 01c6 0200     		movs	r2, r0
+ 301 01c8 5A40     		eors	r2, r3
+ 302 01ca 1000     		movs	r0, r2
+ 303 01cc 0199     		ldr	r1, [sp, #4]
+ 304 01ce 1A00     		movs	r2, r3
+ 305 01d0 2300     		movs	r3, r4
+ 306 01d2 2700     		movs	r7, r4
+ 307 01d4 6140     		eors	r1, r4
+ 308 01d6 2C00     		movs	r4, r5
+ 309 01d8 3500     		movs	r5, r6
+ 310 01da 2040     		ands	r0, r4
+ 311 01dc 0694     		str	r4, [sp, #24]
+ 312 01de 0795     		str	r5, [sp, #28]
+ 313 01e0 2940     		ands	r1, r5
+ 314 01e2 1C00     		movs	r4, r3
+ 315 01e4 1300     		movs	r3, r2
+ 316 01e6 4240     		eors	r2, r0
+ 317 01e8 1292     		str	r2, [sp, #72]
+ 318 01ea 0C93     		str	r3, [sp, #48]
+ 319 01ec 0D94     		str	r4, [sp, #52]
+ 320 01ee 3A00     		movs	r2, r7
+ 321 01f0 4A40     		eors	r2, r1
+ 322 01f2 1392     		str	r2, [sp, #76]
+ 323 01f4 129A     		ldr	r2, [sp, #72]
+ 324 01f6 139B     		ldr	r3, [sp, #76]
+ 325 01f8 0298     		ldr	r0, [sp, #8]
+ 326 01fa 0399     		ldr	r1, [sp, #12]
+ 327 01fc 8018     		adds	r0, r0, r2
+ 328 01fe 5941     		adcs	r1, r1, r3
+ 329 0200 0200     		movs	r2, r0
+ 330 0202 0B00     		movs	r3, r1
+ 331 0204 EA49     		ldr	r1, .L14
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 9
+
+
+ 332 0206 8B46     		mov	fp, r1
+ 333 0208 5146     		mov	r1, r10
+ 334 020a CC00     		lsls	r4, r1, #3
+ 335 020c 5946     		mov	r1, fp
+ 336 020e 0919     		adds	r1, r1, r4
+ 337 0210 0868     		ldr	r0, [r1]
+ 338 0212 4968     		ldr	r1, [r1, #4]
+ 339 0214 1218     		adds	r2, r2, r0
+ 340 0216 4B41     		adcs	r3, r3, r1
+ 341 0218 52A9     		add	r1, sp, #328
+ 342 021a 8C46     		mov	ip, r1
+ 343 021c 6444     		add	r4, r4, ip
+ 344 021e 2068     		ldr	r0, [r4]
+ 345 0220 6168     		ldr	r1, [r4, #4]
+ 346 0222 1218     		adds	r2, r2, r0
+ 347 0224 4B41     		adcs	r3, r3, r1
+ 348              	.LVL12:
+ 349 0226 F399     		ldr	r1, [sp, #972]
+ 350 0228 0801     		lsls	r0, r1, #4
+ 351 022a F299     		ldr	r1, [sp, #968]
+ 352 022c 090F     		lsrs	r1, r1, #28
+ 353 022e 0600     		movs	r6, r0
+ 354 0230 0E43     		orrs	r6, r1
+ 355 0232 F299     		ldr	r1, [sp, #968]
+ 356 0234 0C01     		lsls	r4, r1, #4
+ 357 0236 F399     		ldr	r1, [sp, #972]
+ 358 0238 090F     		lsrs	r1, r1, #28
+ 359 023a 0C43     		orrs	r4, r1
+ 360 023c F299     		ldr	r1, [sp, #968]
+ 361 023e 8808     		lsrs	r0, r1, #2
+ 362 0240 F399     		ldr	r1, [sp, #972]
+ 363 0242 8907     		lsls	r1, r1, #30
+ 364 0244 0143     		orrs	r1, r0
+ 365 0246 F39D     		ldr	r5, [sp, #972]
+ 366 0248 A808     		lsrs	r0, r5, #2
+ 367 024a F29D     		ldr	r5, [sp, #968]
+ 368 024c AD07     		lsls	r5, r5, #30
+ 369 024e 2843     		orrs	r0, r5
+ 370 0250 7040     		eors	r0, r6
+ 371 0252 6140     		eors	r1, r4
+ 372 0254 F29D     		ldr	r5, [sp, #968]
+ 373 0256 ED09     		lsrs	r5, r5, #7
+ 374 0258 F39E     		ldr	r6, [sp, #972]
+ 375 025a 7406     		lsls	r4, r6, #25
+ 376 025c 2C43     		orrs	r4, r5
+ 377 025e F609     		lsrs	r6, r6, #7
+ 378 0260 F29D     		ldr	r5, [sp, #968]
+ 379 0262 6D06     		lsls	r5, r5, #25
+ 380 0264 3543     		orrs	r5, r6
+ 381 0266 0600     		movs	r6, r0
+ 382 0268 6E40     		eors	r6, r5
+ 383 026a 1496     		str	r6, [sp, #80]
+ 384 026c 6140     		eors	r1, r4
+ 385 026e 1591     		str	r1, [sp, #84]
+ 386 0270 F498     		ldr	r0, [sp, #976]
+ 387 0272 F599     		ldr	r1, [sp, #980]
+ 388 0274 0600     		movs	r6, r0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 10
+
+
+ 389 0276 0F00     		movs	r7, r1
+ 390 0278 F299     		ldr	r1, [sp, #968]
+ 391 027a 3143     		orrs	r1, r6
+ 392 027c 0800     		movs	r0, r1
+ 393 027e F399     		ldr	r1, [sp, #972]
+ 394 0280 3943     		orrs	r1, r7
+ 395 0282 8C46     		mov	ip, r1
+ 396 0284 F69C     		ldr	r4, [sp, #984]
+ 397 0286 F79D     		ldr	r5, [sp, #988]
+ 398 0288 2040     		ands	r0, r4
+ 399 028a 0294     		str	r4, [sp, #8]
+ 400 028c 0395     		str	r5, [sp, #12]
+ 401 028e 6446     		mov	r4, ip
+ 402 0290 2C40     		ands	r4, r5
+ 403 0292 2100     		movs	r1, r4
+ 404 0294 F29D     		ldr	r5, [sp, #968]
+ 405 0296 3540     		ands	r5, r6
+ 406 0298 F39C     		ldr	r4, [sp, #972]
+ 407 029a 0896     		str	r6, [sp, #32]
+ 408 029c 0997     		str	r7, [sp, #36]
+ 409 029e 3C40     		ands	r4, r7
+ 410 02a0 0700     		movs	r7, r0
+ 411 02a2 2F43     		orrs	r7, r5
+ 412 02a4 1697     		str	r7, [sp, #88]
+ 413 02a6 2143     		orrs	r1, r4
+ 414 02a8 1791     		str	r1, [sp, #92]
+ 415 02aa 149D     		ldr	r5, [sp, #80]
+ 416 02ac 159E     		ldr	r6, [sp, #84]
+ 417 02ae 1698     		ldr	r0, [sp, #88]
+ 418 02b0 1799     		ldr	r1, [sp, #92]
+ 419 02b2 2D18     		adds	r5, r5, r0
+ 420 02b4 4E41     		adcs	r6, r6, r1
+ 421 02b6 2C00     		movs	r4, r5
+ 422 02b8 3500     		movs	r5, r6
+ 423              	.LVL13:
+ 424 02ba F89E     		ldr	r6, [sp, #992]
+ 425 02bc F99F     		ldr	r7, [sp, #996]
+ 426 02be B618     		adds	r6, r6, r2
+ 427 02c0 5F41     		adcs	r7, r7, r3
+ 428 02c2 3000     		movs	r0, r6
+ 429 02c4 1219     		adds	r2, r2, r4
+ 430 02c6 6B41     		adcs	r3, r3, r5
+ 431              	.LVL14:
+ 432 02c8 0A92     		str	r2, [sp, #40]
+ 433 02ca 0B93     		str	r3, [sp, #44]
+ 120:sha512.c      ****        RND(S[7],S[0],S[1],S[2],S[3],S[4],S[5],S[6],i+1);
+ 434              		.loc 1 120 0 discriminator 3
+ 435 02cc BA04     		lsls	r2, r7, #18
+ 436 02ce B30B     		lsrs	r3, r6, #14
+ 437 02d0 1100     		movs	r1, r2
+ 438 02d2 1943     		orrs	r1, r3
+ 439 02d4 0E00     		movs	r6, r1
+ 440 02d6 3900     		movs	r1, r7
+ 441 02d8 8404     		lsls	r4, r0, #18
+ 442              	.LVL15:
+ 443 02da BB0B     		lsrs	r3, r7, #14
+ 444 02dc 1C43     		orrs	r4, r3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 11
+
+
+ 445 02de BA03     		lsls	r2, r7, #14
+ 446 02e0 830C     		lsrs	r3, r0, #18
+ 447 02e2 1500     		movs	r5, r2
+ 448 02e4 1D43     		orrs	r5, r3
+ 449 02e6 8303     		lsls	r3, r0, #14
+ 450 02e8 0490     		str	r0, [sp, #16]
+ 451 02ea 0591     		str	r1, [sp, #20]
+ 452 02ec BA0C     		lsrs	r2, r7, #18
+ 453 02ee 1343     		orrs	r3, r2
+ 454 02f0 3100     		movs	r1, r6
+ 455 02f2 6940     		eors	r1, r5
+ 456 02f4 0A00     		movs	r2, r1
+ 457 02f6 6340     		eors	r3, r4
+ 458 02f8 0498     		ldr	r0, [sp, #16]
+ 459 02fa 0599     		ldr	r1, [sp, #20]
+ 460 02fc 450A     		lsrs	r5, r0, #9
+ 461 02fe CC05     		lsls	r4, r1, #23
+ 462 0300 2C43     		orrs	r4, r5
+ 463 0302 4E0A     		lsrs	r6, r1, #9
+ 464 0304 C505     		lsls	r5, r0, #23
+ 465 0306 3543     		orrs	r5, r6
+ 466 0308 1100     		movs	r1, r2
+ 467 030a 6940     		eors	r1, r5
+ 468 030c 1891     		str	r1, [sp, #96]
+ 469 030e 1900     		movs	r1, r3
+ 470 0310 6140     		eors	r1, r4
+ 471 0312 1991     		str	r1, [sp, #100]
+ 472 0314 0C9B     		ldr	r3, [sp, #48]
+ 473 0316 0D9C     		ldr	r4, [sp, #52]
+ 474 0318 1899     		ldr	r1, [sp, #96]
+ 475 031a 199A     		ldr	r2, [sp, #100]
+ 476 031c 5B18     		adds	r3, r3, r1
+ 477 031e 5441     		adcs	r4, r4, r2
+ 478 0320 1E00     		movs	r6, r3
+ 479 0322 2700     		movs	r7, r4
+ 480 0324 0698     		ldr	r0, [sp, #24]
+ 481 0326 0799     		ldr	r1, [sp, #28]
+ 482 0328 0300     		movs	r3, r0
+ 483 032a 009C     		ldr	r4, [sp]
+ 484 032c 019D     		ldr	r5, [sp, #4]
+ 485 032e 6340     		eors	r3, r4
+ 486 0330 1A00     		movs	r2, r3
+ 487 0332 0B00     		movs	r3, r1
+ 488 0334 6B40     		eors	r3, r5
+ 489 0336 9C46     		mov	ip, r3
+ 490 0338 0498     		ldr	r0, [sp, #16]
+ 491 033a 0599     		ldr	r1, [sp, #20]
+ 492 033c 0240     		ands	r2, r0
+ 493 033e 6346     		mov	r3, ip
+ 494 0340 0B40     		ands	r3, r1
+ 495 0342 2100     		movs	r1, r4
+ 496 0344 5140     		eors	r1, r2
+ 497 0346 1A91     		str	r1, [sp, #104]
+ 498 0348 2900     		movs	r1, r5
+ 499 034a 5940     		eors	r1, r3
+ 500 034c 1B91     		str	r1, [sp, #108]
+ 501 034e 1A9B     		ldr	r3, [sp, #104]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 12
+
+
+ 502 0350 1B9C     		ldr	r4, [sp, #108]
+ 503 0352 F618     		adds	r6, r6, r3
+ 504 0354 6741     		adcs	r7, r7, r4
+ 505 0356 5146     		mov	r1, r10
+ 506 0358 4C1C     		adds	r4, r1, #1
+ 507 035a E400     		lsls	r4, r4, #3
+ 508 035c 5946     		mov	r1, fp
+ 509 035e 0B19     		adds	r3, r1, r4
+ 510 0360 1A68     		ldr	r2, [r3]
+ 511 0362 5B68     		ldr	r3, [r3, #4]
+ 512 0364 B618     		adds	r6, r6, r2
+ 513 0366 5F41     		adcs	r7, r7, r3
+ 514 0368 52AB     		add	r3, sp, #328
+ 515 036a 9C46     		mov	ip, r3
+ 516 036c 6444     		add	r4, r4, ip
+ 517 036e 2268     		ldr	r2, [r4]
+ 518 0370 6368     		ldr	r3, [r4, #4]
+ 519 0372 B618     		adds	r6, r6, r2
+ 520 0374 5F41     		adcs	r7, r7, r3
+ 521 0376 0C96     		str	r6, [sp, #48]
+ 522 0378 0D97     		str	r7, [sp, #52]
+ 523              	.LVL16:
+ 524 037a 0A9E     		ldr	r6, [sp, #40]
+ 525 037c 0B9F     		ldr	r7, [sp, #44]
+ 526              	.LVL17:
+ 527 037e 3C01     		lsls	r4, r7, #4
+ 528 0380 330F     		lsrs	r3, r6, #28
+ 529 0382 1C43     		orrs	r4, r3
+ 530 0384 3201     		lsls	r2, r6, #4
+ 531 0386 3B0F     		lsrs	r3, r7, #28
+ 532 0388 1500     		movs	r5, r2
+ 533 038a 1D43     		orrs	r5, r3
+ 534 038c B208     		lsrs	r2, r6, #2
+ 535 038e BB07     		lsls	r3, r7, #30
+ 536 0390 1343     		orrs	r3, r2
+ 537 0392 B908     		lsrs	r1, r7, #2
+ 538 0394 8C46     		mov	ip, r1
+ 539 0396 B207     		lsls	r2, r6, #30
+ 540 0398 6146     		mov	r1, ip
+ 541 039a 0A43     		orrs	r2, r1
+ 542 039c 5440     		eors	r4, r2
+ 543 039e 5D40     		eors	r5, r3
+ 544 03a0 2A00     		movs	r2, r5
+ 545 03a2 F509     		lsrs	r5, r6, #7
+ 546 03a4 7B06     		lsls	r3, r7, #25
+ 547 03a6 2B43     		orrs	r3, r5
+ 548 03a8 F909     		lsrs	r1, r7, #7
+ 549 03aa 8C46     		mov	ip, r1
+ 550 03ac 7506     		lsls	r5, r6, #25
+ 551 03ae 6146     		mov	r1, ip
+ 552 03b0 0D43     		orrs	r5, r1
+ 553 03b2 2100     		movs	r1, r4
+ 554 03b4 6940     		eors	r1, r5
+ 555 03b6 1C91     		str	r1, [sp, #112]
+ 556 03b8 5A40     		eors	r2, r3
+ 557 03ba 1D92     		str	r2, [sp, #116]
+ 558 03bc F29A     		ldr	r2, [sp, #968]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 13
+
+
+ 559 03be 3243     		orrs	r2, r6
+ 560 03c0 F39B     		ldr	r3, [sp, #972]
+ 561 03c2 3400     		movs	r4, r6
+ 562 03c4 3D00     		movs	r5, r7
+ 563 03c6 3B43     		orrs	r3, r7
+ 564 03c8 089E     		ldr	r6, [sp, #32]
+ 565 03ca 099F     		ldr	r7, [sp, #36]
+ 566 03cc 3240     		ands	r2, r6
+ 567 03ce 3B40     		ands	r3, r7
+ 568 03d0 F299     		ldr	r1, [sp, #968]
+ 569 03d2 2F00     		movs	r7, r5
+ 570 03d4 2140     		ands	r1, r4
+ 571 03d6 0D00     		movs	r5, r1
+ 572 03d8 F399     		ldr	r1, [sp, #972]
+ 573 03da 3940     		ands	r1, r7
+ 574 03dc 2A43     		orrs	r2, r5
+ 575 03de 1E92     		str	r2, [sp, #120]
+ 576 03e0 0B43     		orrs	r3, r1
+ 577 03e2 1F93     		str	r3, [sp, #124]
+ 578 03e4 1C9B     		ldr	r3, [sp, #112]
+ 579 03e6 1D9C     		ldr	r4, [sp, #116]
+ 580 03e8 1E9D     		ldr	r5, [sp, #120]
+ 581 03ea 1F9E     		ldr	r6, [sp, #124]
+ 582 03ec 5B19     		adds	r3, r3, r5
+ 583 03ee 7441     		adcs	r4, r4, r6
+ 584 03f0 1A00     		movs	r2, r3
+ 585 03f2 2300     		movs	r3, r4
+ 586              	.LVL18:
+ 587 03f4 029C     		ldr	r4, [sp, #8]
+ 588 03f6 039D     		ldr	r5, [sp, #12]
+ 589 03f8 0C98     		ldr	r0, [sp, #48]
+ 590 03fa 0D99     		ldr	r1, [sp, #52]
+ 591 03fc 2418     		adds	r4, r4, r0
+ 592 03fe 4D41     		adcs	r5, r5, r1
+ 593 0400 2600     		movs	r6, r4
+ 594 0402 2F00     		movs	r7, r5
+ 595 0404 8018     		adds	r0, r0, r2
+ 596 0406 5941     		adcs	r1, r1, r3
+ 597 0408 0290     		str	r0, [sp, #8]
+ 598 040a 0391     		str	r1, [sp, #12]
+ 121:sha512.c      ****        RND(S[6],S[7],S[0],S[1],S[2],S[3],S[4],S[5],i+2);
+ 599              		.loc 1 121 0 discriminator 3
+ 600 040c AA04     		lsls	r2, r5, #18
+ 601              	.LVL19:
+ 602 040e A30B     		lsrs	r3, r4, #14
+ 603 0410 1A43     		orrs	r2, r3
+ 604 0412 9446     		mov	ip, r2
+ 605 0414 A404     		lsls	r4, r4, #18
+ 606 0416 AB0B     		lsrs	r3, r5, #14
+ 607 0418 1C43     		orrs	r4, r3
+ 608 041a AA03     		lsls	r2, r5, #14
+ 609 041c B30C     		lsrs	r3, r6, #18
+ 610 041e 1500     		movs	r5, r2
+ 611 0420 1D43     		orrs	r5, r3
+ 612 0422 B303     		lsls	r3, r6, #14
+ 613 0424 BA0C     		lsrs	r2, r7, #18
+ 614 0426 1343     		orrs	r3, r2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 14
+
+
+ 615 0428 6246     		mov	r2, ip
+ 616 042a 6A40     		eors	r2, r5
+ 617 042c 6340     		eors	r3, r4
+ 618 042e 750A     		lsrs	r5, r6, #9
+ 619 0430 FC05     		lsls	r4, r7, #23
+ 620 0432 2C43     		orrs	r4, r5
+ 621 0434 790A     		lsrs	r1, r7, #9
+ 622 0436 8C46     		mov	ip, r1
+ 623 0438 F505     		lsls	r5, r6, #23
+ 624 043a 6146     		mov	r1, ip
+ 625 043c 0D43     		orrs	r5, r1
+ 626 043e 6A40     		eors	r2, r5
+ 627 0440 2092     		str	r2, [sp, #128]
+ 628 0442 6340     		eors	r3, r4
+ 629 0444 2193     		str	r3, [sp, #132]
+ 630 0446 009A     		ldr	r2, [sp]
+ 631 0448 019B     		ldr	r3, [sp, #4]
+ 632 044a 209C     		ldr	r4, [sp, #128]
+ 633 044c 219D     		ldr	r5, [sp, #132]
+ 634 044e 1219     		adds	r2, r2, r4
+ 635 0450 6B41     		adcs	r3, r3, r5
+ 636 0452 0092     		str	r2, [sp]
+ 637 0454 0193     		str	r3, [sp, #4]
+ 638 0456 0698     		ldr	r0, [sp, #24]
+ 639 0458 0799     		ldr	r1, [sp, #28]
+ 640 045a 0500     		movs	r5, r0
+ 641 045c 049A     		ldr	r2, [sp, #16]
+ 642 045e 059B     		ldr	r3, [sp, #20]
+ 643 0460 5540     		eors	r5, r2
+ 644 0462 0C00     		movs	r4, r1
+ 645 0464 5C40     		eors	r4, r3
+ 646 0466 3540     		ands	r5, r6
+ 647 0468 0C96     		str	r6, [sp, #48]
+ 648 046a 0D97     		str	r7, [sp, #52]
+ 649              	.LVL20:
+ 650 046c 3C40     		ands	r4, r7
+ 651 046e 0700     		movs	r7, r0
+ 652 0470 6F40     		eors	r7, r5
+ 653 0472 2297     		str	r7, [sp, #136]
+ 654 0474 0D00     		movs	r5, r1
+ 655 0476 6540     		eors	r5, r4
+ 656 0478 2395     		str	r5, [sp, #140]
+ 657 047a 229D     		ldr	r5, [sp, #136]
+ 658 047c 239E     		ldr	r6, [sp, #140]
+ 659 047e 009A     		ldr	r2, [sp]
+ 660 0480 019B     		ldr	r3, [sp, #4]
+ 661 0482 5219     		adds	r2, r2, r5
+ 662 0484 7341     		adcs	r3, r3, r6
+ 663 0486 5546     		mov	r5, r10
+ 664 0488 AC1C     		adds	r4, r5, #2
+ 665 048a E500     		lsls	r5, r4, #3
+ 666 048c AC46     		mov	ip, r5
+ 667 048e 5C46     		mov	r4, fp
+ 668 0490 6444     		add	r4, r4, ip
+ 669 0492 6568     		ldr	r5, [r4, #4]
+ 670 0494 2468     		ldr	r4, [r4]
+ 671 0496 1219     		adds	r2, r2, r4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 15
+
+
+ 672 0498 6B41     		adcs	r3, r3, r5
+ 673 049a 52A9     		add	r1, sp, #328
+ 674 049c 8846     		mov	r8, r1
+ 675 049e C444     		add	ip, ip, r8
+ 676 04a0 6446     		mov	r4, ip
+ 677 04a2 6568     		ldr	r5, [r4, #4]
+ 678 04a4 2468     		ldr	r4, [r4]
+ 679 04a6 1219     		adds	r2, r2, r4
+ 680 04a8 6B41     		adcs	r3, r3, r5
+ 681              	.LVL21:
+ 682 04aa 0298     		ldr	r0, [sp, #8]
+ 683 04ac 0399     		ldr	r1, [sp, #12]
+ 684 04ae 0D01     		lsls	r5, r1, #4
+ 685 04b0 040F     		lsrs	r4, r0, #28
+ 686 04b2 2543     		orrs	r5, r4
+ 687 04b4 A846     		mov	r8, r5
+ 688 04b6 0501     		lsls	r5, r0, #4
+ 689 04b8 0C0F     		lsrs	r4, r1, #28
+ 690 04ba 2543     		orrs	r5, r4
+ 691 04bc A946     		mov	r9, r5
+ 692 04be 8508     		lsrs	r5, r0, #2
+ 693 04c0 8C07     		lsls	r4, r1, #30
+ 694 04c2 2C43     		orrs	r4, r5
+ 695 04c4 8D08     		lsrs	r5, r1, #2
+ 696 04c6 AC46     		mov	ip, r5
+ 697 04c8 8507     		lsls	r5, r0, #30
+ 698 04ca 6746     		mov	r7, ip
+ 699 04cc 3D43     		orrs	r5, r7
+ 700 04ce 4746     		mov	r7, r8
+ 701 04d0 6F40     		eors	r7, r5
+ 702 04d2 BC46     		mov	ip, r7
+ 703 04d4 4D46     		mov	r5, r9
+ 704 04d6 6540     		eors	r5, r4
+ 705 04d8 C709     		lsrs	r7, r0, #7
+ 706 04da 4C06     		lsls	r4, r1, #25
+ 707 04dc 3C43     		orrs	r4, r7
+ 708 04de CF09     		lsrs	r7, r1, #7
+ 709 04e0 B946     		mov	r9, r7
+ 710 04e2 4706     		lsls	r7, r0, #25
+ 711 04e4 B846     		mov	r8, r7
+ 712 04e6 4F46     		mov	r7, r9
+ 713 04e8 4646     		mov	r6, r8
+ 714 04ea 3743     		orrs	r7, r6
+ 715 04ec B846     		mov	r8, r7
+ 716 04ee 6746     		mov	r7, ip
+ 717 04f0 4646     		mov	r6, r8
+ 718 04f2 7740     		eors	r7, r6
+ 719 04f4 2497     		str	r7, [sp, #144]
+ 720 04f6 6540     		eors	r5, r4
+ 721 04f8 2595     		str	r5, [sp, #148]
+ 722 04fa 0A98     		ldr	r0, [sp, #40]
+ 723 04fc 0B99     		ldr	r1, [sp, #44]
+ 724 04fe 0500     		movs	r5, r0
+ 725 0500 029E     		ldr	r6, [sp, #8]
+ 726 0502 039F     		ldr	r7, [sp, #12]
+ 727 0504 3543     		orrs	r5, r6
+ 728 0506 0C00     		movs	r4, r1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 16
+
+
+ 729 0508 3C43     		orrs	r4, r7
+ 730 050a F29F     		ldr	r7, [sp, #968]
+ 731 050c 3D40     		ands	r5, r7
+ 732 050e F39F     		ldr	r7, [sp, #972]
+ 733 0510 3C40     		ands	r4, r7
+ 734 0512 0700     		movs	r7, r0
+ 735 0514 029E     		ldr	r6, [sp, #8]
+ 736 0516 3740     		ands	r7, r6
+ 737 0518 B846     		mov	r8, r7
+ 738 051a 0F00     		movs	r7, r1
+ 739 051c 0399     		ldr	r1, [sp, #12]
+ 740 051e 0F40     		ands	r7, r1
+ 741 0520 BC46     		mov	ip, r7
+ 742 0522 4746     		mov	r7, r8
+ 743 0524 2F43     		orrs	r7, r5
+ 744 0526 2697     		str	r7, [sp, #152]
+ 745 0528 6546     		mov	r5, ip
+ 746 052a 2543     		orrs	r5, r4
+ 747 052c 2795     		str	r5, [sp, #156]
+ 748 052e 249C     		ldr	r4, [sp, #144]
+ 749 0530 259D     		ldr	r5, [sp, #148]
+ 750 0532 269E     		ldr	r6, [sp, #152]
+ 751 0534 279F     		ldr	r7, [sp, #156]
+ 752 0536 A419     		adds	r4, r4, r6
+ 753 0538 7D41     		adcs	r5, r5, r7
+ 754              	.LVL22:
+ 755 053a 089E     		ldr	r6, [sp, #32]
+ 756 053c 099F     		ldr	r7, [sp, #36]
+ 757 053e B618     		adds	r6, r6, r2
+ 758 0540 5F41     		adcs	r7, r7, r3
+ 759 0542 1219     		adds	r2, r2, r4
+ 760 0544 6B41     		adcs	r3, r3, r5
+ 761              	.LVL23:
+ 762 0546 0092     		str	r2, [sp]
+ 763 0548 0193     		str	r3, [sp, #4]
+ 764              	.LVL24:
+ 122:sha512.c      ****        RND(S[5],S[6],S[7],S[0],S[1],S[2],S[3],S[4],i+3);
+ 765              		.loc 1 122 0 discriminator 3
+ 766 054a BA04     		lsls	r2, r7, #18
+ 767 054c B30B     		lsrs	r3, r6, #14
+ 768 054e 1A43     		orrs	r2, r3
+ 769 0550 9446     		mov	ip, r2
+ 770 0552 B404     		lsls	r4, r6, #18
+ 771              	.LVL25:
+ 772 0554 BB0B     		lsrs	r3, r7, #14
+ 773 0556 1C43     		orrs	r4, r3
+ 774 0558 BA03     		lsls	r2, r7, #14
+ 775 055a B30C     		lsrs	r3, r6, #18
+ 776 055c 1500     		movs	r5, r2
+ 777 055e 1D43     		orrs	r5, r3
+ 778 0560 B303     		lsls	r3, r6, #14
+ 779 0562 BA0C     		lsrs	r2, r7, #18
+ 780 0564 1343     		orrs	r3, r2
+ 781 0566 6246     		mov	r2, ip
+ 782 0568 6A40     		eors	r2, r5
+ 783 056a 6340     		eors	r3, r4
+ 784 056c 750A     		lsrs	r5, r6, #9
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 17
+
+
+ 785 056e FC05     		lsls	r4, r7, #23
+ 786 0570 2C43     		orrs	r4, r5
+ 787 0572 7D0A     		lsrs	r5, r7, #9
+ 788 0574 AC46     		mov	ip, r5
+ 789 0576 F505     		lsls	r5, r6, #23
+ 790 0578 6146     		mov	r1, ip
+ 791 057a 0D43     		orrs	r5, r1
+ 792 057c 6A40     		eors	r2, r5
+ 793 057e 2892     		str	r2, [sp, #160]
+ 794 0580 6340     		eors	r3, r4
+ 795 0582 2993     		str	r3, [sp, #164]
+ 796 0584 069B     		ldr	r3, [sp, #24]
+ 797 0586 079C     		ldr	r4, [sp, #28]
+ 798 0588 2899     		ldr	r1, [sp, #160]
+ 799 058a 299A     		ldr	r2, [sp, #164]
+ 800 058c 5B18     		adds	r3, r3, r1
+ 801 058e 5441     		adcs	r4, r4, r2
+ 802 0590 1A00     		movs	r2, r3
+ 803 0592 2300     		movs	r3, r4
+ 804 0594 0C98     		ldr	r0, [sp, #48]
+ 805 0596 0D99     		ldr	r1, [sp, #52]
+ 806 0598 0500     		movs	r5, r0
+ 807 059a 049C     		ldr	r4, [sp, #16]
+ 808 059c 6540     		eors	r5, r4
+ 809 059e 0598     		ldr	r0, [sp, #20]
+ 810 05a0 4140     		eors	r1, r0
+ 811 05a2 0C00     		movs	r4, r1
+ 812 05a4 3540     		ands	r5, r6
+ 813 05a6 3C40     		ands	r4, r7
+ 814 05a8 0499     		ldr	r1, [sp, #16]
+ 815 05aa 4D40     		eors	r5, r1
+ 816 05ac 2A95     		str	r5, [sp, #168]
+ 817 05ae 01E0     		b	.L15
+ 818              	.L16:
+ 819              		.align	2
+ 820              	.L14:
+ 821 05b0 00000000 		.word	.LANCHOR0
+ 822              	.L15:
+ 823 05b4 2100     		movs	r1, r4
+ 824 05b6 4140     		eors	r1, r0
+ 825 05b8 2B91     		str	r1, [sp, #172]
+ 826 05ba 2A98     		ldr	r0, [sp, #168]
+ 827 05bc 2B99     		ldr	r1, [sp, #172]
+ 828 05be 1218     		adds	r2, r2, r0
+ 829 05c0 4B41     		adcs	r3, r3, r1
+ 830 05c2 5146     		mov	r1, r10
+ 831 05c4 CC1C     		adds	r4, r1, #3
+ 832 05c6 E100     		lsls	r1, r4, #3
+ 833 05c8 8C46     		mov	ip, r1
+ 834 05ca 5946     		mov	r1, fp
+ 835 05cc 6144     		add	r1, r1, ip
+ 836 05ce 0C68     		ldr	r4, [r1]
+ 837 05d0 4D68     		ldr	r5, [r1, #4]
+ 838 05d2 1219     		adds	r2, r2, r4
+ 839 05d4 6B41     		adcs	r3, r3, r5
+ 840 05d6 52A9     		add	r1, sp, #328
+ 841 05d8 8846     		mov	r8, r1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 18
+
+
+ 842 05da C444     		add	ip, ip, r8
+ 843 05dc 6446     		mov	r4, ip
+ 844 05de 6568     		ldr	r5, [r4, #4]
+ 845 05e0 2468     		ldr	r4, [r4]
+ 846 05e2 1219     		adds	r2, r2, r4
+ 847 05e4 6B41     		adcs	r3, r3, r5
+ 848              	.LVL26:
+ 849 05e6 0199     		ldr	r1, [sp, #4]
+ 850 05e8 0D01     		lsls	r5, r1, #4
+ 851 05ea 0099     		ldr	r1, [sp]
+ 852 05ec 0C0F     		lsrs	r4, r1, #28
+ 853 05ee 2543     		orrs	r5, r4
+ 854 05f0 A846     		mov	r8, r5
+ 855 05f2 0D01     		lsls	r5, r1, #4
+ 856 05f4 0199     		ldr	r1, [sp, #4]
+ 857 05f6 0C0F     		lsrs	r4, r1, #28
+ 858 05f8 2543     		orrs	r5, r4
+ 859 05fa A946     		mov	r9, r5
+ 860 05fc 0099     		ldr	r1, [sp]
+ 861 05fe 8D08     		lsrs	r5, r1, #2
+ 862 0600 0199     		ldr	r1, [sp, #4]
+ 863 0602 8C07     		lsls	r4, r1, #30
+ 864 0604 2C43     		orrs	r4, r5
+ 865 0606 8908     		lsrs	r1, r1, #2
+ 866 0608 8C46     		mov	ip, r1
+ 867 060a 0099     		ldr	r1, [sp]
+ 868 060c 8D07     		lsls	r5, r1, #30
+ 869 060e 6146     		mov	r1, ip
+ 870 0610 0D43     		orrs	r5, r1
+ 871 0612 4146     		mov	r1, r8
+ 872 0614 6940     		eors	r1, r5
+ 873 0616 8C46     		mov	ip, r1
+ 874 0618 4D46     		mov	r5, r9
+ 875 061a 6540     		eors	r5, r4
+ 876 061c 0099     		ldr	r1, [sp]
+ 877 061e C909     		lsrs	r1, r1, #7
+ 878 0620 8846     		mov	r8, r1
+ 879 0622 0199     		ldr	r1, [sp, #4]
+ 880 0624 4C06     		lsls	r4, r1, #25
+ 881 0626 4146     		mov	r1, r8
+ 882 0628 0C43     		orrs	r4, r1
+ 883 062a 0199     		ldr	r1, [sp, #4]
+ 884 062c C909     		lsrs	r1, r1, #7
+ 885 062e 8946     		mov	r9, r1
+ 886 0630 0099     		ldr	r1, [sp]
+ 887 0632 4906     		lsls	r1, r1, #25
+ 888 0634 8846     		mov	r8, r1
+ 889 0636 4946     		mov	r1, r9
+ 890 0638 4046     		mov	r0, r8
+ 891 063a 0143     		orrs	r1, r0
+ 892 063c 8846     		mov	r8, r1
+ 893 063e 6146     		mov	r1, ip
+ 894 0640 4046     		mov	r0, r8
+ 895 0642 4140     		eors	r1, r0
+ 896 0644 2C91     		str	r1, [sp, #176]
+ 897 0646 6540     		eors	r5, r4
+ 898 0648 2D95     		str	r5, [sp, #180]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 19
+
+
+ 899 064a 0098     		ldr	r0, [sp]
+ 900 064c 0199     		ldr	r1, [sp, #4]
+ 901 064e 0500     		movs	r5, r0
+ 902 0650 029C     		ldr	r4, [sp, #8]
+ 903 0652 2543     		orrs	r5, r4
+ 904 0654 0398     		ldr	r0, [sp, #12]
+ 905 0656 0143     		orrs	r1, r0
+ 906 0658 0C00     		movs	r4, r1
+ 907 065a 0A99     		ldr	r1, [sp, #40]
+ 908 065c 0D40     		ands	r5, r1
+ 909 065e 0B99     		ldr	r1, [sp, #44]
+ 910 0660 0C40     		ands	r4, r1
+ 911 0662 0099     		ldr	r1, [sp]
+ 912 0664 0298     		ldr	r0, [sp, #8]
+ 913 0666 0140     		ands	r1, r0
+ 914 0668 8846     		mov	r8, r1
+ 915 066a 0199     		ldr	r1, [sp, #4]
+ 916 066c 0398     		ldr	r0, [sp, #12]
+ 917 066e 0140     		ands	r1, r0
+ 918 0670 8C46     		mov	ip, r1
+ 919 0672 4146     		mov	r1, r8
+ 920 0674 2943     		orrs	r1, r5
+ 921 0676 2E91     		str	r1, [sp, #184]
+ 922 0678 6146     		mov	r1, ip
+ 923 067a 2143     		orrs	r1, r4
+ 924 067c 2F91     		str	r1, [sp, #188]
+ 925 067e 2C98     		ldr	r0, [sp, #176]
+ 926 0680 2D99     		ldr	r1, [sp, #180]
+ 927 0682 2E9C     		ldr	r4, [sp, #184]
+ 928 0684 2F9D     		ldr	r5, [sp, #188]
+ 929 0686 0019     		adds	r0, r0, r4
+ 930 0688 6941     		adcs	r1, r1, r5
+ 931 068a 0400     		movs	r4, r0
+ 932 068c 0D00     		movs	r5, r1
+ 933              	.LVL27:
+ 934 068e F298     		ldr	r0, [sp, #968]
+ 935 0690 F399     		ldr	r1, [sp, #972]
+ 936 0692 8018     		adds	r0, r0, r2
+ 937 0694 5941     		adcs	r1, r1, r3
+ 938 0696 1219     		adds	r2, r2, r4
+ 939 0698 6B41     		adcs	r3, r3, r5
+ 940              	.LVL28:
+ 941 069a 0692     		str	r2, [sp, #24]
+ 942 069c 0793     		str	r3, [sp, #28]
+ 123:sha512.c      ****        RND(S[4],S[5],S[6],S[7],S[0],S[1],S[2],S[3],i+4);
+ 943              		.loc 1 123 0 discriminator 3
+ 944 069e 8A04     		lsls	r2, r1, #18
+ 945 06a0 830B     		lsrs	r3, r0, #14
+ 946 06a2 1500     		movs	r5, r2
+ 947 06a4 1D43     		orrs	r5, r3
+ 948 06a6 AC46     		mov	ip, r5
+ 949 06a8 8404     		lsls	r4, r0, #18
+ 950              	.LVL29:
+ 951 06aa 8B0B     		lsrs	r3, r1, #14
+ 952 06ac 1C43     		orrs	r4, r3
+ 953 06ae 8A03     		lsls	r2, r1, #14
+ 954 06b0 830C     		lsrs	r3, r0, #18
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 20
+
+
+ 955 06b2 1500     		movs	r5, r2
+ 956 06b4 1D43     		orrs	r5, r3
+ 957 06b6 8303     		lsls	r3, r0, #14
+ 958 06b8 8A0C     		lsrs	r2, r1, #18
+ 959 06ba 1343     		orrs	r3, r2
+ 960 06bc 6246     		mov	r2, ip
+ 961 06be 6A40     		eors	r2, r5
+ 962 06c0 6340     		eors	r3, r4
+ 963 06c2 450A     		lsrs	r5, r0, #9
+ 964 06c4 CC05     		lsls	r4, r1, #23
+ 965 06c6 2C43     		orrs	r4, r5
+ 966 06c8 4D0A     		lsrs	r5, r1, #9
+ 967 06ca AC46     		mov	ip, r5
+ 968 06cc 0890     		str	r0, [sp, #32]
+ 969 06ce 0991     		str	r1, [sp, #36]
+ 970 06d0 C505     		lsls	r5, r0, #23
+ 971 06d2 6146     		mov	r1, ip
+ 972 06d4 0D43     		orrs	r5, r1
+ 973 06d6 1100     		movs	r1, r2
+ 974 06d8 6940     		eors	r1, r5
+ 975 06da 3091     		str	r1, [sp, #192]
+ 976 06dc 6340     		eors	r3, r4
+ 977 06de 3193     		str	r3, [sp, #196]
+ 978 06e0 3099     		ldr	r1, [sp, #192]
+ 979 06e2 319A     		ldr	r2, [sp, #196]
+ 980 06e4 049B     		ldr	r3, [sp, #16]
+ 981 06e6 059C     		ldr	r4, [sp, #20]
+ 982 06e8 5B18     		adds	r3, r3, r1
+ 983 06ea 5441     		adcs	r4, r4, r2
+ 984 06ec 1800     		movs	r0, r3
+ 985 06ee 2100     		movs	r1, r4
+ 986 06f0 0C9C     		ldr	r4, [sp, #48]
+ 987 06f2 0D9D     		ldr	r5, [sp, #52]
+ 988 06f4 2300     		movs	r3, r4
+ 989 06f6 7340     		eors	r3, r6
+ 990 06f8 1A00     		movs	r2, r3
+ 991 06fa 2B00     		movs	r3, r5
+ 992 06fc 0E96     		str	r6, [sp, #56]
+ 993 06fe 0F97     		str	r7, [sp, #60]
+ 994 0700 7B40     		eors	r3, r7
+ 995 0702 089F     		ldr	r7, [sp, #32]
+ 996 0704 3A40     		ands	r2, r7
+ 997 0706 099F     		ldr	r7, [sp, #36]
+ 998 0708 3B40     		ands	r3, r7
+ 999 070a 2700     		movs	r7, r4
+ 1000 070c 5740     		eors	r7, r2
+ 1001 070e 3297     		str	r7, [sp, #200]
+ 1002 0710 2F00     		movs	r7, r5
+ 1003 0712 5F40     		eors	r7, r3
+ 1004 0714 3397     		str	r7, [sp, #204]
+ 1005 0716 329B     		ldr	r3, [sp, #200]
+ 1006 0718 339C     		ldr	r4, [sp, #204]
+ 1007 071a C018     		adds	r0, r0, r3
+ 1008 071c 6141     		adcs	r1, r1, r4
+ 1009 071e 5746     		mov	r7, r10
+ 1010 0720 3C1D     		adds	r4, r7, #4
+ 1011 0722 E400     		lsls	r4, r4, #3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 21
+
+
+ 1012 0724 5F46     		mov	r7, fp
+ 1013 0726 3B19     		adds	r3, r7, r4
+ 1014 0728 1A68     		ldr	r2, [r3]
+ 1015 072a 5B68     		ldr	r3, [r3, #4]
+ 1016 072c 8018     		adds	r0, r0, r2
+ 1017 072e 5941     		adcs	r1, r1, r3
+ 1018 0730 52AB     		add	r3, sp, #328
+ 1019 0732 9C46     		mov	ip, r3
+ 1020 0734 6444     		add	r4, r4, ip
+ 1021 0736 2268     		ldr	r2, [r4]
+ 1022 0738 6368     		ldr	r3, [r4, #4]
+ 1023 073a 8018     		adds	r0, r0, r2
+ 1024 073c 5941     		adcs	r1, r1, r3
+ 1025 073e 0490     		str	r0, [sp, #16]
+ 1026 0740 0591     		str	r1, [sp, #20]
+ 1027              	.LVL30:
+ 1028 0742 069D     		ldr	r5, [sp, #24]
+ 1029 0744 079E     		ldr	r6, [sp, #28]
+ 1030 0746 3401     		lsls	r4, r6, #4
+ 1031 0748 2B0F     		lsrs	r3, r5, #28
+ 1032 074a 1C43     		orrs	r4, r3
+ 1033 074c 2A01     		lsls	r2, r5, #4
+ 1034 074e 330F     		lsrs	r3, r6, #28
+ 1035 0750 1A43     		orrs	r2, r3
+ 1036 0752 2800     		movs	r0, r5
+ 1037              	.LVL31:
+ 1038 0754 AD08     		lsrs	r5, r5, #2
+ 1039 0756 B307     		lsls	r3, r6, #30
+ 1040 0758 2B43     		orrs	r3, r5
+ 1041 075a B708     		lsrs	r7, r6, #2
+ 1042 075c BC46     		mov	ip, r7
+ 1043 075e 8507     		lsls	r5, r0, #30
+ 1044 0760 6746     		mov	r7, ip
+ 1045 0762 3D43     		orrs	r5, r7
+ 1046 0764 6C40     		eors	r4, r5
+ 1047 0766 5A40     		eors	r2, r3
+ 1048 0768 C509     		lsrs	r5, r0, #7
+ 1049 076a 7306     		lsls	r3, r6, #25
+ 1050 076c 2B43     		orrs	r3, r5
+ 1051 076e F709     		lsrs	r7, r6, #7
+ 1052 0770 BC46     		mov	ip, r7
+ 1053 0772 4506     		lsls	r5, r0, #25
+ 1054 0774 6746     		mov	r7, ip
+ 1055 0776 3D43     		orrs	r5, r7
+ 1056 0778 2700     		movs	r7, r4
+ 1057 077a 6F40     		eors	r7, r5
+ 1058 077c 3497     		str	r7, [sp, #208]
+ 1059 077e 5A40     		eors	r2, r3
+ 1060 0780 3592     		str	r2, [sp, #212]
+ 1061 0782 009C     		ldr	r4, [sp]
+ 1062 0784 019D     		ldr	r5, [sp, #4]
+ 1063 0786 2200     		movs	r2, r4
+ 1064 0788 0243     		orrs	r2, r0
+ 1065 078a 2B00     		movs	r3, r5
+ 1066 078c 3343     		orrs	r3, r6
+ 1067 078e 029E     		ldr	r6, [sp, #8]
+ 1068 0790 039F     		ldr	r7, [sp, #12]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 22
+
+
+ 1069 0792 3240     		ands	r2, r6
+ 1070 0794 3B40     		ands	r3, r7
+ 1071 0796 2500     		movs	r5, r4
+ 1072 0798 0698     		ldr	r0, [sp, #24]
+ 1073 079a 0799     		ldr	r1, [sp, #28]
+ 1074 079c 0540     		ands	r5, r0
+ 1075 079e 019F     		ldr	r7, [sp, #4]
+ 1076 07a0 0F40     		ands	r7, r1
+ 1077 07a2 2A43     		orrs	r2, r5
+ 1078 07a4 3692     		str	r2, [sp, #216]
+ 1079 07a6 3B43     		orrs	r3, r7
+ 1080 07a8 3793     		str	r3, [sp, #220]
+ 1081 07aa 349B     		ldr	r3, [sp, #208]
+ 1082 07ac 359C     		ldr	r4, [sp, #212]
+ 1083 07ae 369D     		ldr	r5, [sp, #216]
+ 1084 07b0 379E     		ldr	r6, [sp, #220]
+ 1085 07b2 5B19     		adds	r3, r3, r5
+ 1086 07b4 7441     		adcs	r4, r4, r6
+ 1087 07b6 1A00     		movs	r2, r3
+ 1088 07b8 2300     		movs	r3, r4
+ 1089              	.LVL32:
+ 1090 07ba 0A9C     		ldr	r4, [sp, #40]
+ 1091 07bc 0B9D     		ldr	r5, [sp, #44]
+ 1092 07be 0498     		ldr	r0, [sp, #16]
+ 1093 07c0 0599     		ldr	r1, [sp, #20]
+ 1094 07c2 2418     		adds	r4, r4, r0
+ 1095 07c4 4D41     		adcs	r5, r5, r1
+ 1096 07c6 FFA9     		add	r1, sp, #1020
+ 1097 07c8 0431     		adds	r1, r1, #4
+ 1098 07ca 0C60     		str	r4, [r1]
+ 1099 07cc 4D60     		str	r5, [r1, #4]
+ 1100 07ce 0498     		ldr	r0, [sp, #16]
+ 1101 07d0 0599     		ldr	r1, [sp, #20]
+ 1102 07d2 8018     		adds	r0, r0, r2
+ 1103 07d4 5941     		adcs	r1, r1, r3
+ 1104 07d6 0490     		str	r0, [sp, #16]
+ 1105 07d8 0591     		str	r1, [sp, #20]
+ 1106              	.LVL33:
+ 1107 07da F890     		str	r0, [sp, #992]
+ 1108 07dc F991     		str	r1, [sp, #996]
+ 124:sha512.c      ****        RND(S[3],S[4],S[5],S[6],S[7],S[0],S[1],S[2],i+5);
+ 1109              		.loc 1 124 0 discriminator 3
+ 1110 07de AA04     		lsls	r2, r5, #18
+ 1111              	.LVL34:
+ 1112 07e0 2E00     		movs	r6, r5
+ 1113 07e2 2500     		movs	r5, r4
+ 1114 07e4 A30B     		lsrs	r3, r4, #14
+ 1115 07e6 1A43     		orrs	r2, r3
+ 1116 07e8 1400     		movs	r4, r2
+ 1117 07ea A904     		lsls	r1, r5, #18
+ 1118 07ec B30B     		lsrs	r3, r6, #14
+ 1119 07ee 1943     		orrs	r1, r3
+ 1120 07f0 B203     		lsls	r2, r6, #14
+ 1121 07f2 AB0C     		lsrs	r3, r5, #18
+ 1122 07f4 1700     		movs	r7, r2
+ 1123 07f6 1F43     		orrs	r7, r3
+ 1124 07f8 3800     		movs	r0, r7
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 23
+
+
+ 1125 07fa AB03     		lsls	r3, r5, #14
+ 1126 07fc B20C     		lsrs	r2, r6, #18
+ 1127 07fe 1343     		orrs	r3, r2
+ 1128 0800 2700     		movs	r7, r4
+ 1129 0802 4740     		eors	r7, r0
+ 1130 0804 3A00     		movs	r2, r7
+ 1131 0806 4B40     		eors	r3, r1
+ 1132 0808 680A     		lsrs	r0, r5, #9
+ 1133 080a F105     		lsls	r1, r6, #23
+ 1134 080c 0143     		orrs	r1, r0
+ 1135 080e 740A     		lsrs	r4, r6, #9
+ 1136 0810 0A95     		str	r5, [sp, #40]
+ 1137 0812 0B96     		str	r6, [sp, #44]
+ 1138 0814 E805     		lsls	r0, r5, #23
+ 1139 0816 2043     		orrs	r0, r4
+ 1140 0818 1700     		movs	r7, r2
+ 1141 081a 4740     		eors	r7, r0
+ 1142 081c 3897     		str	r7, [sp, #224]
+ 1143 081e 4B40     		eors	r3, r1
+ 1144 0820 3993     		str	r3, [sp, #228]
+ 1145 0822 0C9A     		ldr	r2, [sp, #48]
+ 1146 0824 0D9B     		ldr	r3, [sp, #52]
+ 1147 0826 389D     		ldr	r5, [sp, #224]
+ 1148 0828 399E     		ldr	r6, [sp, #228]
+ 1149 082a 5219     		adds	r2, r2, r5
+ 1150 082c 7341     		adcs	r3, r3, r6
+ 1151 082e 0C92     		str	r2, [sp, #48]
+ 1152 0830 0D93     		str	r3, [sp, #52]
+ 1153 0832 0E9E     		ldr	r6, [sp, #56]
+ 1154 0834 0F9F     		ldr	r7, [sp, #60]
+ 1155 0836 3100     		movs	r1, r6
+ 1156 0838 089C     		ldr	r4, [sp, #32]
+ 1157 083a 099D     		ldr	r5, [sp, #36]
+ 1158 083c 6140     		eors	r1, r4
+ 1159 083e 0800     		movs	r0, r1
+ 1160 0840 3900     		movs	r1, r7
+ 1161 0842 6940     		eors	r1, r5
+ 1162 0844 0A9C     		ldr	r4, [sp, #40]
+ 1163 0846 0B9D     		ldr	r5, [sp, #44]
+ 1164 0848 2040     		ands	r0, r4
+ 1165 084a 2940     		ands	r1, r5
+ 1166 084c 3500     		movs	r5, r6
+ 1167 084e 3E00     		movs	r6, r7
+ 1168 0850 2F00     		movs	r7, r5
+ 1169 0852 4740     		eors	r7, r0
+ 1170 0854 3A97     		str	r7, [sp, #232]
+ 1171 0856 3700     		movs	r7, r6
+ 1172 0858 4F40     		eors	r7, r1
+ 1173 085a 3B97     		str	r7, [sp, #236]
+ 1174 085c 3A9D     		ldr	r5, [sp, #232]
+ 1175 085e 3B9E     		ldr	r6, [sp, #236]
+ 1176 0860 0C9A     		ldr	r2, [sp, #48]
+ 1177 0862 0D9B     		ldr	r3, [sp, #52]
+ 1178 0864 5219     		adds	r2, r2, r5
+ 1179 0866 7341     		adcs	r3, r3, r6
+ 1180 0868 5146     		mov	r1, r10
+ 1181 086a 4C1D     		adds	r4, r1, #5
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 24
+
+
+ 1182 086c E400     		lsls	r4, r4, #3
+ 1183 086e 5946     		mov	r1, fp
+ 1184 0870 0919     		adds	r1, r1, r4
+ 1185 0872 0868     		ldr	r0, [r1]
+ 1186 0874 4968     		ldr	r1, [r1, #4]
+ 1187 0876 1218     		adds	r2, r2, r0
+ 1188 0878 4B41     		adcs	r3, r3, r1
+ 1189 087a 52A9     		add	r1, sp, #328
+ 1190 087c 8C46     		mov	ip, r1
+ 1191 087e 6444     		add	r4, r4, ip
+ 1192 0880 2068     		ldr	r0, [r4]
+ 1193 0882 6168     		ldr	r1, [r4, #4]
+ 1194 0884 1218     		adds	r2, r2, r0
+ 1195 0886 4B41     		adcs	r3, r3, r1
+ 1196 0888 0C92     		str	r2, [sp, #48]
+ 1197 088a 0D93     		str	r3, [sp, #52]
+ 1198              	.LVL35:
+ 1199 088c 0498     		ldr	r0, [sp, #16]
+ 1200 088e 0599     		ldr	r1, [sp, #20]
+ 1201 0890 0C01     		lsls	r4, r1, #4
+ 1202 0892 0600     		movs	r6, r0
+ 1203 0894 0F00     		movs	r7, r1
+ 1204 0896 010F     		lsrs	r1, r0, #28
+ 1205 0898 0C43     		orrs	r4, r1
+ 1206 089a 3001     		lsls	r0, r6, #4
+ 1207 089c 390F     		lsrs	r1, r7, #28
+ 1208 089e 0843     		orrs	r0, r1
+ 1209 08a0 B508     		lsrs	r5, r6, #2
+ 1210 08a2 B907     		lsls	r1, r7, #30
+ 1211 08a4 2943     		orrs	r1, r5
+ 1212 08a6 BD08     		lsrs	r5, r7, #2
+ 1213 08a8 AC46     		mov	ip, r5
+ 1214 08aa B507     		lsls	r5, r6, #30
+ 1215 08ac 6346     		mov	r3, ip
+ 1216 08ae 1D43     		orrs	r5, r3
+ 1217 08b0 6C40     		eors	r4, r5
+ 1218 08b2 4840     		eors	r0, r1
+ 1219 08b4 F509     		lsrs	r5, r6, #7
+ 1220 08b6 7906     		lsls	r1, r7, #25
+ 1221 08b8 2943     		orrs	r1, r5
+ 1222 08ba FB09     		lsrs	r3, r7, #7
+ 1223 08bc 9C46     		mov	ip, r3
+ 1224 08be 3B00     		movs	r3, r7
+ 1225 08c0 7506     		lsls	r5, r6, #25
+ 1226 08c2 6746     		mov	r7, ip
+ 1227 08c4 3D43     		orrs	r5, r7
+ 1228 08c6 2700     		movs	r7, r4
+ 1229 08c8 6F40     		eors	r7, r5
+ 1230 08ca 3C97     		str	r7, [sp, #240]
+ 1231 08cc 0700     		movs	r7, r0
+ 1232 08ce 4F40     		eors	r7, r1
+ 1233 08d0 3D97     		str	r7, [sp, #244]
+ 1234 08d2 069C     		ldr	r4, [sp, #24]
+ 1235 08d4 079D     		ldr	r5, [sp, #28]
+ 1236 08d6 2100     		movs	r1, r4
+ 1237 08d8 1F00     		movs	r7, r3
+ 1238 08da 3143     		orrs	r1, r6
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 25
+
+
+ 1239 08dc 0800     		movs	r0, r1
+ 1240 08de 2900     		movs	r1, r5
+ 1241 08e0 3943     		orrs	r1, r7
+ 1242 08e2 009E     		ldr	r6, [sp]
+ 1243 08e4 019F     		ldr	r7, [sp, #4]
+ 1244 08e6 3040     		ands	r0, r6
+ 1245 08e8 3940     		ands	r1, r7
+ 1246 08ea 2F00     		movs	r7, r5
+ 1247 08ec 2500     		movs	r5, r4
+ 1248 08ee 049B     		ldr	r3, [sp, #16]
+ 1249 08f0 1D40     		ands	r5, r3
+ 1250 08f2 059B     		ldr	r3, [sp, #20]
+ 1251 08f4 1F40     		ands	r7, r3
+ 1252 08f6 3C00     		movs	r4, r7
+ 1253 08f8 0700     		movs	r7, r0
+ 1254 08fa 2F43     		orrs	r7, r5
+ 1255 08fc 3E97     		str	r7, [sp, #248]
+ 1256 08fe 2143     		orrs	r1, r4
+ 1257 0900 3F91     		str	r1, [sp, #252]
+ 1258 0902 3C98     		ldr	r0, [sp, #240]
+ 1259 0904 3D99     		ldr	r1, [sp, #244]
+ 1260 0906 3E9D     		ldr	r5, [sp, #248]
+ 1261 0908 3F9E     		ldr	r6, [sp, #252]
+ 1262 090a 4019     		adds	r0, r0, r5
+ 1263 090c 7141     		adcs	r1, r1, r6
+ 1264              	.LVL36:
+ 1265 090e 029E     		ldr	r6, [sp, #8]
+ 1266 0910 039F     		ldr	r7, [sp, #12]
+ 1267 0912 0C9B     		ldr	r3, [sp, #48]
+ 1268 0914 0D9C     		ldr	r4, [sp, #52]
+ 1269 0916 F618     		adds	r6, r6, r3
+ 1270 0918 6741     		adcs	r7, r7, r4
+ 1271 091a FE96     		str	r6, [sp, #1016]
+ 1272 091c FF97     		str	r7, [sp, #1020]
+ 1273 091e 1A00     		movs	r2, r3
+ 1274              	.LVL37:
+ 1275 0920 2300     		movs	r3, r4
+ 1276              	.LVL38:
+ 1277 0922 1218     		adds	r2, r2, r0
+ 1278 0924 4B41     		adcs	r3, r3, r1
+ 1279 0926 1100     		movs	r1, r2
+ 1280 0928 1A00     		movs	r2, r3
+ 1281 092a 0291     		str	r1, [sp, #8]
+ 1282 092c 0392     		str	r2, [sp, #12]
+ 1283 092e F691     		str	r1, [sp, #984]
+ 1284 0930 F792     		str	r2, [sp, #988]
+ 125:sha512.c      ****        RND(S[2],S[3],S[4],S[5],S[6],S[7],S[0],S[1],i+6);
+ 1285              		.loc 1 125 0 discriminator 3
+ 1286 0932 BA04     		lsls	r2, r7, #18
+ 1287 0934 B30B     		lsrs	r3, r6, #14
+ 1288 0936 1500     		movs	r5, r2
+ 1289 0938 1D43     		orrs	r5, r3
+ 1290 093a B104     		lsls	r1, r6, #18
+ 1291 093c BB0B     		lsrs	r3, r7, #14
+ 1292 093e 1943     		orrs	r1, r3
+ 1293 0940 BA03     		lsls	r2, r7, #14
+ 1294 0942 B30C     		lsrs	r3, r6, #18
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 26
+
+
+ 1295 0944 1000     		movs	r0, r2
+ 1296              	.LVL39:
+ 1297 0946 1843     		orrs	r0, r3
+ 1298 0948 B303     		lsls	r3, r6, #14
+ 1299 094a BA0C     		lsrs	r2, r7, #18
+ 1300 094c 1343     		orrs	r3, r2
+ 1301 094e 4540     		eors	r5, r0
+ 1302 0950 4B40     		eors	r3, r1
+ 1303 0952 700A     		lsrs	r0, r6, #9
+ 1304 0954 F905     		lsls	r1, r7, #23
+ 1305 0956 0143     		orrs	r1, r0
+ 1306 0958 7C0A     		lsrs	r4, r7, #9
+ 1307 095a F005     		lsls	r0, r6, #23
+ 1308 095c 2043     		orrs	r0, r4
+ 1309 095e 4540     		eors	r5, r0
+ 1310 0960 4095     		str	r5, [sp, #256]
+ 1311 0962 4B40     		eors	r3, r1
+ 1312 0964 4193     		str	r3, [sp, #260]
+ 1313 0966 0E98     		ldr	r0, [sp, #56]
+ 1314 0968 0F99     		ldr	r1, [sp, #60]
+ 1315 096a 409B     		ldr	r3, [sp, #256]
+ 1316 096c 419C     		ldr	r4, [sp, #260]
+ 1317 096e C018     		adds	r0, r0, r3
+ 1318 0970 6141     		adcs	r1, r1, r4
+ 1319 0972 0C90     		str	r0, [sp, #48]
+ 1320 0974 0D91     		str	r1, [sp, #52]
+ 1321              	.LVL40:
+ 1322 0976 089B     		ldr	r3, [sp, #32]
+ 1323 0978 0A9C     		ldr	r4, [sp, #40]
+ 1324 097a 0B9D     		ldr	r5, [sp, #44]
+ 1325 097c 6340     		eors	r3, r4
+ 1326 097e 1A00     		movs	r2, r3
+ 1327 0980 0898     		ldr	r0, [sp, #32]
+ 1328 0982 0999     		ldr	r1, [sp, #36]
+ 1329 0984 0B00     		movs	r3, r1
+ 1330 0986 6B40     		eors	r3, r5
+ 1331 0988 3240     		ands	r2, r6
+ 1332 098a 3B40     		ands	r3, r7
+ 1333 098c 0D00     		movs	r5, r1
+ 1334 098e 5040     		eors	r0, r2
+ 1335 0990 4290     		str	r0, [sp, #264]
+ 1336 0992 5D40     		eors	r5, r3
+ 1337 0994 4395     		str	r5, [sp, #268]
+ 1338 0996 429B     		ldr	r3, [sp, #264]
+ 1339 0998 439C     		ldr	r4, [sp, #268]
+ 1340 099a 0C98     		ldr	r0, [sp, #48]
+ 1341 099c 0D99     		ldr	r1, [sp, #52]
+ 1342 099e C018     		adds	r0, r0, r3
+ 1343 09a0 6141     		adcs	r1, r1, r4
+ 1344 09a2 5546     		mov	r5, r10
+ 1345 09a4 AB1D     		adds	r3, r5, #6
+ 1346 09a6 DB00     		lsls	r3, r3, #3
+ 1347 09a8 5D46     		mov	r5, fp
+ 1348 09aa EA18     		adds	r2, r5, r3
+ 1349 09ac 1468     		ldr	r4, [r2]
+ 1350 09ae 5568     		ldr	r5, [r2, #4]
+ 1351 09b0 0019     		adds	r0, r0, r4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 27
+
+
+ 1352 09b2 6941     		adcs	r1, r1, r5
+ 1353 09b4 52AA     		add	r2, sp, #328
+ 1354 09b6 9446     		mov	ip, r2
+ 1355 09b8 6344     		add	r3, r3, ip
+ 1356 09ba 1C68     		ldr	r4, [r3]
+ 1357 09bc 5D68     		ldr	r5, [r3, #4]
+ 1358 09be 0019     		adds	r0, r0, r4
+ 1359 09c0 6941     		adcs	r1, r1, r5
+ 1360 09c2 0C90     		str	r0, [sp, #48]
+ 1361 09c4 0D91     		str	r1, [sp, #52]
+ 1362              	.LVL41:
+ 1363 09c6 029A     		ldr	r2, [sp, #8]
+ 1364 09c8 039B     		ldr	r3, [sp, #12]
+ 1365 09ca 1C01     		lsls	r4, r3, #4
+ 1366 09cc 1000     		movs	r0, r2
+ 1367              	.LVL42:
+ 1368 09ce 1900     		movs	r1, r3
+ 1369 09d0 130F     		lsrs	r3, r2, #28
+ 1370 09d2 1C43     		orrs	r4, r3
+ 1371 09d4 0201     		lsls	r2, r0, #4
+ 1372 09d6 0B0F     		lsrs	r3, r1, #28
+ 1373 09d8 1A43     		orrs	r2, r3
+ 1374 09da 8508     		lsrs	r5, r0, #2
+ 1375 09dc 8B07     		lsls	r3, r1, #30
+ 1376 09de 2B43     		orrs	r3, r5
+ 1377 09e0 0399     		ldr	r1, [sp, #12]
+ 1378 09e2 8908     		lsrs	r1, r1, #2
+ 1379 09e4 8C46     		mov	ip, r1
+ 1380 09e6 0299     		ldr	r1, [sp, #8]
+ 1381 09e8 8D07     		lsls	r5, r1, #30
+ 1382 09ea 6146     		mov	r1, ip
+ 1383 09ec 0D43     		orrs	r5, r1
+ 1384 09ee 6C40     		eors	r4, r5
+ 1385 09f0 5A40     		eors	r2, r3
+ 1386 09f2 0299     		ldr	r1, [sp, #8]
+ 1387 09f4 CD09     		lsrs	r5, r1, #7
+ 1388 09f6 0399     		ldr	r1, [sp, #12]
+ 1389 09f8 4B06     		lsls	r3, r1, #25
+ 1390 09fa 2B43     		orrs	r3, r5
+ 1391 09fc C909     		lsrs	r1, r1, #7
+ 1392 09fe 8C46     		mov	ip, r1
+ 1393 0a00 0299     		ldr	r1, [sp, #8]
+ 1394 0a02 4D06     		lsls	r5, r1, #25
+ 1395 0a04 6146     		mov	r1, ip
+ 1396 0a06 0D43     		orrs	r5, r1
+ 1397 0a08 2100     		movs	r1, r4
+ 1398 0a0a 6940     		eors	r1, r5
+ 1399 0a0c 4491     		str	r1, [sp, #272]
+ 1400 0a0e 1100     		movs	r1, r2
+ 1401 0a10 5940     		eors	r1, r3
+ 1402 0a12 4591     		str	r1, [sp, #276]
+ 1403 0a14 049B     		ldr	r3, [sp, #16]
+ 1404 0a16 059C     		ldr	r4, [sp, #20]
+ 1405 0a18 1900     		movs	r1, r3
+ 1406 0a1a 029D     		ldr	r5, [sp, #8]
+ 1407 0a1c 2943     		orrs	r1, r5
+ 1408 0a1e 0A00     		movs	r2, r1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 28
+
+
+ 1409 0a20 2300     		movs	r3, r4
+ 1410 0a22 0399     		ldr	r1, [sp, #12]
+ 1411 0a24 0B43     		orrs	r3, r1
+ 1412 0a26 069C     		ldr	r4, [sp, #24]
+ 1413 0a28 079D     		ldr	r5, [sp, #28]
+ 1414 0a2a 2240     		ands	r2, r4
+ 1415 0a2c 2B40     		ands	r3, r5
+ 1416 0a2e 049D     		ldr	r5, [sp, #16]
+ 1417 0a30 0299     		ldr	r1, [sp, #8]
+ 1418 0a32 0D40     		ands	r5, r1
+ 1419 0a34 0599     		ldr	r1, [sp, #20]
+ 1420 0a36 0398     		ldr	r0, [sp, #12]
+ 1421 0a38 0140     		ands	r1, r0
+ 1422 0a3a 0C00     		movs	r4, r1
+ 1423 0a3c 1100     		movs	r1, r2
+ 1424 0a3e 2943     		orrs	r1, r5
+ 1425 0a40 4691     		str	r1, [sp, #280]
+ 1426 0a42 2343     		orrs	r3, r4
+ 1427 0a44 4793     		str	r3, [sp, #284]
+ 1428 0a46 449B     		ldr	r3, [sp, #272]
+ 1429 0a48 459C     		ldr	r4, [sp, #276]
+ 1430 0a4a 4699     		ldr	r1, [sp, #280]
+ 1431 0a4c 479A     		ldr	r2, [sp, #284]
+ 1432 0a4e 5B18     		adds	r3, r3, r1
+ 1433 0a50 5441     		adcs	r4, r4, r2
+ 1434 0a52 2500     		movs	r5, r4
+ 1435 0a54 1C00     		movs	r4, r3
+ 1436              	.LVL43:
+ 1437 0a56 009A     		ldr	r2, [sp]
+ 1438 0a58 019B     		ldr	r3, [sp, #4]
+ 1439 0a5a 0C98     		ldr	r0, [sp, #48]
+ 1440 0a5c 0D99     		ldr	r1, [sp, #52]
+ 1441 0a5e 1218     		adds	r2, r2, r0
+ 1442 0a60 4B41     		adcs	r3, r3, r1
+ 1443 0a62 FC92     		str	r2, [sp, #1008]
+ 1444 0a64 FD93     		str	r3, [sp, #1012]
+ 1445 0a66 2418     		adds	r4, r4, r0
+ 1446 0a68 4D41     		adcs	r5, r5, r1
+ 1447              	.LVL44:
+ 1448 0a6a F494     		str	r4, [sp, #976]
+ 1449 0a6c F595     		str	r5, [sp, #980]
+ 126:sha512.c      ****        RND(S[1],S[2],S[3],S[4],S[5],S[6],S[7],S[0],i+7);
+ 1450              		.loc 1 126 0 discriminator 3
+ 1451 0a6e 9804     		lsls	r0, r3, #18
+ 1452 0a70 910B     		lsrs	r1, r2, #14
+ 1453 0a72 0843     		orrs	r0, r1
+ 1454 0a74 8146     		mov	r9, r0
+ 1455 0a76 9004     		lsls	r0, r2, #18
+ 1456 0a78 990B     		lsrs	r1, r3, #14
+ 1457 0a7a 0843     		orrs	r0, r1
+ 1458 0a7c 8446     		mov	ip, r0
+ 1459 0a7e 9803     		lsls	r0, r3, #14
+ 1460 0a80 910C     		lsrs	r1, r2, #18
+ 1461 0a82 0843     		orrs	r0, r1
+ 1462 0a84 8046     		mov	r8, r0
+ 1463 0a86 9103     		lsls	r1, r2, #14
+ 1464 0a88 0092     		str	r2, [sp]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 29
+
+
+ 1465 0a8a 0193     		str	r3, [sp, #4]
+ 1466 0a8c 980C     		lsrs	r0, r3, #18
+ 1467 0a8e 0143     		orrs	r1, r0
+ 1468 0a90 4846     		mov	r0, r9
+ 1469 0a92 4346     		mov	r3, r8
+ 1470 0a94 5840     		eors	r0, r3
+ 1471 0a96 6346     		mov	r3, ip
+ 1472 0a98 5940     		eors	r1, r3
+ 1473 0a9a 009B     		ldr	r3, [sp]
+ 1474 0a9c 5B0A     		lsrs	r3, r3, #9
+ 1475 0a9e 9846     		mov	r8, r3
+ 1476 0aa0 019B     		ldr	r3, [sp, #4]
+ 1477 0aa2 DB05     		lsls	r3, r3, #23
+ 1478 0aa4 9C46     		mov	ip, r3
+ 1479 0aa6 4346     		mov	r3, r8
+ 1480 0aa8 6246     		mov	r2, ip
+ 1481 0aaa 1343     		orrs	r3, r2
+ 1482 0aac 9C46     		mov	ip, r3
+ 1483 0aae 019B     		ldr	r3, [sp, #4]
+ 1484 0ab0 5B0A     		lsrs	r3, r3, #9
+ 1485 0ab2 9946     		mov	r9, r3
+ 1486 0ab4 009B     		ldr	r3, [sp]
+ 1487 0ab6 DB05     		lsls	r3, r3, #23
+ 1488 0ab8 9846     		mov	r8, r3
+ 1489 0aba 4B46     		mov	r3, r9
+ 1490 0abc 4246     		mov	r2, r8
+ 1491 0abe 1343     		orrs	r3, r2
+ 1492 0ac0 4340     		eors	r3, r0
+ 1493 0ac2 4893     		str	r3, [sp, #288]
+ 1494 0ac4 6346     		mov	r3, ip
+ 1495 0ac6 4B40     		eors	r3, r1
+ 1496 0ac8 4993     		str	r3, [sp, #292]
+ 1497 0aca 0898     		ldr	r0, [sp, #32]
+ 1498 0acc 0999     		ldr	r1, [sp, #36]
+ 1499 0ace 489A     		ldr	r2, [sp, #288]
+ 1500 0ad0 499B     		ldr	r3, [sp, #292]
+ 1501 0ad2 8018     		adds	r0, r0, r2
+ 1502 0ad4 5941     		adcs	r1, r1, r3
+ 1503 0ad6 0890     		str	r0, [sp, #32]
+ 1504 0ad8 0991     		str	r1, [sp, #36]
+ 1505 0ada 0A9A     		ldr	r2, [sp, #40]
+ 1506 0adc 0B9B     		ldr	r3, [sp, #44]
+ 1507 0ade 1100     		movs	r1, r2
+ 1508 0ae0 7140     		eors	r1, r6
+ 1509 0ae2 8C46     		mov	ip, r1
+ 1510 0ae4 1900     		movs	r1, r3
+ 1511 0ae6 7940     		eors	r1, r7
+ 1512 0ae8 0E00     		movs	r6, r1
+ 1513 0aea 6146     		mov	r1, ip
+ 1514 0aec 009A     		ldr	r2, [sp]
+ 1515 0aee 0A40     		ands	r2, r1
+ 1516 0af0 019B     		ldr	r3, [sp, #4]
+ 1517 0af2 3340     		ands	r3, r6
+ 1518 0af4 0A9E     		ldr	r6, [sp, #40]
+ 1519 0af6 0B9F     		ldr	r7, [sp, #44]
+ 1520 0af8 3100     		movs	r1, r6
+ 1521 0afa 5140     		eors	r1, r2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 30
+
+
+ 1522 0afc 4A91     		str	r1, [sp, #296]
+ 1523 0afe 3900     		movs	r1, r7
+ 1524 0b00 5940     		eors	r1, r3
+ 1525 0b02 4B91     		str	r1, [sp, #300]
+ 1526 0b04 4A9A     		ldr	r2, [sp, #296]
+ 1527 0b06 4B9B     		ldr	r3, [sp, #300]
+ 1528 0b08 0898     		ldr	r0, [sp, #32]
+ 1529 0b0a 0999     		ldr	r1, [sp, #36]
+ 1530 0b0c 8018     		adds	r0, r0, r2
+ 1531 0b0e 5941     		adcs	r1, r1, r3
+ 1532 0b10 5746     		mov	r7, r10
+ 1533 0b12 FE1D     		adds	r6, r7, #7
+ 1534 0b14 F600     		lsls	r6, r6, #3
+ 1535 0b16 5F46     		mov	r7, fp
+ 1536 0b18 BB19     		adds	r3, r7, r6
+ 1537 0b1a 1A68     		ldr	r2, [r3]
+ 1538 0b1c 5B68     		ldr	r3, [r3, #4]
+ 1539 0b1e 8018     		adds	r0, r0, r2
+ 1540 0b20 5941     		adcs	r1, r1, r3
+ 1541 0b22 52AB     		add	r3, sp, #328
+ 1542 0b24 9C46     		mov	ip, r3
+ 1543 0b26 6644     		add	r6, r6, ip
+ 1544 0b28 3268     		ldr	r2, [r6]
+ 1545 0b2a 7368     		ldr	r3, [r6, #4]
+ 1546 0b2c 8018     		adds	r0, r0, r2
+ 1547 0b2e 5941     		adcs	r1, r1, r3
+ 1548 0b30 0090     		str	r0, [sp]
+ 1549 0b32 0191     		str	r1, [sp, #4]
+ 1550              	.LVL45:
+ 1551 0b34 2E01     		lsls	r6, r5, #4
+ 1552 0b36 230F     		lsrs	r3, r4, #28
+ 1553 0b38 1E43     		orrs	r6, r3
+ 1554 0b3a 2201     		lsls	r2, r4, #4
+ 1555 0b3c 2B0F     		lsrs	r3, r5, #28
+ 1556 0b3e 1A43     		orrs	r2, r3
+ 1557 0b40 A708     		lsrs	r7, r4, #2
+ 1558 0b42 AB07     		lsls	r3, r5, #30
+ 1559 0b44 3B43     		orrs	r3, r7
+ 1560 0b46 AF08     		lsrs	r7, r5, #2
+ 1561 0b48 BC46     		mov	ip, r7
+ 1562 0b4a A707     		lsls	r7, r4, #30
+ 1563 0b4c 6146     		mov	r1, ip
+ 1564 0b4e 0F43     		orrs	r7, r1
+ 1565 0b50 7E40     		eors	r6, r7
+ 1566 0b52 5A40     		eors	r2, r3
+ 1567 0b54 E709     		lsrs	r7, r4, #7
+ 1568 0b56 6B06     		lsls	r3, r5, #25
+ 1569 0b58 3B43     		orrs	r3, r7
+ 1570 0b5a E909     		lsrs	r1, r5, #7
+ 1571 0b5c 6706     		lsls	r7, r4, #25
+ 1572 0b5e 0F43     		orrs	r7, r1
+ 1573 0b60 7E40     		eors	r6, r7
+ 1574 0b62 4C96     		str	r6, [sp, #304]
+ 1575 0b64 5A40     		eors	r2, r3
+ 1576 0b66 4D92     		str	r2, [sp, #308]
+ 1577 0b68 029E     		ldr	r6, [sp, #8]
+ 1578 0b6a 039F     		ldr	r7, [sp, #12]
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 31
+
+
+ 1579 0b6c 3200     		movs	r2, r6
+ 1580 0b6e 2243     		orrs	r2, r4
+ 1581 0b70 3B00     		movs	r3, r7
+ 1582 0b72 2B43     		orrs	r3, r5
+ 1583 0b74 049E     		ldr	r6, [sp, #16]
+ 1584 0b76 059F     		ldr	r7, [sp, #20]
+ 1585 0b78 3240     		ands	r2, r6
+ 1586 0b7a 3B40     		ands	r3, r7
+ 1587 0b7c 0298     		ldr	r0, [sp, #8]
+ 1588 0b7e 0399     		ldr	r1, [sp, #12]
+ 1589              	.LVL46:
+ 1590 0b80 0600     		movs	r6, r0
+ 1591 0b82 2640     		ands	r6, r4
+ 1592 0b84 0F00     		movs	r7, r1
+ 1593 0b86 2F40     		ands	r7, r5
+ 1594 0b88 3243     		orrs	r2, r6
+ 1595 0b8a 4E92     		str	r2, [sp, #312]
+ 1596 0b8c 3B43     		orrs	r3, r7
+ 1597 0b8e 4F93     		str	r3, [sp, #316]
+ 1598 0b90 4C9E     		ldr	r6, [sp, #304]
+ 1599 0b92 4D9F     		ldr	r7, [sp, #308]
+ 1600 0b94 4E9B     		ldr	r3, [sp, #312]
+ 1601 0b96 4F9C     		ldr	r4, [sp, #316]
+ 1602 0b98 F618     		adds	r6, r6, r3
+ 1603 0b9a 6741     		adcs	r7, r7, r4
+ 1604              	.LVL47:
+ 1605 0b9c 069A     		ldr	r2, [sp, #24]
+ 1606 0b9e 079B     		ldr	r3, [sp, #28]
+ 1607 0ba0 0098     		ldr	r0, [sp]
+ 1608 0ba2 0199     		ldr	r1, [sp, #4]
+ 1609 0ba4 1218     		adds	r2, r2, r0
+ 1610 0ba6 4B41     		adcs	r3, r3, r1
+ 1611 0ba8 FA92     		str	r2, [sp, #1000]
+ 1612 0baa FB93     		str	r3, [sp, #1004]
+ 1613 0bac 8019     		adds	r0, r0, r6
+ 1614 0bae 7941     		adcs	r1, r1, r7
+ 1615 0bb0 F290     		str	r0, [sp, #968]
+ 1616 0bb2 F391     		str	r1, [sp, #972]
+ 118:sha512.c      ****        RND(S[0],S[1],S[2],S[3],S[4],S[5],S[6],S[7],i+0);
+ 1617              		.loc 1 118 0 discriminator 3
+ 1618 0bb4 0823     		movs	r3, #8
+ 1619 0bb6 9C46     		mov	ip, r3
+ 1620 0bb8 E244     		add	r10, r10, ip
+ 1621              	.LVL48:
+ 1622              	.L8:
+ 118:sha512.c      ****        RND(S[0],S[1],S[2],S[3],S[4],S[5],S[6],S[7],i+0);
+ 1623              		.loc 1 118 0 is_stmt 0 discriminator 1
+ 1624 0bba 5346     		mov	r3, r10
+ 1625 0bbc 4F2B     		cmp	r3, #79
+ 1626 0bbe 01DC     		bgt	.LCB1569
+ 1627 0bc0 FFF7CEFA 		bl	.L9	@far jump
+ 1628              	.LCB1569:
+ 1629 0bc4 0023     		movs	r3, #0
+ 1630 0bc6 519D     		ldr	r5, [sp, #324]
+ 1631 0bc8 0FE0     		b	.L10
+ 1632              	.LVL49:
+ 1633              	.L11:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 32
+
+
+ 127:sha512.c      ****    }
+ 128:sha512.c      **** 
+ 129:sha512.c      ****    #undef RND
+ 130:sha512.c      **** 
+ 131:sha512.c      **** 
+ 132:sha512.c      **** 
+ 133:sha512.c      ****     /* feedback */
+ 134:sha512.c      ****    for (i = 0; i < 8; i++) {
+ 135:sha512.c      ****         md->state[i] = md->state[i] + S[i];
+ 1634              		.loc 1 135 0 is_stmt 1 discriminator 3
+ 1635 0bca 5C1C     		adds	r4, r3, #1
+ 1636 0bcc E200     		lsls	r2, r4, #3
+ 1637 0bce AA18     		adds	r2, r5, r2
+ 1638 0bd0 DB00     		lsls	r3, r3, #3
+ 1639              	.LVL50:
+ 1640 0bd2 F2A9     		add	r1, sp, #968
+ 1641 0bd4 8C46     		mov	ip, r1
+ 1642 0bd6 6344     		add	r3, r3, ip
+ 1643 0bd8 1868     		ldr	r0, [r3]
+ 1644 0bda 5968     		ldr	r1, [r3, #4]
+ 1645 0bdc 1668     		ldr	r6, [r2]
+ 1646 0bde 5768     		ldr	r7, [r2, #4]
+ 1647 0be0 8019     		adds	r0, r0, r6
+ 1648 0be2 7941     		adcs	r1, r1, r7
+ 1649 0be4 1060     		str	r0, [r2]
+ 1650 0be6 5160     		str	r1, [r2, #4]
+ 134:sha512.c      ****         md->state[i] = md->state[i] + S[i];
+ 1651              		.loc 1 134 0 discriminator 3
+ 1652 0be8 2300     		movs	r3, r4
+ 1653              	.LVL51:
+ 1654              	.L10:
+ 134:sha512.c      ****         md->state[i] = md->state[i] + S[i];
+ 1655              		.loc 1 134 0 is_stmt 0 discriminator 1
+ 1656 0bea 072B     		cmp	r3, #7
+ 1657 0bec EDDD     		ble	.L11
+ 136:sha512.c      ****     }
+ 137:sha512.c      **** 
+ 138:sha512.c      ****     return 0;
+ 139:sha512.c      **** }
+ 1658              		.loc 1 139 0 is_stmt 1
+ 1659 0bee 0020     		movs	r0, #0
+ 1660 0bf0 034B     		ldr	r3, .L17
+ 1661              	.LVL52:
+ 1662 0bf2 9D44     		add	sp, sp, r3
+ 1663              		@ sp needed
+ 1664 0bf4 3CBC     		pop	{r2, r3, r4, r5}
+ 1665 0bf6 9046     		mov	r8, r2
+ 1666 0bf8 9946     		mov	r9, r3
+ 1667 0bfa A246     		mov	r10, r4
+ 1668 0bfc AB46     		mov	fp, r5
+ 1669 0bfe F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1670              	.L18:
+ 1671              		.align	2
+ 1672              	.L17:
+ 1673 0c00 0C040000 		.word	1036
+ 1674              		.cfi_endproc
+ 1675              	.LFE0:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 33
+
+
+ 1676              		.size	sha512_compress, .-sha512_compress
+ 1677              		.section	.text.sha512_init,"ax",%progbits
+ 1678              		.align	2
+ 1679              		.global	sha512_init
+ 1680              		.code	16
+ 1681              		.thumb_func
+ 1682              		.type	sha512_init, %function
+ 1683              	sha512_init:
+ 1684              	.LFB1:
+ 140:sha512.c      **** 
+ 141:sha512.c      **** 
+ 142:sha512.c      **** /**
+ 143:sha512.c      ****    Initialize the hash state
+ 144:sha512.c      ****    @param md   The hash state you wish to initialize
+ 145:sha512.c      ****    @return 0 if successful
+ 146:sha512.c      **** */
+ 147:sha512.c      **** int sha512_init(sha512_context * md) {
+ 1685              		.loc 1 147 0
+ 1686              		.cfi_startproc
+ 1687              		@ args = 0, pretend = 0, frame = 0
+ 1688              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1689              		@ link register save eliminated.
+ 1690              	.LVL53:
+ 148:sha512.c      ****     if (md == NULL) return 1;
+ 1691              		.loc 1 148 0
+ 1692 0000 0028     		cmp	r0, #0
+ 1693 0002 27D0     		beq	.L21
+ 149:sha512.c      **** 
+ 150:sha512.c      ****     md->curlen = 0;
+ 1694              		.loc 1 150 0
+ 1695 0004 0023     		movs	r3, #0
+ 1696 0006 8364     		str	r3, [r0, #72]
+ 151:sha512.c      ****     md->length = 0;
+ 1697              		.loc 1 151 0
+ 1698 0008 0022     		movs	r2, #0
+ 1699 000a 0023     		movs	r3, #0
+ 1700 000c 0260     		str	r2, [r0]
+ 1701 000e 4360     		str	r3, [r0, #4]
+ 152:sha512.c      ****     md->state[0] = UINT64_C(0x6a09e667f3bcc908);
+ 1702              		.loc 1 152 0
+ 1703 0010 114A     		ldr	r2, .L22
+ 1704 0012 124B     		ldr	r3, .L22+4
+ 1705 0014 8260     		str	r2, [r0, #8]
+ 1706 0016 C360     		str	r3, [r0, #12]
+ 153:sha512.c      ****     md->state[1] = UINT64_C(0xbb67ae8584caa73b);
+ 1707              		.loc 1 153 0
+ 1708 0018 114A     		ldr	r2, .L22+8
+ 1709 001a 124B     		ldr	r3, .L22+12
+ 1710 001c 0261     		str	r2, [r0, #16]
+ 1711 001e 4361     		str	r3, [r0, #20]
+ 154:sha512.c      ****     md->state[2] = UINT64_C(0x3c6ef372fe94f82b);
+ 1712              		.loc 1 154 0
+ 1713 0020 114A     		ldr	r2, .L22+16
+ 1714 0022 124B     		ldr	r3, .L22+20
+ 1715 0024 8261     		str	r2, [r0, #24]
+ 1716 0026 C361     		str	r3, [r0, #28]
+ 155:sha512.c      ****     md->state[3] = UINT64_C(0xa54ff53a5f1d36f1);
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 34
+
+
+ 1717              		.loc 1 155 0
+ 1718 0028 114A     		ldr	r2, .L22+24
+ 1719 002a 124B     		ldr	r3, .L22+28
+ 1720 002c 0262     		str	r2, [r0, #32]
+ 1721 002e 4362     		str	r3, [r0, #36]
+ 156:sha512.c      ****     md->state[4] = UINT64_C(0x510e527fade682d1);
+ 1722              		.loc 1 156 0
+ 1723 0030 114A     		ldr	r2, .L22+32
+ 1724 0032 124B     		ldr	r3, .L22+36
+ 1725 0034 8262     		str	r2, [r0, #40]
+ 1726 0036 C362     		str	r3, [r0, #44]
+ 157:sha512.c      ****     md->state[5] = UINT64_C(0x9b05688c2b3e6c1f);
+ 1727              		.loc 1 157 0
+ 1728 0038 114A     		ldr	r2, .L22+40
+ 1729 003a 124B     		ldr	r3, .L22+44
+ 1730 003c 0263     		str	r2, [r0, #48]
+ 1731 003e 4363     		str	r3, [r0, #52]
+ 158:sha512.c      ****     md->state[6] = UINT64_C(0x1f83d9abfb41bd6b);
+ 1732              		.loc 1 158 0
+ 1733 0040 114A     		ldr	r2, .L22+48
+ 1734 0042 124B     		ldr	r3, .L22+52
+ 1735 0044 8263     		str	r2, [r0, #56]
+ 1736 0046 C363     		str	r3, [r0, #60]
+ 159:sha512.c      ****     md->state[7] = UINT64_C(0x5be0cd19137e2179);
+ 1737              		.loc 1 159 0
+ 1738 0048 114A     		ldr	r2, .L22+56
+ 1739 004a 124B     		ldr	r3, .L22+60
+ 1740 004c 0264     		str	r2, [r0, #64]
+ 1741 004e 4364     		str	r3, [r0, #68]
+ 160:sha512.c      **** 
+ 161:sha512.c      ****     return 0;
+ 1742              		.loc 1 161 0
+ 1743 0050 0020     		movs	r0, #0
+ 1744              	.LVL54:
+ 1745 0052 00E0     		b	.L20
+ 1746              	.LVL55:
+ 1747              	.L21:
+ 148:sha512.c      **** 
+ 1748              		.loc 1 148 0
+ 1749 0054 0120     		movs	r0, #1
+ 1750              	.LVL56:
+ 1751              	.L20:
+ 162:sha512.c      **** }
+ 1752              		.loc 1 162 0
+ 1753              		@ sp needed
+ 1754 0056 7047     		bx	lr
+ 1755              	.L23:
+ 1756              		.align	2
+ 1757              	.L22:
+ 1758 0058 08C9BCF3 		.word	-205731576
+ 1759 005c 67E6096A 		.word	1779033703
+ 1760 0060 3BA7CA84 		.word	-2067093701
+ 1761 0064 85AE67BB 		.word	-1150833019
+ 1762 0068 2BF894FE 		.word	-23791573
+ 1763 006c 72F36E3C 		.word	1013904242
+ 1764 0070 F1361D5F 		.word	1595750129
+ 1765 0074 3AF54FA5 		.word	-1521486534
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 35
+
+
+ 1766 0078 D182E6AD 		.word	-1377402159
+ 1767 007c 7F520E51 		.word	1359893119
+ 1768 0080 1F6C3E2B 		.word	725511199
+ 1769 0084 8C68059B 		.word	-1694144372
+ 1770 0088 6BBD41FB 		.word	-79577749
+ 1771 008c ABD9831F 		.word	528734635
+ 1772 0090 79217E13 		.word	327033209
+ 1773 0094 19CDE05B 		.word	1541459225
+ 1774              		.cfi_endproc
+ 1775              	.LFE1:
+ 1776              		.size	sha512_init, .-sha512_init
+ 1777              		.section	.text.sha512_update,"ax",%progbits
+ 1778              		.align	2
+ 1779              		.global	sha512_update
+ 1780              		.code	16
+ 1781              		.thumb_func
+ 1782              		.type	sha512_update, %function
+ 1783              	sha512_update:
+ 1784              	.LFB2:
+ 163:sha512.c      **** 
+ 164:sha512.c      **** /**
+ 165:sha512.c      ****    Process a block of memory though the hash
+ 166:sha512.c      ****    @param md     The hash state
+ 167:sha512.c      ****    @param in     The data to hash
+ 168:sha512.c      ****    @param inlen  The length of the data (octets)
+ 169:sha512.c      ****    @return 0 if successful
+ 170:sha512.c      **** */
+ 171:sha512.c      **** int sha512_update (sha512_context * md, const unsigned char *in, size_t inlen)               
+ 172:sha512.c      **** {                                                                                           
+ 1785              		.loc 1 172 0
+ 1786              		.cfi_startproc
+ 1787              		@ args = 0, pretend = 0, frame = 0
+ 1788              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1789              	.LVL57:
+ 1790 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1791              		.cfi_def_cfa_offset 24
+ 1792              		.cfi_offset 3, -24
+ 1793              		.cfi_offset 4, -20
+ 1794              		.cfi_offset 5, -16
+ 1795              		.cfi_offset 6, -12
+ 1796              		.cfi_offset 7, -8
+ 1797              		.cfi_offset 14, -4
+ 1798 0002 0400     		movs	r4, r0
+ 1799 0004 0D00     		movs	r5, r1
+ 1800 0006 1600     		movs	r6, r2
+ 173:sha512.c      ****     size_t n;
+ 174:sha512.c      ****     size_t i;                                                                        
+ 175:sha512.c      ****     int           err;     
+ 176:sha512.c      ****     if (md == NULL) return 1;  
+ 1801              		.loc 1 176 0
+ 1802 0008 0028     		cmp	r0, #0
+ 1803 000a 48D0     		beq	.L33
+ 177:sha512.c      ****     if (in == NULL) return 1;                                                              
+ 1804              		.loc 1 177 0
+ 1805 000c 0029     		cmp	r1, #0
+ 1806 000e 48D0     		beq	.L34
+ 178:sha512.c      ****     if (md->curlen > sizeof(md->buf)) {                             
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 36
+
+
+ 1807              		.loc 1 178 0
+ 1808 0010 836C     		ldr	r3, [r0, #72]
+ 1809 0012 802B     		cmp	r3, #128
+ 1810 0014 3FD9     		bls	.L26
+ 1811 0016 46E0     		b	.L35
+ 1812              	.LVL58:
+ 1813              	.L32:
+ 179:sha512.c      ****        return 1;                                                            
+ 180:sha512.c      ****     }                                                                                       
+ 181:sha512.c      ****     while (inlen > 0) {                                                                     
+ 182:sha512.c      ****         if (md->curlen == 0 && inlen >= 128) {                           
+ 1814              		.loc 1 182 0
+ 1815 0018 A06C     		ldr	r0, [r4, #72]
+ 1816 001a 0028     		cmp	r0, #0
+ 1817 001c 13D1     		bne	.L27
+ 1818              		.loc 1 182 0 is_stmt 0 discriminator 1
+ 1819 001e 7F2E     		cmp	r6, #127
+ 1820 0020 11D9     		bls	.L27
+ 183:sha512.c      ****            if ((err = sha512_compress (md, (unsigned char *)in)) != 0) {               
+ 1821              		.loc 1 183 0 is_stmt 1
+ 1822 0022 2900     		movs	r1, r5
+ 1823 0024 2000     		movs	r0, r4
+ 1824 0026 FFF7FEFF 		bl	sha512_compress
+ 1825              	.LVL59:
+ 1826 002a 0028     		cmp	r0, #0
+ 1827 002c 3CD1     		bne	.L25
+ 184:sha512.c      ****               return err;                                                                   
+ 185:sha512.c      ****            }                                                                                
+ 186:sha512.c      ****            md->length += 128 * 8;                                        
+ 1828              		.loc 1 186 0
+ 1829 002e 8022     		movs	r2, #128
+ 1830 0030 D200     		lsls	r2, r2, #3
+ 1831 0032 0023     		movs	r3, #0
+ 1832 0034 2068     		ldr	r0, [r4]
+ 1833 0036 6168     		ldr	r1, [r4, #4]
+ 1834              	.LVL60:
+ 1835 0038 1218     		adds	r2, r2, r0
+ 1836 003a 4B41     		adcs	r3, r3, r1
+ 1837 003c 2260     		str	r2, [r4]
+ 1838 003e 6360     		str	r3, [r4, #4]
+ 187:sha512.c      ****            in             += 128;                                                    
+ 1839              		.loc 1 187 0
+ 1840 0040 8035     		adds	r5, r5, #128
+ 1841              	.LVL61:
+ 188:sha512.c      ****            inlen          -= 128;                                                    
+ 1842              		.loc 1 188 0
+ 1843 0042 803E     		subs	r6, r6, #128
+ 1844              	.LVL62:
+ 1845 0044 27E0     		b	.L26
+ 1846              	.L27:
+ 189:sha512.c      ****         } else {                                                                            
+ 190:sha512.c      ****            n = MIN(inlen, (128 - md->curlen));
+ 1847              		.loc 1 190 0
+ 1848 0046 8023     		movs	r3, #128
+ 1849 0048 1B1A     		subs	r3, r3, r0
+ 1850 004a 3700     		movs	r7, r6
+ 1851 004c 9E42     		cmp	r6, r3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 37
+
+
+ 1852 004e 00D9     		bls	.L29
+ 1853 0050 1F00     		movs	r7, r3
+ 1854              	.L29:
+ 1855              	.LVL63:
+ 191:sha512.c      **** 
+ 192:sha512.c      ****            for (i = 0; i < n; i++) {
+ 1856              		.loc 1 192 0
+ 1857 0052 0022     		movs	r2, #0
+ 1858 0054 05E0     		b	.L30
+ 1859              	.LVL64:
+ 1860              	.L31:
+ 193:sha512.c      ****             md->buf[i + md->curlen] = in[i];
+ 1861              		.loc 1 193 0 discriminator 3
+ 1862 0056 1318     		adds	r3, r2, r0
+ 1863 0058 A95C     		ldrb	r1, [r5, r2]
+ 1864 005a E318     		adds	r3, r4, r3
+ 1865 005c 4C33     		adds	r3, r3, #76
+ 1866 005e 1970     		strb	r1, [r3]
+ 192:sha512.c      ****             md->buf[i + md->curlen] = in[i];
+ 1867              		.loc 1 192 0 discriminator 3
+ 1868 0060 0132     		adds	r2, r2, #1
+ 1869              	.LVL65:
+ 1870              	.L30:
+ 192:sha512.c      ****             md->buf[i + md->curlen] = in[i];
+ 1871              		.loc 1 192 0 is_stmt 0 discriminator 1
+ 1872 0062 BA42     		cmp	r2, r7
+ 1873 0064 F7D3     		bcc	.L31
+ 194:sha512.c      ****            }
+ 195:sha512.c      **** 
+ 196:sha512.c      **** 
+ 197:sha512.c      ****            md->curlen += n;                                                     
+ 1874              		.loc 1 197 0 is_stmt 1
+ 1875 0066 C019     		adds	r0, r0, r7
+ 1876 0068 A064     		str	r0, [r4, #72]
+ 198:sha512.c      ****            in             += n;                                                             
+ 1877              		.loc 1 198 0
+ 1878 006a ED19     		adds	r5, r5, r7
+ 1879              	.LVL66:
+ 199:sha512.c      ****            inlen          -= n;                                                             
+ 1880              		.loc 1 199 0
+ 1881 006c F61B     		subs	r6, r6, r7
+ 1882              	.LVL67:
+ 200:sha512.c      ****            if (md->curlen == 128) {                                      
+ 1883              		.loc 1 200 0
+ 1884 006e 8028     		cmp	r0, #128
+ 1885 0070 11D1     		bne	.L26
+ 201:sha512.c      ****               if ((err = sha512_compress (md, md->buf)) != 0) {            
+ 1886              		.loc 1 201 0
+ 1887 0072 2100     		movs	r1, r4
+ 1888 0074 4C31     		adds	r1, r1, #76
+ 1889 0076 2000     		movs	r0, r4
+ 1890 0078 FFF7FEFF 		bl	sha512_compress
+ 1891              	.LVL68:
+ 1892 007c 0028     		cmp	r0, #0
+ 1893 007e 13D1     		bne	.L25
+ 202:sha512.c      ****                  return err;                                                                
+ 203:sha512.c      ****               }                                                                             
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 38
+
+
+ 204:sha512.c      ****               md->length += 8*128;                                       
+ 1894              		.loc 1 204 0
+ 1895 0080 8022     		movs	r2, #128
+ 1896 0082 D200     		lsls	r2, r2, #3
+ 1897 0084 0023     		movs	r3, #0
+ 1898 0086 2068     		ldr	r0, [r4]
+ 1899 0088 6168     		ldr	r1, [r4, #4]
+ 1900              	.LVL69:
+ 1901 008a 1218     		adds	r2, r2, r0
+ 1902 008c 4B41     		adcs	r3, r3, r1
+ 1903 008e 2260     		str	r2, [r4]
+ 1904 0090 6360     		str	r3, [r4, #4]
+ 205:sha512.c      ****               md->curlen = 0;                                                   
+ 1905              		.loc 1 205 0
+ 1906 0092 0023     		movs	r3, #0
+ 1907 0094 A364     		str	r3, [r4, #72]
+ 1908              	.LVL70:
+ 1909              	.L26:
+ 181:sha512.c      ****         if (md->curlen == 0 && inlen >= 128) {                           
+ 1910              		.loc 1 181 0
+ 1911 0096 002E     		cmp	r6, #0
+ 1912 0098 BED1     		bne	.L32
+ 206:sha512.c      ****            }                                                                                
+ 207:sha512.c      ****        }                                                                                    
+ 208:sha512.c      ****     }                                                                                       
+ 209:sha512.c      ****     return 0;                                                                        
+ 1913              		.loc 1 209 0
+ 1914 009a 0020     		movs	r0, #0
+ 1915 009c 04E0     		b	.L25
+ 1916              	.LVL71:
+ 1917              	.L33:
+ 176:sha512.c      ****     if (in == NULL) return 1;                                                              
+ 1918              		.loc 1 176 0
+ 1919 009e 0120     		movs	r0, #1
+ 1920              	.LVL72:
+ 1921 00a0 02E0     		b	.L25
+ 1922              	.LVL73:
+ 1923              	.L34:
+ 177:sha512.c      ****     if (md->curlen > sizeof(md->buf)) {                             
+ 1924              		.loc 1 177 0
+ 1925 00a2 0120     		movs	r0, #1
+ 1926              	.LVL74:
+ 1927 00a4 00E0     		b	.L25
+ 1928              	.LVL75:
+ 1929              	.L35:
+ 179:sha512.c      ****     }                                                                                       
+ 1930              		.loc 1 179 0
+ 1931 00a6 0120     		movs	r0, #1
+ 1932              	.LVL76:
+ 1933              	.L25:
+ 210:sha512.c      **** }
+ 1934              		.loc 1 210 0
+ 1935              		@ sp needed
+ 1936              	.LVL77:
+ 1937              	.LVL78:
+ 1938              	.LVL79:
+ 1939 00a8 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 39
+
+
+ 1940              		.cfi_endproc
+ 1941              	.LFE2:
+ 1942              		.size	sha512_update, .-sha512_update
+ 1943 00aa C046     		.section	.text.sha512_final,"ax",%progbits
+ 1944              		.align	2
+ 1945              		.global	sha512_final
+ 1946              		.code	16
+ 1947              		.thumb_func
+ 1948              		.type	sha512_final, %function
+ 1949              	sha512_final:
+ 1950              	.LFB3:
+ 211:sha512.c      **** 
+ 212:sha512.c      **** /**
+ 213:sha512.c      ****    Terminate the hash to get the digest
+ 214:sha512.c      ****    @param md  The hash state
+ 215:sha512.c      ****    @param out [out] The destination of the hash (64 bytes)
+ 216:sha512.c      ****    @return 0 if successful
+ 217:sha512.c      **** */
+ 218:sha512.c      ****    int sha512_final(sha512_context * md, unsigned char *out)
+ 219:sha512.c      ****    {
+ 1951              		.loc 1 219 0
+ 1952              		.cfi_startproc
+ 1953              		@ args = 0, pretend = 0, frame = 0
+ 1954              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1955              	.LVL80:
+ 1956 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1957              		.cfi_def_cfa_offset 24
+ 1958              		.cfi_offset 3, -24
+ 1959              		.cfi_offset 4, -20
+ 1960              		.cfi_offset 5, -16
+ 1961              		.cfi_offset 6, -12
+ 1962              		.cfi_offset 7, -8
+ 1963              		.cfi_offset 14, -4
+ 1964 0002 0400     		movs	r4, r0
+ 1965 0004 0D00     		movs	r5, r1
+ 220:sha512.c      ****     int i;
+ 221:sha512.c      **** 
+ 222:sha512.c      ****     if (md == NULL) return 1;
+ 1966              		.loc 1 222 0
+ 1967 0006 0028     		cmp	r0, #0
+ 1968 0008 70D0     		beq	.L47
+ 223:sha512.c      ****     if (out == NULL) return 1;
+ 1969              		.loc 1 223 0
+ 1970 000a 0029     		cmp	r1, #0
+ 1971 000c 70D0     		beq	.L48
+ 224:sha512.c      **** 
+ 225:sha512.c      ****     if (md->curlen >= sizeof(md->buf)) {
+ 1972              		.loc 1 225 0
+ 1973 000e 836C     		ldr	r3, [r0, #72]
+ 1974 0010 7F2B     		cmp	r3, #127
+ 1975 0012 6FD8     		bhi	.L49
+ 226:sha512.c      ****      return 1;
+ 227:sha512.c      ****  }
+ 228:sha512.c      **** 
+ 229:sha512.c      ****     /* increase the length of the message */
+ 230:sha512.c      ****  md->length += md->curlen * UINT64_C(8);
+ 1976              		.loc 1 230 0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 40
+
+
+ 1977 0014 590F     		lsrs	r1, r3, #29
+ 1978              	.LVL81:
+ 1979 0016 D800     		lsls	r0, r3, #3
+ 1980              	.LVL82:
+ 1981 0018 2668     		ldr	r6, [r4]
+ 1982 001a 6768     		ldr	r7, [r4, #4]
+ 1983 001c 8019     		adds	r0, r0, r6
+ 1984 001e 7941     		adcs	r1, r1, r7
+ 1985 0020 2060     		str	r0, [r4]
+ 1986 0022 6160     		str	r1, [r4, #4]
+ 231:sha512.c      **** 
+ 232:sha512.c      ****     /* append the '1' bit */
+ 233:sha512.c      ****  md->buf[md->curlen++] = (unsigned char)0x80;
+ 1987              		.loc 1 233 0
+ 1988 0024 5A1C     		adds	r2, r3, #1
+ 1989 0026 A264     		str	r2, [r4, #72]
+ 1990 0028 E318     		adds	r3, r4, r3
+ 1991 002a 4C33     		adds	r3, r3, #76
+ 1992 002c 8021     		movs	r1, #128
+ 1993 002e 1970     		strb	r1, [r3]
+ 234:sha512.c      **** 
+ 235:sha512.c      ****     /* if the length is currently above 112 bytes we append zeros
+ 236:sha512.c      ****      * then compress.  Then we can fall back to padding zeros and length
+ 237:sha512.c      ****      * encoding like normal.
+ 238:sha512.c      ****      */
+ 239:sha512.c      ****      if (md->curlen > 112) {
+ 1994              		.loc 1 239 0
+ 1995 0030 702A     		cmp	r2, #112
+ 1996 0032 06D8     		bhi	.L40
+ 1997 0034 16E0     		b	.L43
+ 1998              	.L42:
+ 240:sha512.c      ****         while (md->curlen < 128) {
+ 241:sha512.c      ****             md->buf[md->curlen++] = (unsigned char)0;
+ 1999              		.loc 1 241 0
+ 2000 0036 5A1C     		adds	r2, r3, #1
+ 2001 0038 A264     		str	r2, [r4, #72]
+ 2002 003a E318     		adds	r3, r4, r3
+ 2003 003c 4C33     		adds	r3, r3, #76
+ 2004 003e 0022     		movs	r2, #0
+ 2005 0040 1A70     		strb	r2, [r3]
+ 2006              	.L40:
+ 240:sha512.c      ****         while (md->curlen < 128) {
+ 2007              		.loc 1 240 0
+ 2008 0042 A36C     		ldr	r3, [r4, #72]
+ 2009 0044 7F2B     		cmp	r3, #127
+ 2010 0046 F6D9     		bls	.L42
+ 242:sha512.c      ****         }
+ 243:sha512.c      ****         sha512_compress(md, md->buf);
+ 2011              		.loc 1 243 0
+ 2012 0048 2100     		movs	r1, r4
+ 2013 004a 4C31     		adds	r1, r1, #76
+ 2014 004c 2000     		movs	r0, r4
+ 2015 004e FFF7FEFF 		bl	sha512_compress
+ 2016              	.LVL83:
+ 244:sha512.c      ****         md->curlen = 0;
+ 2017              		.loc 1 244 0
+ 2018 0052 0023     		movs	r3, #0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 41
+
+
+ 2019 0054 A364     		str	r3, [r4, #72]
+ 2020 0056 05E0     		b	.L43
+ 2021              	.L44:
+ 245:sha512.c      ****     }
+ 246:sha512.c      **** 
+ 247:sha512.c      ****     /* pad upto 120 bytes of zeroes 
+ 248:sha512.c      ****      * note: that from 112 to 120 is the 64 MSB of the length.  We assume that you won't hash
+ 249:sha512.c      ****      * > 2^64 bits of data... :-)
+ 250:sha512.c      ****      */
+ 251:sha512.c      **** while (md->curlen < 120) {
+ 252:sha512.c      ****     md->buf[md->curlen++] = (unsigned char)0;
+ 2022              		.loc 1 252 0
+ 2023 0058 5A1C     		adds	r2, r3, #1
+ 2024 005a A264     		str	r2, [r4, #72]
+ 2025 005c E318     		adds	r3, r4, r3
+ 2026 005e 4C33     		adds	r3, r3, #76
+ 2027 0060 0022     		movs	r2, #0
+ 2028 0062 1A70     		strb	r2, [r3]
+ 2029              	.L43:
+ 251:sha512.c      ****     md->buf[md->curlen++] = (unsigned char)0;
+ 2030              		.loc 1 251 0
+ 2031 0064 A36C     		ldr	r3, [r4, #72]
+ 2032 0066 772B     		cmp	r3, #119
+ 2033 0068 F6D9     		bls	.L44
+ 253:sha512.c      **** }
+ 254:sha512.c      **** 
+ 255:sha512.c      ****     /* store length */
+ 256:sha512.c      **** STORE64H(md->length, md->buf+120);
+ 2034              		.loc 1 256 0
+ 2035 006a 2368     		ldr	r3, [r4]
+ 2036 006c 6268     		ldr	r2, [r4, #4]
+ 2037 006e 100E     		lsrs	r0, r2, #24
+ 2038 0070 C421     		movs	r1, #196
+ 2039 0072 6054     		strb	r0, [r4, r1]
+ 2040 0074 100C     		lsrs	r0, r2, #16
+ 2041 0076 0131     		adds	r1, r1, #1
+ 2042 0078 6054     		strb	r0, [r4, r1]
+ 2043 007a 100A     		lsrs	r0, r2, #8
+ 2044 007c 0131     		adds	r1, r1, #1
+ 2045 007e 6054     		strb	r0, [r4, r1]
+ 2046 0080 0131     		adds	r1, r1, #1
+ 2047 0082 6254     		strb	r2, [r4, r1]
+ 2048 0084 190E     		lsrs	r1, r3, #24
+ 2049 0086 C822     		movs	r2, #200
+ 2050 0088 A154     		strb	r1, [r4, r2]
+ 2051 008a 190C     		lsrs	r1, r3, #16
+ 2052 008c 0132     		adds	r2, r2, #1
+ 2053 008e A154     		strb	r1, [r4, r2]
+ 2054 0090 190A     		lsrs	r1, r3, #8
+ 2055 0092 0132     		adds	r2, r2, #1
+ 2056 0094 A154     		strb	r1, [r4, r2]
+ 2057 0096 0132     		adds	r2, r2, #1
+ 2058 0098 A354     		strb	r3, [r4, r2]
+ 257:sha512.c      **** sha512_compress(md, md->buf);
+ 2059              		.loc 1 257 0
+ 2060 009a 2100     		movs	r1, r4
+ 2061 009c 4C31     		adds	r1, r1, #76
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 42
+
+
+ 2062 009e 2000     		movs	r0, r4
+ 2063 00a0 FFF7FEFF 		bl	sha512_compress
+ 2064              	.LVL84:
+ 258:sha512.c      **** 
+ 259:sha512.c      ****     /* copy output */
+ 260:sha512.c      **** for (i = 0; i < 8; i++) {
+ 2065              		.loc 1 260 0
+ 2066 00a4 0022     		movs	r2, #0
+ 2067 00a6 1DE0     		b	.L45
+ 2068              	.LVL85:
+ 2069              	.L46:
+ 261:sha512.c      ****     STORE64H(md->state[i], out+(8*i));
+ 2070              		.loc 1 261 0 discriminator 3
+ 2071 00a8 D300     		lsls	r3, r2, #3
+ 2072 00aa 511C     		adds	r1, r2, #1
+ 2073 00ac CA00     		lsls	r2, r1, #3
+ 2074              	.LVL86:
+ 2075 00ae A218     		adds	r2, r4, r2
+ 2076 00b0 D079     		ldrb	r0, [r2, #7]
+ 2077 00b2 E854     		strb	r0, [r5, r3]
+ 2078 00b4 581C     		adds	r0, r3, #1
+ 2079 00b6 9679     		ldrb	r6, [r2, #6]
+ 2080 00b8 2E54     		strb	r6, [r5, r0]
+ 2081 00ba 9E1C     		adds	r6, r3, #2
+ 2082 00bc 5068     		ldr	r0, [r2, #4]
+ 2083 00be 000A     		lsrs	r0, r0, #8
+ 2084 00c0 A855     		strb	r0, [r5, r6]
+ 2085 00c2 D81C     		adds	r0, r3, #3
+ 2086 00c4 1679     		ldrb	r6, [r2, #4]
+ 2087 00c6 2E54     		strb	r6, [r5, r0]
+ 2088 00c8 181D     		adds	r0, r3, #4
+ 2089 00ca D678     		ldrb	r6, [r2, #3]
+ 2090 00cc 2E54     		strb	r6, [r5, r0]
+ 2091 00ce 581D     		adds	r0, r3, #5
+ 2092 00d0 9678     		ldrb	r6, [r2, #2]
+ 2093 00d2 2E54     		strb	r6, [r5, r0]
+ 2094 00d4 9E1D     		adds	r6, r3, #6
+ 2095 00d6 1068     		ldr	r0, [r2]
+ 2096 00d8 000A     		lsrs	r0, r0, #8
+ 2097 00da A855     		strb	r0, [r5, r6]
+ 2098 00dc 0733     		adds	r3, r3, #7
+ 2099 00de 1278     		ldrb	r2, [r2]
+ 2100 00e0 EA54     		strb	r2, [r5, r3]
+ 260:sha512.c      ****     STORE64H(md->state[i], out+(8*i));
+ 2101              		.loc 1 260 0 discriminator 3
+ 2102 00e2 0A00     		movs	r2, r1
+ 2103              	.LVL87:
+ 2104              	.L45:
+ 260:sha512.c      ****     STORE64H(md->state[i], out+(8*i));
+ 2105              		.loc 1 260 0 is_stmt 0 discriminator 1
+ 2106 00e4 072A     		cmp	r2, #7
+ 2107 00e6 DFDD     		ble	.L46
+ 262:sha512.c      **** }
+ 263:sha512.c      **** 
+ 264:sha512.c      **** return 0;
+ 2108              		.loc 1 264 0 is_stmt 1
+ 2109 00e8 0020     		movs	r0, #0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 43
+
+
+ 2110 00ea 04E0     		b	.L39
+ 2111              	.LVL88:
+ 2112              	.L47:
+ 222:sha512.c      ****     if (out == NULL) return 1;
+ 2113              		.loc 1 222 0
+ 2114 00ec 0120     		movs	r0, #1
+ 2115              	.LVL89:
+ 2116 00ee 02E0     		b	.L39
+ 2117              	.LVL90:
+ 2118              	.L48:
+ 223:sha512.c      **** 
+ 2119              		.loc 1 223 0
+ 2120 00f0 0120     		movs	r0, #1
+ 2121              	.LVL91:
+ 2122 00f2 00E0     		b	.L39
+ 2123              	.LVL92:
+ 2124              	.L49:
+ 226:sha512.c      ****  }
+ 2125              		.loc 1 226 0
+ 2126 00f4 0120     		movs	r0, #1
+ 2127              	.LVL93:
+ 2128              	.L39:
+ 265:sha512.c      **** }
+ 2129              		.loc 1 265 0
+ 2130              		@ sp needed
+ 2131              	.LVL94:
+ 2132              	.LVL95:
+ 2133 00f6 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2134              		.cfi_endproc
+ 2135              	.LFE3:
+ 2136              		.size	sha512_final, .-sha512_final
+ 2137              		.section	.text.sha512,"ax",%progbits
+ 2138              		.align	2
+ 2139              		.global	sha512
+ 2140              		.code	16
+ 2141              		.thumb_func
+ 2142              		.type	sha512, %function
+ 2143              	sha512:
+ 2144              	.LFB4:
+ 266:sha512.c      **** 
+ 267:sha512.c      **** int sha512(const unsigned char *message, size_t message_len, unsigned char *out)
+ 268:sha512.c      **** {
+ 2145              		.loc 1 268 0
+ 2146              		.cfi_startproc
+ 2147              		@ args = 0, pretend = 0, frame = 208
+ 2148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2149              	.LVL96:
+ 2150 0000 70B5     		push	{r4, r5, r6, lr}
+ 2151              		.cfi_def_cfa_offset 16
+ 2152              		.cfi_offset 4, -16
+ 2153              		.cfi_offset 5, -12
+ 2154              		.cfi_offset 6, -8
+ 2155              		.cfi_offset 14, -4
+ 2156 0002 B4B0     		sub	sp, sp, #208
+ 2157              		.cfi_def_cfa_offset 224
+ 2158 0004 0400     		movs	r4, r0
+ 2159 0006 0E00     		movs	r6, r1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 44
+
+
+ 2160 0008 1500     		movs	r5, r2
+ 269:sha512.c      ****     sha512_context ctx;
+ 270:sha512.c      ****     int ret;
+ 271:sha512.c      ****     if ((ret = sha512_init(&ctx))) return ret;
+ 2161              		.loc 1 271 0
+ 2162 000a 6846     		mov	r0, sp
+ 2163              	.LVL97:
+ 2164 000c FFF7FEFF 		bl	sha512_init
+ 2165              	.LVL98:
+ 2166 0010 0028     		cmp	r0, #0
+ 2167 0012 0AD1     		bne	.L51
+ 272:sha512.c      ****     if ((ret = sha512_update(&ctx, message, message_len))) return ret;
+ 2168              		.loc 1 272 0
+ 2169 0014 3200     		movs	r2, r6
+ 2170 0016 2100     		movs	r1, r4
+ 2171 0018 6846     		mov	r0, sp
+ 2172              	.LVL99:
+ 2173 001a FFF7FEFF 		bl	sha512_update
+ 2174              	.LVL100:
+ 2175 001e 0028     		cmp	r0, #0
+ 2176 0020 03D1     		bne	.L51
+ 273:sha512.c      ****     if ((ret = sha512_final(&ctx, out))) return ret;
+ 2177              		.loc 1 273 0
+ 2178 0022 2900     		movs	r1, r5
+ 2179 0024 6846     		mov	r0, sp
+ 2180              	.LVL101:
+ 2181 0026 FFF7FEFF 		bl	sha512_final
+ 2182              	.LVL102:
+ 2183              	.L51:
+ 274:sha512.c      ****     return 0;
+ 275:sha512.c      **** }
+ 2184              		.loc 1 275 0
+ 2185 002a 34B0     		add	sp, sp, #208
+ 2186              		@ sp needed
+ 2187              	.LVL103:
+ 2188              	.LVL104:
+ 2189              	.LVL105:
+ 2190 002c 70BD     		pop	{r4, r5, r6, pc}
+ 2191              		.cfi_endproc
+ 2192              	.LFE4:
+ 2193              		.size	sha512, .-sha512
+ 2194 002e C046     		.section	.rodata
+ 2195              		.align	3
+ 2196              		.set	.LANCHOR0,. + 0
+ 2197              		.type	K, %object
+ 2198              		.size	K, 640
+ 2199              	K:
+ 2200 0000 22AE28D7 		.word	-685199838
+ 2201 0004 982F8A42 		.word	1116352408
+ 2202 0008 CD65EF23 		.word	602891725
+ 2203 000c 91443771 		.word	1899447441
+ 2204 0010 2F3B4DEC 		.word	-330482897
+ 2205 0014 CFFBC0B5 		.word	-1245643825
+ 2206 0018 BCDB8981 		.word	-2121671748
+ 2207 001c A5DBB5E9 		.word	-373957723
+ 2208 0020 38B548F3 		.word	-213338824
+ 2209 0024 5BC25639 		.word	961987163
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 45
+
+
+ 2210 0028 19D005B6 		.word	-1241133031
+ 2211 002c F111F159 		.word	1508970993
+ 2212 0030 9B4F19AF 		.word	-1357295717
+ 2213 0034 A4823F92 		.word	-1841331548
+ 2214 0038 18816DDA 		.word	-630357736
+ 2215 003c D55E1CAB 		.word	-1424204075
+ 2216 0040 420203A3 		.word	-1560083902
+ 2217 0044 98AA07D8 		.word	-670586216
+ 2218 0048 BE6F7045 		.word	1164996542
+ 2219 004c 015B8312 		.word	310598401
+ 2220 0050 8CB2E44E 		.word	1323610764
+ 2221 0054 BE853124 		.word	607225278
+ 2222 0058 E2B4FFD5 		.word	-704662302
+ 2223 005c C37D0C55 		.word	1426881987
+ 2224 0060 6F897BF2 		.word	-226784913
+ 2225 0064 745DBE72 		.word	1925078388
+ 2226 0068 B196163B 		.word	991336113
+ 2227 006c FEB1DE80 		.word	-2132889090
+ 2228 0070 3512C725 		.word	633803317
+ 2229 0074 A706DC9B 		.word	-1680079193
+ 2230 0078 942669CF 		.word	-815192428
+ 2231 007c 74F19BC1 		.word	-1046744716
+ 2232 0080 D24AF19E 		.word	-1628353838
+ 2233 0084 C1699BE4 		.word	-459576895
+ 2234 0088 E3254F38 		.word	944711139
+ 2235 008c 8647BEEF 		.word	-272742522
+ 2236 0090 B5D58C8B 		.word	-1953704523
+ 2237 0094 C69DC10F 		.word	264347078
+ 2238 0098 659CAC77 		.word	2007800933
+ 2239 009c CCA10C24 		.word	604807628
+ 2240 00a0 75022B59 		.word	1495990901
+ 2241 00a4 6F2CE92D 		.word	770255983
+ 2242 00a8 83E4A66E 		.word	1856431235
+ 2243 00ac AA84744A 		.word	1249150122
+ 2244 00b0 D4FB41BD 		.word	-1119749164
+ 2245 00b4 DCA9B05C 		.word	1555081692
+ 2246 00b8 B5531183 		.word	-2096016459
+ 2247 00bc DA88F976 		.word	1996064986
+ 2248 00c0 ABDF66EE 		.word	-295247957
+ 2249 00c4 52513E98 		.word	-1740746414
+ 2250 00c8 1032B42D 		.word	766784016
+ 2251 00cc 6DC631A8 		.word	-1473132947
+ 2252 00d0 3F21FB98 		.word	-1728372417
+ 2253 00d4 C82703B0 		.word	-1341970488
+ 2254 00d8 E40EEFBE 		.word	-1091629340
+ 2255 00dc C77F59BF 		.word	-1084653625
+ 2256 00e0 C28FA83D 		.word	1034457026
+ 2257 00e4 F30BE0C6 		.word	-958395405
+ 2258 00e8 25A70A93 		.word	-1828018395
+ 2259 00ec 4791A7D5 		.word	-710438585
+ 2260 00f0 6F8203E0 		.word	-536640913
+ 2261 00f4 5163CA06 		.word	113926993
+ 2262 00f8 706E0E0A 		.word	168717936
+ 2263 00fc 67292914 		.word	338241895
+ 2264 0100 FC2FD246 		.word	1188179964
+ 2265 0104 850AB727 		.word	666307205
+ 2266 0108 26C9265C 		.word	1546045734
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 46
+
+
+ 2267 010c 38211B2E 		.word	773529912
+ 2268 0110 ED2AC45A 		.word	1522805485
+ 2269 0114 FC6D2C4D 		.word	1294757372
+ 2270 0118 DFB3959D 		.word	-1651133473
+ 2271 011c 130D3853 		.word	1396182291
+ 2272 0120 DE63AF8B 		.word	-1951439906
+ 2273 0124 54730A65 		.word	1695183700
+ 2274 0128 A8B2773C 		.word	1014477480
+ 2275 012c BB0A6A76 		.word	1986661051
+ 2276 0130 E6AEED47 		.word	1206759142
+ 2277 0134 2EC9C281 		.word	-2117940946
+ 2278 0138 3B358214 		.word	344077627
+ 2279 013c 852C7292 		.word	-1838011259
+ 2280 0140 6403F14C 		.word	1290863460
+ 2281 0144 A1E8BFA2 		.word	-1564481375
+ 2282 0148 013042BC 		.word	-1136513023
+ 2283 014c 4B661AA8 		.word	-1474664885
+ 2284 0150 9197F8D0 		.word	-789014639
+ 2285 0154 708B4BC2 		.word	-1035236496
+ 2286 0158 30BE5406 		.word	106217008
+ 2287 015c A3516CC7 		.word	-949202525
+ 2288 0160 1852EFD6 		.word	-688958952
+ 2289 0164 19E892D1 		.word	-778901479
+ 2290 0168 10A96555 		.word	1432725776
+ 2291 016c 240699D6 		.word	-694614492
+ 2292 0170 2A207157 		.word	1467031594
+ 2293 0174 85350EF4 		.word	-200395387
+ 2294 0178 B8D1BB32 		.word	851169720
+ 2295 017c 70A06A10 		.word	275423344
+ 2296 0180 C8D0D2B8 		.word	-1194143544
+ 2297 0184 16C1A419 		.word	430227734
+ 2298 0188 53AB4151 		.word	1363258195
+ 2299 018c 086C371E 		.word	506948616
+ 2300 0190 99EB8EDF 		.word	-544281703
+ 2301 0194 4C774827 		.word	659060556
+ 2302 0198 A8489BE1 		.word	-509917016
+ 2303 019c B5BCB034 		.word	883997877
+ 2304 01a0 635AC9C5 		.word	-976659869
+ 2305 01a4 B30C1C39 		.word	958139571
+ 2306 01a8 CB8A41E3 		.word	-482243893
+ 2307 01ac 4AAAD84E 		.word	1322822218
+ 2308 01b0 73E36377 		.word	2003034995
+ 2309 01b4 4FCA9C5B 		.word	1537002063
+ 2310 01b8 A3B8B2D6 		.word	-692930397
+ 2311 01bc F36F2E68 		.word	1747873779
+ 2312 01c0 FCB2EF5D 		.word	1575990012
+ 2313 01c4 EE828F74 		.word	1955562222
+ 2314 01c8 602F1743 		.word	1125592928
+ 2315 01cc 6F63A578 		.word	2024104815
+ 2316 01d0 72ABF0A1 		.word	-1578062990
+ 2317 01d4 1478C884 		.word	-2067236844
+ 2318 01d8 EC39641A 		.word	442776044
+ 2319 01dc 0802C78C 		.word	-1933114872
+ 2320 01e0 281E6323 		.word	593698344
+ 2321 01e4 FAFFBE90 		.word	-1866530822
+ 2322 01e8 E9BD82DE 		.word	-561857047
+ 2323 01ec EB6C50A4 		.word	-1538233109
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 47
+
+
+ 2324 01f0 1579C6B2 		.word	-1295615723
+ 2325 01f4 F7A3F9BE 		.word	-1090935817
+ 2326 01f8 2B5372E3 		.word	-479046869
+ 2327 01fc F27871C6 		.word	-965641998
+ 2328 0200 9C6126EA 		.word	-366583396
+ 2329 0204 CE3E27CA 		.word	-903397682
+ 2330 0208 07C2C021 		.word	566280711
+ 2331 020c C7B886D1 		.word	-779700025
+ 2332 0210 1EEBE0CD 		.word	-840897762
+ 2333 0214 D67DDAEA 		.word	-354779690
+ 2334 0218 78D16EEE 		.word	-294727304
+ 2335 021c 7F4F7DF5 		.word	-176337025
+ 2336 0220 BA6F1772 		.word	1914138554
+ 2337 0224 AA67F006 		.word	116418474
+ 2338 0228 A698C8A2 		.word	-1563912026
+ 2339 022c C57D630A 		.word	174292421
+ 2340 0230 AE0DF9BE 		.word	-1090974290
+ 2341 0234 04983F11 		.word	289380356
+ 2342 0238 1B471C13 		.word	320620315
+ 2343 023c 350B711B 		.word	460393269
+ 2344 0240 847D0423 		.word	587496836
+ 2345 0244 F577DB28 		.word	685471733
+ 2346 0248 9324C740 		.word	1086792851
+ 2347 024c 7BABCA32 		.word	852142971
+ 2348 0250 BCBEC915 		.word	365543100
+ 2349 0254 0ABE9E3C 		.word	1017036298
+ 2350 0258 4C0D109C 		.word	-1676669620
+ 2351 025c C4671D43 		.word	1126000580
+ 2352 0260 B6423ECB 		.word	-885112138
+ 2353 0264 BED4C54C 		.word	1288033470
+ 2354 0268 2A7E65FC 		.word	-60457430
+ 2355 026c 9C297F59 		.word	1501505948
+ 2356 0270 ECFAD63A 		.word	987167468
+ 2357 0274 AB6FCB5F 		.word	1607167915
+ 2358 0278 1758474A 		.word	1246189591
+ 2359 027c 8C19446C 		.word	1816402316
+ 2360              		.text
+ 2361              	.Letext0:
+ 2362              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2363              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2364              		.file 4 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2365              		.file 5 "sha512.h"
+ 2366              		.section	.debug_info,"",%progbits
+ 2367              	.Ldebug_info0:
+ 2368 0000 BB030000 		.4byte	0x3bb
+ 2369 0004 0400     		.2byte	0x4
+ 2370 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 2371 000a 04       		.byte	0x4
+ 2372 000b 01       		.uleb128 0x1
+ 2373 000c BA000000 		.4byte	.LASF25
+ 2374 0010 0C       		.byte	0xc
+ 2375 0011 62000000 		.4byte	.LASF26
+ 2376 0015 48010000 		.4byte	.LASF27
+ 2377 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 2378 001d 00000000 		.4byte	0
+ 2379 0021 00000000 		.4byte	.Ldebug_line0
+ 2380 0025 02       		.uleb128 0x2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 48
+
+
+ 2381 0026 08       		.byte	0x8
+ 2382 0027 07       		.byte	0x7
+ 2383 0028 A3000000 		.4byte	.LASF0
+ 2384 002c 02       		.uleb128 0x2
+ 2385 002d 01       		.byte	0x1
+ 2386 002e 06       		.byte	0x6
+ 2387 002f E9010000 		.4byte	.LASF1
+ 2388 0033 02       		.uleb128 0x2
+ 2389 0034 01       		.byte	0x1
+ 2390 0035 08       		.byte	0x8
+ 2391 0036 44000000 		.4byte	.LASF2
+ 2392 003a 02       		.uleb128 0x2
+ 2393 003b 02       		.byte	0x2
+ 2394 003c 05       		.byte	0x5
+ 2395 003d A8010000 		.4byte	.LASF3
+ 2396 0041 02       		.uleb128 0x2
+ 2397 0042 02       		.byte	0x2
+ 2398 0043 07       		.byte	0x7
+ 2399 0044 6B000000 		.4byte	.LASF4
+ 2400 0048 02       		.uleb128 0x2
+ 2401 0049 04       		.byte	0x4
+ 2402 004a 05       		.byte	0x5
+ 2403 004b D4010000 		.4byte	.LASF5
+ 2404 004f 02       		.uleb128 0x2
+ 2405 0050 04       		.byte	0x4
+ 2406 0051 07       		.byte	0x7
+ 2407 0052 84000000 		.4byte	.LASF6
+ 2408 0056 02       		.uleb128 0x2
+ 2409 0057 08       		.byte	0x8
+ 2410 0058 05       		.byte	0x5
+ 2411 0059 86010000 		.4byte	.LASF7
+ 2412 005d 03       		.uleb128 0x3
+ 2413 005e B2010000 		.4byte	.LASF9
+ 2414 0062 02       		.byte	0x2
+ 2415 0063 5B       		.byte	0x5b
+ 2416 0064 25000000 		.4byte	0x25
+ 2417 0068 04       		.uleb128 0x4
+ 2418 0069 04       		.byte	0x4
+ 2419 006a 05       		.byte	0x5
+ 2420 006b 696E7400 		.ascii	"int\000"
+ 2421 006f 02       		.uleb128 0x2
+ 2422 0070 04       		.byte	0x4
+ 2423 0071 07       		.byte	0x7
+ 2424 0072 96000000 		.4byte	.LASF8
+ 2425 0076 03       		.uleb128 0x3
+ 2426 0077 3B000000 		.4byte	.LASF10
+ 2427 007b 03       		.byte	0x3
+ 2428 007c 3C       		.byte	0x3c
+ 2429 007d 5D000000 		.4byte	0x5d
+ 2430 0081 03       		.uleb128 0x3
+ 2431 0082 14000000 		.4byte	.LASF11
+ 2432 0086 04       		.byte	0x4
+ 2433 0087 D8       		.byte	0xd8
+ 2434 0088 6F000000 		.4byte	0x6f
+ 2435 008c 02       		.uleb128 0x2
+ 2436 008d 08       		.byte	0x8
+ 2437 008e 04       		.byte	0x4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 49
+
+
+ 2438 008f DD010000 		.4byte	.LASF12
+ 2439 0093 05       		.uleb128 0x5
+ 2440 0094 BD010000 		.4byte	.LASF28
+ 2441 0098 D0       		.byte	0xd0
+ 2442 0099 05       		.byte	0x5
+ 2443 009a 09       		.byte	0x9
+ 2444 009b D0000000 		.4byte	0xd0
+ 2445 009f 06       		.uleb128 0x6
+ 2446 00a0 F5010000 		.4byte	.LASF13
+ 2447 00a4 05       		.byte	0x5
+ 2448 00a5 0A       		.byte	0xa
+ 2449 00a6 76000000 		.4byte	0x76
+ 2450 00aa 00       		.byte	0
+ 2451 00ab 06       		.uleb128 0x6
+ 2452 00ac 1B000000 		.4byte	.LASF14
+ 2453 00b0 05       		.byte	0x5
+ 2454 00b1 0A       		.byte	0xa
+ 2455 00b2 D0000000 		.4byte	0xd0
+ 2456 00b6 08       		.byte	0x8
+ 2457 00b7 06       		.uleb128 0x6
+ 2458 00b8 A1010000 		.4byte	.LASF15
+ 2459 00bc 05       		.byte	0x5
+ 2460 00bd 0B       		.byte	0xb
+ 2461 00be 81000000 		.4byte	0x81
+ 2462 00c2 48       		.byte	0x48
+ 2463 00c3 07       		.uleb128 0x7
+ 2464 00c4 62756600 		.ascii	"buf\000"
+ 2465 00c8 05       		.byte	0x5
+ 2466 00c9 0C       		.byte	0xc
+ 2467 00ca E7000000 		.4byte	0xe7
+ 2468 00ce 4C       		.byte	0x4c
+ 2469 00cf 00       		.byte	0
+ 2470 00d0 08       		.uleb128 0x8
+ 2471 00d1 76000000 		.4byte	0x76
+ 2472 00d5 E0000000 		.4byte	0xe0
+ 2473 00d9 09       		.uleb128 0x9
+ 2474 00da E0000000 		.4byte	0xe0
+ 2475 00de 07       		.byte	0x7
+ 2476 00df 00       		.byte	0
+ 2477 00e0 02       		.uleb128 0x2
+ 2478 00e1 04       		.byte	0x4
+ 2479 00e2 07       		.byte	0x7
+ 2480 00e3 7D010000 		.4byte	.LASF16
+ 2481 00e7 08       		.uleb128 0x8
+ 2482 00e8 33000000 		.4byte	0x33
+ 2483 00ec F7000000 		.4byte	0xf7
+ 2484 00f0 09       		.uleb128 0x9
+ 2485 00f1 E0000000 		.4byte	0xe0
+ 2486 00f5 7F       		.byte	0x7f
+ 2487 00f6 00       		.byte	0
+ 2488 00f7 03       		.uleb128 0x3
+ 2489 00f8 FC010000 		.4byte	.LASF17
+ 2490 00fc 05       		.byte	0x5
+ 2491 00fd 0D       		.byte	0xd
+ 2492 00fe 93000000 		.4byte	0x93
+ 2493 0102 0A       		.uleb128 0xa
+ 2494 0103 52000000 		.4byte	.LASF29
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 50
+
+
+ 2495 0107 01       		.byte	0x1
+ 2496 0108 5B       		.byte	0x5b
+ 2497 0109 68000000 		.4byte	0x68
+ 2498 010d 00000000 		.4byte	.LFB0
+ 2499 0111 040C0000 		.4byte	.LFE0-.LFB0
+ 2500 0115 01       		.uleb128 0x1
+ 2501 0116 9C       		.byte	0x9c
+ 2502 0117 7C010000 		.4byte	0x17c
+ 2503 011b 0B       		.uleb128 0xb
+ 2504 011c 6D6400   		.ascii	"md\000"
+ 2505 011f 01       		.byte	0x1
+ 2506 0120 5B       		.byte	0x5b
+ 2507 0121 7C010000 		.4byte	0x17c
+ 2508 0125 00000000 		.4byte	.LLST0
+ 2509 0129 0B       		.uleb128 0xb
+ 2510 012a 62756600 		.ascii	"buf\000"
+ 2511 012e 01       		.byte	0x1
+ 2512 012f 5B       		.byte	0x5b
+ 2513 0130 82010000 		.4byte	0x182
+ 2514 0134 2B000000 		.4byte	.LLST1
+ 2515 0138 0C       		.uleb128 0xc
+ 2516 0139 5300     		.ascii	"S\000"
+ 2517 013b 01       		.byte	0x1
+ 2518 013c 5D       		.byte	0x5d
+ 2519 013d D0000000 		.4byte	0xd0
+ 2520 0141 03       		.uleb128 0x3
+ 2521 0142 91       		.byte	0x91
+ 2522 0143 987F     		.sleb128 -104
+ 2523 0145 0C       		.uleb128 0xc
+ 2524 0146 5700     		.ascii	"W\000"
+ 2525 0148 01       		.byte	0x1
+ 2526 0149 5D       		.byte	0x5d
+ 2527 014a 88010000 		.4byte	0x188
+ 2528 014e 03       		.uleb128 0x3
+ 2529 014f 91       		.byte	0x91
+ 2530 0150 987A     		.sleb128 -744
+ 2531 0152 0D       		.uleb128 0xd
+ 2532 0153 743000   		.ascii	"t0\000"
+ 2533 0156 01       		.byte	0x1
+ 2534 0157 5D       		.byte	0x5d
+ 2535 0158 76000000 		.4byte	0x76
+ 2536 015c 4C000000 		.4byte	.LLST2
+ 2537 0160 0D       		.uleb128 0xd
+ 2538 0161 743100   		.ascii	"t1\000"
+ 2539 0164 01       		.byte	0x1
+ 2540 0165 5D       		.byte	0x5d
+ 2541 0166 76000000 		.4byte	0x76
+ 2542 016a 8F010000 		.4byte	.LLST3
+ 2543 016e 0D       		.uleb128 0xd
+ 2544 016f 6900     		.ascii	"i\000"
+ 2545 0171 01       		.byte	0x1
+ 2546 0172 5E       		.byte	0x5e
+ 2547 0173 68000000 		.4byte	0x68
+ 2548 0177 47020000 		.4byte	.LLST4
+ 2549 017b 00       		.byte	0
+ 2550 017c 0E       		.uleb128 0xe
+ 2551 017d 04       		.byte	0x4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 51
+
+
+ 2552 017e F7000000 		.4byte	0xf7
+ 2553 0182 0E       		.uleb128 0xe
+ 2554 0183 04       		.byte	0x4
+ 2555 0184 33000000 		.4byte	0x33
+ 2556 0188 08       		.uleb128 0x8
+ 2557 0189 76000000 		.4byte	0x76
+ 2558 018d 98010000 		.4byte	0x198
+ 2559 0191 09       		.uleb128 0x9
+ 2560 0192 E0000000 		.4byte	0xe0
+ 2561 0196 4F       		.byte	0x4f
+ 2562 0197 00       		.byte	0
+ 2563 0198 0F       		.uleb128 0xf
+ 2564 0199 21000000 		.4byte	.LASF18
+ 2565 019d 01       		.byte	0x1
+ 2566 019e 93       		.byte	0x93
+ 2567 019f 68000000 		.4byte	0x68
+ 2568 01a3 00000000 		.4byte	.LFB1
+ 2569 01a7 98000000 		.4byte	.LFE1-.LFB1
+ 2570 01ab 01       		.uleb128 0x1
+ 2571 01ac 9C       		.byte	0x9c
+ 2572 01ad C0010000 		.4byte	0x1c0
+ 2573 01b1 0B       		.uleb128 0xb
+ 2574 01b2 6D6400   		.ascii	"md\000"
+ 2575 01b5 01       		.byte	0x1
+ 2576 01b6 93       		.byte	0x93
+ 2577 01b7 7C010000 		.4byte	0x17c
+ 2578 01bb CD020000 		.4byte	.LLST5
+ 2579 01bf 00       		.byte	0
+ 2580 01c0 0F       		.uleb128 0xf
+ 2581 01c1 2D000000 		.4byte	.LASF19
+ 2582 01c5 01       		.byte	0x1
+ 2583 01c6 AB       		.byte	0xab
+ 2584 01c7 68000000 		.4byte	0x68
+ 2585 01cb 00000000 		.4byte	.LFB2
+ 2586 01cf AA000000 		.4byte	.LFE2-.LFB2
+ 2587 01d3 01       		.uleb128 0x1
+ 2588 01d4 9C       		.byte	0x9c
+ 2589 01d5 5F020000 		.4byte	0x25f
+ 2590 01d9 0B       		.uleb128 0xb
+ 2591 01da 6D6400   		.ascii	"md\000"
+ 2592 01dd 01       		.byte	0x1
+ 2593 01de AB       		.byte	0xab
+ 2594 01df 7C010000 		.4byte	0x17c
+ 2595 01e3 07030000 		.4byte	.LLST6
+ 2596 01e7 0B       		.uleb128 0xb
+ 2597 01e8 696E00   		.ascii	"in\000"
+ 2598 01eb 01       		.byte	0x1
+ 2599 01ec AB       		.byte	0xab
+ 2600 01ed 5F020000 		.4byte	0x25f
+ 2601 01f1 75030000 		.4byte	.LLST7
+ 2602 01f5 10       		.uleb128 0x10
+ 2603 01f6 7E000000 		.4byte	.LASF20
+ 2604 01fa 01       		.byte	0x1
+ 2605 01fb AB       		.byte	0xab
+ 2606 01fc 81000000 		.4byte	0x81
+ 2607 0200 A9030000 		.4byte	.LLST8
+ 2608 0204 0D       		.uleb128 0xd
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 52
+
+
+ 2609 0205 6E00     		.ascii	"n\000"
+ 2610 0207 01       		.byte	0x1
+ 2611 0208 AD       		.byte	0xad
+ 2612 0209 81000000 		.4byte	0x81
+ 2613 020d DD030000 		.4byte	.LLST9
+ 2614 0211 0D       		.uleb128 0xd
+ 2615 0212 6900     		.ascii	"i\000"
+ 2616 0214 01       		.byte	0x1
+ 2617 0215 AE       		.byte	0xae
+ 2618 0216 81000000 		.4byte	0x81
+ 2619 021a F0030000 		.4byte	.LLST10
+ 2620 021e 0D       		.uleb128 0xd
+ 2621 021f 65727200 		.ascii	"err\000"
+ 2622 0223 01       		.byte	0x1
+ 2623 0224 AF       		.byte	0xaf
+ 2624 0225 68000000 		.4byte	0x68
+ 2625 0229 0F040000 		.4byte	.LLST11
+ 2626 022d 11       		.uleb128 0x11
+ 2627 022e 2A000000 		.4byte	.LVL59
+ 2628 0232 02010000 		.4byte	0x102
+ 2629 0236 47020000 		.4byte	0x247
+ 2630 023a 12       		.uleb128 0x12
+ 2631 023b 01       		.uleb128 0x1
+ 2632 023c 50       		.byte	0x50
+ 2633 023d 02       		.uleb128 0x2
+ 2634 023e 74       		.byte	0x74
+ 2635 023f 00       		.sleb128 0
+ 2636 0240 12       		.uleb128 0x12
+ 2637 0241 01       		.uleb128 0x1
+ 2638 0242 51       		.byte	0x51
+ 2639 0243 02       		.uleb128 0x2
+ 2640 0244 75       		.byte	0x75
+ 2641 0245 00       		.sleb128 0
+ 2642 0246 00       		.byte	0
+ 2643 0247 13       		.uleb128 0x13
+ 2644 0248 7C000000 		.4byte	.LVL68
+ 2645 024c 02010000 		.4byte	0x102
+ 2646 0250 12       		.uleb128 0x12
+ 2647 0251 01       		.uleb128 0x1
+ 2648 0252 50       		.byte	0x50
+ 2649 0253 02       		.uleb128 0x2
+ 2650 0254 74       		.byte	0x74
+ 2651 0255 00       		.sleb128 0
+ 2652 0256 12       		.uleb128 0x12
+ 2653 0257 01       		.uleb128 0x1
+ 2654 0258 51       		.byte	0x51
+ 2655 0259 03       		.uleb128 0x3
+ 2656 025a 74       		.byte	0x74
+ 2657 025b CC00     		.sleb128 76
+ 2658 025d 00       		.byte	0
+ 2659 025e 00       		.byte	0
+ 2660 025f 0E       		.uleb128 0xe
+ 2661 0260 04       		.byte	0x4
+ 2662 0261 65020000 		.4byte	0x265
+ 2663 0265 14       		.uleb128 0x14
+ 2664 0266 33000000 		.4byte	0x33
+ 2665 026a 0F       		.uleb128 0xf
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 53
+
+
+ 2666 026b 94010000 		.4byte	.LASF21
+ 2667 026f 01       		.byte	0x1
+ 2668 0270 DA       		.byte	0xda
+ 2669 0271 68000000 		.4byte	0x68
+ 2670 0275 00000000 		.4byte	.LFB3
+ 2671 0279 F8000000 		.4byte	.LFE3-.LFB3
+ 2672 027d 01       		.uleb128 0x1
+ 2673 027e 9C       		.byte	0x9c
+ 2674 027f E0020000 		.4byte	0x2e0
+ 2675 0283 0B       		.uleb128 0xb
+ 2676 0284 6D6400   		.ascii	"md\000"
+ 2677 0287 01       		.byte	0x1
+ 2678 0288 DA       		.byte	0xda
+ 2679 0289 7C010000 		.4byte	0x17c
+ 2680 028d 2D040000 		.4byte	.LLST12
+ 2681 0291 0B       		.uleb128 0xb
+ 2682 0292 6F757400 		.ascii	"out\000"
+ 2683 0296 01       		.byte	0x1
+ 2684 0297 DA       		.byte	0xda
+ 2685 0298 82010000 		.4byte	0x182
+ 2686 029c 9B040000 		.4byte	.LLST13
+ 2687 02a0 0D       		.uleb128 0xd
+ 2688 02a1 6900     		.ascii	"i\000"
+ 2689 02a3 01       		.byte	0x1
+ 2690 02a4 DC       		.byte	0xdc
+ 2691 02a5 68000000 		.4byte	0x68
+ 2692 02a9 DD040000 		.4byte	.LLST14
+ 2693 02ad 11       		.uleb128 0x11
+ 2694 02ae 52000000 		.4byte	.LVL83
+ 2695 02b2 02010000 		.4byte	0x102
+ 2696 02b6 C8020000 		.4byte	0x2c8
+ 2697 02ba 12       		.uleb128 0x12
+ 2698 02bb 01       		.uleb128 0x1
+ 2699 02bc 50       		.byte	0x50
+ 2700 02bd 02       		.uleb128 0x2
+ 2701 02be 74       		.byte	0x74
+ 2702 02bf 00       		.sleb128 0
+ 2703 02c0 12       		.uleb128 0x12
+ 2704 02c1 01       		.uleb128 0x1
+ 2705 02c2 51       		.byte	0x51
+ 2706 02c3 03       		.uleb128 0x3
+ 2707 02c4 74       		.byte	0x74
+ 2708 02c5 CC00     		.sleb128 76
+ 2709 02c7 00       		.byte	0
+ 2710 02c8 13       		.uleb128 0x13
+ 2711 02c9 A4000000 		.4byte	.LVL84
+ 2712 02cd 02010000 		.4byte	0x102
+ 2713 02d1 12       		.uleb128 0x12
+ 2714 02d2 01       		.uleb128 0x1
+ 2715 02d3 50       		.byte	0x50
+ 2716 02d4 02       		.uleb128 0x2
+ 2717 02d5 74       		.byte	0x74
+ 2718 02d6 00       		.sleb128 0
+ 2719 02d7 12       		.uleb128 0x12
+ 2720 02d8 01       		.uleb128 0x1
+ 2721 02d9 51       		.byte	0x51
+ 2722 02da 03       		.uleb128 0x3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 54
+
+
+ 2723 02db 74       		.byte	0x74
+ 2724 02dc CC00     		.sleb128 76
+ 2725 02de 00       		.byte	0
+ 2726 02df 00       		.byte	0
+ 2727 02e0 15       		.uleb128 0x15
+ 2728 02e1 CD010000 		.4byte	.LASF22
+ 2729 02e5 01       		.byte	0x1
+ 2730 02e6 0B01     		.2byte	0x10b
+ 2731 02e8 68000000 		.4byte	0x68
+ 2732 02ec 00000000 		.4byte	.LFB4
+ 2733 02f0 2E000000 		.4byte	.LFE4-.LFB4
+ 2734 02f4 01       		.uleb128 0x1
+ 2735 02f5 9C       		.byte	0x9c
+ 2736 02f6 95030000 		.4byte	0x395
+ 2737 02fa 16       		.uleb128 0x16
+ 2738 02fb 00000000 		.4byte	.LASF23
+ 2739 02ff 01       		.byte	0x1
+ 2740 0300 0B01     		.2byte	0x10b
+ 2741 0302 5F020000 		.4byte	0x25f
+ 2742 0306 14050000 		.4byte	.LLST15
+ 2743 030a 16       		.uleb128 0x16
+ 2744 030b 08000000 		.4byte	.LASF24
+ 2745 030f 01       		.byte	0x1
+ 2746 0310 0B01     		.2byte	0x10b
+ 2747 0312 81000000 		.4byte	0x81
+ 2748 0316 40050000 		.4byte	.LLST16
+ 2749 031a 17       		.uleb128 0x17
+ 2750 031b 6F757400 		.ascii	"out\000"
+ 2751 031f 01       		.byte	0x1
+ 2752 0320 0B01     		.2byte	0x10b
+ 2753 0322 82010000 		.4byte	0x182
+ 2754 0326 6C050000 		.4byte	.LLST17
+ 2755 032a 18       		.uleb128 0x18
+ 2756 032b 63747800 		.ascii	"ctx\000"
+ 2757 032f 01       		.byte	0x1
+ 2758 0330 0D01     		.2byte	0x10d
+ 2759 0332 F7000000 		.4byte	0xf7
+ 2760 0336 03       		.uleb128 0x3
+ 2761 0337 91       		.byte	0x91
+ 2762 0338 A07E     		.sleb128 -224
+ 2763 033a 19       		.uleb128 0x19
+ 2764 033b 72657400 		.ascii	"ret\000"
+ 2765 033f 01       		.byte	0x1
+ 2766 0340 0E01     		.2byte	0x10e
+ 2767 0342 68000000 		.4byte	0x68
+ 2768 0346 98050000 		.4byte	.LLST18
+ 2769 034a 11       		.uleb128 0x11
+ 2770 034b 10000000 		.4byte	.LVL98
+ 2771 034f 98010000 		.4byte	0x198
+ 2772 0353 5E030000 		.4byte	0x35e
+ 2773 0357 12       		.uleb128 0x12
+ 2774 0358 01       		.uleb128 0x1
+ 2775 0359 50       		.byte	0x50
+ 2776 035a 02       		.uleb128 0x2
+ 2777 035b 7D       		.byte	0x7d
+ 2778 035c 00       		.sleb128 0
+ 2779 035d 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 55
+
+
+ 2780 035e 11       		.uleb128 0x11
+ 2781 035f 1E000000 		.4byte	.LVL100
+ 2782 0363 C0010000 		.4byte	0x1c0
+ 2783 0367 7E030000 		.4byte	0x37e
+ 2784 036b 12       		.uleb128 0x12
+ 2785 036c 01       		.uleb128 0x1
+ 2786 036d 50       		.byte	0x50
+ 2787 036e 02       		.uleb128 0x2
+ 2788 036f 7D       		.byte	0x7d
+ 2789 0370 00       		.sleb128 0
+ 2790 0371 12       		.uleb128 0x12
+ 2791 0372 01       		.uleb128 0x1
+ 2792 0373 51       		.byte	0x51
+ 2793 0374 02       		.uleb128 0x2
+ 2794 0375 74       		.byte	0x74
+ 2795 0376 00       		.sleb128 0
+ 2796 0377 12       		.uleb128 0x12
+ 2797 0378 01       		.uleb128 0x1
+ 2798 0379 52       		.byte	0x52
+ 2799 037a 02       		.uleb128 0x2
+ 2800 037b 76       		.byte	0x76
+ 2801 037c 00       		.sleb128 0
+ 2802 037d 00       		.byte	0
+ 2803 037e 13       		.uleb128 0x13
+ 2804 037f 2A000000 		.4byte	.LVL102
+ 2805 0383 6A020000 		.4byte	0x26a
+ 2806 0387 12       		.uleb128 0x12
+ 2807 0388 01       		.uleb128 0x1
+ 2808 0389 50       		.byte	0x50
+ 2809 038a 02       		.uleb128 0x2
+ 2810 038b 7D       		.byte	0x7d
+ 2811 038c 00       		.sleb128 0
+ 2812 038d 12       		.uleb128 0x12
+ 2813 038e 01       		.uleb128 0x1
+ 2814 038f 51       		.byte	0x51
+ 2815 0390 02       		.uleb128 0x2
+ 2816 0391 75       		.byte	0x75
+ 2817 0392 00       		.sleb128 0
+ 2818 0393 00       		.byte	0
+ 2819 0394 00       		.byte	0
+ 2820 0395 08       		.uleb128 0x8
+ 2821 0396 A5030000 		.4byte	0x3a5
+ 2822 039a A5030000 		.4byte	0x3a5
+ 2823 039e 09       		.uleb128 0x9
+ 2824 039f E0000000 		.4byte	0xe0
+ 2825 03a3 4F       		.byte	0x4f
+ 2826 03a4 00       		.byte	0
+ 2827 03a5 14       		.uleb128 0x14
+ 2828 03a6 76000000 		.4byte	0x76
+ 2829 03aa 0C       		.uleb128 0xc
+ 2830 03ab 4B00     		.ascii	"K\000"
+ 2831 03ad 01       		.byte	0x1
+ 2832 03ae 10       		.byte	0x10
+ 2833 03af B9030000 		.4byte	0x3b9
+ 2834 03b3 05       		.uleb128 0x5
+ 2835 03b4 03       		.byte	0x3
+ 2836 03b5 00000000 		.4byte	K
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 56
+
+
+ 2837 03b9 14       		.uleb128 0x14
+ 2838 03ba 95030000 		.4byte	0x395
+ 2839 03be 00       		.byte	0
+ 2840              		.section	.debug_abbrev,"",%progbits
+ 2841              	.Ldebug_abbrev0:
+ 2842 0000 01       		.uleb128 0x1
+ 2843 0001 11       		.uleb128 0x11
+ 2844 0002 01       		.byte	0x1
+ 2845 0003 25       		.uleb128 0x25
+ 2846 0004 0E       		.uleb128 0xe
+ 2847 0005 13       		.uleb128 0x13
+ 2848 0006 0B       		.uleb128 0xb
+ 2849 0007 03       		.uleb128 0x3
+ 2850 0008 0E       		.uleb128 0xe
+ 2851 0009 1B       		.uleb128 0x1b
+ 2852 000a 0E       		.uleb128 0xe
+ 2853 000b 55       		.uleb128 0x55
+ 2854 000c 17       		.uleb128 0x17
+ 2855 000d 11       		.uleb128 0x11
+ 2856 000e 01       		.uleb128 0x1
+ 2857 000f 10       		.uleb128 0x10
+ 2858 0010 17       		.uleb128 0x17
+ 2859 0011 00       		.byte	0
+ 2860 0012 00       		.byte	0
+ 2861 0013 02       		.uleb128 0x2
+ 2862 0014 24       		.uleb128 0x24
+ 2863 0015 00       		.byte	0
+ 2864 0016 0B       		.uleb128 0xb
+ 2865 0017 0B       		.uleb128 0xb
+ 2866 0018 3E       		.uleb128 0x3e
+ 2867 0019 0B       		.uleb128 0xb
+ 2868 001a 03       		.uleb128 0x3
+ 2869 001b 0E       		.uleb128 0xe
+ 2870 001c 00       		.byte	0
+ 2871 001d 00       		.byte	0
+ 2872 001e 03       		.uleb128 0x3
+ 2873 001f 16       		.uleb128 0x16
+ 2874 0020 00       		.byte	0
+ 2875 0021 03       		.uleb128 0x3
+ 2876 0022 0E       		.uleb128 0xe
+ 2877 0023 3A       		.uleb128 0x3a
+ 2878 0024 0B       		.uleb128 0xb
+ 2879 0025 3B       		.uleb128 0x3b
+ 2880 0026 0B       		.uleb128 0xb
+ 2881 0027 49       		.uleb128 0x49
+ 2882 0028 13       		.uleb128 0x13
+ 2883 0029 00       		.byte	0
+ 2884 002a 00       		.byte	0
+ 2885 002b 04       		.uleb128 0x4
+ 2886 002c 24       		.uleb128 0x24
+ 2887 002d 00       		.byte	0
+ 2888 002e 0B       		.uleb128 0xb
+ 2889 002f 0B       		.uleb128 0xb
+ 2890 0030 3E       		.uleb128 0x3e
+ 2891 0031 0B       		.uleb128 0xb
+ 2892 0032 03       		.uleb128 0x3
+ 2893 0033 08       		.uleb128 0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 57
+
+
+ 2894 0034 00       		.byte	0
+ 2895 0035 00       		.byte	0
+ 2896 0036 05       		.uleb128 0x5
+ 2897 0037 13       		.uleb128 0x13
+ 2898 0038 01       		.byte	0x1
+ 2899 0039 03       		.uleb128 0x3
+ 2900 003a 0E       		.uleb128 0xe
+ 2901 003b 0B       		.uleb128 0xb
+ 2902 003c 0B       		.uleb128 0xb
+ 2903 003d 3A       		.uleb128 0x3a
+ 2904 003e 0B       		.uleb128 0xb
+ 2905 003f 3B       		.uleb128 0x3b
+ 2906 0040 0B       		.uleb128 0xb
+ 2907 0041 01       		.uleb128 0x1
+ 2908 0042 13       		.uleb128 0x13
+ 2909 0043 00       		.byte	0
+ 2910 0044 00       		.byte	0
+ 2911 0045 06       		.uleb128 0x6
+ 2912 0046 0D       		.uleb128 0xd
+ 2913 0047 00       		.byte	0
+ 2914 0048 03       		.uleb128 0x3
+ 2915 0049 0E       		.uleb128 0xe
+ 2916 004a 3A       		.uleb128 0x3a
+ 2917 004b 0B       		.uleb128 0xb
+ 2918 004c 3B       		.uleb128 0x3b
+ 2919 004d 0B       		.uleb128 0xb
+ 2920 004e 49       		.uleb128 0x49
+ 2921 004f 13       		.uleb128 0x13
+ 2922 0050 38       		.uleb128 0x38
+ 2923 0051 0B       		.uleb128 0xb
+ 2924 0052 00       		.byte	0
+ 2925 0053 00       		.byte	0
+ 2926 0054 07       		.uleb128 0x7
+ 2927 0055 0D       		.uleb128 0xd
+ 2928 0056 00       		.byte	0
+ 2929 0057 03       		.uleb128 0x3
+ 2930 0058 08       		.uleb128 0x8
+ 2931 0059 3A       		.uleb128 0x3a
+ 2932 005a 0B       		.uleb128 0xb
+ 2933 005b 3B       		.uleb128 0x3b
+ 2934 005c 0B       		.uleb128 0xb
+ 2935 005d 49       		.uleb128 0x49
+ 2936 005e 13       		.uleb128 0x13
+ 2937 005f 38       		.uleb128 0x38
+ 2938 0060 0B       		.uleb128 0xb
+ 2939 0061 00       		.byte	0
+ 2940 0062 00       		.byte	0
+ 2941 0063 08       		.uleb128 0x8
+ 2942 0064 01       		.uleb128 0x1
+ 2943 0065 01       		.byte	0x1
+ 2944 0066 49       		.uleb128 0x49
+ 2945 0067 13       		.uleb128 0x13
+ 2946 0068 01       		.uleb128 0x1
+ 2947 0069 13       		.uleb128 0x13
+ 2948 006a 00       		.byte	0
+ 2949 006b 00       		.byte	0
+ 2950 006c 09       		.uleb128 0x9
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 58
+
+
+ 2951 006d 21       		.uleb128 0x21
+ 2952 006e 00       		.byte	0
+ 2953 006f 49       		.uleb128 0x49
+ 2954 0070 13       		.uleb128 0x13
+ 2955 0071 2F       		.uleb128 0x2f
+ 2956 0072 0B       		.uleb128 0xb
+ 2957 0073 00       		.byte	0
+ 2958 0074 00       		.byte	0
+ 2959 0075 0A       		.uleb128 0xa
+ 2960 0076 2E       		.uleb128 0x2e
+ 2961 0077 01       		.byte	0x1
+ 2962 0078 03       		.uleb128 0x3
+ 2963 0079 0E       		.uleb128 0xe
+ 2964 007a 3A       		.uleb128 0x3a
+ 2965 007b 0B       		.uleb128 0xb
+ 2966 007c 3B       		.uleb128 0x3b
+ 2967 007d 0B       		.uleb128 0xb
+ 2968 007e 27       		.uleb128 0x27
+ 2969 007f 19       		.uleb128 0x19
+ 2970 0080 49       		.uleb128 0x49
+ 2971 0081 13       		.uleb128 0x13
+ 2972 0082 11       		.uleb128 0x11
+ 2973 0083 01       		.uleb128 0x1
+ 2974 0084 12       		.uleb128 0x12
+ 2975 0085 06       		.uleb128 0x6
+ 2976 0086 40       		.uleb128 0x40
+ 2977 0087 18       		.uleb128 0x18
+ 2978 0088 9742     		.uleb128 0x2117
+ 2979 008a 19       		.uleb128 0x19
+ 2980 008b 01       		.uleb128 0x1
+ 2981 008c 13       		.uleb128 0x13
+ 2982 008d 00       		.byte	0
+ 2983 008e 00       		.byte	0
+ 2984 008f 0B       		.uleb128 0xb
+ 2985 0090 05       		.uleb128 0x5
+ 2986 0091 00       		.byte	0
+ 2987 0092 03       		.uleb128 0x3
+ 2988 0093 08       		.uleb128 0x8
+ 2989 0094 3A       		.uleb128 0x3a
+ 2990 0095 0B       		.uleb128 0xb
+ 2991 0096 3B       		.uleb128 0x3b
+ 2992 0097 0B       		.uleb128 0xb
+ 2993 0098 49       		.uleb128 0x49
+ 2994 0099 13       		.uleb128 0x13
+ 2995 009a 02       		.uleb128 0x2
+ 2996 009b 17       		.uleb128 0x17
+ 2997 009c 00       		.byte	0
+ 2998 009d 00       		.byte	0
+ 2999 009e 0C       		.uleb128 0xc
+ 3000 009f 34       		.uleb128 0x34
+ 3001 00a0 00       		.byte	0
+ 3002 00a1 03       		.uleb128 0x3
+ 3003 00a2 08       		.uleb128 0x8
+ 3004 00a3 3A       		.uleb128 0x3a
+ 3005 00a4 0B       		.uleb128 0xb
+ 3006 00a5 3B       		.uleb128 0x3b
+ 3007 00a6 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 59
+
+
+ 3008 00a7 49       		.uleb128 0x49
+ 3009 00a8 13       		.uleb128 0x13
+ 3010 00a9 02       		.uleb128 0x2
+ 3011 00aa 18       		.uleb128 0x18
+ 3012 00ab 00       		.byte	0
+ 3013 00ac 00       		.byte	0
+ 3014 00ad 0D       		.uleb128 0xd
+ 3015 00ae 34       		.uleb128 0x34
+ 3016 00af 00       		.byte	0
+ 3017 00b0 03       		.uleb128 0x3
+ 3018 00b1 08       		.uleb128 0x8
+ 3019 00b2 3A       		.uleb128 0x3a
+ 3020 00b3 0B       		.uleb128 0xb
+ 3021 00b4 3B       		.uleb128 0x3b
+ 3022 00b5 0B       		.uleb128 0xb
+ 3023 00b6 49       		.uleb128 0x49
+ 3024 00b7 13       		.uleb128 0x13
+ 3025 00b8 02       		.uleb128 0x2
+ 3026 00b9 17       		.uleb128 0x17
+ 3027 00ba 00       		.byte	0
+ 3028 00bb 00       		.byte	0
+ 3029 00bc 0E       		.uleb128 0xe
+ 3030 00bd 0F       		.uleb128 0xf
+ 3031 00be 00       		.byte	0
+ 3032 00bf 0B       		.uleb128 0xb
+ 3033 00c0 0B       		.uleb128 0xb
+ 3034 00c1 49       		.uleb128 0x49
+ 3035 00c2 13       		.uleb128 0x13
+ 3036 00c3 00       		.byte	0
+ 3037 00c4 00       		.byte	0
+ 3038 00c5 0F       		.uleb128 0xf
+ 3039 00c6 2E       		.uleb128 0x2e
+ 3040 00c7 01       		.byte	0x1
+ 3041 00c8 3F       		.uleb128 0x3f
+ 3042 00c9 19       		.uleb128 0x19
+ 3043 00ca 03       		.uleb128 0x3
+ 3044 00cb 0E       		.uleb128 0xe
+ 3045 00cc 3A       		.uleb128 0x3a
+ 3046 00cd 0B       		.uleb128 0xb
+ 3047 00ce 3B       		.uleb128 0x3b
+ 3048 00cf 0B       		.uleb128 0xb
+ 3049 00d0 27       		.uleb128 0x27
+ 3050 00d1 19       		.uleb128 0x19
+ 3051 00d2 49       		.uleb128 0x49
+ 3052 00d3 13       		.uleb128 0x13
+ 3053 00d4 11       		.uleb128 0x11
+ 3054 00d5 01       		.uleb128 0x1
+ 3055 00d6 12       		.uleb128 0x12
+ 3056 00d7 06       		.uleb128 0x6
+ 3057 00d8 40       		.uleb128 0x40
+ 3058 00d9 18       		.uleb128 0x18
+ 3059 00da 9742     		.uleb128 0x2117
+ 3060 00dc 19       		.uleb128 0x19
+ 3061 00dd 01       		.uleb128 0x1
+ 3062 00de 13       		.uleb128 0x13
+ 3063 00df 00       		.byte	0
+ 3064 00e0 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 60
+
+
+ 3065 00e1 10       		.uleb128 0x10
+ 3066 00e2 05       		.uleb128 0x5
+ 3067 00e3 00       		.byte	0
+ 3068 00e4 03       		.uleb128 0x3
+ 3069 00e5 0E       		.uleb128 0xe
+ 3070 00e6 3A       		.uleb128 0x3a
+ 3071 00e7 0B       		.uleb128 0xb
+ 3072 00e8 3B       		.uleb128 0x3b
+ 3073 00e9 0B       		.uleb128 0xb
+ 3074 00ea 49       		.uleb128 0x49
+ 3075 00eb 13       		.uleb128 0x13
+ 3076 00ec 02       		.uleb128 0x2
+ 3077 00ed 17       		.uleb128 0x17
+ 3078 00ee 00       		.byte	0
+ 3079 00ef 00       		.byte	0
+ 3080 00f0 11       		.uleb128 0x11
+ 3081 00f1 898201   		.uleb128 0x4109
+ 3082 00f4 01       		.byte	0x1
+ 3083 00f5 11       		.uleb128 0x11
+ 3084 00f6 01       		.uleb128 0x1
+ 3085 00f7 31       		.uleb128 0x31
+ 3086 00f8 13       		.uleb128 0x13
+ 3087 00f9 01       		.uleb128 0x1
+ 3088 00fa 13       		.uleb128 0x13
+ 3089 00fb 00       		.byte	0
+ 3090 00fc 00       		.byte	0
+ 3091 00fd 12       		.uleb128 0x12
+ 3092 00fe 8A8201   		.uleb128 0x410a
+ 3093 0101 00       		.byte	0
+ 3094 0102 02       		.uleb128 0x2
+ 3095 0103 18       		.uleb128 0x18
+ 3096 0104 9142     		.uleb128 0x2111
+ 3097 0106 18       		.uleb128 0x18
+ 3098 0107 00       		.byte	0
+ 3099 0108 00       		.byte	0
+ 3100 0109 13       		.uleb128 0x13
+ 3101 010a 898201   		.uleb128 0x4109
+ 3102 010d 01       		.byte	0x1
+ 3103 010e 11       		.uleb128 0x11
+ 3104 010f 01       		.uleb128 0x1
+ 3105 0110 31       		.uleb128 0x31
+ 3106 0111 13       		.uleb128 0x13
+ 3107 0112 00       		.byte	0
+ 3108 0113 00       		.byte	0
+ 3109 0114 14       		.uleb128 0x14
+ 3110 0115 26       		.uleb128 0x26
+ 3111 0116 00       		.byte	0
+ 3112 0117 49       		.uleb128 0x49
+ 3113 0118 13       		.uleb128 0x13
+ 3114 0119 00       		.byte	0
+ 3115 011a 00       		.byte	0
+ 3116 011b 15       		.uleb128 0x15
+ 3117 011c 2E       		.uleb128 0x2e
+ 3118 011d 01       		.byte	0x1
+ 3119 011e 3F       		.uleb128 0x3f
+ 3120 011f 19       		.uleb128 0x19
+ 3121 0120 03       		.uleb128 0x3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 61
+
+
+ 3122 0121 0E       		.uleb128 0xe
+ 3123 0122 3A       		.uleb128 0x3a
+ 3124 0123 0B       		.uleb128 0xb
+ 3125 0124 3B       		.uleb128 0x3b
+ 3126 0125 05       		.uleb128 0x5
+ 3127 0126 27       		.uleb128 0x27
+ 3128 0127 19       		.uleb128 0x19
+ 3129 0128 49       		.uleb128 0x49
+ 3130 0129 13       		.uleb128 0x13
+ 3131 012a 11       		.uleb128 0x11
+ 3132 012b 01       		.uleb128 0x1
+ 3133 012c 12       		.uleb128 0x12
+ 3134 012d 06       		.uleb128 0x6
+ 3135 012e 40       		.uleb128 0x40
+ 3136 012f 18       		.uleb128 0x18
+ 3137 0130 9742     		.uleb128 0x2117
+ 3138 0132 19       		.uleb128 0x19
+ 3139 0133 01       		.uleb128 0x1
+ 3140 0134 13       		.uleb128 0x13
+ 3141 0135 00       		.byte	0
+ 3142 0136 00       		.byte	0
+ 3143 0137 16       		.uleb128 0x16
+ 3144 0138 05       		.uleb128 0x5
+ 3145 0139 00       		.byte	0
+ 3146 013a 03       		.uleb128 0x3
+ 3147 013b 0E       		.uleb128 0xe
+ 3148 013c 3A       		.uleb128 0x3a
+ 3149 013d 0B       		.uleb128 0xb
+ 3150 013e 3B       		.uleb128 0x3b
+ 3151 013f 05       		.uleb128 0x5
+ 3152 0140 49       		.uleb128 0x49
+ 3153 0141 13       		.uleb128 0x13
+ 3154 0142 02       		.uleb128 0x2
+ 3155 0143 17       		.uleb128 0x17
+ 3156 0144 00       		.byte	0
+ 3157 0145 00       		.byte	0
+ 3158 0146 17       		.uleb128 0x17
+ 3159 0147 05       		.uleb128 0x5
+ 3160 0148 00       		.byte	0
+ 3161 0149 03       		.uleb128 0x3
+ 3162 014a 08       		.uleb128 0x8
+ 3163 014b 3A       		.uleb128 0x3a
+ 3164 014c 0B       		.uleb128 0xb
+ 3165 014d 3B       		.uleb128 0x3b
+ 3166 014e 05       		.uleb128 0x5
+ 3167 014f 49       		.uleb128 0x49
+ 3168 0150 13       		.uleb128 0x13
+ 3169 0151 02       		.uleb128 0x2
+ 3170 0152 17       		.uleb128 0x17
+ 3171 0153 00       		.byte	0
+ 3172 0154 00       		.byte	0
+ 3173 0155 18       		.uleb128 0x18
+ 3174 0156 34       		.uleb128 0x34
+ 3175 0157 00       		.byte	0
+ 3176 0158 03       		.uleb128 0x3
+ 3177 0159 08       		.uleb128 0x8
+ 3178 015a 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 62
+
+
+ 3179 015b 0B       		.uleb128 0xb
+ 3180 015c 3B       		.uleb128 0x3b
+ 3181 015d 05       		.uleb128 0x5
+ 3182 015e 49       		.uleb128 0x49
+ 3183 015f 13       		.uleb128 0x13
+ 3184 0160 02       		.uleb128 0x2
+ 3185 0161 18       		.uleb128 0x18
+ 3186 0162 00       		.byte	0
+ 3187 0163 00       		.byte	0
+ 3188 0164 19       		.uleb128 0x19
+ 3189 0165 34       		.uleb128 0x34
+ 3190 0166 00       		.byte	0
+ 3191 0167 03       		.uleb128 0x3
+ 3192 0168 08       		.uleb128 0x8
+ 3193 0169 3A       		.uleb128 0x3a
+ 3194 016a 0B       		.uleb128 0xb
+ 3195 016b 3B       		.uleb128 0x3b
+ 3196 016c 05       		.uleb128 0x5
+ 3197 016d 49       		.uleb128 0x49
+ 3198 016e 13       		.uleb128 0x13
+ 3199 016f 02       		.uleb128 0x2
+ 3200 0170 17       		.uleb128 0x17
+ 3201 0171 00       		.byte	0
+ 3202 0172 00       		.byte	0
+ 3203 0173 00       		.byte	0
+ 3204              		.section	.debug_loc,"",%progbits
+ 3205              	.Ldebug_loc0:
+ 3206              	.LLST0:
+ 3207 0000 00000000 		.4byte	.LVL0
+ 3208 0004 16000000 		.4byte	.LVL2
+ 3209 0008 0100     		.2byte	0x1
+ 3210 000a 50       		.byte	0x50
+ 3211 000b 16000000 		.4byte	.LVL2
+ 3212 000f 38000000 		.4byte	.LVL6
+ 3213 0013 0100     		.2byte	0x1
+ 3214 0015 55       		.byte	0x55
+ 3215 0016 38000000 		.4byte	.LVL6
+ 3216 001a 040C0000 		.4byte	.LFE0
+ 3217 001e 0300     		.2byte	0x3
+ 3218 0020 91       		.byte	0x91
+ 3219 0021 947A     		.sleb128 -748
+ 3220 0023 00000000 		.4byte	0
+ 3221 0027 00000000 		.4byte	0
+ 3222              	.LLST1:
+ 3223 002b 00000000 		.4byte	.LVL0
+ 3224 002f 78000000 		.4byte	.LVL8
+ 3225 0033 0100     		.2byte	0x1
+ 3226 0035 51       		.byte	0x51
+ 3227 0036 78000000 		.4byte	.LVL8
+ 3228 003a 040C0000 		.4byte	.LFE0
+ 3229 003e 0400     		.2byte	0x4
+ 3230 0040 F3       		.byte	0xf3
+ 3231 0041 01       		.uleb128 0x1
+ 3232 0042 51       		.byte	0x51
+ 3233 0043 9F       		.byte	0x9f
+ 3234 0044 00000000 		.4byte	0
+ 3235 0048 00000000 		.4byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 63
+
+
+ 3236              	.LLST2:
+ 3237 004c 26020000 		.4byte	.LVL12
+ 3238 0050 C8020000 		.4byte	.LVL14
+ 3239 0054 0600     		.2byte	0x6
+ 3240 0056 52       		.byte	0x52
+ 3241 0057 93       		.byte	0x93
+ 3242 0058 04       		.uleb128 0x4
+ 3243 0059 53       		.byte	0x53
+ 3244 005a 93       		.byte	0x93
+ 3245 005b 04       		.uleb128 0x4
+ 3246 005c 7A030000 		.4byte	.LVL16
+ 3247 0060 7E030000 		.4byte	.LVL17
+ 3248 0064 0600     		.2byte	0x6
+ 3249 0066 56       		.byte	0x56
+ 3250 0067 93       		.byte	0x93
+ 3251 0068 04       		.uleb128 0x4
+ 3252 0069 57       		.byte	0x57
+ 3253 006a 93       		.byte	0x93
+ 3254 006b 04       		.uleb128 0x4
+ 3255 006c 7E030000 		.4byte	.LVL17
+ 3256 0070 6C040000 		.4byte	.LVL20
+ 3257 0074 0300     		.2byte	0x3
+ 3258 0076 91       		.byte	0x91
+ 3259 0077 8078     		.sleb128 -1024
+ 3260 0079 AA040000 		.4byte	.LVL21
+ 3261 007d 46050000 		.4byte	.LVL23
+ 3262 0081 0600     		.2byte	0x6
+ 3263 0083 52       		.byte	0x52
+ 3264 0084 93       		.byte	0x93
+ 3265 0085 04       		.uleb128 0x4
+ 3266 0086 53       		.byte	0x53
+ 3267 0087 93       		.byte	0x93
+ 3268 0088 04       		.uleb128 0x4
+ 3269 0089 46050000 		.4byte	.LVL23
+ 3270 008d 4A050000 		.4byte	.LVL24
+ 3271 0091 2800     		.2byte	0x28
+ 3272 0093 91       		.byte	0x91
+ 3273 0094 D077     		.sleb128 -1072
+ 3274 0096 F6       		.byte	0xf6
+ 3275 0097 08       		.byte	0x8
+ 3276 0098 25       		.uleb128 0x25
+ 3277 0099 7A       		.byte	0x7a
+ 3278 009a 02       		.sleb128 2
+ 3279 009b 33       		.byte	0x33
+ 3280 009c 24       		.byte	0x24
+ 3281 009d 91       		.byte	0x91
+ 3282 009e 00       		.sleb128 0
+ 3283 009f 22       		.byte	0x22
+ 3284 00a0 0A       		.byte	0xa
+ 3285 00a1 E802     		.2byte	0x2e8
+ 3286 00a3 1C       		.byte	0x1c
+ 3287 00a4 F6       		.byte	0xf6
+ 3288 00a5 08       		.byte	0x8
+ 3289 00a6 25       		.uleb128 0x25
+ 3290 00a7 22       		.byte	0x22
+ 3291 00a8 91       		.byte	0x91
+ 3292 00a9 D878     		.sleb128 -936
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 64
+
+
+ 3293 00ab F6       		.byte	0xf6
+ 3294 00ac 08       		.byte	0x8
+ 3295 00ad 25       		.uleb128 0x25
+ 3296 00ae 22       		.byte	0x22
+ 3297 00af 7A       		.byte	0x7a
+ 3298 00b0 02       		.sleb128 2
+ 3299 00b1 33       		.byte	0x33
+ 3300 00b2 24       		.byte	0x24
+ 3301 00b3 7B       		.byte	0x7b
+ 3302 00b4 00       		.sleb128 0
+ 3303 00b5 22       		.byte	0x22
+ 3304 00b6 F6       		.byte	0xf6
+ 3305 00b7 08       		.byte	0x8
+ 3306 00b8 25       		.uleb128 0x25
+ 3307 00b9 22       		.byte	0x22
+ 3308 00ba 9F       		.byte	0x9f
+ 3309 00bb 4A050000 		.4byte	.LVL24
+ 3310 00bf E6050000 		.4byte	.LVL26
+ 3311 00c3 2E00     		.2byte	0x2e
+ 3312 00c5 91       		.byte	0x91
+ 3313 00c6 40       		.sleb128 -64
+ 3314 00c7 F6       		.byte	0xf6
+ 3315 00c8 08       		.byte	0x8
+ 3316 00c9 25       		.uleb128 0x25
+ 3317 00ca 7A       		.byte	0x7a
+ 3318 00cb 02       		.sleb128 2
+ 3319 00cc 33       		.byte	0x33
+ 3320 00cd 24       		.byte	0x24
+ 3321 00ce 91       		.byte	0x91
+ 3322 00cf 00       		.sleb128 0
+ 3323 00d0 22       		.byte	0x22
+ 3324 00d1 0A       		.byte	0xa
+ 3325 00d2 E802     		.2byte	0x2e8
+ 3326 00d4 1C       		.byte	0x1c
+ 3327 00d5 F6       		.byte	0xf6
+ 3328 00d6 08       		.byte	0x8
+ 3329 00d7 25       		.uleb128 0x25
+ 3330 00d8 22       		.byte	0x22
+ 3331 00d9 91       		.byte	0x91
+ 3332 00da D878     		.sleb128 -936
+ 3333 00dc F6       		.byte	0xf6
+ 3334 00dd 08       		.byte	0x8
+ 3335 00de 25       		.uleb128 0x25
+ 3336 00df 22       		.byte	0x22
+ 3337 00e0 91       		.byte	0x91
+ 3338 00e1 D078     		.sleb128 -944
+ 3339 00e3 F6       		.byte	0xf6
+ 3340 00e4 08       		.byte	0x8
+ 3341 00e5 25       		.uleb128 0x25
+ 3342 00e6 22       		.byte	0x22
+ 3343 00e7 7A       		.byte	0x7a
+ 3344 00e8 02       		.sleb128 2
+ 3345 00e9 33       		.byte	0x33
+ 3346 00ea 24       		.byte	0x24
+ 3347 00eb 7B       		.byte	0x7b
+ 3348 00ec 00       		.sleb128 0
+ 3349 00ed 22       		.byte	0x22
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 65
+
+
+ 3350 00ee F6       		.byte	0xf6
+ 3351 00ef 08       		.byte	0x8
+ 3352 00f0 25       		.uleb128 0x25
+ 3353 00f1 22       		.byte	0x22
+ 3354 00f2 9F       		.byte	0x9f
+ 3355 00f3 E6050000 		.4byte	.LVL26
+ 3356 00f7 9A060000 		.4byte	.LVL28
+ 3357 00fb 0600     		.2byte	0x6
+ 3358 00fd 52       		.byte	0x52
+ 3359 00fe 93       		.byte	0x93
+ 3360 00ff 04       		.uleb128 0x4
+ 3361 0100 53       		.byte	0x53
+ 3362 0101 93       		.byte	0x93
+ 3363 0102 04       		.uleb128 0x4
+ 3364 0103 42070000 		.4byte	.LVL30
+ 3365 0107 54070000 		.4byte	.LVL31
+ 3366 010b 0600     		.2byte	0x6
+ 3367 010d 50       		.byte	0x50
+ 3368 010e 93       		.byte	0x93
+ 3369 010f 04       		.uleb128 0x4
+ 3370 0110 51       		.byte	0x51
+ 3371 0111 93       		.byte	0x93
+ 3372 0112 04       		.uleb128 0x4
+ 3373 0113 54070000 		.4byte	.LVL31
+ 3374 0117 DA070000 		.4byte	.LVL33
+ 3375 011b 0300     		.2byte	0x3
+ 3376 011d 91       		.byte	0x91
+ 3377 011e E077     		.sleb128 -1056
+ 3378 0120 8C080000 		.4byte	.LVL35
+ 3379 0124 20090000 		.4byte	.LVL37
+ 3380 0128 0600     		.2byte	0x6
+ 3381 012a 52       		.byte	0x52
+ 3382 012b 93       		.byte	0x93
+ 3383 012c 04       		.uleb128 0x4
+ 3384 012d 53       		.byte	0x53
+ 3385 012e 93       		.byte	0x93
+ 3386 012f 04       		.uleb128 0x4
+ 3387 0130 20090000 		.4byte	.LVL37
+ 3388 0134 22090000 		.4byte	.LVL38
+ 3389 0138 0600     		.2byte	0x6
+ 3390 013a 53       		.byte	0x53
+ 3391 013b 93       		.byte	0x93
+ 3392 013c 04       		.uleb128 0x4
+ 3393 013d 54       		.byte	0x54
+ 3394 013e 93       		.byte	0x93
+ 3395 013f 04       		.uleb128 0x4
+ 3396 0140 22090000 		.4byte	.LVL38
+ 3397 0144 76090000 		.4byte	.LVL40
+ 3398 0148 0300     		.2byte	0x3
+ 3399 014a 91       		.byte	0x91
+ 3400 014b 8078     		.sleb128 -1024
+ 3401 014d C6090000 		.4byte	.LVL41
+ 3402 0151 CE090000 		.4byte	.LVL42
+ 3403 0155 0600     		.2byte	0x6
+ 3404 0157 50       		.byte	0x50
+ 3405 0158 93       		.byte	0x93
+ 3406 0159 04       		.uleb128 0x4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 66
+
+
+ 3407 015a 51       		.byte	0x51
+ 3408 015b 93       		.byte	0x93
+ 3409 015c 04       		.uleb128 0x4
+ 3410 015d CE090000 		.4byte	.LVL42
+ 3411 0161 340B0000 		.4byte	.LVL45
+ 3412 0165 0300     		.2byte	0x3
+ 3413 0167 91       		.byte	0x91
+ 3414 0168 8078     		.sleb128 -1024
+ 3415 016a 340B0000 		.4byte	.LVL45
+ 3416 016e 800B0000 		.4byte	.LVL46
+ 3417 0172 0600     		.2byte	0x6
+ 3418 0174 50       		.byte	0x50
+ 3419 0175 93       		.byte	0x93
+ 3420 0176 04       		.uleb128 0x4
+ 3421 0177 51       		.byte	0x51
+ 3422 0178 93       		.byte	0x93
+ 3423 0179 04       		.uleb128 0x4
+ 3424 017a 800B0000 		.4byte	.LVL46
+ 3425 017e BA0B0000 		.4byte	.LVL48
+ 3426 0182 0300     		.2byte	0x3
+ 3427 0184 91       		.byte	0x91
+ 3428 0185 D077     		.sleb128 -1072
+ 3429 0187 00000000 		.4byte	0
+ 3430 018b 00000000 		.4byte	0
+ 3431              	.LLST3:
+ 3432 018f BA020000 		.4byte	.LVL13
+ 3433 0193 DA020000 		.4byte	.LVL15
+ 3434 0197 0600     		.2byte	0x6
+ 3435 0199 54       		.byte	0x54
+ 3436 019a 93       		.byte	0x93
+ 3437 019b 04       		.uleb128 0x4
+ 3438 019c 55       		.byte	0x55
+ 3439 019d 93       		.byte	0x93
+ 3440 019e 04       		.uleb128 0x4
+ 3441 019f F4030000 		.4byte	.LVL18
+ 3442 01a3 0E040000 		.4byte	.LVL19
+ 3443 01a7 0600     		.2byte	0x6
+ 3444 01a9 52       		.byte	0x52
+ 3445 01aa 93       		.byte	0x93
+ 3446 01ab 04       		.uleb128 0x4
+ 3447 01ac 53       		.byte	0x53
+ 3448 01ad 93       		.byte	0x93
+ 3449 01ae 04       		.uleb128 0x4
+ 3450 01af 3A050000 		.4byte	.LVL22
+ 3451 01b3 54050000 		.4byte	.LVL25
+ 3452 01b7 0600     		.2byte	0x6
+ 3453 01b9 54       		.byte	0x54
+ 3454 01ba 93       		.byte	0x93
+ 3455 01bb 04       		.uleb128 0x4
+ 3456 01bc 55       		.byte	0x55
+ 3457 01bd 93       		.byte	0x93
+ 3458 01be 04       		.uleb128 0x4
+ 3459 01bf 54050000 		.4byte	.LVL25
+ 3460 01c3 8E060000 		.4byte	.LVL27
+ 3461 01c7 0E00     		.2byte	0xe
+ 3462 01c9 91       		.byte	0x91
+ 3463 01ca E078     		.sleb128 -928
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 67
+
+
+ 3464 01cc F6       		.byte	0xf6
+ 3465 01cd 08       		.byte	0x8
+ 3466 01ce 25       		.uleb128 0x25
+ 3467 01cf 91       		.byte	0x91
+ 3468 01d0 E878     		.sleb128 -920
+ 3469 01d2 F6       		.byte	0xf6
+ 3470 01d3 08       		.byte	0x8
+ 3471 01d4 25       		.uleb128 0x25
+ 3472 01d5 22       		.byte	0x22
+ 3473 01d6 9F       		.byte	0x9f
+ 3474 01d7 8E060000 		.4byte	.LVL27
+ 3475 01db AA060000 		.4byte	.LVL29
+ 3476 01df 0600     		.2byte	0x6
+ 3477 01e1 54       		.byte	0x54
+ 3478 01e2 93       		.byte	0x93
+ 3479 01e3 04       		.uleb128 0x4
+ 3480 01e4 55       		.byte	0x55
+ 3481 01e5 93       		.byte	0x93
+ 3482 01e6 04       		.uleb128 0x4
+ 3483 01e7 BA070000 		.4byte	.LVL32
+ 3484 01eb E0070000 		.4byte	.LVL34
+ 3485 01ef 0600     		.2byte	0x6
+ 3486 01f1 52       		.byte	0x52
+ 3487 01f2 93       		.byte	0x93
+ 3488 01f3 04       		.uleb128 0x4
+ 3489 01f4 53       		.byte	0x53
+ 3490 01f5 93       		.byte	0x93
+ 3491 01f6 04       		.uleb128 0x4
+ 3492 01f7 0E090000 		.4byte	.LVL36
+ 3493 01fb 46090000 		.4byte	.LVL39
+ 3494 01ff 0600     		.2byte	0x6
+ 3495 0201 50       		.byte	0x50
+ 3496 0202 93       		.byte	0x93
+ 3497 0203 04       		.uleb128 0x4
+ 3498 0204 51       		.byte	0x51
+ 3499 0205 93       		.byte	0x93
+ 3500 0206 04       		.uleb128 0x4
+ 3501 0207 46090000 		.4byte	.LVL39
+ 3502 020b 560A0000 		.4byte	.LVL43
+ 3503 020f 0E00     		.2byte	0xe
+ 3504 0211 91       		.byte	0x91
+ 3505 0212 C079     		.sleb128 -832
+ 3506 0214 F6       		.byte	0xf6
+ 3507 0215 08       		.byte	0x8
+ 3508 0216 25       		.uleb128 0x25
+ 3509 0217 91       		.byte	0x91
+ 3510 0218 C879     		.sleb128 -824
+ 3511 021a F6       		.byte	0xf6
+ 3512 021b 08       		.byte	0x8
+ 3513 021c 25       		.uleb128 0x25
+ 3514 021d 22       		.byte	0x22
+ 3515 021e 9F       		.byte	0x9f
+ 3516 021f 560A0000 		.4byte	.LVL43
+ 3517 0223 6A0A0000 		.4byte	.LVL44
+ 3518 0227 0600     		.2byte	0x6
+ 3519 0229 54       		.byte	0x54
+ 3520 022a 93       		.byte	0x93
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 68
+
+
+ 3521 022b 04       		.uleb128 0x4
+ 3522 022c 55       		.byte	0x55
+ 3523 022d 93       		.byte	0x93
+ 3524 022e 04       		.uleb128 0x4
+ 3525 022f 9C0B0000 		.4byte	.LVL47
+ 3526 0233 BA0B0000 		.4byte	.LVL48
+ 3527 0237 0600     		.2byte	0x6
+ 3528 0239 56       		.byte	0x56
+ 3529 023a 93       		.byte	0x93
+ 3530 023b 04       		.uleb128 0x4
+ 3531 023c 57       		.byte	0x57
+ 3532 023d 93       		.byte	0x93
+ 3533 023e 04       		.uleb128 0x4
+ 3534 023f 00000000 		.4byte	0
+ 3535 0243 00000000 		.4byte	0
+ 3536              	.LLST4:
+ 3537 0247 14000000 		.4byte	.LVL1
+ 3538 024b 18000000 		.4byte	.LVL3
+ 3539 024f 0200     		.2byte	0x2
+ 3540 0251 30       		.byte	0x30
+ 3541 0252 9F       		.byte	0x9f
+ 3542 0253 18000000 		.4byte	.LVL3
+ 3543 0257 24000000 		.4byte	.LVL4
+ 3544 025b 0100     		.2byte	0x1
+ 3545 025d 50       		.byte	0x50
+ 3546 025e 24000000 		.4byte	.LVL4
+ 3547 0262 30000000 		.4byte	.LVL5
+ 3548 0266 0300     		.2byte	0x3
+ 3549 0268 74       		.byte	0x74
+ 3550 0269 7F       		.sleb128 -1
+ 3551 026a 9F       		.byte	0x9f
+ 3552 026b 30000000 		.4byte	.LVL5
+ 3553 026f 38000000 		.4byte	.LVL6
+ 3554 0273 0100     		.2byte	0x1
+ 3555 0275 50       		.byte	0x50
+ 3556 0276 38000000 		.4byte	.LVL6
+ 3557 027a 78000000 		.4byte	.LVL8
+ 3558 027e 0100     		.2byte	0x1
+ 3559 0280 57       		.byte	0x57
+ 3560 0281 78000000 		.4byte	.LVL8
+ 3561 0285 60010000 		.4byte	.LVL10
+ 3562 0289 0100     		.2byte	0x1
+ 3563 028b 54       		.byte	0x54
+ 3564 028c 60010000 		.4byte	.LVL10
+ 3565 0290 62010000 		.4byte	.LVL11
+ 3566 0294 0100     		.2byte	0x1
+ 3567 0296 53       		.byte	0x53
+ 3568 0297 62010000 		.4byte	.LVL11
+ 3569 029b CA0B0000 		.4byte	.LVL49
+ 3570 029f 0100     		.2byte	0x1
+ 3571 02a1 5A       		.byte	0x5a
+ 3572 02a2 CA0B0000 		.4byte	.LVL49
+ 3573 02a6 D20B0000 		.4byte	.LVL50
+ 3574 02aa 0100     		.2byte	0x1
+ 3575 02ac 53       		.byte	0x53
+ 3576 02ad D20B0000 		.4byte	.LVL50
+ 3577 02b1 EA0B0000 		.4byte	.LVL51
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 69
+
+
+ 3578 02b5 0300     		.2byte	0x3
+ 3579 02b7 74       		.byte	0x74
+ 3580 02b8 7F       		.sleb128 -1
+ 3581 02b9 9F       		.byte	0x9f
+ 3582 02ba EA0B0000 		.4byte	.LVL51
+ 3583 02be F20B0000 		.4byte	.LVL52
+ 3584 02c2 0100     		.2byte	0x1
+ 3585 02c4 53       		.byte	0x53
+ 3586 02c5 00000000 		.4byte	0
+ 3587 02c9 00000000 		.4byte	0
+ 3588              	.LLST5:
+ 3589 02cd 00000000 		.4byte	.LVL53
+ 3590 02d1 52000000 		.4byte	.LVL54
+ 3591 02d5 0100     		.2byte	0x1
+ 3592 02d7 50       		.byte	0x50
+ 3593 02d8 52000000 		.4byte	.LVL54
+ 3594 02dc 54000000 		.4byte	.LVL55
+ 3595 02e0 0400     		.2byte	0x4
+ 3596 02e2 F3       		.byte	0xf3
+ 3597 02e3 01       		.uleb128 0x1
+ 3598 02e4 50       		.byte	0x50
+ 3599 02e5 9F       		.byte	0x9f
+ 3600 02e6 54000000 		.4byte	.LVL55
+ 3601 02ea 56000000 		.4byte	.LVL56
+ 3602 02ee 0100     		.2byte	0x1
+ 3603 02f0 50       		.byte	0x50
+ 3604 02f1 56000000 		.4byte	.LVL56
+ 3605 02f5 98000000 		.4byte	.LFE1
+ 3606 02f9 0400     		.2byte	0x4
+ 3607 02fb F3       		.byte	0xf3
+ 3608 02fc 01       		.uleb128 0x1
+ 3609 02fd 50       		.byte	0x50
+ 3610 02fe 9F       		.byte	0x9f
+ 3611 02ff 00000000 		.4byte	0
+ 3612 0303 00000000 		.4byte	0
+ 3613              	.LLST6:
+ 3614 0307 00000000 		.4byte	.LVL57
+ 3615 030b 18000000 		.4byte	.LVL58
+ 3616 030f 0100     		.2byte	0x1
+ 3617 0311 50       		.byte	0x50
+ 3618 0312 18000000 		.4byte	.LVL58
+ 3619 0316 9E000000 		.4byte	.LVL71
+ 3620 031a 0100     		.2byte	0x1
+ 3621 031c 54       		.byte	0x54
+ 3622 031d 9E000000 		.4byte	.LVL71
+ 3623 0321 A0000000 		.4byte	.LVL72
+ 3624 0325 0100     		.2byte	0x1
+ 3625 0327 50       		.byte	0x50
+ 3626 0328 A0000000 		.4byte	.LVL72
+ 3627 032c A2000000 		.4byte	.LVL73
+ 3628 0330 0100     		.2byte	0x1
+ 3629 0332 54       		.byte	0x54
+ 3630 0333 A2000000 		.4byte	.LVL73
+ 3631 0337 A4000000 		.4byte	.LVL74
+ 3632 033b 0100     		.2byte	0x1
+ 3633 033d 50       		.byte	0x50
+ 3634 033e A4000000 		.4byte	.LVL74
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 70
+
+
+ 3635 0342 A6000000 		.4byte	.LVL75
+ 3636 0346 0100     		.2byte	0x1
+ 3637 0348 54       		.byte	0x54
+ 3638 0349 A6000000 		.4byte	.LVL75
+ 3639 034d A8000000 		.4byte	.LVL76
+ 3640 0351 0100     		.2byte	0x1
+ 3641 0353 50       		.byte	0x50
+ 3642 0354 A8000000 		.4byte	.LVL76
+ 3643 0358 A8000000 		.4byte	.LVL77
+ 3644 035c 0100     		.2byte	0x1
+ 3645 035e 54       		.byte	0x54
+ 3646 035f A8000000 		.4byte	.LVL77
+ 3647 0363 AA000000 		.4byte	.LFE2
+ 3648 0367 0400     		.2byte	0x4
+ 3649 0369 F3       		.byte	0xf3
+ 3650 036a 01       		.uleb128 0x1
+ 3651 036b 50       		.byte	0x50
+ 3652 036c 9F       		.byte	0x9f
+ 3653 036d 00000000 		.4byte	0
+ 3654 0371 00000000 		.4byte	0
+ 3655              	.LLST7:
+ 3656 0375 00000000 		.4byte	.LVL57
+ 3657 0379 18000000 		.4byte	.LVL58
+ 3658 037d 0100     		.2byte	0x1
+ 3659 037f 51       		.byte	0x51
+ 3660 0380 18000000 		.4byte	.LVL58
+ 3661 0384 9E000000 		.4byte	.LVL71
+ 3662 0388 0100     		.2byte	0x1
+ 3663 038a 55       		.byte	0x55
+ 3664 038b 9E000000 		.4byte	.LVL71
+ 3665 038f A8000000 		.4byte	.LVL76
+ 3666 0393 0100     		.2byte	0x1
+ 3667 0395 51       		.byte	0x51
+ 3668 0396 A8000000 		.4byte	.LVL76
+ 3669 039a A8000000 		.4byte	.LVL78
+ 3670 039e 0100     		.2byte	0x1
+ 3671 03a0 55       		.byte	0x55
+ 3672 03a1 00000000 		.4byte	0
+ 3673 03a5 00000000 		.4byte	0
+ 3674              	.LLST8:
+ 3675 03a9 00000000 		.4byte	.LVL57
+ 3676 03ad 18000000 		.4byte	.LVL58
+ 3677 03b1 0100     		.2byte	0x1
+ 3678 03b3 52       		.byte	0x52
+ 3679 03b4 18000000 		.4byte	.LVL58
+ 3680 03b8 9E000000 		.4byte	.LVL71
+ 3681 03bc 0100     		.2byte	0x1
+ 3682 03be 56       		.byte	0x56
+ 3683 03bf 9E000000 		.4byte	.LVL71
+ 3684 03c3 A8000000 		.4byte	.LVL76
+ 3685 03c7 0100     		.2byte	0x1
+ 3686 03c9 52       		.byte	0x52
+ 3687 03ca A8000000 		.4byte	.LVL76
+ 3688 03ce A8000000 		.4byte	.LVL79
+ 3689 03d2 0100     		.2byte	0x1
+ 3690 03d4 56       		.byte	0x56
+ 3691 03d5 00000000 		.4byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 71
+
+
+ 3692 03d9 00000000 		.4byte	0
+ 3693              	.LLST9:
+ 3694 03dd 52000000 		.4byte	.LVL63
+ 3695 03e1 96000000 		.4byte	.LVL70
+ 3696 03e5 0100     		.2byte	0x1
+ 3697 03e7 57       		.byte	0x57
+ 3698 03e8 00000000 		.4byte	0
+ 3699 03ec 00000000 		.4byte	0
+ 3700              	.LLST10:
+ 3701 03f0 52000000 		.4byte	.LVL63
+ 3702 03f4 56000000 		.4byte	.LVL64
+ 3703 03f8 0200     		.2byte	0x2
+ 3704 03fa 30       		.byte	0x30
+ 3705 03fb 9F       		.byte	0x9f
+ 3706 03fc 56000000 		.4byte	.LVL64
+ 3707 0400 7B000000 		.4byte	.LVL68-1
+ 3708 0404 0100     		.2byte	0x1
+ 3709 0406 52       		.byte	0x52
+ 3710 0407 00000000 		.4byte	0
+ 3711 040b 00000000 		.4byte	0
+ 3712              	.LLST11:
+ 3713 040f 2A000000 		.4byte	.LVL59
+ 3714 0413 38000000 		.4byte	.LVL60
+ 3715 0417 0100     		.2byte	0x1
+ 3716 0419 50       		.byte	0x50
+ 3717 041a 7C000000 		.4byte	.LVL68
+ 3718 041e 8A000000 		.4byte	.LVL69
+ 3719 0422 0100     		.2byte	0x1
+ 3720 0424 50       		.byte	0x50
+ 3721 0425 00000000 		.4byte	0
+ 3722 0429 00000000 		.4byte	0
+ 3723              	.LLST12:
+ 3724 042d 00000000 		.4byte	.LVL80
+ 3725 0431 18000000 		.4byte	.LVL82
+ 3726 0435 0100     		.2byte	0x1
+ 3727 0437 50       		.byte	0x50
+ 3728 0438 18000000 		.4byte	.LVL82
+ 3729 043c EC000000 		.4byte	.LVL88
+ 3730 0440 0100     		.2byte	0x1
+ 3731 0442 54       		.byte	0x54
+ 3732 0443 EC000000 		.4byte	.LVL88
+ 3733 0447 EE000000 		.4byte	.LVL89
+ 3734 044b 0100     		.2byte	0x1
+ 3735 044d 50       		.byte	0x50
+ 3736 044e EE000000 		.4byte	.LVL89
+ 3737 0452 F0000000 		.4byte	.LVL90
+ 3738 0456 0100     		.2byte	0x1
+ 3739 0458 54       		.byte	0x54
+ 3740 0459 F0000000 		.4byte	.LVL90
+ 3741 045d F2000000 		.4byte	.LVL91
+ 3742 0461 0100     		.2byte	0x1
+ 3743 0463 50       		.byte	0x50
+ 3744 0464 F2000000 		.4byte	.LVL91
+ 3745 0468 F4000000 		.4byte	.LVL92
+ 3746 046c 0100     		.2byte	0x1
+ 3747 046e 54       		.byte	0x54
+ 3748 046f F4000000 		.4byte	.LVL92
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 72
+
+
+ 3749 0473 F6000000 		.4byte	.LVL93
+ 3750 0477 0100     		.2byte	0x1
+ 3751 0479 50       		.byte	0x50
+ 3752 047a F6000000 		.4byte	.LVL93
+ 3753 047e F6000000 		.4byte	.LVL94
+ 3754 0482 0100     		.2byte	0x1
+ 3755 0484 54       		.byte	0x54
+ 3756 0485 F6000000 		.4byte	.LVL94
+ 3757 0489 F8000000 		.4byte	.LFE3
+ 3758 048d 0400     		.2byte	0x4
+ 3759 048f F3       		.byte	0xf3
+ 3760 0490 01       		.uleb128 0x1
+ 3761 0491 50       		.byte	0x50
+ 3762 0492 9F       		.byte	0x9f
+ 3763 0493 00000000 		.4byte	0
+ 3764 0497 00000000 		.4byte	0
+ 3765              	.LLST13:
+ 3766 049b 00000000 		.4byte	.LVL80
+ 3767 049f 16000000 		.4byte	.LVL81
+ 3768 04a3 0100     		.2byte	0x1
+ 3769 04a5 51       		.byte	0x51
+ 3770 04a6 16000000 		.4byte	.LVL81
+ 3771 04aa EC000000 		.4byte	.LVL88
+ 3772 04ae 0100     		.2byte	0x1
+ 3773 04b0 55       		.byte	0x55
+ 3774 04b1 EC000000 		.4byte	.LVL88
+ 3775 04b5 F6000000 		.4byte	.LVL93
+ 3776 04b9 0100     		.2byte	0x1
+ 3777 04bb 51       		.byte	0x51
+ 3778 04bc F6000000 		.4byte	.LVL93
+ 3779 04c0 F6000000 		.4byte	.LVL95
+ 3780 04c4 0100     		.2byte	0x1
+ 3781 04c6 55       		.byte	0x55
+ 3782 04c7 F6000000 		.4byte	.LVL95
+ 3783 04cb F8000000 		.4byte	.LFE3
+ 3784 04cf 0400     		.2byte	0x4
+ 3785 04d1 F3       		.byte	0xf3
+ 3786 04d2 01       		.uleb128 0x1
+ 3787 04d3 51       		.byte	0x51
+ 3788 04d4 9F       		.byte	0x9f
+ 3789 04d5 00000000 		.4byte	0
+ 3790 04d9 00000000 		.4byte	0
+ 3791              	.LLST14:
+ 3792 04dd A4000000 		.4byte	.LVL84
+ 3793 04e1 A8000000 		.4byte	.LVL85
+ 3794 04e5 0200     		.2byte	0x2
+ 3795 04e7 30       		.byte	0x30
+ 3796 04e8 9F       		.byte	0x9f
+ 3797 04e9 A8000000 		.4byte	.LVL85
+ 3798 04ed AE000000 		.4byte	.LVL86
+ 3799 04f1 0100     		.2byte	0x1
+ 3800 04f3 52       		.byte	0x52
+ 3801 04f4 AE000000 		.4byte	.LVL86
+ 3802 04f8 E4000000 		.4byte	.LVL87
+ 3803 04fc 0300     		.2byte	0x3
+ 3804 04fe 71       		.byte	0x71
+ 3805 04ff 7F       		.sleb128 -1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 73
+
+
+ 3806 0500 9F       		.byte	0x9f
+ 3807 0501 E4000000 		.4byte	.LVL87
+ 3808 0505 EC000000 		.4byte	.LVL88
+ 3809 0509 0100     		.2byte	0x1
+ 3810 050b 52       		.byte	0x52
+ 3811 050c 00000000 		.4byte	0
+ 3812 0510 00000000 		.4byte	0
+ 3813              	.LLST15:
+ 3814 0514 00000000 		.4byte	.LVL96
+ 3815 0518 0C000000 		.4byte	.LVL97
+ 3816 051c 0100     		.2byte	0x1
+ 3817 051e 50       		.byte	0x50
+ 3818 051f 0C000000 		.4byte	.LVL97
+ 3819 0523 2C000000 		.4byte	.LVL103
+ 3820 0527 0100     		.2byte	0x1
+ 3821 0529 54       		.byte	0x54
+ 3822 052a 2C000000 		.4byte	.LVL103
+ 3823 052e 2E000000 		.4byte	.LFE4
+ 3824 0532 0400     		.2byte	0x4
+ 3825 0534 F3       		.byte	0xf3
+ 3826 0535 01       		.uleb128 0x1
+ 3827 0536 50       		.byte	0x50
+ 3828 0537 9F       		.byte	0x9f
+ 3829 0538 00000000 		.4byte	0
+ 3830 053c 00000000 		.4byte	0
+ 3831              	.LLST16:
+ 3832 0540 00000000 		.4byte	.LVL96
+ 3833 0544 0F000000 		.4byte	.LVL98-1
+ 3834 0548 0100     		.2byte	0x1
+ 3835 054a 51       		.byte	0x51
+ 3836 054b 0F000000 		.4byte	.LVL98-1
+ 3837 054f 2C000000 		.4byte	.LVL105
+ 3838 0553 0100     		.2byte	0x1
+ 3839 0555 56       		.byte	0x56
+ 3840 0556 2C000000 		.4byte	.LVL105
+ 3841 055a 2E000000 		.4byte	.LFE4
+ 3842 055e 0400     		.2byte	0x4
+ 3843 0560 F3       		.byte	0xf3
+ 3844 0561 01       		.uleb128 0x1
+ 3845 0562 51       		.byte	0x51
+ 3846 0563 9F       		.byte	0x9f
+ 3847 0564 00000000 		.4byte	0
+ 3848 0568 00000000 		.4byte	0
+ 3849              	.LLST17:
+ 3850 056c 00000000 		.4byte	.LVL96
+ 3851 0570 0F000000 		.4byte	.LVL98-1
+ 3852 0574 0100     		.2byte	0x1
+ 3853 0576 52       		.byte	0x52
+ 3854 0577 0F000000 		.4byte	.LVL98-1
+ 3855 057b 2C000000 		.4byte	.LVL104
+ 3856 057f 0100     		.2byte	0x1
+ 3857 0581 55       		.byte	0x55
+ 3858 0582 2C000000 		.4byte	.LVL104
+ 3859 0586 2E000000 		.4byte	.LFE4
+ 3860 058a 0400     		.2byte	0x4
+ 3861 058c F3       		.byte	0xf3
+ 3862 058d 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 74
+
+
+ 3863 058e 52       		.byte	0x52
+ 3864 058f 9F       		.byte	0x9f
+ 3865 0590 00000000 		.4byte	0
+ 3866 0594 00000000 		.4byte	0
+ 3867              	.LLST18:
+ 3868 0598 10000000 		.4byte	.LVL98
+ 3869 059c 1A000000 		.4byte	.LVL99
+ 3870 05a0 0100     		.2byte	0x1
+ 3871 05a2 50       		.byte	0x50
+ 3872 05a3 1E000000 		.4byte	.LVL100
+ 3873 05a7 26000000 		.4byte	.LVL101
+ 3874 05ab 0100     		.2byte	0x1
+ 3875 05ad 50       		.byte	0x50
+ 3876 05ae 2A000000 		.4byte	.LVL102
+ 3877 05b2 2E000000 		.4byte	.LFE4
+ 3878 05b6 0100     		.2byte	0x1
+ 3879 05b8 50       		.byte	0x50
+ 3880 05b9 00000000 		.4byte	0
+ 3881 05bd 00000000 		.4byte	0
+ 3882              		.section	.debug_aranges,"",%progbits
+ 3883 0000 3C000000 		.4byte	0x3c
+ 3884 0004 0200     		.2byte	0x2
+ 3885 0006 00000000 		.4byte	.Ldebug_info0
+ 3886 000a 04       		.byte	0x4
+ 3887 000b 00       		.byte	0
+ 3888 000c 0000     		.2byte	0
+ 3889 000e 0000     		.2byte	0
+ 3890 0010 00000000 		.4byte	.LFB0
+ 3891 0014 040C0000 		.4byte	.LFE0-.LFB0
+ 3892 0018 00000000 		.4byte	.LFB1
+ 3893 001c 98000000 		.4byte	.LFE1-.LFB1
+ 3894 0020 00000000 		.4byte	.LFB2
+ 3895 0024 AA000000 		.4byte	.LFE2-.LFB2
+ 3896 0028 00000000 		.4byte	.LFB3
+ 3897 002c F8000000 		.4byte	.LFE3-.LFB3
+ 3898 0030 00000000 		.4byte	.LFB4
+ 3899 0034 2E000000 		.4byte	.LFE4-.LFB4
+ 3900 0038 00000000 		.4byte	0
+ 3901 003c 00000000 		.4byte	0
+ 3902              		.section	.debug_ranges,"",%progbits
+ 3903              	.Ldebug_ranges0:
+ 3904 0000 00000000 		.4byte	.LFB0
+ 3905 0004 040C0000 		.4byte	.LFE0
+ 3906 0008 00000000 		.4byte	.LFB1
+ 3907 000c 98000000 		.4byte	.LFE1
+ 3908 0010 00000000 		.4byte	.LFB2
+ 3909 0014 AA000000 		.4byte	.LFE2
+ 3910 0018 00000000 		.4byte	.LFB3
+ 3911 001c F8000000 		.4byte	.LFE3
+ 3912 0020 00000000 		.4byte	.LFB4
+ 3913 0024 2E000000 		.4byte	.LFE4
+ 3914 0028 00000000 		.4byte	0
+ 3915 002c 00000000 		.4byte	0
+ 3916              		.section	.debug_line,"",%progbits
+ 3917              	.Ldebug_line0:
+ 3918 0000 13030000 		.section	.debug_str,"MS",%progbits,1
+ 3918      0200AA01 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 75
+
+
+ 3918      00000201 
+ 3918      FB0E0D00 
+ 3918      01010101 
+ 3919              	.LASF23:
+ 3920 0000 6D657373 		.ascii	"message\000"
+ 3920      61676500 
+ 3921              	.LASF24:
+ 3922 0008 6D657373 		.ascii	"message_len\000"
+ 3922      6167655F 
+ 3922      6C656E00 
+ 3923              	.LASF11:
+ 3924 0014 73697A65 		.ascii	"size_t\000"
+ 3924      5F7400
+ 3925              	.LASF14:
+ 3926 001b 73746174 		.ascii	"state\000"
+ 3926      6500
+ 3927              	.LASF18:
+ 3928 0021 73686135 		.ascii	"sha512_init\000"
+ 3928      31325F69 
+ 3928      6E697400 
+ 3929              	.LASF19:
+ 3930 002d 73686135 		.ascii	"sha512_update\000"
+ 3930      31325F75 
+ 3930      70646174 
+ 3930      6500
+ 3931              	.LASF10:
+ 3932 003b 75696E74 		.ascii	"uint64_t\000"
+ 3932      36345F74 
+ 3932      00
+ 3933              	.LASF2:
+ 3934 0044 756E7369 		.ascii	"unsigned char\000"
+ 3934      676E6564 
+ 3934      20636861 
+ 3934      7200
+ 3935              	.LASF29:
+ 3936 0052 73686135 		.ascii	"sha512_compress\000"
+ 3936      31325F63 
+ 3936      6F6D7072 
+ 3936      65737300 
+ 3937              	.LASF26:
+ 3938 0062 73686135 		.ascii	"sha512.c\000"
+ 3938      31322E63 
+ 3938      00
+ 3939              	.LASF4:
+ 3940 006b 73686F72 		.ascii	"short unsigned int\000"
+ 3940      7420756E 
+ 3940      7369676E 
+ 3940      65642069 
+ 3940      6E7400
+ 3941              	.LASF20:
+ 3942 007e 696E6C65 		.ascii	"inlen\000"
+ 3942      6E00
+ 3943              	.LASF6:
+ 3944 0084 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3944      20756E73 
+ 3944      69676E65 
+ 3944      6420696E 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 76
+
+
+ 3944      7400
+ 3945              	.LASF8:
+ 3946 0096 756E7369 		.ascii	"unsigned int\000"
+ 3946      676E6564 
+ 3946      20696E74 
+ 3946      00
+ 3947              	.LASF0:
+ 3948 00a3 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 3948      206C6F6E 
+ 3948      6720756E 
+ 3948      7369676E 
+ 3948      65642069 
+ 3949              	.LASF25:
+ 3950 00ba 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 3950      43313120 
+ 3950      352E342E 
+ 3950      31203230 
+ 3950      31363036 
+ 3951 00ed 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 3951      20726576 
+ 3951      6973696F 
+ 3951      6E203233 
+ 3951      37373135 
+ 3952 0120 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 3952      66756E63 
+ 3952      74696F6E 
+ 3952      2D736563 
+ 3952      74696F6E 
+ 3953              	.LASF27:
+ 3954 0148 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\CAR"
+ 3954      73657273 
+ 3954      5C4E6967 
+ 3954      68647261 
+ 3954      676F6E5C 
+ 3955 0175 442E6379 		.ascii	"D.cydsn\000"
+ 3955      64736E00 
+ 3956              	.LASF16:
+ 3957 017d 73697A65 		.ascii	"sizetype\000"
+ 3957      74797065 
+ 3957      00
+ 3958              	.LASF7:
+ 3959 0186 6C6F6E67 		.ascii	"long long int\000"
+ 3959      206C6F6E 
+ 3959      6720696E 
+ 3959      7400
+ 3960              	.LASF21:
+ 3961 0194 73686135 		.ascii	"sha512_final\000"
+ 3961      31325F66 
+ 3961      696E616C 
+ 3961      00
+ 3962              	.LASF15:
+ 3963 01a1 6375726C 		.ascii	"curlen\000"
+ 3963      656E00
+ 3964              	.LASF3:
+ 3965 01a8 73686F72 		.ascii	"short int\000"
+ 3965      7420696E 
+ 3965      7400
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccUHySfm.s 			page 77
+
+
+ 3966              	.LASF9:
+ 3967 01b2 5F5F7569 		.ascii	"__uint64_t\000"
+ 3967      6E743634 
+ 3967      5F7400
+ 3968              	.LASF28:
+ 3969 01bd 73686135 		.ascii	"sha512_context_\000"
+ 3969      31325F63 
+ 3969      6F6E7465 
+ 3969      78745F00 
+ 3970              	.LASF22:
+ 3971 01cd 73686135 		.ascii	"sha512\000"
+ 3971      313200
+ 3972              	.LASF5:
+ 3973 01d4 6C6F6E67 		.ascii	"long int\000"
+ 3973      20696E74 
+ 3973      00
+ 3974              	.LASF12:
+ 3975 01dd 6C6F6E67 		.ascii	"long double\000"
+ 3975      20646F75 
+ 3975      626C6500 
+ 3976              	.LASF1:
+ 3977 01e9 7369676E 		.ascii	"signed char\000"
+ 3977      65642063 
+ 3977      68617200 
+ 3978              	.LASF13:
+ 3979 01f5 6C656E67 		.ascii	"length\000"
+ 3979      746800
+ 3980              	.LASF17:
+ 3981 01fc 73686135 		.ascii	"sha512_context\000"
+ 3981      31325F63 
+ 3981      6F6E7465 
+ 3981      787400
+ 3982              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
