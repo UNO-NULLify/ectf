@@ -13,8 +13,9 @@ class Card(Psoc):
     """
     def __init__(self, port=None, verbose=False):
         super(Card, self).__init__('CARD', port, verbose)
+        self.GET_UUID = 1
         self.SIGNED_RESPONSE = 2
-        self.GET_UUID = 3
+        self.GET_PUBLIC_KEY = 3
 
     def _send_op(self, op):
         """Sends requested operation to ATM card
@@ -68,6 +69,23 @@ class Card(Psoc):
         self._vp('Card sent response %s' % signed_response)
         return signed_response
 
+    def get_public_key(self):
+        """Requests for a pin to be changed
+
+        Args:
+            old_pin (str): Challenge PIN
+            new_pin (str): New PIN to change to
+
+        Returns:
+            bool: True if PIN was changed, False otherwise
+        """
+        self._sync(False)
+        self._send_op(self.GET_PUBLIC_KEY)
+        self._vp('Getting public key.')
+        uuid = self._pull_msg()
+        self._vp('Card sent response %s' % uuid)
+        return uuid
+
 
     def provision(self, uuid):
         """Attempts to provision a new ATM card
@@ -92,9 +110,16 @@ class Card(Psoc):
             self._vp('Card hasn\'t accepted uuid', logging.error)
         self._vp('Card accepted uuid')
 
+
+        self._push_msg(str(self.GET_PUBLIC_KEY))
+        key = ''
+        while len(key) != 32:
+            key = self._pull_msg()
+            self._vp('Card hasn\'t sent', logging.error)
+
         self._vp('Provisioning complete')
 
-        return True
+        return key
 
 
 class DummyCard(Card):
