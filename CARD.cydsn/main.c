@@ -16,6 +16,7 @@
 #include "SW1.h"
 #include "Reset_isr.h"
 #include "aes.h"
+#include "CyLib.c"
 
 #define CARD_ID_LEN 36
 #define PROV_MSG "P"
@@ -84,7 +85,6 @@ void provision()
     memset(&KEY, 0, 64);
 }
 
-
 int main(void)
 {
     // enable global interrupts -- DO NOT DELETE
@@ -96,6 +96,10 @@ int main(void)
     /* Declare vairables here */
     uint8 i;
     uint8 message[128];
+    uint32 * id[2];
+    struct AES_ctx ctx;
+    uint8_t key[32];
+    uint8_t iv = 21;
     
     // local EEPROM read variable
     static const uint8 PROVISIONED[1] = {0x00};
@@ -133,7 +137,12 @@ int main(void)
         }
         if(message[1] == GIVE_SIG)
         {
-            
+            pullMessage(message);
+            CyGetUniqueId(*id); //64 bit
+            //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+            AES_init_ctx(&ctx, key);
+            AES_ctx_set_iv(&ctx, &iv);
+            AES_CBC_encrypt_buffer(&ctx, message, strlen((char*) message));
         }
     }
 }

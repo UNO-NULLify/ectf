@@ -14,18 +14,18 @@
   #define CBC 1
 #endif
 
-#ifndef ECB
-  #define ECB 1
-#endif
+//#ifndef ECB
+//  #define ECB 1
+//#endif
 
-#ifndef CTR
-  #define CTR 1
-#endif
+//#ifndef CTR
+ // #define CTR 1
+//#endif
 
 
-#define AES128 1
+//#define AES128 1
 //#define AES192 1
-//#define AES256 1
+#define AES256 1
 
 #define AES_BLOCKLEN 16 //Block length in bytes AES is 128b block only
 
@@ -65,7 +65,7 @@ void AES_ECB_decrypt(struct AES_ctx* ctx, const uint8_t* buf);
 
 
 #if defined(CBC) && (CBC == 1)
-// buffer size MUST be mutile of AES_BLOCKLEN;
+// buffer size MUST be mutiple of AES_BLOCKLEN;
 // Suggest https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS7 for padding scheme
 // NOTES: you need to set IV in ctx via AES_init_ctx_iv() or AES_ctx_set_iv()
 //        no IV should ever be reused with the same key 

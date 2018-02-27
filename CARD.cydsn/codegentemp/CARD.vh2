@@ -2,7 +2,7 @@
 --	Conversion of CARD.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Sun Feb 25 23:16:04 2018
+--	Mon Feb 26 22:39:52 2018
 --
 
 USE cypress.cypress.all;
