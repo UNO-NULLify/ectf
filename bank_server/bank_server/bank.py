@@ -51,10 +51,11 @@ class Bank(object):
     global db
     db = DB()
 
-    def __init__(self, config):
+    def __init__(self, config,ready_event):
         super(Bank, self).__init__()
         self.bank_host = config['bank']['host']
         self.bank_port = int(config['bank']['port'])
+        ready_event.set()
         self.server.run(host='0.0.0.0', port=1337,ssl_context=('/data/certs/cert.pem','/data/certs/key.pem'))
         self.server.run(debug=True)
 
