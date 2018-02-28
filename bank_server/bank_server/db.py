@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from passlib.hash import argon2
 from passlib.hash import sha256_crypt
 import datetime
-import ed25519
+#import ed25519
 import string
 import random
 
@@ -100,8 +100,7 @@ class DB(object):
         Returns:
             (string): Returns hashed string.
         """ 
-
-        hash = sha256_crypt.using(salt_size=0,rounds=53500).hash(str(string))
+        hash = sha256_crypt.using(salt_size=0,rounds=53500).hash(str(card_id))
         return hash[-86:]
 
     def hash_pin(self, card_id, pin):
@@ -145,7 +144,7 @@ class DB(object):
     def initialize_card(self, card_id, key, new_pin):
         updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'key': key,'pin': self.hash_pin(card_id, new_pin) }})
         return updated.acknowledged and updated.raw_result['updatedExisting']
-    
+    '''
     def verify_challenge(self, card_id, chall_sig):
         account = self.get_account(card_id)
         if datetime.datetime.now() <= account['time']:
@@ -157,7 +156,7 @@ class DB(object):
                 return False
         else:
             return False
-
+'''
 
     #############################
     # ADMIN INTERFACE FUNCTIONS #
