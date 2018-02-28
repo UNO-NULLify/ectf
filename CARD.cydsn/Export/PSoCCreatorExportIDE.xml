@@ -39,9 +39,12 @@
           <File BuildType="BUILD" Toolchain="">main.c</File>
           <File BuildType="BUILD" Toolchain="">usbserialprotocol.c</File>
           <File BuildType="BUILD" Toolchain="">aes.c</File>
+          <File BuildType="BUILD" Toolchain="">SuperFastHash.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
           <File BuildType="BUILD" Toolchain="">usbserialprotocol.h</File>
           <File BuildType="BUILD" Toolchain="">aes.h</File>
+          <File BuildType="BUILD" Toolchain="">pstdint.h</File>
+          <File BuildType="BUILD" Toolchain="">SuperFastHash.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\Generated_Source\PSoC4">

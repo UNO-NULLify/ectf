@@ -1,5 +1,45 @@
---------------- Build Started: 02/27/2018 00:03:38 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 02/27/2018 23:21:32 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
-The compile step is up to date, no work needs to be done.
-The link step is up to date, no work needs to be done.
---------------- Build Succeeded: 02/27/2018 00:03:38 ---------------
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
+main.c: In function 'main':
+main.c:151:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+             hash(strncat(hash((unsigned char *) key[0], 1),(unsigned char *) key[1],1),5);
+                               ^
+main.c:151:31: warning: pointer targets in passing argument 1 of 'hash' differ in signedness [-Wpointer-sign]
+In file included from main.c:19:0:
+SuperFastHash.h:6:10: note: expected 'const char *' but argument is of type 'unsigned char *'
+ uint32_t hash(const char * data, int len);
+          ^
+main.c:151:60: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+             hash(strncat(hash((unsigned char *) key[0], 1),(unsigned char *) key[1],1),5);
+                                                            ^
+main.c:151:26: warning: passing argument 1 of 'strncat' makes pointer from integer without a cast [-Wint-conversion]
+             hash(strncat(hash((unsigned char *) key[0], 1),(unsigned char *) key[1],1),5);
+                          ^
+In file included from c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:10:0,
+                 from Generated_Source\PSoC4/CyLib.h:25,
+                 from Generated_Source\PSoC4/ATM_UART.h:24,
+                 from Generated_Source\PSoC4/project.h:21,
+                 from main.c:13:
+c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:34:8: note: expected 'char * restrict' but argument is of type 'uint32_t {aka long unsigned int}'
+ char  *_EXFUN(strncat,(char *__restrict, const char *__restrict, size_t));
+        ^
+main.c:151:60: warning: pointer targets in passing argument 2 of 'strncat' differ in signedness [-Wpointer-sign]
+             hash(strncat(hash((unsigned char *) key[0], 1),(unsigned char *) key[1],1),5);
+                                                            ^
+In file included from c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:10:0,
+                 from Generated_Source\PSoC4/CyLib.h:25,
+                 from Generated_Source\PSoC4/ATM_UART.h:24,
+                 from Generated_Source\PSoC4/project.h:21,
+                 from main.c:13:
+c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:34:8: note: expected 'const char * restrict' but argument is of type 'unsigned char *'
+ char  *_EXFUN(strncat,(char *__restrict, const char *__restrict, size_t));
+        ^
+arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_541\Debug\CARD.a .\CortexM0\ARM_GCC_541\Debug\ATM_UART.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USER_INFO.o .\CortexM0\ARM_GCC_541\Debug\USB_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o .\CortexM0\ARM_GCC_541\Debug\SW1.o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_IntClock.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCBCLK.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCB_IRQ.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx_PM.o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o .\CortexM0\ARM_GCC_541\Debug\CyLib.o .\CortexM0\ARM_GCC_541\Debug\cyPm.o .\CortexM0\ARM_GCC_541\Debug\cyutils.o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o
+arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_541\Debug\CARD.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\aes.o .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\CARD.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/CARD.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
+cyelftool.exe -C C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf --flash_row_size 128 --flash_size 32768 --flash_offset 0x00000000
+cyelftool.exe -S C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf
+Flash used: 6712 of 32768 bytes (20.5%).
+SRAM used: 2192 of 4096 bytes (53.5%). Stack: 1024 bytes. Heap: 496 bytes.
+--------------- Build Succeeded: 02/27/2018 23:21:33 ---------------

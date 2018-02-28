@@ -16,7 +16,7 @@
 #include "SW1.h"
 #include "Reset_isr.h"
 #include "aes.h"
-#include "CyLib.c"
+#include "SuperFastHash.h"
 
 #define CARD_ID_LEN 36
 #define PROV_MSG "P"
@@ -96,9 +96,9 @@ int main(void)
     /* Declare vairables here */
     uint8 i;
     uint8 message[128];
-    uint32 * id[2];
+    //uint32 * id[2];
     struct AES_ctx ctx;
-    uint8_t key[32];
+    unsigned char key[32];
     uint8_t iv = 21;
     
     // local EEPROM read variable
@@ -138,8 +138,20 @@ int main(void)
         if(message[1] == GIVE_SIG)
         {
             pullMessage(message);
-            CyGetUniqueId(*id); //64 bit
+            key[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+            key[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+            key[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+            key[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+
+            key[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+            key[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+            key[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+            key[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
             //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+            temphash = hash(key[0], 1);
+            temphash = hash(temphash + key[1], 4);
+            
+            //Do AES
             AES_init_ctx(&ctx, key);
             AES_ctx_set_iv(&ctx, &iv);
             AES_CBC_encrypt_buffer(&ctx, message, strlen((char*) message));
