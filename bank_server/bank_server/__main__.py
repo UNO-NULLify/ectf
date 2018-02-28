@@ -43,11 +43,12 @@ def main():
 
     logging.info('Config loaded and logging initialized')
 
-    thread_obj = threading.Thread(target=AdminBackend, args=(config,))
+    ready_event = threading.Event()
+    thread_obj = threading.Thread(target=AdminBackend, args=(config, ready_event))
     thread_obj.daemon = True
     thread_obj.start()
 
-    Bank(config)
+    Bank(config, ready_event)
 
 
 if __name__ == "__main__":

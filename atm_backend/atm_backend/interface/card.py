@@ -69,24 +69,6 @@ class Card(Psoc):
         self._vp('Card sent response %s' % signed_response)
         return signed_response
 
-    def get_public_key(self):
-        """Requests for a pin to be changed
-
-        Args:
-            old_pin (str): Challenge PIN
-            new_pin (str): New PIN to change to
-
-        Returns:
-            bool: True if PIN was changed, False otherwise
-        """
-        self._sync(False)
-        self._send_op(self.GET_PUBLIC_KEY)
-        self._vp('Getting public key.')
-        uuid = self._pull_msg()
-        self._vp('Card sent response %s' % uuid)
-        return uuid
-
-
     def provision(self, uuid):
         """Attempts to provision a new ATM card
 

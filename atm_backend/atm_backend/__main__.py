@@ -175,6 +175,9 @@ def main():
     server.register_function(atm.change_pin)
     server.register_function(provision_tool.provision_card)
     server.register_function(provision_tool.provision_atm)
+    server.register_function(provision_tool.ready_for_hsm)
+    server.register_function(provision_tool.hsm_connected)
+    server.register_function(provision_tool.card_connected)
 
     logging.info('ATM xmlrpc interface initialized.')
     logging.info('ATM listening on %s:%s' % (config['devices']['atm']['host'], str(config['devices']['atm']['port'])))
