@@ -6,9 +6,9 @@ from pymongo import MongoClient
 from passlib.hash import argon2
 from passlib.hash import sha256_crypt
 import datetime
-#import ed25519
 import string
 import random
+from Crypto.Cipher import AES
 
 class DB(object):
     """Implements a Database interface for the bank server and admin interface"""
@@ -22,6 +22,12 @@ class DB(object):
     ############################
     # BANK INTERFACE FUNCTIONS #
     ############################
+
+    def verify_challenge(self, challenge, encrypted_response, AES_KEY):
+        key = AES_KEY
+        cipher = AES.new(key, AES.MODE_ECB, 0x00)
+        decrypted_response = cipher.decrypt(encrypted_response)
+        return challenge == decrypted_response
 
     def set_balance(self, card_id, balance):
         """set balance of account: card_id
@@ -101,6 +107,16 @@ class DB(object):
             (bool): Returns True on Success. False otherwise.
         """
         updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_dispensed_bills': num_bills}})
+        return updated.acknowledged and updated.raw_result['updatedExisting']
+
+
+    def initialize_atm(self, key, num_bills, atm_id):
+        """set number of bills in atm: atm_id
+
+        Returns:
+            (bool): Returns True on Success. False otherwise.
+        """
+        updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'AES_KEY': key, 'num_bills':num_bills}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def hash_card(self, card_id):

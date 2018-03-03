@@ -64,7 +64,7 @@ class Bank(object):
     @server.route('/withdraw', methods = ['POST'])
     def withdraw():
         try:
-            if not request.json or not 'atm_id' in request.json or not 'pin' not in request.json or not 'card_id' in request.json or not 'num_bills' in request.json:
+            if not request.json or not 'atm_id' in request.json or not 'pin' not in request.json or not 'card_id' in request.json or not 'num_bills' in request.json: #and not 'encrypted_response' in request.json:
                 time.sleep(2)
                 return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -76,6 +76,10 @@ class Bank(object):
             if account['num_bills'] is None:
                 time.sleep(2)
                 return jsonify({'ERROR': 'Could not validate transaction'})
+
+            #if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+            #    time.sleep(2)
+            #    return jsonify({'ERROR': 'Could not validate transaction'})
 
             atm = db.get_atm(request.json['atm_id'])
             if atm is None:
@@ -116,7 +120,7 @@ class Bank(object):
 
     @server.route('/balance', methods = ['POST'])
     def check_balance():
-        if not request.json or not 'card_id' in request.json or not 'pin' in request.json:
+        if not request.json or not 'card_id' in request.json or not 'pin' in request.json: #or not 'encrypted_response' in request.json:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -124,6 +128,14 @@ class Bank(object):
         if account is None:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction'})
+
+        if account['balance'] is None:
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+
+        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+        #    time.sleep(2)
+        #    return jsonify({'ERROR': 'Could not validate transaction'})
 
         if db.verify_pin(request.json['pin'], request.json['card_id'], account):
             return jsonify({'OK': str(account['balance'])})
@@ -134,7 +146,7 @@ class Bank(object):
 
     @server.route('/change_pin', methods = ['POST'])
     def change_pin():
-        if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json:
+        if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json:# or not 'encrypted_response' in request.json:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -142,6 +154,15 @@ class Bank(object):
         if account is None:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction'})
+
+        if account['pin'] is None:
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+
+        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+        #    time.sleep(2)
+        #    return jsonify({'ERROR': 'Could not validate transaction'})
+
 
         if db.verify_pin(request.json['pin'],request.json['card_id'], account):
             db.set_pin(request.json['card_id'], request.json['new_pin'])
@@ -165,6 +186,28 @@ class Bank(object):
             success = db.initialize_card(request.json['card_id'], request.json['key'], request.json['new_pin'])
             if success:
                 return jsonify({'OKAY': 'Card has been provisioned!'})
+            else:
+                time.sleep(2)
+                return jsonify({'ERROR': 'Could not validate transaction'})
+        time.sleep(2)
+        return jsonify({'ERROR': 'Could not validate transaction'})
+
+
+    @server.route('/initalize_atm', methods = ['POST'])
+    def new_atm():
+        if not request.json or not 'atm_id' in request.json or not 'key' in request.json or not 'num_bills' in request.json:
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+
+        atm = db.get_atm(request.json['atm_id'])
+        if atm is None:
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
+
+        if atm['key'] == None:
+            success = db.initialize_atm(request.json['key'], request.json['num_bills'], request.json['atm_id'])
+            if success:
+                return jsonify({'OKAY': 'HSM has been provisioned!'})
             else:
                 time.sleep(2)
                 return jsonify({'ERROR': 'Could not validate transaction'})
