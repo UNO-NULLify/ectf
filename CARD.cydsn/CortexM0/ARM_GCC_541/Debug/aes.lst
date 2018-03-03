@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
   29:aes.c         ****         You should pad the end of the string with zeros if this is not the case.
   30:aes.c         ****         For AES192/256 the key size is proportionally larger.
   31:aes.c         **** 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 2
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 2
 
 
   32:aes.c         **** */
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
   86:aes.c         ****   0x09, 0x83, 0x2c, 0x1a, 0x1b, 0x6e, 0x5a, 0xa0, 0x52, 0x3b, 0xd6, 0xb3, 0x29, 0xe3, 0x2f, 0x84,
   87:aes.c         ****   0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf,
   88:aes.c         ****   0xd0, 0xef, 0xaa, 0xfb, 0x43, 0x4d, 0x33, 0x85, 0x45, 0xf9, 0x02, 0x7f, 0x50, 0x3c, 0x9f, 0xa8,
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 3
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 3
 
 
   89:aes.c         ****   0x51, 0xa3, 0x40, 0x8f, 0x92, 0x9d, 0x38, 0xf5, 0xbc, 0xb6, 0xda, 0x21, 0x10, 0xff, 0xf3, 0xd2,
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  143:aes.c         **** /*
  144:aes.c         **** static uint8_t getSBoxInvert(uint8_t num)
  145:aes.c         **** {
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 4
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 4
 
 
  146:aes.c         ****   return rsbox[num];
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  158:aes.c         ****   {
   63              		.loc 1 158 0 discriminator 3
   64 0020 0132     		adds	r2, r2, #1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 5
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 5
 
 
   65              	.LVL3:
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  182:aes.c         **** 
  183:aes.c         ****       // Function RotWord()
  184:aes.c         ****       {
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 6
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 6
 
 
  185:aes.c         ****         k = tempa[0];
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  128 0070 1C78     		ldrb	r4, [r3]
  129 0072 164A     		ldr	r2, .L8+4
  130 0074 145D     		ldrb	r4, [r2, r4]
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 7
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 7
 
 
  131 0076 1C70     		strb	r4, [r3]
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  174              	.LVL13:
  175 00b4 DD78     		ldrb	r5, [r3, #3]
  176 00b6 E378     		ldrb	r3, [r4, #3]
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 8
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 8
 
 
  177 00b8 6B40     		eors	r3, r5
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  244:aes.c         **** {
  207              		.loc 1 244 0
  208              		.cfi_startproc
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 9
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 9
 
 
  209              		@ args = 0, pretend = 0, frame = 0
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  254              	.LVL23:
  255              	.L11:
  246:aes.c         ****   {
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 10
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 10
 
 
  256              		.loc 1 246 0 is_stmt 0 discriminator 1
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  262:aes.c         ****     {
  296              		.loc 1 262 0 discriminator 3
  297 0012 0133     		adds	r3, r3, #1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 11
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 11
 
 
  298              	.LVL28:
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  340              		@ link register save eliminated.
  341              	.LVL34:
  274:aes.c         ****   uint8_t temp;
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 12
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 12
 
 
  275:aes.c         **** 
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  376 0022 C27B     		ldrb	r2, [r0, #15]
  377 0024 C270     		strb	r2, [r0, #3]
  295:aes.c         ****   (*state)[3][3] = (*state)[2][3];
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 13
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 13
 
 
  378              		.loc 1 295 0
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  424              		.thumb_func
  425              		.type	MixColumns, %function
  426              	MixColumns:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 14
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 14
 
 
  427              	.LFB8:
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  314:aes.c         ****     Tm  = (*state)[i][0] ^ (*state)[i][1] ; Tm = xtime(Tm);  (*state)[i][0] ^= Tm ^ Tmp ;
  471              		.loc 1 314 0 discriminator 3
  472 0028 FFF7FEFF 		bl	xtime
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 15
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 15
 
 
  473              	.LVL46:
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  523              	.LVL58:
  524              	.L25:
  310:aes.c         ****   {  
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 16
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 16
 
 
  525              		.loc 1 310 0 is_stmt 0 discriminator 1
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  551 0000 F0B5     		push	{r4, r5, r6, r7, lr}
  552              		.cfi_def_cfa_offset 20
  553              		.cfi_offset 4, -20
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 17
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 17
 
 
  554              		.cfi_offset 5, -16
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  600              	.LVL68:
  354:aes.c         **** 
  355:aes.c         ****     (*state)[i][0] = Multiply(a, 0x0e) ^ Multiply(b, 0x0b) ^ Multiply(c, 0x0d) ^ Multiply(d, 0x09);
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 18
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 18
 
 
  601              		.loc 1 355 0 discriminator 3
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  655 0096 059A     		ldr	r2, [sp, #20]
  656 0098 6A40     		eors	r2, r5
  657 009a D2B2     		uxtb	r2, r2
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 19
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 19
 
 
  658 009c 4B46     		mov	r3, r9
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  710 0100 D3B2     		uxtb	r3, r2
  711 0102 059D     		ldr	r5, [sp, #20]
  712 0104 2A00     		movs	r2, r5
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 20
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 20
 
 
  713 0106 4846     		mov	r0, r9
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  765 016a 9C46     		mov	ip, r3
  766 016c E044     		add	r8, r8, ip
  767              	.LVL84:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 21
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 21
 
 
  768              	.L28:
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  369:aes.c         ****   {
  370:aes.c         ****     for (j = 0; j < 4; ++j)
  371:aes.c         ****     {
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 22
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 22
 
 
  372:aes.c         ****       (*state)[j][i] = getSBoxInvert((*state)[j][i]);
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  857              		.type	InvShiftRows, %function
  858              	InvShiftRows:
  859              	.LFB11:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 23
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 23
 
 
  376:aes.c         **** 
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  894              		.loc 1 395 0
  895 001e 8373     		strb	r3, [r0, #14]
  396:aes.c         **** 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 24
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 24
 
 
  397:aes.c         ****   // Rotate third row 3 columns to right
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  410:aes.c         **** 
  411:aes.c         ****   // Add the First round key to the state before starting the rounds.
  412:aes.c         ****   AddRoundKey(0, state, RoundKey); 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 25
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 25
 
 
  937              		.loc 1 412 0
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  425:aes.c         ****   // The last round is given below.
  426:aes.c         ****   // The MixColumns function is not here in the last round.
  427:aes.c         ****   SubBytes(state);
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 26
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 26
 
 
  977              		.loc 1 427 0 is_stmt 1
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1021              		.loc 1 437 0
  1022 0006 0A00     		movs	r2, r1
  1023 0008 0100     		movs	r1, r0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 27
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 27
 
 
  1024              	.LVL121:
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1061              		.loc 1 452 0 is_stmt 1
  1062 0038 2800     		movs	r0, r5
  1063 003a FFF7FEFF 		bl	InvShiftRows
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 28
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 28
 
 
  1064              	.LVL131:
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  480:aes.c         **** 
  481:aes.c         **** 
  482:aes.c         **** 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 29
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 29
 
 
  483:aes.c         **** #if defined(CBC) && (CBC == 1)
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1132              		.thumb_func
  1133              		.type	AES_init_ctx, %function
  1134              	AES_init_ctx:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 30
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 30
 
 
  1135              	.LFB1:
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1183 0012 FFF7FEFF 		bl	memcpy
  1184              	.LVL146:
  234:aes.c         **** void AES_ctx_set_iv(struct AES_ctx* ctx, const uint8_t* iv)
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 31
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 31
 
 
  1185              		.loc 1 234 0
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1233              		@ frame_needed = 0, uses_anonymous_args = 0
  1234              	.LVL152:
  1235 0000 F0B5     		push	{r4, r5, r6, r7, lr}
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 32
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 32
 
 
  1236              		.cfi_def_cfa_offset 20
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1280 002e BD42     		cmp	r5, r7
  1281 0030 F3D3     		bcc	.L52
  505:aes.c         ****     //printf("Step %d - %d", i/16, i);
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 33
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 33
 
 
  506:aes.c         ****   }
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  514:aes.c         ****   uint8_t storeNextIv[AES_BLOCKLEN];
  515:aes.c         ****   for (i = 0; i < length; i += AES_BLOCKLEN)
  1328              		.loc 1 515 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 34
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 34
 
 
  1329 000e 0025     		movs	r5, #0
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1372              	.LVL176:
  1373              	.LVL177:
  1374 0044 04BC     		pop	{r2}
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 35
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 35
 
 
  1375 0046 9046     		mov	r8, r2
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1429 002a E5       		.byte	-27
  1430 002b F1       		.byte	-15
  1431 002c 71       		.byte	113
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 36
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 36
 
 
  1432 002d D8       		.byte	-40
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1486 0063 FB       		.byte	-5
  1487 0064 43       		.byte	67
  1488 0065 4D       		.byte	77
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 37
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 37
 
 
  1489 0066 33       		.byte	51
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1543 009c DE       		.byte	-34
  1544 009d 5E       		.byte	94
  1545 009e 0B       		.byte	11
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 38
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 38
 
 
  1546 009f DB       		.byte	-37
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1600 00d5 03       		.byte	3
  1601 00d6 F6       		.byte	-10
  1602 00d7 0E       		.byte	14
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 39
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 39
 
 
  1603 00d8 61       		.byte	97
@@ -2338,7 +2338,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1657 010b 00       		.space	1
  1658              		.type	rsbox, %object
  1659              		.size	rsbox, 256
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 40
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 40
 
 
  1660              	rsbox:
@@ -2398,7 +2398,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1714 0141 D9       		.byte	-39
  1715 0142 24       		.byte	36
  1716 0143 B2       		.byte	-78
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 41
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 41
 
 
  1717 0144 76       		.byte	118
@@ -2458,7 +2458,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1771 017a 45       		.byte	69
  1772 017b 06       		.byte	6
  1773 017c D0       		.byte	-48
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 42
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 42
 
 
  1774 017d 2C       		.byte	44
@@ -2518,7 +2518,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1828 01b3 89       		.byte	-119
  1829 01b4 6F       		.byte	111
  1830 01b5 B7       		.byte	-73
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 43
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 43
 
 
  1831 01b6 62       		.byte	98
@@ -2578,7 +2578,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1885 01ec A0       		.byte	-96
  1886 01ed E0       		.byte	-32
  1887 01ee 3B       		.byte	59
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 44
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 44
 
 
  1888 01ef 4D       		.byte	77
@@ -2622,109 +2622,109 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  1926 0006 00000000 		.4byte	.Ldebug_abbrev0
  1927 000a 04       		.byte	0x4
  1928 000b 01       		.uleb128 0x1
- 1929 000c 5E000000 		.4byte	.LASF45
+ 1929 000c 59000000 		.4byte	.LASF45
  1930 0010 0C       		.byte	0xc
- 1931 0011 66020000 		.4byte	.LASF46
- 1932 0015 29000000 		.4byte	.LASF47
+ 1931 0011 61020000 		.4byte	.LASF46
+ 1932 0015 00000000 		.4byte	.LASF47
  1933 0019 00000000 		.4byte	.Ldebug_ranges0+0
  1934 001d 00000000 		.4byte	0
  1935 0021 00000000 		.4byte	.Ldebug_line0
  1936 0025 02       		.uleb128 0x2
  1937 0026 01       		.byte	0x1
  1938 0027 06       		.byte	0x6
- 1939 0028 2A010000 		.4byte	.LASF0
+ 1939 0028 25010000 		.4byte	.LASF0
  1940 002c 03       		.uleb128 0x3
- 1941 002d 1F000000 		.4byte	.LASF5
+ 1941 002d 4F000000 		.4byte	.LASF5
  1942 0031 02       		.byte	0x2
  1943 0032 1D       		.byte	0x1d
  1944 0033 37000000 		.4byte	0x37
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 45
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 45
 
 
  1945 0037 02       		.uleb128 0x2
  1946 0038 01       		.byte	0x1
  1947 0039 08       		.byte	0x8
- 1948 003a 19020000 		.4byte	.LASF1
+ 1948 003a 14020000 		.4byte	.LASF1
  1949 003e 02       		.uleb128 0x2
  1950 003f 02       		.byte	0x2
  1951 0040 05       		.byte	0x5
- 1952 0041 27020000 		.4byte	.LASF2
+ 1952 0041 22020000 		.4byte	.LASF2
  1953 0045 02       		.uleb128 0x2
  1954 0046 02       		.byte	0x2
  1955 0047 07       		.byte	0x7
- 1956 0048 D0010000 		.4byte	.LASF3
+ 1956 0048 CB010000 		.4byte	.LASF3
  1957 004c 02       		.uleb128 0x2
  1958 004d 04       		.byte	0x4
  1959 004e 05       		.byte	0x5
- 1960 004f 3C010000 		.4byte	.LASF4
+ 1960 004f 37010000 		.4byte	.LASF4
  1961 0053 03       		.uleb128 0x3
- 1962 0054 84010000 		.4byte	.LASF6
+ 1962 0054 7F010000 		.4byte	.LASF6
  1963 0058 02       		.byte	0x2
  1964 0059 41       		.byte	0x41
  1965 005a 5E000000 		.4byte	0x5e
  1966 005e 02       		.uleb128 0x2
  1967 005f 04       		.byte	0x4
  1968 0060 07       		.byte	0x7
- 1969 0061 A1010000 		.4byte	.LASF7
+ 1969 0061 9C010000 		.4byte	.LASF7
  1970 0065 02       		.uleb128 0x2
  1971 0066 08       		.byte	0x8
  1972 0067 05       		.byte	0x5
- 1973 0068 1C010000 		.4byte	.LASF8
+ 1973 0068 17010000 		.4byte	.LASF8
  1974 006c 02       		.uleb128 0x2
  1975 006d 08       		.byte	0x8
  1976 006e 07       		.byte	0x7
- 1977 006f EC000000 		.4byte	.LASF9
+ 1977 006f E7000000 		.4byte	.LASF9
  1978 0073 04       		.uleb128 0x4
  1979 0074 04       		.byte	0x4
  1980 0075 05       		.byte	0x5
  1981 0076 696E7400 		.ascii	"int\000"
  1982 007a 03       		.uleb128 0x3
- 1983 007b 31020000 		.4byte	.LASF10
+ 1983 007b 2C020000 		.4byte	.LASF10
  1984 007f 02       		.byte	0x2
  1985 0080 CA       		.byte	0xca
  1986 0081 85000000 		.4byte	0x85
  1987 0085 02       		.uleb128 0x2
  1988 0086 04       		.byte	0x4
  1989 0087 07       		.byte	0x7
- 1990 0088 94010000 		.4byte	.LASF11
+ 1990 0088 8F010000 		.4byte	.LASF11
  1991 008c 03       		.uleb128 0x3
- 1992 008d B3020000 		.4byte	.LASF12
+ 1992 008d AE020000 		.4byte	.LASF12
  1993 0091 03       		.byte	0x3
  1994 0092 18       		.byte	0x18
  1995 0093 2C000000 		.4byte	0x2c
  1996 0097 03       		.uleb128 0x3
- 1997 0098 5D020000 		.4byte	.LASF13
+ 1997 0098 58020000 		.4byte	.LASF13
  1998 009c 03       		.byte	0x3
  1999 009d 30       		.byte	0x30
  2000 009e 53000000 		.4byte	0x53
  2001 00a2 03       		.uleb128 0x3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 46
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 46
 
 
- 2002 00a3 00000000 		.4byte	.LASF14
+ 2002 00a3 30000000 		.4byte	.LASF14
  2003 00a7 03       		.byte	0x3
  2004 00a8 48       		.byte	0x48
  2005 00a9 7A000000 		.4byte	0x7a
  2006 00ad 02       		.uleb128 0x2
  2007 00ae 08       		.byte	0x8
  2008 00af 04       		.byte	0x4
- 2009 00b0 00020000 		.4byte	.LASF15
+ 2009 00b0 FB010000 		.4byte	.LASF15
  2010 00b4 02       		.uleb128 0x2
  2011 00b5 04       		.byte	0x4
  2012 00b6 07       		.byte	0x7
- 2013 00b7 ED010000 		.4byte	.LASF16
+ 2013 00b7 E8010000 		.4byte	.LASF16
  2014 00bb 02       		.uleb128 0x2
  2015 00bc 01       		.byte	0x1
  2016 00bd 08       		.byte	0x8
- 2017 00be 73020000 		.4byte	.LASF17
+ 2017 00be 6E020000 		.4byte	.LASF17
  2018 00c2 05       		.uleb128 0x5
- 2019 00c3 A5020000 		.4byte	.LASF48
+ 2019 00c3 A0020000 		.4byte	.LASF48
  2020 00c7 0001     		.2byte	0x100
  2021 00c9 04       		.byte	0x4
  2022 00ca 2B       		.byte	0x2b
  2023 00cb E7000000 		.4byte	0xe7
  2024 00cf 06       		.uleb128 0x6
- 2025 00d0 7E020000 		.4byte	.LASF18
+ 2025 00d0 79020000 		.4byte	.LASF18
  2026 00d4 04       		.byte	0x4
  2027 00d5 2D       		.byte	0x2d
  2028 00d6 E7000000 		.4byte	0xe7
@@ -2751,14 +2751,14 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2049 0105 0F       		.byte	0xf
  2050 0106 00       		.byte	0
  2051 0107 03       		.uleb128 0x3
- 2052 0108 87020000 		.4byte	.LASF19
+ 2052 0108 82020000 		.4byte	.LASF19
  2053 010c 01       		.byte	0x1
  2054 010d 49       		.byte	0x49
  2055 010e 12010000 		.4byte	0x112
  2056 0112 08       		.uleb128 0x8
  2057 0113 8C000000 		.4byte	0x8c
  2058 0117 28010000 		.4byte	0x128
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 47
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 47
 
 
  2059 011b 09       		.uleb128 0x9
@@ -2769,7 +2769,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2064 0126 03       		.byte	0x3
  2065 0127 00       		.byte	0
  2066 0128 0A       		.uleb128 0xa
- 2067 0129 C3010000 		.4byte	.LASF21
+ 2067 0129 BE010000 		.4byte	.LASF21
  2068 012d 01       		.byte	0x1
  2069 012e 98       		.byte	0x98
  2070 012f 00000000 		.4byte	.LFB0
@@ -2778,7 +2778,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2073 0138 9C       		.byte	0x9c
  2074 0139 8F010000 		.4byte	0x18f
  2075 013d 0B       		.uleb128 0xb
- 2076 013e 7E020000 		.4byte	.LASF18
+ 2076 013e 79020000 		.4byte	.LASF18
  2077 0142 01       		.byte	0x1
  2078 0143 98       		.byte	0x98
  2079 0144 8F010000 		.4byte	0x18f
@@ -2809,7 +2809,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2104 0178 85000000 		.4byte	0x85
  2105 017c 6B000000 		.4byte	.LLST3
  2106 0180 0E       		.uleb128 0xe
- 2107 0181 78020000 		.4byte	.LASF20
+ 2107 0181 73020000 		.4byte	.LASF20
  2108 0185 01       		.byte	0x1
  2109 0186 9B       		.byte	0x9b
  2110 0187 A0010000 		.4byte	0x1a0
@@ -2818,7 +2818,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2113 018d 64       		.sleb128 -28
  2114 018e 00       		.byte	0
  2115 018f 0F       		.uleb128 0xf
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 48
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 48
 
 
  2116 0190 04       		.byte	0x4
@@ -2836,7 +2836,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2128 01ae 03       		.byte	0x3
  2129 01af 00       		.byte	0
  2130 01b0 0A       		.uleb128 0xa
- 2131 01b1 13000000 		.4byte	.LASF22
+ 2131 01b1 43000000 		.4byte	.LASF22
  2132 01b5 01       		.byte	0x1
  2133 01b6 F3       		.byte	0xf3
  2134 01b7 00000000 		.4byte	.LFB4
@@ -2845,21 +2845,21 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2137 01c0 9C       		.byte	0x9c
  2138 01c1 07020000 		.4byte	0x207
  2139 01c5 0B       		.uleb128 0xb
- 2140 01c6 3D020000 		.4byte	.LASF23
+ 2140 01c6 38020000 		.4byte	.LASF23
  2141 01ca 01       		.byte	0x1
  2142 01cb F3       		.byte	0xf3
  2143 01cc 8C000000 		.4byte	0x8c
  2144 01d0 01       		.uleb128 0x1
  2145 01d1 50       		.byte	0x50
  2146 01d2 0B       		.uleb128 0xb
- 2147 01d3 36010000 		.4byte	.LASF24
+ 2147 01d3 31010000 		.4byte	.LASF24
  2148 01d7 01       		.byte	0x1
  2149 01d8 F3       		.byte	0xf3
  2150 01d9 07020000 		.4byte	0x207
  2151 01dd 01       		.uleb128 0x1
  2152 01de 51       		.byte	0x51
  2153 01df 0B       		.uleb128 0xb
- 2154 01e0 7E020000 		.4byte	.LASF18
+ 2154 01e0 79020000 		.4byte	.LASF18
  2155 01e4 01       		.byte	0x1
  2156 01e5 F3       		.byte	0xf3
  2157 01e6 8F010000 		.4byte	0x18f
@@ -2878,14 +2878,14 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2170 01fe 8C000000 		.4byte	0x8c
  2171 0202 E9000000 		.4byte	.LLST5
  2172 0206 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 49
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 49
 
 
  2173 0207 0F       		.uleb128 0xf
  2174 0208 04       		.byte	0x4
  2175 0209 07010000 		.4byte	0x107
  2176 020d 11       		.uleb128 0x11
- 2177 020e 0A000000 		.4byte	.LASF25
+ 2177 020e 3A000000 		.4byte	.LASF25
  2178 0212 01       		.byte	0x1
  2179 0213 0101     		.2byte	0x101
  2180 0215 00000000 		.4byte	.LFB5
@@ -2894,7 +2894,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2183 021e 9C       		.byte	0x9c
  2184 021f 4E020000 		.4byte	0x24e
  2185 0223 12       		.uleb128 0x12
- 2186 0224 36010000 		.4byte	.LASF24
+ 2186 0224 31010000 		.4byte	.LASF24
  2187 0228 01       		.byte	0x1
  2188 0229 0101     		.2byte	0x101
  2189 022b 07020000 		.4byte	0x207
@@ -2914,7 +2914,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2203 0249 3C010000 		.4byte	.LLST7
  2204 024d 00       		.byte	0
  2205 024e 11       		.uleb128 0x11
- 2206 024f 53020000 		.4byte	.LASF26
+ 2206 024f 4E020000 		.4byte	.LASF26
  2207 0253 01       		.byte	0x1
  2208 0254 1001     		.2byte	0x110
  2209 0256 00000000 		.4byte	.LFB6
@@ -2923,14 +2923,14 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2212 025f 9C       		.byte	0x9c
  2213 0260 81020000 		.4byte	0x281
  2214 0264 12       		.uleb128 0x12
- 2215 0265 36010000 		.4byte	.LASF24
+ 2215 0265 31010000 		.4byte	.LASF24
  2216 0269 01       		.byte	0x1
  2217 026a 1001     		.2byte	0x110
  2218 026c 07020000 		.4byte	0x207
  2219 0270 01       		.uleb128 0x1
  2220 0271 50       		.byte	0x50
  2221 0272 14       		.uleb128 0x14
- 2222 0273 8F010000 		.4byte	.LASF27
+ 2222 0273 8A010000 		.4byte	.LASF27
  2223 0277 01       		.byte	0x1
  2224 0278 1201     		.2byte	0x112
  2225 027a 8C000000 		.4byte	0x8c
@@ -2938,10 +2938,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2227 027f 53       		.byte	0x53
  2228 0280 00       		.byte	0
  2229 0281 15       		.uleb128 0x15
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 50
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 50
 
 
- 2230 0282 BB020000 		.4byte	.LASF49
+ 2230 0282 B6020000 		.4byte	.LASF49
  2231 0286 01       		.byte	0x1
  2232 0287 2C01     		.2byte	0x12c
  2233 0289 8C000000 		.4byte	0x8c
@@ -2958,7 +2958,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2244 02a5 65010000 		.4byte	.LLST8
  2245 02a9 00       		.byte	0
  2246 02aa 11       		.uleb128 0x11
- 2247 02ab B8010000 		.4byte	.LASF28
+ 2247 02ab B3010000 		.4byte	.LASF28
  2248 02af 01       		.byte	0x1
  2249 02b0 3201     		.2byte	0x132
  2250 02b2 00000000 		.4byte	.LFB8
@@ -2967,7 +2967,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2253 02bb 9C       		.byte	0x9c
  2254 02bc 3A030000 		.4byte	0x33a
  2255 02c0 17       		.uleb128 0x17
- 2256 02c1 36010000 		.4byte	.LASF24
+ 2256 02c1 31010000 		.4byte	.LASF24
  2257 02c5 01       		.byte	0x1
  2258 02c6 3201     		.2byte	0x132
  2259 02c8 07020000 		.4byte	0x207
@@ -2998,7 +2998,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2284 0307 5F020000 		.4byte	.LLST13
  2285 030b 18       		.uleb128 0x18
  2286 030c 2C000000 		.4byte	.LVL46
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 51
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 51
 
 
  2287 0310 81020000 		.4byte	0x281
@@ -3023,7 +3023,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2306 0338 00       		.byte	0
  2307 0339 00       		.byte	0
  2308 033a 11       		.uleb128 0x11
- 2309 033b C1020000 		.4byte	.LASF29
+ 2309 033b BC020000 		.4byte	.LASF29
  2310 033f 01       		.byte	0x1
  2311 0340 5801     		.2byte	0x158
  2312 0342 00000000 		.4byte	.LFB9
@@ -3032,7 +3032,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2315 034b 9C       		.byte	0x9c
  2316 034c A2040000 		.4byte	0x4a2
  2317 0350 17       		.uleb128 0x17
- 2318 0351 36010000 		.4byte	.LASF24
+ 2318 0351 31010000 		.4byte	.LASF24
  2319 0355 01       		.byte	0x1
  2320 0356 5801     		.2byte	0x158
  2321 0358 07020000 		.4byte	0x207
@@ -3058,7 +3058,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2341 038a 13       		.uleb128 0x13
  2342 038b 6300     		.ascii	"c\000"
  2343 038d 01       		.byte	0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 52
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 52
 
 
  2344 038e 5B01     		.2byte	0x15b
@@ -3118,7 +3118,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2398 03f7 74       		.byte	0x74
  2399 03f8 00       		.sleb128 0
  2400 03f9 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 53
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 53
 
 
  2401 03fa 1B       		.uleb128 0x1b
@@ -3178,7 +3178,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2455 045d 50       		.byte	0x50
  2456 045e 02       		.uleb128 0x2
  2457 045f 74       		.byte	0x74
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 54
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 54
 
 
  2458 0460 00       		.sleb128 0
@@ -3223,7 +3223,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2497 04a0 00       		.byte	0
  2498 04a1 00       		.byte	0
  2499 04a2 11       		.uleb128 0x11
- 2500 04a3 5C010000 		.4byte	.LASF30
+ 2500 04a3 57010000 		.4byte	.LASF30
  2501 04a7 01       		.byte	0x1
  2502 04a8 6D01     		.2byte	0x16d
  2503 04aa 00000000 		.4byte	.LFB10
@@ -3232,13 +3232,13 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2506 04b3 9C       		.byte	0x9c
  2507 04b4 E3040000 		.4byte	0x4e3
  2508 04b8 12       		.uleb128 0x12
- 2509 04b9 36010000 		.4byte	.LASF24
+ 2509 04b9 31010000 		.4byte	.LASF24
  2510 04bd 01       		.byte	0x1
  2511 04be 6D01     		.2byte	0x16d
  2512 04c0 07020000 		.4byte	0x207
  2513 04c4 01       		.uleb128 0x1
  2514 04c5 50       		.byte	0x50
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 55
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 55
 
 
  2515 04c6 13       		.uleb128 0x13
@@ -3255,7 +3255,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2526 04de 66030000 		.4byte	.LLST21
  2527 04e2 00       		.byte	0
  2528 04e3 11       		.uleb128 0x11
- 2529 04e4 0C020000 		.4byte	.LASF31
+ 2529 04e4 07020000 		.4byte	.LASF31
  2530 04e8 01       		.byte	0x1
  2531 04e9 7901     		.2byte	0x179
  2532 04eb 00000000 		.4byte	.LFB11
@@ -3264,14 +3264,14 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2535 04f4 9C       		.byte	0x9c
  2536 04f5 16050000 		.4byte	0x516
  2537 04f9 12       		.uleb128 0x12
- 2538 04fa 36010000 		.4byte	.LASF24
+ 2538 04fa 31010000 		.4byte	.LASF24
  2539 04fe 01       		.byte	0x1
  2540 04ff 7901     		.2byte	0x179
  2541 0501 07020000 		.4byte	0x207
  2542 0505 01       		.uleb128 0x1
  2543 0506 50       		.byte	0x50
  2544 0507 14       		.uleb128 0x14
- 2545 0508 8F010000 		.4byte	.LASF27
+ 2545 0508 8A010000 		.4byte	.LASF27
  2546 050c 01       		.byte	0x1
  2547 050d 7B01     		.2byte	0x17b
  2548 050f 8C000000 		.4byte	0x8c
@@ -3279,7 +3279,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2550 0514 53       		.byte	0x53
  2551 0515 00       		.byte	0
  2552 0516 11       		.uleb128 0x11
- 2553 0517 CF020000 		.4byte	.LASF32
+ 2553 0517 CA020000 		.4byte	.LASF32
  2554 051b 01       		.byte	0x1
  2555 051c 9701     		.2byte	0x197
  2556 051e 00000000 		.4byte	.LFB12
@@ -3288,22 +3288,22 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2559 0527 9C       		.byte	0x9c
  2560 0528 1B060000 		.4byte	0x61b
  2561 052c 17       		.uleb128 0x17
- 2562 052d 36010000 		.4byte	.LASF24
+ 2562 052d 31010000 		.4byte	.LASF24
  2563 0531 01       		.byte	0x1
  2564 0532 9701     		.2byte	0x197
  2565 0534 07020000 		.4byte	0x207
  2566 0538 8F030000 		.4byte	.LLST22
  2567 053c 17       		.uleb128 0x17
- 2568 053d 7E020000 		.4byte	.LASF18
+ 2568 053d 79020000 		.4byte	.LASF18
  2569 0541 01       		.byte	0x1
  2570 0542 9701     		.2byte	0x197
  2571 0544 8F010000 		.4byte	0x18f
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 56
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 56
 
 
  2572 0548 C6030000 		.4byte	.LLST23
  2573 054c 1C       		.uleb128 0x1c
- 2574 054d 3D020000 		.4byte	.LASF23
+ 2574 054d 38020000 		.4byte	.LASF23
  2575 0551 01       		.byte	0x1
  2576 0552 9901     		.2byte	0x199
  2577 0554 8C000000 		.4byte	0x8c
@@ -3358,7 +3358,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2626 05ac B7050000 		.4byte	0x5b7
  2627 05b0 1A       		.uleb128 0x1a
  2628 05b1 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 57
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 57
 
 
  2629 05b2 50       		.byte	0x50
@@ -3418,7 +3418,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2683 0609 01       		.uleb128 0x1
  2684 060a 50       		.byte	0x50
  2685 060b 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 58
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 58
 
 
  2686 060c 3E       		.byte	0x3e
@@ -3437,7 +3437,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2699 0619 00       		.byte	0
  2700 061a 00       		.byte	0
  2701 061b 11       		.uleb128 0x11
- 2702 061c E3010000 		.4byte	.LASF33
+ 2702 061c DE010000 		.4byte	.LASF33
  2703 0620 01       		.byte	0x1
  2704 0621 B001     		.2byte	0x1b0
  2705 0623 00000000 		.4byte	.LFB13
@@ -3446,19 +3446,19 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2708 062c 9C       		.byte	0x9c
  2709 062d 20070000 		.4byte	0x720
  2710 0631 17       		.uleb128 0x17
- 2711 0632 36010000 		.4byte	.LASF24
+ 2711 0632 31010000 		.4byte	.LASF24
  2712 0636 01       		.byte	0x1
  2713 0637 B001     		.2byte	0x1b0
  2714 0639 07020000 		.4byte	0x207
  2715 063d 33040000 		.4byte	.LLST25
  2716 0641 17       		.uleb128 0x17
- 2717 0642 7E020000 		.4byte	.LASF18
+ 2717 0642 79020000 		.4byte	.LASF18
  2718 0646 01       		.byte	0x1
  2719 0647 B001     		.2byte	0x1b0
  2720 0649 8F010000 		.4byte	0x18f
  2721 064d 6A040000 		.4byte	.LLST26
  2722 0651 1C       		.uleb128 0x1c
- 2723 0652 3D020000 		.4byte	.LASF23
+ 2723 0652 38020000 		.4byte	.LASF23
  2724 0656 01       		.byte	0x1
  2725 0657 B201     		.2byte	0x1b2
  2726 0659 8C000000 		.4byte	0x8c
@@ -3478,7 +3478,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2740 0676 02       		.uleb128 0x2
  2741 0677 75       		.byte	0x75
  2742 0678 00       		.sleb128 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 59
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 59
 
 
  2743 0679 1A       		.uleb128 0x1a
@@ -3538,7 +3538,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2797 06cd 3A030000 		.4byte	0x33a
  2798 06d1 DC060000 		.4byte	0x6dc
  2799 06d5 1A       		.uleb128 0x1a
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 60
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 60
 
 
  2800 06d6 01       		.uleb128 0x1
@@ -3592,13 +3592,13 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2848 071e 00       		.byte	0
  2849 071f 00       		.byte	0
  2850 0720 11       		.uleb128 0x11
- 2851 0721 F6010000 		.4byte	.LASF34
+ 2851 0721 F1010000 		.4byte	.LASF34
  2852 0725 01       		.byte	0x1
  2853 0726 E601     		.2byte	0x1e6
  2854 0728 00000000 		.4byte	.LFB14
  2855 072c 1A000000 		.4byte	.LFE14-.LFB14
  2856 0730 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 61
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 61
 
 
  2857 0731 9C       		.byte	0x9c
@@ -3625,7 +3625,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2878 075b D7040000 		.4byte	.LLST28
  2879 075f 00       		.byte	0
  2880 0760 1E       		.uleb128 0x1e
- 2881 0761 0F010000 		.4byte	.LASF35
+ 2881 0761 0A010000 		.4byte	.LASF35
  2882 0765 01       		.byte	0x1
  2883 0766 E1       		.byte	0xe1
  2884 0767 00000000 		.4byte	.LFB1
@@ -3658,7 +3658,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2911 07a3 1A       		.uleb128 0x1a
  2912 07a4 01       		.uleb128 0x1
  2913 07a5 51       		.byte	0x51
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 62
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 62
 
 
  2914 07a6 03       		.uleb128 0x3
@@ -3671,7 +3671,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2921 07ad 04       		.byte	0x4
  2922 07ae C2000000 		.4byte	0xc2
  2923 07b2 1E       		.uleb128 0x1e
- 2924 07b3 43020000 		.4byte	.LASF36
+ 2924 07b3 3E020000 		.4byte	.LASF36
  2925 07b7 01       		.byte	0x1
  2926 07b8 E6       		.byte	0xe6
  2927 07b9 00000000 		.4byte	.LFB2
@@ -3718,7 +3718,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2968 080e 19       		.uleb128 0x19
  2969 080f 16000000 		.4byte	.LVL146
  2970 0813 5A0A0000 		.4byte	0xa5a
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 63
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 63
 
 
  2971 0817 1A       		.uleb128 0x1a
@@ -3741,7 +3741,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  2988 0829 00       		.byte	0
  2989 082a 00       		.byte	0
  2990 082b 1E       		.uleb128 0x1e
- 2991 082c 8F020000 		.4byte	.LASF37
+ 2991 082c 8A020000 		.4byte	.LASF37
  2992 0830 01       		.byte	0x1
  2993 0831 EB       		.byte	0xeb
  2994 0832 00000000 		.4byte	.LFB3
@@ -3778,7 +3778,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3025 0872 51       		.byte	0x51
  3026 0873 03       		.uleb128 0x3
  3027 0874 F3       		.byte	0xf3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 64
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 64
 
 
  3028 0875 01       		.uleb128 0x1
@@ -3791,7 +3791,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3035 087c 00       		.byte	0
  3036 087d 00       		.byte	0
  3037 087e 1F       		.uleb128 0x1f
- 3038 087f 45010000 		.4byte	.LASF38
+ 3038 087f 40010000 		.4byte	.LASF38
  3039 0883 01       		.byte	0x1
  3040 0884 EF01     		.2byte	0x1ef
  3041 0886 00000000 		.4byte	.LFB15
@@ -3812,7 +3812,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3056 08ac 8F010000 		.4byte	0x18f
  3057 08b0 38060000 		.4byte	.LLST37
  3058 08b4 17       		.uleb128 0x17
- 3059 08b5 6C020000 		.4byte	.LASF39
+ 3059 08b5 67020000 		.4byte	.LASF39
  3060 08b9 01       		.byte	0x1
  3061 08ba EF01     		.2byte	0x1ef
  3062 08bc 97000000 		.4byte	0x97
@@ -3838,7 +3838,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3082 08f0 50       		.byte	0x50
  3083 08f1 02       		.uleb128 0x2
  3084 08f2 74       		.byte	0x74
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 65
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 65
 
 
  3085 08f3 00       		.sleb128 0
@@ -3878,7 +3878,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3119 0924 00       		.byte	0
  3120 0925 00       		.byte	0
  3121 0926 1F       		.uleb128 0x1f
- 3122 0927 68010000 		.4byte	.LASF40
+ 3122 0927 63010000 		.4byte	.LASF40
  3123 092b 01       		.byte	0x1
  3124 092c FF01     		.2byte	0x1ff
  3125 092e 00000000 		.4byte	.LFB16
@@ -3898,11 +3898,11 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3139 0952 FF01     		.2byte	0x1ff
  3140 0954 8F010000 		.4byte	0x18f
  3141 0958 19070000 		.4byte	.LLST42
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 66
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 66
 
 
  3142 095c 17       		.uleb128 0x17
- 3143 095d 6C020000 		.4byte	.LASF39
+ 3143 095d 67020000 		.4byte	.LASF39
  3144 0961 01       		.byte	0x1
  3145 0962 FF01     		.2byte	0x1ff
  3146 0964 97000000 		.4byte	0x97
@@ -3914,7 +3914,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3152 0972 A2000000 		.4byte	0xa2
  3153 0976 63070000 		.4byte	.LLST44
  3154 097a 14       		.uleb128 0x14
- 3155 097b 03010000 		.4byte	.LASF41
+ 3155 097b FE000000 		.4byte	.LASF41
  3156 097f 01       		.byte	0x1
  3157 0980 0202     		.2byte	0x202
  3158 0982 F7000000 		.4byte	0xf7
@@ -3958,7 +3958,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3196 09bd 51       		.byte	0x51
  3197 09be 02       		.uleb128 0x2
  3198 09bf 77       		.byte	0x77
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 67
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 67
 
 
  3199 09c0 00       		.sleb128 0
@@ -4010,7 +4010,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3245 0a06 FF       		.byte	0xff
  3246 0a07 00       		.byte	0
  3247 0a08 0E       		.uleb128 0xe
- 3248 0a09 7F010000 		.4byte	.LASF42
+ 3248 0a09 7A010000 		.4byte	.LASF42
  3249 0a0d 01       		.byte	0x1
  3250 0a0e 50       		.byte	0x50
  3251 0a0f 190A0000 		.4byte	0xa19
@@ -4018,12 +4018,12 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3253 0a14 03       		.byte	0x3
  3254 0a15 00000000 		.4byte	sbox
  3255 0a19 10       		.uleb128 0x10
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 68
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 68
 
 
  3256 0a1a F8090000 		.4byte	0x9f8
  3257 0a1e 0E       		.uleb128 0xe
- 3258 0a1f AD020000 		.4byte	.LASF43
+ 3258 0a1f A8020000 		.4byte	.LASF43
  3259 0a23 01       		.byte	0x1
  3260 0a24 63       		.byte	0x63
  3261 0a25 2F0A0000 		.4byte	0xa2f
@@ -4040,7 +4040,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3272 0a42 0A       		.byte	0xa
  3273 0a43 00       		.byte	0
  3274 0a44 0E       		.uleb128 0xe
- 3275 0a45 B3010000 		.4byte	.LASF44
+ 3275 0a45 AE010000 		.4byte	.LASF44
  3276 0a49 01       		.byte	0x1
  3277 0a4a 77       		.byte	0x77
  3278 0a4b 550A0000 		.4byte	0xa55
@@ -4050,8 +4050,8 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3282 0a55 10       		.uleb128 0x10
  3283 0a56 340A0000 		.4byte	0xa34
  3284 0a5a 20       		.uleb128 0x20
- 3285 0a5b 9E020000 		.4byte	.LASF50
- 3286 0a5f 9E020000 		.4byte	.LASF50
+ 3285 0a5b 99020000 		.4byte	.LASF50
+ 3286 0a5f 99020000 		.4byte	.LASF50
  3287 0a63 00       		.byte	0
  3288              		.section	.debug_abbrev,"",%progbits
  3289              	.Ldebug_abbrev0:
@@ -4078,7 +4078,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3310 0014 24       		.uleb128 0x24
  3311 0015 00       		.byte	0
  3312 0016 0B       		.uleb128 0xb
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 69
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 69
 
 
  3313 0017 0B       		.uleb128 0xb
@@ -4138,7 +4138,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3367 004d 0B       		.uleb128 0xb
  3368 004e 49       		.uleb128 0x49
  3369 004f 13       		.uleb128 0x13
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 70
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 70
 
 
  3370 0050 38       		.uleb128 0x38
@@ -4198,7 +4198,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3424 0086 9742     		.uleb128 0x2117
  3425 0088 19       		.uleb128 0x19
  3426 0089 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 71
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 71
 
 
  3427 008a 13       		.uleb128 0x13
@@ -4258,7 +4258,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3481 00c0 0B       		.uleb128 0xb
  3482 00c1 3B       		.uleb128 0x3b
  3483 00c2 0B       		.uleb128 0xb
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 72
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 72
 
 
  3484 00c3 49       		.uleb128 0x49
@@ -4318,7 +4318,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3538 00fa 49       		.uleb128 0x49
  3539 00fb 13       		.uleb128 0x13
  3540 00fc 02       		.uleb128 0x2
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 73
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 73
 
 
  3541 00fd 18       		.uleb128 0x18
@@ -4378,7 +4378,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3595 0134 01       		.uleb128 0x1
  3596 0135 13       		.uleb128 0x13
  3597 0136 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 74
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 74
 
 
  3598 0137 00       		.byte	0
@@ -4438,7 +4438,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3652 0173 9142     		.uleb128 0x2111
  3653 0175 18       		.uleb128 0x18
  3654 0176 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 75
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 75
 
 
  3655 0177 00       		.byte	0
@@ -4498,7 +4498,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3709 01af 19       		.uleb128 0x19
  3710 01b0 11       		.uleb128 0x11
  3711 01b1 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 76
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 76
 
 
  3712 01b2 12       		.uleb128 0x12
@@ -4558,7 +4558,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3766 0008 0100     		.2byte	0x1
  3767 000a 51       		.byte	0x51
  3768 000b 28000000 		.4byte	.LVL4
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 77
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 77
 
 
  3769 000f D8000000 		.4byte	.LFE0
@@ -4618,7 +4618,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3822 0093 77       		.byte	0x77
  3823 0094 00       		.sleb128 0
  3824 0095 08       		.byte	0x8
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 78
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 78
 
 
  3825 0096 FF       		.byte	0xff
@@ -4678,7 +4678,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3878 011d 9F       		.byte	0x9f
  3879 011e 06000000 		.4byte	.LVL27
  3880 0122 20000000 		.4byte	.LVL32
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 79
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 79
 
 
  3881 0126 0100     		.2byte	0x1
@@ -4738,7 +4738,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3935 01ae 00000000 		.4byte	0
  3936              	.LLST10:
  3937 01b2 0A000000 		.4byte	.LVL42
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 80
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 80
 
 
  3938 01b6 0E000000 		.4byte	.LVL43
@@ -4798,7 +4798,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  3992 0247 00       		.sleb128 0
  3993 0248 77       		.byte	0x77
  3994 0249 00       		.sleb128 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 81
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 81
 
 
  3995 024a 27       		.byte	0x27
@@ -4858,7 +4858,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4049 02da 0300     		.2byte	0x3
  4050 02dc 91       		.byte	0x91
  4051 02dd AC7F     		.sleb128 -84
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 82
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 82
 
 
  4052 02df 00000000 		.4byte	0
@@ -4918,7 +4918,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4106 0370 53       		.byte	0x53
  4107 0371 18000000 		.4byte	.LVL90
  4108 0375 1A000000 		.4byte	.LVL91
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 83
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 83
 
 
  4109 0379 0100     		.2byte	0x1
@@ -4978,7 +4978,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4163 0401 10000000 		.4byte	.LVL105
  4164 0405 0200     		.2byte	0x2
  4165 0407 30       		.byte	0x30
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 84
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 84
 
 
  4166 0408 9F       		.byte	0x9f
@@ -5038,7 +5038,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4220 0495 F3       		.byte	0xf3
  4221 0496 01       		.uleb128 0x1
  4222 0497 51       		.byte	0x51
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 85
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 85
 
 
  4223 0498 9F       		.byte	0x9f
@@ -5098,7 +5098,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4277              	.LLST30:
  4278 0522 00000000 		.4byte	.LVL142
  4279 0526 05000000 		.4byte	.LVL143-1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 86
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 86
 
 
  4280 052a 0100     		.2byte	0x1
@@ -5158,7 +5158,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4334 05ae 0400     		.2byte	0x4
  4335 05b0 F3       		.byte	0xf3
  4336 05b1 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 87
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 87
 
 
  4337 05b2 52       		.byte	0x52
@@ -5218,7 +5218,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4391 0630 00000000 		.4byte	0
  4392 0634 00000000 		.4byte	0
  4393              	.LLST37:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 88
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 88
 
 
  4394 0638 00000000 		.4byte	.LVL152
@@ -5278,7 +5278,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4448 06c3 53       		.byte	0x53
  4449 06c4 1A000000 		.4byte	.LVL155
  4450 06c8 1F000000 		.4byte	.LVL156-1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 89
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 89
 
 
  4451 06cc 0100     		.2byte	0x1
@@ -5338,7 +5338,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4505 0758 01       		.uleb128 0x1
  4506 0759 52       		.byte	0x52
  4507 075a 9F       		.byte	0x9f
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 90
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 90
 
 
  4508 075b 00000000 		.4byte	0
@@ -5398,7 +5398,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4562 0090 00000000 		.4byte	.LFB16
  4563 0094 4A000000 		.4byte	.LFE16-.LFB16
  4564 0098 00000000 		.4byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 91
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 91
 
 
  4565 009c 00000000 		.4byte	0
@@ -5447,239 +5447,238 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 1
  4606      00000201 
  4606      FB0E0D00 
  4606      01010101 
- 4607              	.LASF14:
- 4608 0000 75696E74 		.ascii	"uintptr_t\000"
- 4608      7074725F 
- 4608      7400
- 4609              	.LASF25:
- 4610 000a 53756242 		.ascii	"SubBytes\000"
- 4610      79746573 
- 4610      00
- 4611              	.LASF22:
- 4612 0013 41646452 		.ascii	"AddRoundKey\000"
- 4612      6F756E64 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 92
+ 4607              	.LASF47:
+ 4608 0000 433A5C55 		.ascii	"C:\\Users\\Admin\\Documents\\GitHub\\ectf\\CARD.cyd"
+ 4608      73657273 
+ 4608      5C41646D 
+ 4608      696E5C44 
+ 4608      6F63756D 
+ 4609 002d 736E00   		.ascii	"sn\000"
+ 4610              	.LASF14:
+ 4611 0030 75696E74 		.ascii	"uintptr_t\000"
+ 4611      7074725F 
+ 4611      7400
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 92
 
 
- 4612      4B657900 
- 4613              	.LASF5:
- 4614 001f 5F5F7569 		.ascii	"__uint8_t\000"
- 4614      6E74385F 
- 4614      7400
- 4615              	.LASF47:
- 4616 0029 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\CAR"
- 4616      73657273 
- 4616      5C4E6967 
- 4616      68647261 
- 4616      676F6E5C 
- 4617 0056 442E6379 		.ascii	"D.cydsn\000"
- 4617      64736E00 
+ 4612              	.LASF25:
+ 4613 003a 53756242 		.ascii	"SubBytes\000"
+ 4613      79746573 
+ 4613      00
+ 4614              	.LASF22:
+ 4615 0043 41646452 		.ascii	"AddRoundKey\000"
+ 4615      6F756E64 
+ 4615      4B657900 
+ 4616              	.LASF5:
+ 4617 004f 5F5F7569 		.ascii	"__uint8_t\000"
+ 4617      6E74385F 
+ 4617      7400
  4618              	.LASF45:
- 4619 005e 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 4619 0059 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
  4619      43313120 
  4619      352E342E 
  4619      31203230 
  4619      31363036 
- 4620 0091 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 4620 008c 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
  4620      20726576 
  4620      6973696F 
  4620      6E203233 
  4620      37373135 
- 4621 00c4 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 4621 00bf 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
  4621      66756E63 
  4621      74696F6E 
  4621      2D736563 
  4621      74696F6E 
  4622              	.LASF9:
- 4623 00ec 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 4623 00e7 6C6F6E67 		.ascii	"long long unsigned int\000"
  4623      206C6F6E 
  4623      6720756E 
  4623      7369676E 
  4623      65642069 
  4624              	.LASF41:
- 4625 0103 73746F72 		.ascii	"storeNextIv\000"
+ 4625 00fe 73746F72 		.ascii	"storeNextIv\000"
  4625      654E6578 
  4625      74497600 
  4626              	.LASF35:
- 4627 010f 4145535F 		.ascii	"AES_init_ctx\000"
+ 4627 010a 4145535F 		.ascii	"AES_init_ctx\000"
  4627      696E6974 
  4627      5F637478 
  4627      00
  4628              	.LASF8:
- 4629 011c 6C6F6E67 		.ascii	"long long int\000"
+ 4629 0117 6C6F6E67 		.ascii	"long long int\000"
  4629      206C6F6E 
  4629      6720696E 
  4629      7400
  4630              	.LASF0:
- 4631 012a 7369676E 		.ascii	"signed char\000"
+ 4631 0125 7369676E 		.ascii	"signed char\000"
  4631      65642063 
  4631      68617200 
  4632              	.LASF24:
- 4633 0136 73746174 		.ascii	"state\000"
+ 4633 0131 73746174 		.ascii	"state\000"
  4633      6500
  4634              	.LASF4:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 93
+ 4635 0137 6C6F6E67 		.ascii	"long int\000"
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 93
 
 
- 4635 013c 6C6F6E67 		.ascii	"long int\000"
  4635      20696E74 
  4635      00
  4636              	.LASF38:
- 4637 0145 4145535F 		.ascii	"AES_CBC_encrypt_buffer\000"
+ 4637 0140 4145535F 		.ascii	"AES_CBC_encrypt_buffer\000"
  4637      4342435F 
  4637      656E6372 
  4637      7970745F 
  4637      62756666 
  4638              	.LASF30:
- 4639 015c 496E7653 		.ascii	"InvSubBytes\000"
+ 4639 0157 496E7653 		.ascii	"InvSubBytes\000"
  4639      75624279 
  4639      74657300 
  4640              	.LASF40:
- 4641 0168 4145535F 		.ascii	"AES_CBC_decrypt_buffer\000"
+ 4641 0163 4145535F 		.ascii	"AES_CBC_decrypt_buffer\000"
  4641      4342435F 
  4641      64656372 
  4641      7970745F 
  4641      62756666 
  4642              	.LASF42:
- 4643 017f 73626F78 		.ascii	"sbox\000"
+ 4643 017a 73626F78 		.ascii	"sbox\000"
  4643      00
  4644              	.LASF6:
- 4645 0184 5F5F7569 		.ascii	"__uint32_t\000"
+ 4645 017f 5F5F7569 		.ascii	"__uint32_t\000"
  4645      6E743332 
  4645      5F7400
  4646              	.LASF27:
- 4647 018f 74656D70 		.ascii	"temp\000"
+ 4647 018a 74656D70 		.ascii	"temp\000"
  4647      00
  4648              	.LASF11:
- 4649 0194 756E7369 		.ascii	"unsigned int\000"
+ 4649 018f 756E7369 		.ascii	"unsigned int\000"
  4649      676E6564 
  4649      20696E74 
  4649      00
  4650              	.LASF7:
- 4651 01a1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 4651 019c 6C6F6E67 		.ascii	"long unsigned int\000"
  4651      20756E73 
  4651      69676E65 
  4651      6420696E 
  4651      7400
  4652              	.LASF44:
- 4653 01b3 52636F6E 		.ascii	"Rcon\000"
+ 4653 01ae 52636F6E 		.ascii	"Rcon\000"
  4653      00
  4654              	.LASF28:
- 4655 01b8 4D697843 		.ascii	"MixColumns\000"
+ 4655 01b3 4D697843 		.ascii	"MixColumns\000"
  4655      6F6C756D 
  4655      6E7300
  4656              	.LASF21:
- 4657 01c3 4B657945 		.ascii	"KeyExpansion\000"
+ 4657 01be 4B657945 		.ascii	"KeyExpansion\000"
  4657      7870616E 
  4657      73696F6E 
  4657      00
  4658              	.LASF3:
- 4659 01d0 73686F72 		.ascii	"short unsigned int\000"
+ 4659 01cb 73686F72 		.ascii	"short unsigned int\000"
  4659      7420756E 
  4659      7369676E 
  4659      65642069 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 94
-
-
  4659      6E7400
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 94
+
+
  4660              	.LASF33:
- 4661 01e3 496E7643 		.ascii	"InvCipher\000"
+ 4661 01de 496E7643 		.ascii	"InvCipher\000"
  4661      69706865 
  4661      7200
  4662              	.LASF16:
- 4663 01ed 73697A65 		.ascii	"sizetype\000"
+ 4663 01e8 73697A65 		.ascii	"sizetype\000"
  4663      74797065 
  4663      00
  4664              	.LASF34:
- 4665 01f6 586F7257 		.ascii	"XorWithIv\000"
+ 4665 01f1 586F7257 		.ascii	"XorWithIv\000"
  4665      69746849 
  4665      7600
  4666              	.LASF15:
- 4667 0200 6C6F6E67 		.ascii	"long double\000"
+ 4667 01fb 6C6F6E67 		.ascii	"long double\000"
  4667      20646F75 
  4667      626C6500 
  4668              	.LASF31:
- 4669 020c 496E7653 		.ascii	"InvShiftRows\000"
+ 4669 0207 496E7653 		.ascii	"InvShiftRows\000"
  4669      68696674 
  4669      526F7773 
  4669      00
  4670              	.LASF1:
- 4671 0219 756E7369 		.ascii	"unsigned char\000"
+ 4671 0214 756E7369 		.ascii	"unsigned char\000"
  4671      676E6564 
  4671      20636861 
  4671      7200
  4672              	.LASF2:
- 4673 0227 73686F72 		.ascii	"short int\000"
+ 4673 0222 73686F72 		.ascii	"short int\000"
  4673      7420696E 
  4673      7400
  4674              	.LASF10:
- 4675 0231 5F5F7569 		.ascii	"__uintptr_t\000"
+ 4675 022c 5F5F7569 		.ascii	"__uintptr_t\000"
  4675      6E747074 
  4675      725F7400 
  4676              	.LASF23:
- 4677 023d 726F756E 		.ascii	"round\000"
+ 4677 0238 726F756E 		.ascii	"round\000"
  4677      6400
  4678              	.LASF36:
- 4679 0243 4145535F 		.ascii	"AES_init_ctx_iv\000"
+ 4679 023e 4145535F 		.ascii	"AES_init_ctx_iv\000"
  4679      696E6974 
  4679      5F637478 
  4679      5F697600 
  4680              	.LASF26:
- 4681 0253 53686966 		.ascii	"ShiftRows\000"
+ 4681 024e 53686966 		.ascii	"ShiftRows\000"
  4681      74526F77 
  4681      7300
  4682              	.LASF13:
- 4683 025d 75696E74 		.ascii	"uint32_t\000"
+ 4683 0258 75696E74 		.ascii	"uint32_t\000"
  4683      33325F74 
  4683      00
  4684              	.LASF46:
- 4685 0266 6165732E 		.ascii	"aes.c\000"
+ 4685 0261 6165732E 		.ascii	"aes.c\000"
  4685      6300
  4686              	.LASF39:
- 4687 026c 6C656E67 		.ascii	"length\000"
+ 4687 0267 6C656E67 		.ascii	"length\000"
  4687      746800
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAKmmdN.s 			page 95
-
-
  4688              	.LASF17:
- 4689 0273 63686172 		.ascii	"char\000"
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccU9mOFV.s 			page 95
+
+
+ 4689 026e 63686172 		.ascii	"char\000"
  4689      00
  4690              	.LASF20:
- 4691 0278 74656D70 		.ascii	"tempa\000"
+ 4691 0273 74656D70 		.ascii	"tempa\000"
  4691      6100
  4692              	.LASF18:
- 4693 027e 526F756E 		.ascii	"RoundKey\000"
+ 4693 0279 526F756E 		.ascii	"RoundKey\000"
  4693      644B6579 
  4693      00
  4694              	.LASF19:
- 4695 0287 73746174 		.ascii	"state_t\000"
+ 4695 0282 73746174 		.ascii	"state_t\000"
  4695      655F7400 
  4696              	.LASF37:
- 4697 028f 4145535F 		.ascii	"AES_ctx_set_iv\000"
+ 4697 028a 4145535F 		.ascii	"AES_ctx_set_iv\000"
  4697      6374785F 
  4697      7365745F 
  4697      697600
  4698              	.LASF50:
- 4699 029e 6D656D63 		.ascii	"memcpy\000"
+ 4699 0299 6D656D63 		.ascii	"memcpy\000"
  4699      707900
  4700              	.LASF48:
- 4701 02a5 4145535F 		.ascii	"AES_ctx\000"
+ 4701 02a0 4145535F 		.ascii	"AES_ctx\000"
  4701      63747800 
  4702              	.LASF43:
- 4703 02ad 7273626F 		.ascii	"rsbox\000"
+ 4703 02a8 7273626F 		.ascii	"rsbox\000"
  4703      7800
  4704              	.LASF12:
- 4705 02b3 75696E74 		.ascii	"uint8_t\000"
+ 4705 02ae 75696E74 		.ascii	"uint8_t\000"
  4705      385F7400 
  4706              	.LASF49:
- 4707 02bb 7874696D 		.ascii	"xtime\000"
+ 4707 02b6 7874696D 		.ascii	"xtime\000"
  4707      6500
  4708              	.LASF29:
- 4709 02c1 496E764D 		.ascii	"InvMixColumns\000"
+ 4709 02bc 496E764D 		.ascii	"InvMixColumns\000"
  4709      6978436F 
  4709      6C756D6E 
  4709      7300
  4710              	.LASF32:
- 4711 02cf 43697068 		.ascii	"Cipher\000"
+ 4711 02ca 43697068 		.ascii	"Cipher\000"
  4711      657200
  4712              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

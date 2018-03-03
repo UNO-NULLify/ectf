@@ -16,7 +16,7 @@
 #include "SW1.h"
 #include "Reset_isr.h"
 #include "aes.h"
-#include "SuperFastHash.h"
+#include "SuperSecretHash.h"
 
 #define CARD_ID_LEN 36
 #define PROV_MSG "P"
@@ -96,10 +96,14 @@ int main(void)
     /* Declare vairables here */
     uint8 i;
     uint8 message[128];
-    //uint32 * id[2];
+    //AES shit
     struct AES_ctx ctx;
-    unsigned char key[32];
+    unsigned char AESkey[32];
     uint8_t iv = 21;
+    //Hashing shit
+    char *buf = malloc(8*sizeof(char));
+    char *temp = malloc(4*sizeof(char));
+    unsigned char keyValues[32];
     
     // local EEPROM read variable
     static const uint8 PROVISIONED[1] = {0x00};
@@ -110,7 +114,6 @@ int main(void)
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     USER_INFO_Start();
     USB_UART_Start();
-    
     // Provision card if on first boot
     ptr = PROVISIONED;
     if (*ptr == 0x00) {
@@ -137,24 +140,46 @@ int main(void)
         }
         if(message[1] == GIVE_SIG)
         {
-            pullMessage(message);
-            key[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
-            key[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
-            key[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
-            key[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+            //pullMessage(message);
+            keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+            keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+            keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+            keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
 
-            key[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
-            key[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
-            key[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
-            key[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
+            keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+            keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+            keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+            keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
             //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-            temphash = hash(key[0], 1);
-            temphash = hash(temphash + key[1], 4);
-            
+            memcpy(buf, CARD_ID, 4);
+            for(int x=0; x < 8; x=x+1)
+            {
+                for(int y=0; y < 8; y=y+1)
+                {
+                    for(int z=0; z < 8; z=z+1)
+                    {
+                        for(int w=0; w < 8; w=w+1)
+                        {
+                            memcpy(&temp[0], &keyValues[x],1);
+                            memcpy(&temp[2], &keyValues[y],1);
+                            memcpy(&temp[3], &keyValues[z],1);
+                            memcpy(&temp[4], &keyValues[w],1);
+                            SALT_HAsaltH_SALT(buf, temp, 4, 32);
+                        }
+                        
+                    }
+                }
+                if(x % 4 == 0)
+                {
+                    memcpy(&AESkey[x*4], buf, 4);
+                }
+            }
             //Do AES
-            AES_init_ctx(&ctx, key);
+            AES_init_ctx(&ctx, AESkey);
             AES_ctx_set_iv(&ctx, &iv);
             AES_CBC_encrypt_buffer(&ctx, message, strlen((char*) message));
+            //Send Message
+            pushMessage(message, strlen((char *) message));
         }
     }
 }

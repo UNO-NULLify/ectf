@@ -853,7 +853,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x3f67
+.debug_info     0x00000000     0x3f62
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x62e .\CortexM0\ARM_GCC_541\Debug\main.o
  .debug_info    0x0000062e      0x2f9 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
@@ -869,8 +869,8 @@ END GROUP
  .debug_info    0x0000220d      0x33d .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyFlash.o)
  .debug_info    0x0000254a      0xb0b .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLib.o)
  .debug_info    0x00003055      0xcfe .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLFClk.o)
- .debug_info    0x00003d53       0x8e .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyBootAsmGnu.o)
- .debug_info    0x00003de1      0x186 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART_INT.o)
+ .debug_info    0x00003d53       0x89 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyBootAsmGnu.o)
+ .debug_info    0x00003ddc      0x186 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART_INT.o)
 
 .debug_abbrev   0x00000000     0x138a
  *(.debug_abbrev)
@@ -934,38 +934,38 @@ END GROUP
  .debug_frame   0x00000fec       0x20 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
  .debug_frame   0x0000100c       0x20 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcmp.o)
 
-.debug_str      0x00000000     0x1774
+.debug_str      0x00000000     0x176f
  *(.debug_str)
- .debug_str     0x00000000      0x254 .\CortexM0\ARM_GCC_541\Debug\main.o
-                                0x294 (size before relaxing)
- .debug_str     0x00000254       0x82 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                                0x248 (size before relaxing)
- .debug_str     0x000002d6      0x119 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
-                                0x2c9 (size before relaxing)
- .debug_str     0x000003ef       0x63 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
-                                0x1c6 (size before relaxing)
- .debug_str     0x00000452      0x13a .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                                0x2ff (size before relaxing)
- .debug_str     0x0000058c      0x1b3 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART.o)
-                                0x360 (size before relaxing)
- .debug_str     0x0000073f      0x1c8 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART.o)
-                                0x3b2 (size before relaxing)
- .debug_str     0x00000907       0xeb .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_UART.o)
-                                0x3d6 (size before relaxing)
- .debug_str     0x000009f2       0xab .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(PIGGY_BANK.o)
-                                0x258 (size before relaxing)
- .debug_str     0x00000a9d      0x160 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(Reset_isr.o)
-                                0x320 (size before relaxing)
- .debug_str     0x00000bfd       0x8f .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(SW1.o)
-                                0x226 (size before relaxing)
- .debug_str     0x00000c8c      0x13a .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyFlash.o)
-                                0x32c (size before relaxing)
- .debug_str     0x00000dc6      0x44e .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLib.o)
-                                0x6c2 (size before relaxing)
- .debug_str     0x00001214      0x51d .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLFClk.o)
-                                0x73b (size before relaxing)
- .debug_str     0x00001731       0x43 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART_INT.o)
-                                0x2a5 (size before relaxing)
+ .debug_str     0x00000000      0x24f .\CortexM0\ARM_GCC_541\Debug\main.o
+                                0x28f (size before relaxing)
+ .debug_str     0x0000024f       0x82 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                                0x243 (size before relaxing)
+ .debug_str     0x000002d1      0x119 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+                                0x2c4 (size before relaxing)
+ .debug_str     0x000003ea       0x63 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
+                                0x1c1 (size before relaxing)
+ .debug_str     0x0000044d      0x13a .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                                0x2fa (size before relaxing)
+ .debug_str     0x00000587      0x1b3 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART.o)
+                                0x35b (size before relaxing)
+ .debug_str     0x0000073a      0x1c8 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART.o)
+                                0x3ad (size before relaxing)
+ .debug_str     0x00000902       0xeb .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_UART.o)
+                                0x3d1 (size before relaxing)
+ .debug_str     0x000009ed       0xab .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(PIGGY_BANK.o)
+                                0x253 (size before relaxing)
+ .debug_str     0x00000a98      0x160 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(Reset_isr.o)
+                                0x31b (size before relaxing)
+ .debug_str     0x00000bf8       0x8f .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(SW1.o)
+                                0x221 (size before relaxing)
+ .debug_str     0x00000c87      0x13a .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyFlash.o)
+                                0x327 (size before relaxing)
+ .debug_str     0x00000dc1      0x44e .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLib.o)
+                                0x6bd (size before relaxing)
+ .debug_str     0x0000120f      0x51d .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(CyLFClk.o)
+                                0x736 (size before relaxing)
+ .debug_str     0x0000172c       0x43 .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a(DB_UART_SPI_UART_INT.o)
+                                0x2a0 (size before relaxing)
 
 .debug_loc      0x00000000     0x1c33
  *(.debug_loc)
@@ -1105,4 +1105,4 @@ END GROUP
 
 /DISCARD/
  *(.note.GNU-stack)
-OUTPUT(C:\Users\Nighdragon\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf elf32-littlearm)
+OUTPUT(C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf elf32-littlearm)

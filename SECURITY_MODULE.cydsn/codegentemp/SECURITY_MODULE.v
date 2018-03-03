@@ -1,6 +1,6 @@
 // ======================================================================
 // SECURITY_MODULE.v generated from TopDesign.cysch
-// 02/25/2018 at 20:08
+// 03/03/2018 at 16:41
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -557,7 +557,7 @@ module UART_v2_50_1 (
 		  .divisor(0),
 		  .period("1085069444.44444"),
 		  .is_direct(0),
-		  .is_digital(0))
+		  .is_digital(1))
 		IntClock
 		 (.clock_out(Net_9));
 
