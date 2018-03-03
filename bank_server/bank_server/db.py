@@ -16,7 +16,7 @@ class DB(object):
         super(DB, self).__init__()
         self.client = MongoClient()
         self.db = self.client['bank_server']
-        self.atms =  self.db['atm']
+        self.atms =  self.db['atms']
         self.users = self.db['users']
 
     ############################
@@ -92,6 +92,15 @@ class DB(object):
             (bool): Returns True on Success. False otherwise.
         """
         updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_bills': num_bills}})
+        return updated.acknowledged and updated.raw_result['updatedExisting']
+
+    def set_atm_num_dispensed_bills(self, atm_id, num_bills):
+        """set number of bills in atm: atm_id
+
+        Returns:
+            (bool): Returns True on Success. False otherwise.
+        """
+        updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_dispensed_bills': num_bills}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def hash_card(self, card_id):
@@ -172,7 +181,7 @@ class DB(object):
             'account_name' : account_name,
             'card_id' : self.hash_card(card_id),
             'balance' : amount,
-            'key' : None,
+            'AES_KEY' : None,
             'pin' : None,
             'chall' : None,
             'time' : None
@@ -187,9 +196,11 @@ class DB(object):
         """
         new_atm = {
             'atm_id' : atm_id,
-            'bills' : []
+            'num_bills' : 0,
+            'num_dispensed_bills' : 0,
+            'AES_KEY' : None
         }
-        return self.atm.insert_one(new_atm).ackknowledged
+        return self.atms.insert_one(new_atm).acknowledged
 
     def admin_get_balance(self, account_name):
         """get balance of account: account_name
