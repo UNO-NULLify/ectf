@@ -48,7 +48,7 @@ class Card(Psoc):
         self._vp('Card sent response %s' % uuid)
         return uuid
 
-    def get_signed_response(self, challenge):
+    def get_encrypted_response(self, challenge):
         """Requests for a pin to be changed
 
         Args:

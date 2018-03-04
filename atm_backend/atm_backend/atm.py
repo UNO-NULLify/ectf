@@ -39,12 +39,12 @@ class ATM(object):
             logging.info('check_balance: Requesting card_id using inputted pin')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            signed_response = self.card.get_signed_message(challenge)
+            encrypted_response = self.card.get_encrypted_response(challenge)
 
             # get balance from bank if card accepted PIN
-            if (card_id is not None) and (signed_response is not None):
+            if (card_id is not None) and (encrypted_response is not None):
                 logging.info('check_balance: Requesting balance from Bank')
-                response = self.bank.check_balance(card_id, signed_response, pin)
+                response = self.bank.check_balance(card_id, encrypted_response, pin)
                 if response:
                     return response
             logging.info('check_balance failed')
@@ -76,12 +76,12 @@ class ATM(object):
             logging.info('check_balance: Requesting pin change using inputted pin')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            signed_response = self.card.get_signed_message(challenge)
+            encrypted_response = self.card.get_encrypted_response(challenge)
 
             # get balance from bank if card accepted PIN
-            if card_id is not None and signed_response is not None:
+            if card_id is not None and encrypted_response is not None:
                 logging.info('check_balance: Requesting balance from Bank')
-                response = self.bank.change_pin(card_id, signed_response, old_pin, new_pin)
+                response = self.bank.change_pin(card_id, encrypted_response, old_pin, new_pin)
                 if response:
                     return response
             logging.info('change_pin failed')
@@ -92,7 +92,6 @@ class ATM(object):
         except NotProvisioned:
             logging.info('ATM card has not been provisioned!')
             return False
-
 
     def withdraw(self, pin, amount):
         """Tries to withdraw money from the account associated with the
@@ -119,12 +118,12 @@ class ATM(object):
             logging.info('withdraw: Requesting card_id from card')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            signed_response = self.card.get_signed_message(challenge)
+            encrypted_response = self.card.get_encrypted_response(challenge)
 
             # request UUID from HSM if card accepts PIN
-            if (card_id is not None) and (signed_response is not None) :
+            if (card_id is not None) and (encrypted_response is not None) :
                 logging.info('withdraw: Requesting hsm_id from hsm')
-                response = self.bank.withdraw(self, card_id, signed_response, pin, amount)
+                response = self.bank.withdraw(self, card_id, encrypted_response, pin, amount)
                 if 'Error' not in response:
                     logging.info('withdraw: Requesting withdrawal from bank')
                     bills = self.bank.withdraw(response)

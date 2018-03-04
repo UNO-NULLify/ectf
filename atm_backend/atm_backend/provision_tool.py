@@ -49,10 +49,10 @@ class ProvisionTool(object):
             logging.info('provision_card: generating card id')
             card_id = card_blob
             logging.info('provision_card: sending info to card')
-            if self.card.provision(card_id, pin):
-                return True
-            logging.error('provision_card: provision card failed!')
-            return False
+            key = self.card.provision(card_id)
+            if len(key) ==  32:
+                success = self.bank.provision_card(card_id, pin, key)
+                return success
         except DeviceRemoved:
             logging.error('provision_card: card was removed!')
             return False
@@ -81,7 +81,11 @@ class ProvisionTool(object):
 
         try:
             logging.info('provision_atm: provisioning hsm with inputted bills')
-            if self.hsm.provision(hsm_blob, bills):
+            atm_id = hsm_blob
+            key = self.hsm.provision(hsm_blob, bills)
+            num_bills = len(bills)
+            if len(key) == 32:
+                self.bank.provision_atm(atm_id, key, num_bills)
                 logging.info('provision_atm: provisioned hsm with inputted bills')
                 return True
             logging.error('provision_atm: provision failed!')
