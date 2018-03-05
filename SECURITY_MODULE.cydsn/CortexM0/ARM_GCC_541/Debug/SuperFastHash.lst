@@ -1,0 +1,988 @@
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"SuperFastHash.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.hash_inc,"ax",%progbits
+  20              		.align	2
+  21              		.global	hash_inc
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	hash_inc, %function
+  25              	hash_inc:
+  26              	.LFB1:
+  27              		.file 1 "SuperFastHash.c"
+   1:SuperFastHash.c **** #include "SuperFastHash.h"
+   2:SuperFastHash.c **** #include <stdlib.h>
+   3:SuperFastHash.c **** #include <stdint.h>
+   4:SuperFastHash.c **** 
+   5:SuperFastHash.c **** #undef get16bits
+   6:SuperFastHash.c **** #if (defined(__GNUC__) && defined(__i386__)) || defined(__WATCOMC__) \
+   7:SuperFastHash.c ****     || defined(_MSC_VER) || defined (__BORLANDC__) || defined (__TURBOC__)
+   8:SuperFastHash.c **** #define get16bits(d) (*((const uint16_t *) (d)))
+   9:SuperFastHash.c **** #endif
+  10:SuperFastHash.c **** 
+  11:SuperFastHash.c **** #if !defined (get16bits)
+  12:SuperFastHash.c **** #define get16bits(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)\
+  13:SuperFastHash.c ****         +(uint32_t)(((const uint8_t *)(d))[0]) )
+  14:SuperFastHash.c **** #endif
+  15:SuperFastHash.c **** 
+  16:SuperFastHash.c **** uint32_t hash(const char * data, int len)
+  17:SuperFastHash.c **** {
+  18:SuperFastHash.c ****     return hash_inc(data, len, (uint32_t) len);
+  19:SuperFastHash.c **** }
+  20:SuperFastHash.c **** 
+  21:SuperFastHash.c **** uint32_t hash_inc(const char * data, int len, uint32_t hash)
+  22:SuperFastHash.c **** {
+  28              		.loc 1 22 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              		.cfi_def_cfa_offset 12
+  35              		.cfi_offset 4, -12
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 2
+
+
+  36              		.cfi_offset 5, -8
+  37              		.cfi_offset 14, -4
+  23:SuperFastHash.c ****     uint32_t tmp;
+  24:SuperFastHash.c ****     int rem;
+  25:SuperFastHash.c **** 
+  26:SuperFastHash.c ****     if (len <= 0 || data == NULL) return 0;
+  38              		.loc 1 26 0
+  39 0002 0029     		cmp	r1, #0
+  40 0004 4ADD     		ble	.L9
+  41              		.loc 1 26 0 is_stmt 0 discriminator 2
+  42 0006 0028     		cmp	r0, #0
+  43 0008 4AD0     		beq	.L10
+  27:SuperFastHash.c **** 
+  28:SuperFastHash.c ****     rem = len & 3; //mod 3
+  44              		.loc 1 28 0 is_stmt 1
+  45 000a 0325     		movs	r5, #3
+  46 000c 0D40     		ands	r5, r1
+  47              	.LVL1:
+  29:SuperFastHash.c ****     len >>= 2;
+  48              		.loc 1 29 0
+  49 000e 8910     		asrs	r1, r1, #2
+  50              	.LVL2:
+  30:SuperFastHash.c **** 
+  31:SuperFastHash.c ****     /* Main loop */
+  32:SuperFastHash.c ****     for (;len > 0; len--) {
+  51              		.loc 1 32 0
+  52 0010 10E0     		b	.L3
+  53              	.L4:
+  33:SuperFastHash.c ****         hash  += get16bits (data);
+  54              		.loc 1 33 0 discriminator 2
+  55 0012 4378     		ldrb	r3, [r0, #1]
+  56 0014 1B02     		lsls	r3, r3, #8
+  57 0016 0478     		ldrb	r4, [r0]
+  58 0018 1B19     		adds	r3, r3, r4
+  59 001a D318     		adds	r3, r2, r3
+  60              	.LVL3:
+  34:SuperFastHash.c ****         tmp    = (get16bits (data+2) << 11) ^ hash;
+  61              		.loc 1 34 0 discriminator 2
+  62 001c C278     		ldrb	r2, [r0, #3]
+  63 001e 1202     		lsls	r2, r2, #8
+  64 0020 8478     		ldrb	r4, [r0, #2]
+  65 0022 1219     		adds	r2, r2, r4
+  66 0024 D202     		lsls	r2, r2, #11
+  67 0026 5A40     		eors	r2, r3
+  68              	.LVL4:
+  35:SuperFastHash.c ****         hash   = (hash << 16) ^ tmp;
+  69              		.loc 1 35 0 discriminator 2
+  70 0028 1B04     		lsls	r3, r3, #16
+  71              	.LVL5:
+  72 002a 5A40     		eors	r2, r3
+  73              	.LVL6:
+  36:SuperFastHash.c ****         data  += 2*sizeof (uint16_t);
+  74              		.loc 1 36 0 discriminator 2
+  75 002c 0430     		adds	r0, r0, #4
+  76              	.LVL7:
+  37:SuperFastHash.c ****         hash  += hash >> 11;
+  77              		.loc 1 37 0 discriminator 2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 3
+
+
+  78 002e D30A     		lsrs	r3, r2, #11
+  79 0030 D218     		adds	r2, r2, r3
+  80              	.LVL8:
+  32:SuperFastHash.c ****         hash  += get16bits (data);
+  81              		.loc 1 32 0 discriminator 2
+  82 0032 0139     		subs	r1, r1, #1
+  83              	.LVL9:
+  84              	.L3:
+  32:SuperFastHash.c ****         hash  += get16bits (data);
+  85              		.loc 1 32 0 is_stmt 0 discriminator 1
+  86 0034 0029     		cmp	r1, #0
+  87 0036 ECDC     		bgt	.L4
+  38:SuperFastHash.c ****     }
+  39:SuperFastHash.c **** 
+  40:SuperFastHash.c ****     /* Handle end cases */
+  41:SuperFastHash.c ****     switch (rem) {
+  88              		.loc 1 41 0 is_stmt 1
+  89 0038 022D     		cmp	r5, #2
+  90 003a 12D0     		beq	.L6
+  91 003c 032D     		cmp	r5, #3
+  92 003e 02D0     		beq	.L7
+  93 0040 012D     		cmp	r5, #1
+  94 0042 1ED1     		bne	.L5
+  95 0044 17E0     		b	.L8
+  96              	.L7:
+  42:SuperFastHash.c ****         case 3: hash += get16bits (data);
+  97              		.loc 1 42 0
+  98 0046 4378     		ldrb	r3, [r0, #1]
+  99 0048 1B02     		lsls	r3, r3, #8
+ 100 004a 0178     		ldrb	r1, [r0]
+ 101              	.LVL10:
+ 102 004c 5B18     		adds	r3, r3, r1
+ 103 004e D218     		adds	r2, r2, r3
+ 104              	.LVL11:
+  43:SuperFastHash.c ****                 hash ^= hash << 16;
+ 105              		.loc 1 43 0
+ 106 0050 1104     		lsls	r1, r2, #16
+ 107 0052 1300     		movs	r3, r2
+ 108 0054 4B40     		eors	r3, r1
+ 109              	.LVL12:
+  44:SuperFastHash.c ****                 hash ^= data[sizeof (uint16_t)] << 18;
+ 110              		.loc 1 44 0
+ 111 0056 8278     		ldrb	r2, [r0, #2]
+ 112 0058 9204     		lsls	r2, r2, #18
+ 113 005a 5A40     		eors	r2, r3
+ 114              	.LVL13:
+  45:SuperFastHash.c ****                 hash += hash >> 11;
+ 115              		.loc 1 45 0
+ 116 005c D30A     		lsrs	r3, r2, #11
+ 117 005e D218     		adds	r2, r2, r3
+ 118              	.LVL14:
+  46:SuperFastHash.c ****                 break;
+ 119              		.loc 1 46 0
+ 120 0060 0FE0     		b	.L5
+ 121              	.LVL15:
+ 122              	.L6:
+  47:SuperFastHash.c ****         case 2: hash += get16bits (data);
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 4
+
+
+ 123              		.loc 1 47 0
+ 124 0062 4378     		ldrb	r3, [r0, #1]
+ 125 0064 1B02     		lsls	r3, r3, #8
+ 126 0066 0178     		ldrb	r1, [r0]
+ 127              	.LVL16:
+ 128 0068 5B18     		adds	r3, r3, r1
+ 129 006a D218     		adds	r2, r2, r3
+ 130              	.LVL17:
+  48:SuperFastHash.c ****                 hash ^= hash << 11;
+ 131              		.loc 1 48 0
+ 132 006c D302     		lsls	r3, r2, #11
+ 133 006e 5A40     		eors	r2, r3
+ 134              	.LVL18:
+  49:SuperFastHash.c ****                 hash += hash >> 17;
+ 135              		.loc 1 49 0
+ 136 0070 530C     		lsrs	r3, r2, #17
+ 137 0072 D218     		adds	r2, r2, r3
+ 138              	.LVL19:
+  50:SuperFastHash.c ****                 break;
+ 139              		.loc 1 50 0
+ 140 0074 05E0     		b	.L5
+ 141              	.LVL20:
+ 142              	.L8:
+  51:SuperFastHash.c ****         case 1: hash += *data;
+ 143              		.loc 1 51 0
+ 144 0076 0378     		ldrb	r3, [r0]
+ 145 0078 9A18     		adds	r2, r3, r2
+ 146              	.LVL21:
+  52:SuperFastHash.c ****                 hash ^= hash << 10;
+ 147              		.loc 1 52 0
+ 148 007a 9102     		lsls	r1, r2, #10
+ 149              	.LVL22:
+ 150 007c 4A40     		eors	r2, r1
+ 151              	.LVL23:
+  53:SuperFastHash.c ****                 hash += hash >> 1;
+ 152              		.loc 1 53 0
+ 153 007e 5308     		lsrs	r3, r2, #1
+ 154 0080 D218     		adds	r2, r2, r3
+ 155              	.LVL24:
+ 156              	.L5:
+  54:SuperFastHash.c ****     }
+  55:SuperFastHash.c **** 
+  56:SuperFastHash.c ****     /* Force "avalanching" of final 127 bits */
+  57:SuperFastHash.c ****     hash ^= hash << 3;
+ 157              		.loc 1 57 0
+ 158 0082 D000     		lsls	r0, r2, #3
+ 159              	.LVL25:
+ 160 0084 4240     		eors	r2, r0
+ 161              	.LVL26:
+  58:SuperFastHash.c ****     hash += hash >> 5;
+ 162              		.loc 1 58 0
+ 163 0086 5109     		lsrs	r1, r2, #5
+ 164 0088 5018     		adds	r0, r2, r1
+ 165              	.LVL27:
+  59:SuperFastHash.c ****     hash ^= hash << 4;
+ 166              		.loc 1 59 0
+ 167 008a 0101     		lsls	r1, r0, #4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 5
+
+
+ 168 008c 4840     		eors	r0, r1
+ 169              	.LVL28:
+  60:SuperFastHash.c ****     hash += hash >> 17;
+ 170              		.loc 1 60 0
+ 171 008e 410C     		lsrs	r1, r0, #17
+ 172 0090 4018     		adds	r0, r0, r1
+ 173              	.LVL29:
+  61:SuperFastHash.c ****     hash ^= hash << 25;
+ 174              		.loc 1 61 0
+ 175 0092 4106     		lsls	r1, r0, #25
+ 176 0094 4840     		eors	r0, r1
+ 177              	.LVL30:
+  62:SuperFastHash.c ****     hash += hash >> 6;
+ 178              		.loc 1 62 0
+ 179 0096 8309     		lsrs	r3, r0, #6
+ 180 0098 C018     		adds	r0, r0, r3
+ 181              	.LVL31:
+  63:SuperFastHash.c **** 
+  64:SuperFastHash.c ****     return hash;
+ 182              		.loc 1 64 0
+ 183 009a 02E0     		b	.L2
+ 184              	.LVL32:
+ 185              	.L9:
+  26:SuperFastHash.c **** 
+ 186              		.loc 1 26 0
+ 187 009c 0020     		movs	r0, #0
+ 188              	.LVL33:
+ 189 009e 00E0     		b	.L2
+ 190              	.LVL34:
+ 191              	.L10:
+ 192 00a0 0020     		movs	r0, #0
+ 193              	.LVL35:
+ 194              	.L2:
+  65:SuperFastHash.c **** }...
+ 195              		.loc 1 65 0
+ 196              		@ sp needed
+ 197 00a2 30BD     		pop	{r4, r5, pc}
+ 198              		.cfi_endproc
+ 199              	.LFE1:
+ 200              		.size	hash_inc, .-hash_inc
+ 201              		.section	.text.hash,"ax",%progbits
+ 202              		.align	2
+ 203              		.global	hash
+ 204              		.code	16
+ 205              		.thumb_func
+ 206              		.type	hash, %function
+ 207              	hash:
+ 208              	.LFB0:
+  17:SuperFastHash.c **** {
+ 209              		.loc 1 17 0
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 0
+ 212              		@ frame_needed = 0, uses_anonymous_args = 0
+ 213              	.LVL36:
+ 214 0000 10B5     		push	{r4, lr}
+ 215              		.cfi_def_cfa_offset 8
+ 216              		.cfi_offset 4, -8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 6
+
+
+ 217              		.cfi_offset 14, -4
+  18:SuperFastHash.c ****     return hash_inc(data, len, (uint32_t) len);
+ 218              		.loc 1 18 0
+ 219 0002 0A00     		movs	r2, r1
+ 220 0004 FFF7FEFF 		bl	hash_inc
+ 221              	.LVL37:
+  19:SuperFastHash.c **** }
+ 222              		.loc 1 19 0
+ 223              		@ sp needed
+ 224 0008 10BD     		pop	{r4, pc}
+ 225              		.cfi_endproc
+ 226              	.LFE0:
+ 227              		.size	hash, .-hash
+ 228 000a C046     		.text
+ 229              	.Letext0:
+ 230              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 231              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 232              		.section	.debug_info,"",%progbits
+ 233              	.Ldebug_info0:
+ 234 0000 6C010000 		.4byte	0x16c
+ 235 0004 0400     		.2byte	0x4
+ 236 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 237 000a 04       		.byte	0x4
+ 238 000b 01       		.uleb128 0x1
+ 239 000c E9000000 		.4byte	.LASF18
+ 240 0010 0C       		.byte	0xc
+ 241 0011 CB000000 		.4byte	.LASF19
+ 242 0015 24000000 		.4byte	.LASF20
+ 243 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 244 001d 00000000 		.4byte	0
+ 245 0021 00000000 		.4byte	.Ldebug_line0
+ 246 0025 02       		.uleb128 0x2
+ 247 0026 01       		.byte	0x1
+ 248 0027 06       		.byte	0x6
+ 249 0028 8A010000 		.4byte	.LASF0
+ 250 002c 03       		.uleb128 0x3
+ 251 002d A1000000 		.4byte	.LASF5
+ 252 0031 02       		.byte	0x2
+ 253 0032 1D       		.byte	0x1d
+ 254 0033 37000000 		.4byte	0x37
+ 255 0037 02       		.uleb128 0x2
+ 256 0038 01       		.byte	0x1
+ 257 0039 08       		.byte	0x8
+ 258 003a B8000000 		.4byte	.LASF1
+ 259 003e 02       		.uleb128 0x2
+ 260 003f 02       		.byte	0x2
+ 261 0040 05       		.byte	0x5
+ 262 0041 A2010000 		.4byte	.LASF2
+ 263 0045 02       		.uleb128 0x2
+ 264 0046 02       		.byte	0x2
+ 265 0047 07       		.byte	0x7
+ 266 0048 77010000 		.4byte	.LASF3
+ 267 004c 02       		.uleb128 0x2
+ 268 004d 04       		.byte	0x4
+ 269 004e 05       		.byte	0x5
+ 270 004f DB000000 		.4byte	.LASF4
+ 271 0053 03       		.uleb128 0x3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 7
+
+
+ 272 0054 64000000 		.4byte	.LASF6
+ 273 0058 02       		.byte	0x2
+ 274 0059 41       		.byte	0x41
+ 275 005a 5E000000 		.4byte	0x5e
+ 276 005e 02       		.uleb128 0x2
+ 277 005f 04       		.byte	0x4
+ 278 0060 07       		.byte	0x7
+ 279 0061 78000000 		.4byte	.LASF7
+ 280 0065 02       		.uleb128 0x2
+ 281 0066 08       		.byte	0x8
+ 282 0067 05       		.byte	0x5
+ 283 0068 00000000 		.4byte	.LASF8
+ 284 006c 02       		.uleb128 0x2
+ 285 006d 08       		.byte	0x8
+ 286 006e 07       		.byte	0x7
+ 287 006f 8A000000 		.4byte	.LASF9
+ 288 0073 04       		.uleb128 0x4
+ 289 0074 04       		.byte	0x4
+ 290 0075 05       		.byte	0x5
+ 291 0076 696E7400 		.ascii	"int\000"
+ 292 007a 02       		.uleb128 0x2
+ 293 007b 04       		.byte	0x4
+ 294 007c 07       		.byte	0x7
+ 295 007d 0E000000 		.4byte	.LASF10
+ 296 0081 03       		.uleb128 0x3
+ 297 0082 B0000000 		.4byte	.LASF11
+ 298 0086 03       		.byte	0x3
+ 299 0087 18       		.byte	0x18
+ 300 0088 2C000000 		.4byte	0x2c
+ 301 008c 03       		.uleb128 0x3
+ 302 008d 1B000000 		.4byte	.LASF12
+ 303 0091 03       		.byte	0x3
+ 304 0092 30       		.byte	0x30
+ 305 0093 53000000 		.4byte	0x53
+ 306 0097 02       		.uleb128 0x2
+ 307 0098 08       		.byte	0x8
+ 308 0099 04       		.byte	0x4
+ 309 009a 96010000 		.4byte	.LASF13
+ 310 009e 02       		.uleb128 0x2
+ 311 009f 04       		.byte	0x4
+ 312 00a0 07       		.byte	0x7
+ 313 00a1 AC010000 		.4byte	.LASF14
+ 314 00a5 02       		.uleb128 0x2
+ 315 00a6 01       		.byte	0x1
+ 316 00a7 08       		.byte	0x8
+ 317 00a8 AB000000 		.4byte	.LASF15
+ 318 00ac 05       		.uleb128 0x5
+ 319 00ad 04       		.byte	0x4
+ 320 00ae B2000000 		.4byte	0xb2
+ 321 00b2 06       		.uleb128 0x6
+ 322 00b3 A5000000 		.4byte	0xa5
+ 323 00b7 07       		.uleb128 0x7
+ 324 00b8 6F000000 		.4byte	.LASF21
+ 325 00bc 01       		.byte	0x1
+ 326 00bd 15       		.byte	0x15
+ 327 00be 8C000000 		.4byte	0x8c
+ 328 00c2 00000000 		.4byte	.LFB1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 8
+
+
+ 329 00c6 A4000000 		.4byte	.LFE1-.LFB1
+ 330 00ca 01       		.uleb128 0x1
+ 331 00cb 9C       		.byte	0x9c
+ 332 00cc 1C010000 		.4byte	0x11c
+ 333 00d0 08       		.uleb128 0x8
+ 334 00d1 C6000000 		.4byte	.LASF16
+ 335 00d5 01       		.byte	0x1
+ 336 00d6 15       		.byte	0x15
+ 337 00d7 AC000000 		.4byte	0xac
+ 338 00db 00000000 		.4byte	.LLST0
+ 339 00df 09       		.uleb128 0x9
+ 340 00e0 6C656E00 		.ascii	"len\000"
+ 341 00e4 01       		.byte	0x1
+ 342 00e5 15       		.byte	0x15
+ 343 00e6 73000000 		.4byte	0x73
+ 344 00ea 42000000 		.4byte	.LLST1
+ 345 00ee 08       		.uleb128 0x8
+ 346 00ef E4000000 		.4byte	.LASF17
+ 347 00f3 01       		.byte	0x1
+ 348 00f4 15       		.byte	0x15
+ 349 00f5 8C000000 		.4byte	0x8c
+ 350 00f9 81000000 		.4byte	.LLST2
+ 351 00fd 0A       		.uleb128 0xa
+ 352 00fe 746D7000 		.ascii	"tmp\000"
+ 353 0102 01       		.byte	0x1
+ 354 0103 17       		.byte	0x17
+ 355 0104 8C000000 		.4byte	0x8c
+ 356 0108 D6000000 		.4byte	.LLST3
+ 357 010c 0A       		.uleb128 0xa
+ 358 010d 72656D00 		.ascii	"rem\000"
+ 359 0111 01       		.byte	0x1
+ 360 0112 18       		.byte	0x18
+ 361 0113 73000000 		.4byte	0x73
+ 362 0117 E9000000 		.4byte	.LLST4
+ 363 011b 00       		.byte	0
+ 364 011c 0B       		.uleb128 0xb
+ 365 011d E4000000 		.4byte	.LASF17
+ 366 0121 01       		.byte	0x1
+ 367 0122 10       		.byte	0x10
+ 368 0123 8C000000 		.4byte	0x8c
+ 369 0127 00000000 		.4byte	.LFB0
+ 370 012b 0A000000 		.4byte	.LFE0-.LFB0
+ 371 012f 01       		.uleb128 0x1
+ 372 0130 9C       		.byte	0x9c
+ 373 0131 08       		.uleb128 0x8
+ 374 0132 C6000000 		.4byte	.LASF16
+ 375 0136 01       		.byte	0x1
+ 376 0137 10       		.byte	0x10
+ 377 0138 AC000000 		.4byte	0xac
+ 378 013c FC000000 		.4byte	.LLST5
+ 379 0140 09       		.uleb128 0x9
+ 380 0141 6C656E00 		.ascii	"len\000"
+ 381 0145 01       		.byte	0x1
+ 382 0146 10       		.byte	0x10
+ 383 0147 73000000 		.4byte	0x73
+ 384 014b 1D010000 		.4byte	.LLST6
+ 385 014f 0C       		.uleb128 0xc
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 9
+
+
+ 386 0150 08000000 		.4byte	.LVL37
+ 387 0154 B7000000 		.4byte	0xb7
+ 388 0158 0D       		.uleb128 0xd
+ 389 0159 01       		.uleb128 0x1
+ 390 015a 50       		.byte	0x50
+ 391 015b 03       		.uleb128 0x3
+ 392 015c F3       		.byte	0xf3
+ 393 015d 01       		.uleb128 0x1
+ 394 015e 50       		.byte	0x50
+ 395 015f 0D       		.uleb128 0xd
+ 396 0160 01       		.uleb128 0x1
+ 397 0161 51       		.byte	0x51
+ 398 0162 03       		.uleb128 0x3
+ 399 0163 F3       		.byte	0xf3
+ 400 0164 01       		.uleb128 0x1
+ 401 0165 51       		.byte	0x51
+ 402 0166 0D       		.uleb128 0xd
+ 403 0167 01       		.uleb128 0x1
+ 404 0168 52       		.byte	0x52
+ 405 0169 03       		.uleb128 0x3
+ 406 016a F3       		.byte	0xf3
+ 407 016b 01       		.uleb128 0x1
+ 408 016c 51       		.byte	0x51
+ 409 016d 00       		.byte	0
+ 410 016e 00       		.byte	0
+ 411 016f 00       		.byte	0
+ 412              		.section	.debug_abbrev,"",%progbits
+ 413              	.Ldebug_abbrev0:
+ 414 0000 01       		.uleb128 0x1
+ 415 0001 11       		.uleb128 0x11
+ 416 0002 01       		.byte	0x1
+ 417 0003 25       		.uleb128 0x25
+ 418 0004 0E       		.uleb128 0xe
+ 419 0005 13       		.uleb128 0x13
+ 420 0006 0B       		.uleb128 0xb
+ 421 0007 03       		.uleb128 0x3
+ 422 0008 0E       		.uleb128 0xe
+ 423 0009 1B       		.uleb128 0x1b
+ 424 000a 0E       		.uleb128 0xe
+ 425 000b 55       		.uleb128 0x55
+ 426 000c 17       		.uleb128 0x17
+ 427 000d 11       		.uleb128 0x11
+ 428 000e 01       		.uleb128 0x1
+ 429 000f 10       		.uleb128 0x10
+ 430 0010 17       		.uleb128 0x17
+ 431 0011 00       		.byte	0
+ 432 0012 00       		.byte	0
+ 433 0013 02       		.uleb128 0x2
+ 434 0014 24       		.uleb128 0x24
+ 435 0015 00       		.byte	0
+ 436 0016 0B       		.uleb128 0xb
+ 437 0017 0B       		.uleb128 0xb
+ 438 0018 3E       		.uleb128 0x3e
+ 439 0019 0B       		.uleb128 0xb
+ 440 001a 03       		.uleb128 0x3
+ 441 001b 0E       		.uleb128 0xe
+ 442 001c 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 10
+
+
+ 443 001d 00       		.byte	0
+ 444 001e 03       		.uleb128 0x3
+ 445 001f 16       		.uleb128 0x16
+ 446 0020 00       		.byte	0
+ 447 0021 03       		.uleb128 0x3
+ 448 0022 0E       		.uleb128 0xe
+ 449 0023 3A       		.uleb128 0x3a
+ 450 0024 0B       		.uleb128 0xb
+ 451 0025 3B       		.uleb128 0x3b
+ 452 0026 0B       		.uleb128 0xb
+ 453 0027 49       		.uleb128 0x49
+ 454 0028 13       		.uleb128 0x13
+ 455 0029 00       		.byte	0
+ 456 002a 00       		.byte	0
+ 457 002b 04       		.uleb128 0x4
+ 458 002c 24       		.uleb128 0x24
+ 459 002d 00       		.byte	0
+ 460 002e 0B       		.uleb128 0xb
+ 461 002f 0B       		.uleb128 0xb
+ 462 0030 3E       		.uleb128 0x3e
+ 463 0031 0B       		.uleb128 0xb
+ 464 0032 03       		.uleb128 0x3
+ 465 0033 08       		.uleb128 0x8
+ 466 0034 00       		.byte	0
+ 467 0035 00       		.byte	0
+ 468 0036 05       		.uleb128 0x5
+ 469 0037 0F       		.uleb128 0xf
+ 470 0038 00       		.byte	0
+ 471 0039 0B       		.uleb128 0xb
+ 472 003a 0B       		.uleb128 0xb
+ 473 003b 49       		.uleb128 0x49
+ 474 003c 13       		.uleb128 0x13
+ 475 003d 00       		.byte	0
+ 476 003e 00       		.byte	0
+ 477 003f 06       		.uleb128 0x6
+ 478 0040 26       		.uleb128 0x26
+ 479 0041 00       		.byte	0
+ 480 0042 49       		.uleb128 0x49
+ 481 0043 13       		.uleb128 0x13
+ 482 0044 00       		.byte	0
+ 483 0045 00       		.byte	0
+ 484 0046 07       		.uleb128 0x7
+ 485 0047 2E       		.uleb128 0x2e
+ 486 0048 01       		.byte	0x1
+ 487 0049 3F       		.uleb128 0x3f
+ 488 004a 19       		.uleb128 0x19
+ 489 004b 03       		.uleb128 0x3
+ 490 004c 0E       		.uleb128 0xe
+ 491 004d 3A       		.uleb128 0x3a
+ 492 004e 0B       		.uleb128 0xb
+ 493 004f 3B       		.uleb128 0x3b
+ 494 0050 0B       		.uleb128 0xb
+ 495 0051 27       		.uleb128 0x27
+ 496 0052 19       		.uleb128 0x19
+ 497 0053 49       		.uleb128 0x49
+ 498 0054 13       		.uleb128 0x13
+ 499 0055 11       		.uleb128 0x11
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 11
+
+
+ 500 0056 01       		.uleb128 0x1
+ 501 0057 12       		.uleb128 0x12
+ 502 0058 06       		.uleb128 0x6
+ 503 0059 40       		.uleb128 0x40
+ 504 005a 18       		.uleb128 0x18
+ 505 005b 9742     		.uleb128 0x2117
+ 506 005d 19       		.uleb128 0x19
+ 507 005e 01       		.uleb128 0x1
+ 508 005f 13       		.uleb128 0x13
+ 509 0060 00       		.byte	0
+ 510 0061 00       		.byte	0
+ 511 0062 08       		.uleb128 0x8
+ 512 0063 05       		.uleb128 0x5
+ 513 0064 00       		.byte	0
+ 514 0065 03       		.uleb128 0x3
+ 515 0066 0E       		.uleb128 0xe
+ 516 0067 3A       		.uleb128 0x3a
+ 517 0068 0B       		.uleb128 0xb
+ 518 0069 3B       		.uleb128 0x3b
+ 519 006a 0B       		.uleb128 0xb
+ 520 006b 49       		.uleb128 0x49
+ 521 006c 13       		.uleb128 0x13
+ 522 006d 02       		.uleb128 0x2
+ 523 006e 17       		.uleb128 0x17
+ 524 006f 00       		.byte	0
+ 525 0070 00       		.byte	0
+ 526 0071 09       		.uleb128 0x9
+ 527 0072 05       		.uleb128 0x5
+ 528 0073 00       		.byte	0
+ 529 0074 03       		.uleb128 0x3
+ 530 0075 08       		.uleb128 0x8
+ 531 0076 3A       		.uleb128 0x3a
+ 532 0077 0B       		.uleb128 0xb
+ 533 0078 3B       		.uleb128 0x3b
+ 534 0079 0B       		.uleb128 0xb
+ 535 007a 49       		.uleb128 0x49
+ 536 007b 13       		.uleb128 0x13
+ 537 007c 02       		.uleb128 0x2
+ 538 007d 17       		.uleb128 0x17
+ 539 007e 00       		.byte	0
+ 540 007f 00       		.byte	0
+ 541 0080 0A       		.uleb128 0xa
+ 542 0081 34       		.uleb128 0x34
+ 543 0082 00       		.byte	0
+ 544 0083 03       		.uleb128 0x3
+ 545 0084 08       		.uleb128 0x8
+ 546 0085 3A       		.uleb128 0x3a
+ 547 0086 0B       		.uleb128 0xb
+ 548 0087 3B       		.uleb128 0x3b
+ 549 0088 0B       		.uleb128 0xb
+ 550 0089 49       		.uleb128 0x49
+ 551 008a 13       		.uleb128 0x13
+ 552 008b 02       		.uleb128 0x2
+ 553 008c 17       		.uleb128 0x17
+ 554 008d 00       		.byte	0
+ 555 008e 00       		.byte	0
+ 556 008f 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 12
+
+
+ 557 0090 2E       		.uleb128 0x2e
+ 558 0091 01       		.byte	0x1
+ 559 0092 3F       		.uleb128 0x3f
+ 560 0093 19       		.uleb128 0x19
+ 561 0094 03       		.uleb128 0x3
+ 562 0095 0E       		.uleb128 0xe
+ 563 0096 3A       		.uleb128 0x3a
+ 564 0097 0B       		.uleb128 0xb
+ 565 0098 3B       		.uleb128 0x3b
+ 566 0099 0B       		.uleb128 0xb
+ 567 009a 27       		.uleb128 0x27
+ 568 009b 19       		.uleb128 0x19
+ 569 009c 49       		.uleb128 0x49
+ 570 009d 13       		.uleb128 0x13
+ 571 009e 11       		.uleb128 0x11
+ 572 009f 01       		.uleb128 0x1
+ 573 00a0 12       		.uleb128 0x12
+ 574 00a1 06       		.uleb128 0x6
+ 575 00a2 40       		.uleb128 0x40
+ 576 00a3 18       		.uleb128 0x18
+ 577 00a4 9742     		.uleb128 0x2117
+ 578 00a6 19       		.uleb128 0x19
+ 579 00a7 00       		.byte	0
+ 580 00a8 00       		.byte	0
+ 581 00a9 0C       		.uleb128 0xc
+ 582 00aa 898201   		.uleb128 0x4109
+ 583 00ad 01       		.byte	0x1
+ 584 00ae 11       		.uleb128 0x11
+ 585 00af 01       		.uleb128 0x1
+ 586 00b0 31       		.uleb128 0x31
+ 587 00b1 13       		.uleb128 0x13
+ 588 00b2 00       		.byte	0
+ 589 00b3 00       		.byte	0
+ 590 00b4 0D       		.uleb128 0xd
+ 591 00b5 8A8201   		.uleb128 0x410a
+ 592 00b8 00       		.byte	0
+ 593 00b9 02       		.uleb128 0x2
+ 594 00ba 18       		.uleb128 0x18
+ 595 00bb 9142     		.uleb128 0x2111
+ 596 00bd 18       		.uleb128 0x18
+ 597 00be 00       		.byte	0
+ 598 00bf 00       		.byte	0
+ 599 00c0 00       		.byte	0
+ 600              		.section	.debug_loc,"",%progbits
+ 601              	.Ldebug_loc0:
+ 602              	.LLST0:
+ 603 0000 00000000 		.4byte	.LVL0
+ 604 0004 2E000000 		.4byte	.LVL7
+ 605 0008 0100     		.2byte	0x1
+ 606 000a 50       		.byte	0x50
+ 607 000b 2E000000 		.4byte	.LVL7
+ 608 000f 84000000 		.4byte	.LVL25
+ 609 0013 0100     		.2byte	0x1
+ 610 0015 50       		.byte	0x50
+ 611 0016 9C000000 		.4byte	.LVL32
+ 612 001a 9E000000 		.4byte	.LVL33
+ 613 001e 0100     		.2byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 13
+
+
+ 614 0020 50       		.byte	0x50
+ 615 0021 9E000000 		.4byte	.LVL33
+ 616 0025 A0000000 		.4byte	.LVL34
+ 617 0029 0400     		.2byte	0x4
+ 618 002b F3       		.byte	0xf3
+ 619 002c 01       		.uleb128 0x1
+ 620 002d 50       		.byte	0x50
+ 621 002e 9F       		.byte	0x9f
+ 622 002f A0000000 		.4byte	.LVL34
+ 623 0033 A2000000 		.4byte	.LVL35
+ 624 0037 0100     		.2byte	0x1
+ 625 0039 50       		.byte	0x50
+ 626 003a 00000000 		.4byte	0
+ 627 003e 00000000 		.4byte	0
+ 628              	.LLST1:
+ 629 0042 00000000 		.4byte	.LVL0
+ 630 0046 10000000 		.4byte	.LVL2
+ 631 004a 0100     		.2byte	0x1
+ 632 004c 51       		.byte	0x51
+ 633 004d 10000000 		.4byte	.LVL2
+ 634 0051 4C000000 		.4byte	.LVL10
+ 635 0055 0100     		.2byte	0x1
+ 636 0057 51       		.byte	0x51
+ 637 0058 62000000 		.4byte	.LVL15
+ 638 005c 68000000 		.4byte	.LVL16
+ 639 0060 0100     		.2byte	0x1
+ 640 0062 51       		.byte	0x51
+ 641 0063 76000000 		.4byte	.LVL20
+ 642 0067 7C000000 		.4byte	.LVL22
+ 643 006b 0100     		.2byte	0x1
+ 644 006d 51       		.byte	0x51
+ 645 006e 9C000000 		.4byte	.LVL32
+ 646 0072 A2000000 		.4byte	.LVL35
+ 647 0076 0100     		.2byte	0x1
+ 648 0078 51       		.byte	0x51
+ 649 0079 00000000 		.4byte	0
+ 650 007d 00000000 		.4byte	0
+ 651              	.LLST2:
+ 652 0081 00000000 		.4byte	.LVL0
+ 653 0085 1C000000 		.4byte	.LVL3
+ 654 0089 0100     		.2byte	0x1
+ 655 008b 52       		.byte	0x52
+ 656 008c 1C000000 		.4byte	.LVL3
+ 657 0090 2A000000 		.4byte	.LVL5
+ 658 0094 0100     		.2byte	0x1
+ 659 0096 53       		.byte	0x53
+ 660 0097 2C000000 		.4byte	.LVL6
+ 661 009b 56000000 		.4byte	.LVL12
+ 662 009f 0100     		.2byte	0x1
+ 663 00a1 52       		.byte	0x52
+ 664 00a2 56000000 		.4byte	.LVL12
+ 665 00a6 5C000000 		.4byte	.LVL13
+ 666 00aa 0100     		.2byte	0x1
+ 667 00ac 53       		.byte	0x53
+ 668 00ad 5C000000 		.4byte	.LVL13
+ 669 00b1 8A000000 		.4byte	.LVL27
+ 670 00b5 0100     		.2byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 14
+
+
+ 671 00b7 52       		.byte	0x52
+ 672 00b8 8A000000 		.4byte	.LVL27
+ 673 00bc 9A000000 		.4byte	.LVL31
+ 674 00c0 0100     		.2byte	0x1
+ 675 00c2 50       		.byte	0x50
+ 676 00c3 9C000000 		.4byte	.LVL32
+ 677 00c7 A2000000 		.4byte	.LVL35
+ 678 00cb 0100     		.2byte	0x1
+ 679 00cd 52       		.byte	0x52
+ 680 00ce 00000000 		.4byte	0
+ 681 00d2 00000000 		.4byte	0
+ 682              	.LLST3:
+ 683 00d6 28000000 		.4byte	.LVL4
+ 684 00da 2C000000 		.4byte	.LVL6
+ 685 00de 0100     		.2byte	0x1
+ 686 00e0 52       		.byte	0x52
+ 687 00e1 00000000 		.4byte	0
+ 688 00e5 00000000 		.4byte	0
+ 689              	.LLST4:
+ 690 00e9 0E000000 		.4byte	.LVL1
+ 691 00ed 9C000000 		.4byte	.LVL32
+ 692 00f1 0100     		.2byte	0x1
+ 693 00f3 55       		.byte	0x55
+ 694 00f4 00000000 		.4byte	0
+ 695 00f8 00000000 		.4byte	0
+ 696              	.LLST5:
+ 697 00fc 00000000 		.4byte	.LVL36
+ 698 0100 07000000 		.4byte	.LVL37-1
+ 699 0104 0100     		.2byte	0x1
+ 700 0106 50       		.byte	0x50
+ 701 0107 07000000 		.4byte	.LVL37-1
+ 702 010b 0A000000 		.4byte	.LFE0
+ 703 010f 0400     		.2byte	0x4
+ 704 0111 F3       		.byte	0xf3
+ 705 0112 01       		.uleb128 0x1
+ 706 0113 50       		.byte	0x50
+ 707 0114 9F       		.byte	0x9f
+ 708 0115 00000000 		.4byte	0
+ 709 0119 00000000 		.4byte	0
+ 710              	.LLST6:
+ 711 011d 00000000 		.4byte	.LVL36
+ 712 0121 07000000 		.4byte	.LVL37-1
+ 713 0125 0100     		.2byte	0x1
+ 714 0127 51       		.byte	0x51
+ 715 0128 07000000 		.4byte	.LVL37-1
+ 716 012c 0A000000 		.4byte	.LFE0
+ 717 0130 0400     		.2byte	0x4
+ 718 0132 F3       		.byte	0xf3
+ 719 0133 01       		.uleb128 0x1
+ 720 0134 51       		.byte	0x51
+ 721 0135 9F       		.byte	0x9f
+ 722 0136 00000000 		.4byte	0
+ 723 013a 00000000 		.4byte	0
+ 724              		.section	.debug_aranges,"",%progbits
+ 725 0000 24000000 		.4byte	0x24
+ 726 0004 0200     		.2byte	0x2
+ 727 0006 00000000 		.4byte	.Ldebug_info0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 15
+
+
+ 728 000a 04       		.byte	0x4
+ 729 000b 00       		.byte	0
+ 730 000c 0000     		.2byte	0
+ 731 000e 0000     		.2byte	0
+ 732 0010 00000000 		.4byte	.LFB1
+ 733 0014 A4000000 		.4byte	.LFE1-.LFB1
+ 734 0018 00000000 		.4byte	.LFB0
+ 735 001c 0A000000 		.4byte	.LFE0-.LFB0
+ 736 0020 00000000 		.4byte	0
+ 737 0024 00000000 		.4byte	0
+ 738              		.section	.debug_ranges,"",%progbits
+ 739              	.Ldebug_ranges0:
+ 740 0000 00000000 		.4byte	.LFB1
+ 741 0004 A4000000 		.4byte	.LFE1
+ 742 0008 00000000 		.4byte	.LFB0
+ 743 000c 0A000000 		.4byte	.LFE0
+ 744 0010 00000000 		.4byte	0
+ 745 0014 00000000 		.4byte	0
+ 746              		.section	.debug_line,"",%progbits
+ 747              	.Ldebug_line0:
+ 748 0000 95010000 		.section	.debug_str,"MS",%progbits,1
+ 748      02002301 
+ 748      00000201 
+ 748      FB0E0D00 
+ 748      01010101 
+ 749              	.LASF8:
+ 750 0000 6C6F6E67 		.ascii	"long long int\000"
+ 750      206C6F6E 
+ 750      6720696E 
+ 750      7400
+ 751              	.LASF10:
+ 752 000e 756E7369 		.ascii	"unsigned int\000"
+ 752      676E6564 
+ 752      20696E74 
+ 752      00
+ 753              	.LASF12:
+ 754 001b 75696E74 		.ascii	"uint32_t\000"
+ 754      33325F74 
+ 754      00
+ 755              	.LASF20:
+ 756 0024 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\SEC"
+ 756      73657273 
+ 756      5C4E6967 
+ 756      68647261 
+ 756      676F6E5C 
+ 757 0051 55524954 		.ascii	"URITY_MODULE.cydsn\000"
+ 757      595F4D4F 
+ 757      44554C45 
+ 757      2E637964 
+ 757      736E00
+ 758              	.LASF6:
+ 759 0064 5F5F7569 		.ascii	"__uint32_t\000"
+ 759      6E743332 
+ 759      5F7400
+ 760              	.LASF21:
+ 761 006f 68617368 		.ascii	"hash_inc\000"
+ 761      5F696E63 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 16
+
+
+ 761      00
+ 762              	.LASF7:
+ 763 0078 6C6F6E67 		.ascii	"long unsigned int\000"
+ 763      20756E73 
+ 763      69676E65 
+ 763      6420696E 
+ 763      7400
+ 764              	.LASF9:
+ 765 008a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 765      206C6F6E 
+ 765      6720756E 
+ 765      7369676E 
+ 765      65642069 
+ 766              	.LASF5:
+ 767 00a1 5F5F7569 		.ascii	"__uint8_t\000"
+ 767      6E74385F 
+ 767      7400
+ 768              	.LASF15:
+ 769 00ab 63686172 		.ascii	"char\000"
+ 769      00
+ 770              	.LASF11:
+ 771 00b0 75696E74 		.ascii	"uint8_t\000"
+ 771      385F7400 
+ 772              	.LASF1:
+ 773 00b8 756E7369 		.ascii	"unsigned char\000"
+ 773      676E6564 
+ 773      20636861 
+ 773      7200
+ 774              	.LASF16:
+ 775 00c6 64617461 		.ascii	"data\000"
+ 775      00
+ 776              	.LASF19:
+ 777 00cb 53757065 		.ascii	"SuperFastHash.c\000"
+ 777      72466173 
+ 777      74486173 
+ 777      682E6300 
+ 778              	.LASF4:
+ 779 00db 6C6F6E67 		.ascii	"long int\000"
+ 779      20696E74 
+ 779      00
+ 780              	.LASF17:
+ 781 00e4 68617368 		.ascii	"hash\000"
+ 781      00
+ 782              	.LASF18:
+ 783 00e9 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 783      43313120 
+ 783      352E342E 
+ 783      31203230 
+ 783      31363036 
+ 784 011c 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 784      20726576 
+ 784      6973696F 
+ 784      6E203233 
+ 784      37373135 
+ 785 014f 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 785      66756E63 
+ 785      74696F6E 
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\cc200bqu.s 			page 17
+
+
+ 785      2D736563 
+ 785      74696F6E 
+ 786              	.LASF3:
+ 787 0177 73686F72 		.ascii	"short unsigned int\000"
+ 787      7420756E 
+ 787      7369676E 
+ 787      65642069 
+ 787      6E7400
+ 788              	.LASF0:
+ 789 018a 7369676E 		.ascii	"signed char\000"
+ 789      65642063 
+ 789      68617200 
+ 790              	.LASF13:
+ 791 0196 6C6F6E67 		.ascii	"long double\000"
+ 791      20646F75 
+ 791      626C6500 
+ 792              	.LASF2:
+ 793 01a2 73686F72 		.ascii	"short int\000"
+ 793      7420696E 
+ 793      7400
+ 794              	.LASF14:
+ 795 01ac 73697A65 		.ascii	"sizetype\000"
+ 795      74797065 
+ 795      00
+ 796              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

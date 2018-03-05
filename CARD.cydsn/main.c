@@ -56,7 +56,12 @@ CY_ISR(Reset_ISR)
 void provision()
 {
     uint8 message[64];
-    unsigned int KEY;
+    struct AES_ctx ctx;
+    unsigned char AESkey[32];
+    //Hashing shit
+    char *buf = malloc(8*sizeof(char));
+    char *temp = malloc(4*sizeof(char));
+    unsigned char keyValues[32];
     
     // synchronize with bank
     syncConnection(SYNC_PROV);
@@ -74,15 +79,55 @@ void provision()
     pullMessage(message);
     
     //Generate Public/Private Key.
+    keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+    keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+    keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+    keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+
+    keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+    keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+    keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+    keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
+    //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+    memcpy(buf, CARD_ID, 4);
+    for(int x=0; x < 8; x=x+1)
+    {
+        for(int y=0; y < 8; y=y+1)
+        {
+            for(int z=0; z < 8; z=z+1)
+            {
+                for(int w=0; w < 8; w=w+1)
+                {
+                    memcpy(&temp[0], &keyValues[x],1);
+                    memcpy(&temp[2], &keyValues[y],1);
+                    memcpy(&temp[3], &keyValues[z],1);
+                    memcpy(&temp[4], &keyValues[w],1);
+                    SALT_HASaltH_SALT(buf, temp, 4, 32);
+                }
+                
+            }
+        }
+        if(x % 4 == 0)
+        {
+            memcpy(&AESkey[x*4], buf, 4);
+        }
+    }
+    //Get rid of our previous data
+    memset(keyValues, 0, 32);
+    memset(buf, 0, 8);
+    memset(temp, 0, 8);
+    //Do AES
+    AES_init_ctx(&ctx, AESkey);
+    AES_ECB_encrypt(&ctx, message);
+    //Get rid of our AESKey
     
 
     //Check the message that was received
     if(message[0] == '3')
     {
-        pushMessage((uint8*)KEY, 32); // Public Key
+        pushMessage((uint8*)AESkey, 32); // Public Key
     }
-    //Memset Public Key    
-    memset(&KEY, 0, 64);
+    memset(AESkey, 0, 32);
 }
 
 int main(void)
@@ -99,7 +144,6 @@ int main(void)
     //AES shit
     struct AES_ctx ctx;
     unsigned char AESkey[32];
-    uint8_t iv = 21;
     //Hashing shit
     char *buf = malloc(8*sizeof(char));
     char *temp = malloc(4*sizeof(char));
@@ -165,7 +209,7 @@ int main(void)
                             memcpy(&temp[2], &keyValues[y],1);
                             memcpy(&temp[3], &keyValues[z],1);
                             memcpy(&temp[4], &keyValues[w],1);
-                            SALT_HAsaltH_SALT(buf, temp, 4, 32);
+                            SALT_HASaltH_SALT(buf, temp, 4, 32);
                         }
                         
                     }
@@ -181,8 +225,7 @@ int main(void)
             memset(temp, 0, 8);
             //Do AES
             AES_init_ctx(&ctx, AESkey);
-            AES_ctx_set_iv(&ctx, &iv);
-            AES_CBC_encrypt_buffer(&ctx, message, strlen((char*) message));
+            AES_ECB_encrypt(&ctx, message);
             //Get rid of our AESKey
             memset(AESkey, 0, 32);
             //Send Message

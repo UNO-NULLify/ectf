@@ -1,52 +1,33 @@
---------------- Build Started: 03/03/2018 18:07:14 Project: SECURITY_MODULE, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 03/04/2018 23:01:52 Project: SECURITY_MODULE, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
 main.c: In function 'main':
-main.c:167:17: warning: pointer targets in passing argument 1 of 'decrypt' differ in signedness [-Wpointer-sign]
-         decrypt(message);
-                 ^
-main.c:107:6: note: expected 'char *' but argument is of type 'uint8 * {aka unsigned char *}'
- void decrypt(char * data)
-      ^
-main.c:170:24: warning: pointer targets in passing argument 1 of 'strtok' differ in signedness [-Wpointer-sign]
-         token = strtok(message, ",");
-                        ^
-In file included from c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:10:0,
-                 from Generated_Source\PSoC4/CyLib.h:25,
-                 from Generated_Source\PSoC4/DB_UART.h:24,
-                 from Generated_Source\PSoC4/project.h:21,
-                 from main.c:12:
-c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:42:8: note: expected 'char * restrict' but argument is of type 'uint8 * {aka unsigned char *}'
- char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
-        ^
-main.c:173:32: warning: pointer targets in passing argument 1 of 'strtok' differ in signedness [-Wpointer-sign]
-             temptoken = strtok(message, ",");
-                                ^
-In file included from c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:10:0,
-                 from Generated_Source\PSoC4/CyLib.h:25,
-                 from Generated_Source\PSoC4/DB_UART.h:24,
-                 from Generated_Source\PSoC4/project.h:21,
-                 from main.c:12:
-c:\program files (x86)\cypress\psoc creator\4.1\psoc creator\import\gnu\arm\5.4.1\arm-none-eabi\include\string.h:42:8: note: expected 'char * restrict' but argument is of type 'uint8 * {aka unsigned char *}'
- char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
-        ^
-main.c:174:16: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-             if((uint8) temptoken + (uint8) token > (uint8)BILLS_LEFT)
+main.c:258:16: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+             if((uint8) temptoken + (uint8) token > (uint8) BILLS_LEFT)
                 ^
-main.c:174:36: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-             if((uint8) temptoken + (uint8) token > (uint8)BILLS_LEFT)
+main.c:258:36: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+             if((uint8) temptoken + (uint8) token > (uint8) BILLS_LEFT)
                                     ^
-main.c:174:52: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-             if((uint8) temptoken + (uint8) token > (uint8)BILLS_LEFT)
+main.c:258:52: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+             if((uint8) temptoken + (uint8) token > (uint8) BILLS_LEFT)
                                                     ^
-main.c:121:11: warning: unused variable 'numbills' [-Wunused-variable]
-     uint8 numbills, i, bills_left;
-           ^
+main.c:264:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+                 for (uint8 i = (uint8) token; i < (uint8) temptoken; i++)
+                                ^
+main.c:264:51: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+                 for (uint8 i = (uint8) token; i < (uint8) temptoken; i++)
+                                                   ^
+main.c:267:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+                     bills_left = *BILLS_LEFT - ((uint8) temptoken - (uint8) token);
+                                                 ^
+main.c:267:69: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+                     bills_left = *BILLS_LEFT - ((uint8) temptoken - (uint8) token);
+                                                                     ^
 arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a .\CortexM0\ARM_GCC_541\Debug\DB_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SPI_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SPI_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\PIGGY_BANK.o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o .\CortexM0\ARM_GCC_541\Debug\SW1.o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SCBCLK.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_tx.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_tx_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SCB_IRQ.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_rx.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_rx_PM.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_IntClock.o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o .\CortexM0\ARM_GCC_541\Debug\CyLib.o .\CortexM0\ARM_GCC_541\Debug\cyPm.o .\CortexM0\ARM_GCC_541\Debug\cyutils.o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o
 arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a
-arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/SECURITY_MODULE.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
-cyelftool.exe -C C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf --flash_row_size 128 --flash_size 32768 --flash_offset 0x00000000
-cyelftool.exe -S C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf
-Flash used: 7816 of 32768 bytes (23.9%).
+arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Nighdragon\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\aes.o .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/SECURITY_MODULE.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
+cyelftool.exe -C C:\Users\Nighdragon\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf --flash_row_size 128 --flash_size 32768 --flash_offset 0x00000000
+cyelftool.exe -S C:\Users\Nighdragon\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf
+Flash used: 10030 of 32768 bytes (30.6%).
 SRAM used: 2224 of 4096 bytes (54.3%). Stack: 1024 bytes. Heap: 496 bytes.
---------------- Build Succeeded: 03/03/2018 18:07:16 ---------------
+--------------- Build Succeeded: 03/04/2018 23:01:53 ---------------

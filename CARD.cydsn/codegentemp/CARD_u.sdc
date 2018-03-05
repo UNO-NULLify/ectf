@@ -1,3 +1,3 @@
-# Component constraints for C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\TopDesign\TopDesign.cysch
-# Project: C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\CARD.cyprj
-# Date: Sat, 03 Mar 2018 22:40:49 GMT
+# Component constraints for C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\TopDesign\TopDesign.cysch
+# Project: C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CARD.cyprj
+# Date: Mon, 05 Mar 2018 04:59:49 GMT

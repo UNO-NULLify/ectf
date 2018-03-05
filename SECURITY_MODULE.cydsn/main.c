@@ -61,6 +61,12 @@ void provision()
 {
     int i;
     uint8 message[64], numbills;
+    //AES shit
+    unsigned char AESkey[32];
+    //Hashing shit
+    char *buf = malloc(8*sizeof(char));
+    char *temp = malloc(4*sizeof(char));
+    unsigned char keyValues[32];
     
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
@@ -78,13 +84,48 @@ void provision()
     numbills = message[0];
     PIGGY_BANK_Write(&numbills, BILLS_LEFT, 1u);
     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
-    
+
     // Load bills
     for (i = 0; i < numbills; i++) {
         pullMessage(message);
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     }
+    
+    keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+    keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+    keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+    keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+
+    keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+    keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+    keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+    keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
+    //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+    memcpy(buf, "prof", 4);
+    for(int x=0; x < 8; x=x+1)
+    {
+        for(int y=0; y < 8; y=y+1)
+        {
+            for(int z=0; z < 8; z=z+1)
+            {
+                for(int w=0; w < 8; w=w+1)
+                {
+                    memcpy(&temp[0], &keyValues[x],1);
+                    memcpy(&temp[2], &keyValues[y],1);
+                    memcpy(&temp[3], &keyValues[z],1);
+                    memcpy(&temp[4], &keyValues[w],1);
+                    SALT_HASaltH_SALT(buf, temp, 4, 32);
+                }
+                
+            }
+        }
+        if(x % 4 == 0)
+        {
+            memcpy(&AESkey[x*4], buf, 4);
+        }
+    }
+    pushMessage(AESkey, 32);
 }
 
 
@@ -110,7 +151,6 @@ void decrypt(uint8 data)
     //AES shit
     struct AES_ctx ctx;
     unsigned char AESkey[32];
-    uint8_t iv = 21;
     //Hashing shit
     char *buf = malloc(8*sizeof(char));
     char *temp = malloc(4*sizeof(char));
@@ -126,7 +166,7 @@ void decrypt(uint8 data)
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-    memcpy(buf, CARD_ID, 4);
+    memcpy(buf, "prof", 4);
     for(int x=0; x < 8; x=x+1)
     {
         for(int y=0; y < 8; y=y+1)
@@ -139,7 +179,7 @@ void decrypt(uint8 data)
                     memcpy(&temp[2], &keyValues[y],1);
                     memcpy(&temp[3], &keyValues[z],1);
                     memcpy(&temp[4], &keyValues[w],1);
-                    SALT_HAsaltH_SALT(buf, temp, 4, 32);
+                    SALT_HASaltH_SALT(buf, temp, 4, 32);
                 }
                 
             }
@@ -150,8 +190,7 @@ void decrypt(uint8 data)
         }
     }
     AES_init_ctx(&ctx, AESkey);
-    AES_ctx_set_iv(&ctx, &iv);
-    AES_CBC_decrypt_buffer(&ctx, data, strlen((char*) data));
+    AES_ECB_decrypt(&ctx, &data);
 }
 
 int main(void)
@@ -163,7 +202,7 @@ int main(void)
     
     /* Declare vairables here */
     
-    uint8 numbills, i, bills_left;
+    uint8 i, bills_left;
     uint8 message[64];
     char * token;
     char * temptoken;

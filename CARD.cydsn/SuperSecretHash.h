@@ -5,7 +5,7 @@
 #include "SW1.h"
 #include "Reset_isr.h"
 
-void SALT_HAsaltH_SALT(char* data, char* extra_data, int extra_data_len, int len){
+void SALT_HASaltH_SALT(char* data, char* extra_data, int extra_data_len, int len){
     uint32 output;
     char empty[4] = "";
     strncat(data, extra_data,  extra_data_len);
