@@ -109,11 +109,6 @@ class HSM(Psoc):
             return False
         self._vp('HSM sent provisioning message')
 
-        self._push_msg('%s\00' % uuid)
-        while self._pull_msg() != 'K':
-            self._vp('HSM hasn\'t accepted UUID \'%s\'' % uuid, logging.error)
-        self._vp('HSM accepted UUID \'%s\'' % uuid)
-
         self._push_msg(struct.pack('B', len(bills)))
         while self._pull_msg() != 'K':
             self._vp('HSM hasn\'t accepted number of bills', logging.error)
@@ -128,10 +123,16 @@ class HSM(Psoc):
                 self._vp('HSM hasn\'t accepted bill', logging.error)
             self._vp('HSM accepted bill')
 
-        self._vp('All bills sent! Provisioning complete!')
+        self._vp('All bills sent!')
 
-        return True
+        key = ''
+        while len(key) != 32:
+            key = self._pull_msg()
+            self._vp('Card hasn\'t sent', logging.error)
 
+        self._vp('Provisioning complete')
+
+        return key
 
 class DummyHSM(HSM):
     """Emulated HSM for testing

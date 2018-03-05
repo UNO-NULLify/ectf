@@ -17,7 +17,6 @@ PORT = '1338'
 
 ACCOUNT_NAME_MAX_LENGTH = 1024
 
-
 class AdminInterface(cmd.Cmd):
     """
         The following interface must be supported by the XMLRPC server

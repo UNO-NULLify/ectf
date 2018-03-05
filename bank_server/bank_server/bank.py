@@ -95,7 +95,7 @@ class Bank(object):
             if int(atm['num_bills']) < int(request.json['num_bills']):
                 time.sleep(2)
                 return response
-            if int(account['balance']) < int(request.json['nun_bills']):
+            if int(account['balance']) < int(request.json['num_bills']):
                 time.sleep(2)
                 return response
 
