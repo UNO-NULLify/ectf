@@ -114,6 +114,7 @@ int main(void)
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     USER_INFO_Start();
     USB_UART_Start();
+    
     // Provision card if on first boot
     ptr = PROVISIONED;
     if (*ptr == 0x00) {
@@ -140,7 +141,7 @@ int main(void)
         }
         if(message[1] == GIVE_SIG)
         {
-            //pullMessage(message);
+            pullMessage(message);
             keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
             keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
             keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
@@ -174,10 +175,16 @@ int main(void)
                     memcpy(&AESkey[x*4], buf, 4);
                 }
             }
+            //Get rid of our previous data
+            memset(keyValues, 0, 32);
+            memset(buf, 0, 8);
+            memset(temp, 0, 8);
             //Do AES
             AES_init_ctx(&ctx, AESkey);
             AES_ctx_set_iv(&ctx, &iv);
             AES_CBC_encrypt_buffer(&ctx, message, strlen((char*) message));
+            //Get rid of our AESKey
+            memset(AESkey, 0, 32);
             //Send Message
             pushMessage(message, strlen((char *) message));
         }

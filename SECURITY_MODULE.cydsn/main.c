@@ -11,10 +11,11 @@
 */
 #include "project.h"
 #include <stdlib.h>
-#include <string.h>
-//This is needed for the default communication between the BANK and DISPLAY over the USB-UART
 #include "usbserialprotocol.h"
 #include "SW1.h"
+#include "Reset_isr.h"
+#include "aes.h"
+#include "SuperSecretHash.h"
 
 // SECURITY MODULE
 
@@ -43,8 +44,6 @@
 
 // global EEPROM read variables
 static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
-static const uint8 UUID[UUID_LEN + 1] = {'b', 'l', 'a', 'n', 'k', ' ', 
-                                        'u', 'u', 'i', 'd', '!', 0x00 };
 static const uint8 BILLS_LEFT[1] = {0x00};
 
 
@@ -73,11 +72,6 @@ void provision()
     memset(message, 0u, 64);
     strcpy((char*)message, PROV_MSG);
     pushMessage(message, (uint8)strlen(PROV_MSG));
-        
-    // Set UUID
-    pullMessage(message);
-    PIGGY_BANK_Write(message, UUID, strlen((char*)message) + 1);
-    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     
     // Get numbills
     pullMessage(message);
@@ -111,6 +105,54 @@ void dispenseBill()
     stackloc = (stackloc + 1) % 128;
 }
 
+void decrypt(uint8 data)
+{
+    //AES shit
+    struct AES_ctx ctx;
+    unsigned char AESkey[32];
+    uint8_t iv = 21;
+    //Hashing shit
+    char *buf = malloc(8*sizeof(char));
+    char *temp = malloc(4*sizeof(char));
+    unsigned char keyValues[32];
+    
+    keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+    keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+    keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+    keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+
+    keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+    keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+    keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+    keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
+    //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+    memcpy(buf, CARD_ID, 4);
+    for(int x=0; x < 8; x=x+1)
+    {
+        for(int y=0; y < 8; y=y+1)
+        {
+            for(int z=0; z < 8; z=z+1)
+            {
+                for(int w=0; w < 8; w=w+1)
+                {
+                    memcpy(&temp[0], &keyValues[x],1);
+                    memcpy(&temp[2], &keyValues[y],1);
+                    memcpy(&temp[3], &keyValues[z],1);
+                    memcpy(&temp[4], &keyValues[w],1);
+                    SALT_HAsaltH_SALT(buf, temp, 4, 32);
+                }
+                
+            }
+        }
+        if(x % 4 == 0)
+        {
+            memcpy(&AESkey[x*4], buf, 4);
+        }
+    }
+    AES_init_ctx(&ctx, AESkey);
+    AES_ctx_set_iv(&ctx, &iv);
+    AES_CBC_decrypt_buffer(&ctx, data, strlen((char*) data));
+}
 
 int main(void)
 {
@@ -123,6 +165,11 @@ int main(void)
     
     uint8 numbills, i, bills_left;
     uint8 message[64];
+    char * token;
+    char * temptoken;
+    uint8 bills_dispensed;
+    
+    bills_dispensed = 128;
     
     /*
      * Note:
@@ -148,7 +195,7 @@ int main(void)
         
         // Mark as provisioned
         i = 0x01;
-        PIGGY_BANK_Write(&i, PROVISIONED,1u);
+        PIGGY_BANK_Write(&i, PROVISIONED, 1u);
     }
     
     // Go into infinite loop
@@ -157,36 +204,30 @@ int main(void)
 
         // synchronize with bank
         syncConnection(SYNC_NORM);
-            
-        // send UUID
-        ptr = UUID;
-        pushMessage((uint8*)ptr, strlen((char*)ptr));
         
-        // get returned UUID
+        //Get the range
         pullMessage(message);
         
-        // compare UUID with stored UUID
-        if (strcmp((char*)message, (char*)UUID)) {
-            pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
-        } else {
-            pushMessage((uint8*)WITH_OK, strlen(WITH_OK));
-            
-            // get number of bills
-            pullMessage(message);
-            numbills = message[0];
-            
-            ptr = BILLS_LEFT;
-            if (*ptr < numbills) {
+        //Decrypt the message
+        decrypt(*message);
+        
+        //Check to see if message has a starting valid bill
+        token = strtok((char *)message, ",");
+        if((uint8) *token == bills_dispensed)
+        {
+            temptoken = strtok((char *)message, ",");
+            if((uint8) temptoken + (uint8) token > (uint8) BILLS_LEFT)
+            {
                 pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
-                continue;
-            } else {
-                pushMessage((uint8*)WITH_OK, strlen(WITH_OK));
-                bills_left = *ptr - numbills;
-                PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
             }
-            
-            for (i = 0; i < numbills; i++) {
-                dispenseBill();
+            else
+            {
+                for (uint8 i = (uint8) token; i < (uint8) temptoken; i++)
+                {
+                    dispenseBill();
+                    bills_left = *BILLS_LEFT - ((uint8) temptoken - (uint8) token);
+                    PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+                }
             }
         }
     }
