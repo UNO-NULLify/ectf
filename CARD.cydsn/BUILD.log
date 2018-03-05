@@ -1,4 +1,4 @@
---------------- Build Started: 03/04/2018 23:01:52 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 03/04/2018 23:29:08 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
 arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_541\Debug\CARD.a .\CortexM0\ARM_GCC_541\Debug\ATM_UART.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USER_INFO.o .\CortexM0\ARM_GCC_541\Debug\USB_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SPI_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o .\CortexM0\ARM_GCC_541\Debug\SW1.o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o .\CortexM0\ARM_GCC_541\Debug\ATM_UART_IntClock.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCBCLK.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_tx_PM.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_SCB_IRQ.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx.o .\CortexM0\ARM_GCC_541\Debug\USB_UART_rx_PM.o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o .\CortexM0\ARM_GCC_541\Debug\CyLib.o .\CortexM0\ARM_GCC_541\Debug\cyPm.o .\CortexM0\ARM_GCC_541\Debug\cyutils.o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o
@@ -8,4 +8,4 @@ cyelftool.exe -C C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\A
 cyelftool.exe -S C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf
 Flash used: 7414 of 32768 bytes (22.6%).
 SRAM used: 2216 of 4096 bytes (54.1%). Stack: 1024 bytes. Heap: 496 bytes.
---------------- Build Succeeded: 03/04/2018 23:01:52 ---------------
+--------------- Build Succeeded: 03/04/2018 23:29:09 ---------------

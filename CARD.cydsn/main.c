@@ -211,7 +211,6 @@ int main(void)
                             memcpy(&temp[4], &keyValues[w],1);
                             SALT_HASaltH_SALT(buf, temp, 4, 32);
                         }
-                        
                     }
                 }
                 if(x % 4 == 0)

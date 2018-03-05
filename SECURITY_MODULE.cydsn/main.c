@@ -62,6 +62,7 @@ void provision()
     int i;
     uint8 message[64], numbills;
     //AES shit
+    struct AES_ctx ctx;
     unsigned char AESkey[32];
     //Hashing shit
     char *buf = malloc(8*sizeof(char));
@@ -83,14 +84,6 @@ void provision()
     pullMessage(message);
     numbills = message[0];
     PIGGY_BANK_Write(&numbills, BILLS_LEFT, 1u);
-    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
-
-    // Load bills
-    for (i = 0; i < numbills; i++) {
-        pullMessage(message);
-        PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
-        pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
-    }
     
     keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
     keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
@@ -126,24 +119,15 @@ void provision()
         }
     }
     pushMessage(AESkey, 32);
-}
 
-
-void dispenseBill()
-{
-    static uint8 stackloc = 0;
-    uint8 message[16];
-    volatile const uint8* ptr; 
-    
-    ptr = MONEY[stackloc];
-    
-    memset(message, 0u, 16);
-    memcpy(message, (void*)ptr, BILL_LEN);
-
-    pushMessage(message, BILL_LEN);
-    
-    PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
-    stackloc = (stackloc + 1) % 128;
+    // Load bills
+    for (i = 0; i < numbills; i++) {
+        pullMessage(message);
+        AES_init_ctx(&ctx, AESkey);
+        AES_ECB_encrypt(&ctx, message);
+        PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
+        pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+    }
 }
 
 void decrypt(uint8 data)
@@ -180,6 +164,7 @@ void decrypt(uint8 data)
                     memcpy(&temp[3], &keyValues[z],1);
                     memcpy(&temp[4], &keyValues[w],1);
                     SALT_HASaltH_SALT(buf, temp, 4, 32);
+                    memset(temp, 0, 4);
                 }
                 
             }
@@ -189,8 +174,30 @@ void decrypt(uint8 data)
             memcpy(&AESkey[x*4], buf, 4);
         }
     }
+    memset(keyValues, 0, 32);
+    memset(temp, 0, 4);
+    memset(buf, 0 , 8);
     AES_init_ctx(&ctx, AESkey);
     AES_ECB_decrypt(&ctx, &data);
+    memset(AESkey, 0, 32);
+    memset(&ctx, 0, sizeof(struct AES_ctx));
+}
+
+void dispenseBill()
+{
+    static uint8 stackloc = 0;
+    uint8 message[16];
+    volatile const uint8* ptr; 
+    
+    ptr = MONEY[stackloc];
+    
+    memset(message, 0u, 16);
+    memcpy(message, (void*)ptr, BILL_LEN);
+    decrypt(*message);
+    pushMessage(message, BILL_LEN);
+    
+    PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
+    stackloc = (stackloc + 1) % 128;
 }
 
 int main(void)

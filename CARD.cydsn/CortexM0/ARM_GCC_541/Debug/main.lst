@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
   28:main.c        **** //CARD
   29:main.c        **** 
   30:main.c        **** /* 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 2
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 2
 
 
   31:main.c        ****  * How to read from EEPROM (persistent memory):
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
   59              		.global	SALT_HASaltH_SALT
   60              		.code	16
   61              		.thumb_func
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 3
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 3
 
 
   62              		.type	SALT_HASaltH_SALT, %function
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  102 0026 201D     		adds	r0, r4, #4
  103 0028 0422     		movs	r2, #4
  104 002a 6946     		mov	r1, sp
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 4
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 4
 
 
  105 002c FFF7FEFF 		bl	memcpy
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  148              		.loc 1 62 0
  149 0008 0820     		movs	r0, #8
  150 000a FFF7FEFF 		bl	malloc
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 5
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 5
 
 
  151              	.LVL13:
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  188              		.loc 1 79 0
  189 0042 4EA8     		add	r0, sp, #312
  190 0044 FFF7FEFF 		bl	pullMessage
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 6
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 6
 
 
  191              	.LVL24:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
   93:main.c        ****     for(int x=0; x < 8; x=x+1)
  232              		.loc 1 93 0
  233 0084 0026     		movs	r6, #0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 7
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 7
 
 
  234              	.LVL26:
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  275              	.LBB6:
   99:main.c        ****                 {
  276              		.loc 1 99 0 is_stmt 0 discriminator 1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 8
 
 
  277 00b4 072D     		cmp	r5, #7
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  320 00dc D018     		adds	r0, r2, r3
  321 00de 0422     		movs	r2, #4
  322 00e0 0199     		ldr	r1, [sp, #4]
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 9
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 9
 
 
  323 00e2 FFF7FEFF 		bl	memcpy
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  124:main.c        **** 
  125:main.c        ****     //Check the message that was received
  126:main.c        ****     if(message[0] == '3')
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 10
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 10
 
 
  364              		.loc 1 126 0
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  133:main.c        **** int main(void)
  134:main.c        **** {
  412              		.loc 1 134 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 11
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 11
 
 
  413              		.cfi_startproc
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  452              	.LVL54:
  150:main.c        ****     unsigned char keyValues[32];
  151:main.c        ****     
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 12
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 12
 
 
  152:main.c        ****     // local EEPROM read variable
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  176:main.c        ****         // syncronize communication with bank
  177:main.c        ****         syncConnection(SYNC_NORM);
  483              		.loc 1 177 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 13
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 13
 
 
  484 004e 0020     		movs	r0, #0
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  192:main.c        ****             keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
  524              		.loc 1 192 0
  525 008c 394A     		ldr	r2, .L32+20
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 14
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 14
 
 
  526 008e 1278     		ldrb	r2, [r2]
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  563              		.loc 1 209 0 discriminator 3
  564 00be 4246     		mov	r2, r8
  565 00c0 9A5C     		ldrb	r2, [r3, r2]
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 15
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 15
 
 
  566 00c2 A270     		strb	r2, [r4, #2]
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  612 00ee 9C46     		mov	ip, r3
  613 00f0 E044     		add	r8, r8, ip
  614              	.LVL72:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 16
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 16
 
 
  615 00f2 01E0     		b	.L27
@@ -917,16 +917,15 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  627 00fc F3DD     		ble	.L30
  628              	.LBE15:
  213:main.c        ****                         }
- 214:main.c        ****                         
- 215:main.c        ****                     }
- 216:main.c        ****                 }
- 217:main.c        ****                 if(x % 4 == 0)
- 629              		.loc 1 217 0 is_stmt 1
+ 214:main.c        ****                     }
+ 215:main.c        ****                 }
+ 216:main.c        ****                 if(x % 4 == 0)
+ 629              		.loc 1 216 0 is_stmt 1
  630 00fe B307     		lsls	r3, r6, #30
  631 0100 06D1     		bne	.L26
- 218:main.c        ****                 {
- 219:main.c        ****                     memcpy(&AESkey[x*4], buf, 4);
- 632              		.loc 1 219 0
+ 217:main.c        ****                 {
+ 218:main.c        ****                     memcpy(&AESkey[x*4], buf, 4);
+ 632              		.loc 1 218 0
  633 0102 B300     		lsls	r3, r6, #2
  634 0104 0BAA     		add	r2, sp, #44
  635 0106 D018     		adds	r0, r2, r3
@@ -945,57 +944,57 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  646 0112 072E     		cmp	r6, #7
  647 0114 EEDD     		ble	.L31
  648              	.LBE9:
- 220:main.c        ****                 }
- 221:main.c        ****             }
- 222:main.c        ****             //Get rid of our previous data
- 223:main.c        ****             memset(keyValues, 0, 32);
- 649              		.loc 1 223 0 is_stmt 1
+ 219:main.c        ****                 }
+ 220:main.c        ****             }
+ 221:main.c        ****             //Get rid of our previous data
+ 222:main.c        ****             memset(keyValues, 0, 32);
+ 649              		.loc 1 222 0 is_stmt 1
  650 0116 2022     		movs	r2, #32
  651 0118 0021     		movs	r1, #0
  652 011a 03A8     		add	r0, sp, #12
  653 011c FFF7FEFF 		bl	memset
  654              	.LVL77:
- 224:main.c        ****             memset(buf, 0, 8);
- 655              		.loc 1 224 0
+ 223:main.c        ****             memset(buf, 0, 8);
+ 655              		.loc 1 223 0
  656 0120 0822     		movs	r2, #8
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 17
-
-
  657 0122 0021     		movs	r1, #0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 17
+
+
  658 0124 0198     		ldr	r0, [sp, #4]
  659 0126 FFF7FEFF 		bl	memset
  660              	.LVL78:
- 225:main.c        ****             memset(temp, 0, 8);
- 661              		.loc 1 225 0
+ 224:main.c        ****             memset(temp, 0, 8);
+ 661              		.loc 1 224 0
  662 012a 0822     		movs	r2, #8
  663 012c 0021     		movs	r1, #0
  664 012e 2000     		movs	r0, r4
  665 0130 FFF7FEFF 		bl	memset
  666              	.LVL79:
- 226:main.c        ****             //Do AES
- 227:main.c        ****             AES_init_ctx(&ctx, AESkey);
- 667              		.loc 1 227 0
+ 225:main.c        ****             //Do AES
+ 226:main.c        ****             AES_init_ctx(&ctx, AESkey);
+ 667              		.loc 1 226 0
  668 0134 0BA9     		add	r1, sp, #44
  669 0136 13A8     		add	r0, sp, #76
  670 0138 FFF7FEFF 		bl	AES_init_ctx
  671              	.LVL80:
- 228:main.c        ****             AES_ECB_encrypt(&ctx, message);
- 672              		.loc 1 228 0
+ 227:main.c        ****             AES_ECB_encrypt(&ctx, message);
+ 672              		.loc 1 227 0
  673 013c 4FA9     		add	r1, sp, #316
  674 013e 13A8     		add	r0, sp, #76
  675 0140 FFF7FEFF 		bl	AES_ECB_encrypt
  676              	.LVL81:
- 229:main.c        ****             //Get rid of our AESKey
- 230:main.c        ****             memset(AESkey, 0, 32);
- 677              		.loc 1 230 0
+ 228:main.c        ****             //Get rid of our AESKey
+ 229:main.c        ****             memset(AESkey, 0, 32);
+ 677              		.loc 1 229 0
  678 0144 2022     		movs	r2, #32
  679 0146 0021     		movs	r1, #0
  680 0148 0BA8     		add	r0, sp, #44
  681 014a FFF7FEFF 		bl	memset
  682              	.LVL82:
- 231:main.c        ****             //Send Message
- 232:main.c        ****             pushMessage(message, strlen((char *) message));
- 683              		.loc 1 232 0
+ 230:main.c        ****             //Send Message
+ 231:main.c        ****             pushMessage(message, strlen((char *) message));
+ 683              		.loc 1 231 0
  684 014e 4FA8     		add	r0, sp, #316
  685 0150 FFF7FEFF 		bl	strlen
  686              	.LVL83:
@@ -1018,10 +1017,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  703 0180 7EF1FF0F 		.word	268431742
  704 0184 7FF1FF0F 		.word	268431743
  705              		.cfi_endproc
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 18
-
-
  706              	.LFE37:
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 18
+
+
  707              		.size	main, .-main
  708              		.section	.rodata
  709              		.align	2
@@ -1078,10 +1077,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  753 0011 A8020000 		.4byte	.LASF50
  754 0015 9F010000 		.4byte	.LASF51
  755 0019 90000000 		.4byte	.Ldebug_ranges0+0x90
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 19
-
-
  756 001d 00000000 		.4byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 19
+
+
  757 0021 00000000 		.4byte	.Ldebug_line0
  758 0025 02       		.uleb128 0x2
  759 0026 01       		.byte	0x1
@@ -1138,10 +1137,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  810 0086 05       		.byte	0x5
  811 0087 B901     		.2byte	0x1b9
  812 0089 37000000 		.4byte	0x37
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 20
-
-
  813 008d 05       		.uleb128 0x5
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 20
+
+
  814 008e A1020000 		.4byte	.LASF12
  815 0092 05       		.byte	0x5
  816 0093 BB01     		.2byte	0x1bb
@@ -1198,10 +1197,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  867 00fb 00       		.byte	0
  868 00fc 0C       		.uleb128 0xc
  869 00fd C3020000 		.4byte	.LASF19
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 21
-
-
  870 0101 01       		.byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 21
+
+
  871 0102 30       		.byte	0x30
  872 0103 00000000 		.4byte	.LFB35
  873 0107 18000000 		.4byte	.LFE35-.LFB35
@@ -1258,10 +1257,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  924 0179 08       		.byte	0x8
  925 017a 68000000 		.4byte	0x68
  926 017e 58000000 		.4byte	.LLST2
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 22
-
-
  927 0182 11       		.uleb128 0x11
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 22
+
+
  928 0183 6C656E00 		.ascii	"len\000"
  929 0187 02       		.byte	0x2
  930 0188 08       		.byte	0x8
@@ -1318,10 +1317,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  981 01df 74       		.byte	0x74
  982 01e0 00       		.sleb128 0
  983 01e1 0E       		.uleb128 0xe
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 23
-
-
  984 01e2 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 23
+
+
  985 01e3 51       		.byte	0x51
  986 01e4 02       		.uleb128 0x2
  987 01e5 76       		.byte	0x76
@@ -1378,10 +1377,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1038 0230 01       		.uleb128 0x1
  1039 0231 50       		.byte	0x50
  1040 0232 02       		.uleb128 0x2
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 24
-
-
  1041 0233 75       		.byte	0x75
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 24
+
+
  1042 0234 00       		.sleb128 0
  1043 0235 0E       		.uleb128 0xe
  1044 0236 01       		.uleb128 0x1
@@ -1438,10 +1437,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1095 0292 987D     		.sleb128 -360
  1096 0294 16       		.uleb128 0x16
  1097 0295 62756600 		.ascii	"buf\000"
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 25
-
-
  1098 0299 01       		.byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 25
+
+
  1099 029a 3E       		.byte	0x3e
  1100 029b CD000000 		.4byte	0xcd
  1101 029f A5000000 		.4byte	.LLST4
@@ -1498,10 +1497,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1152 0316 AE000000 		.4byte	.LVL28
  1153 031a 40010000 		.4byte	0x140
  1154 031e 0E       		.uleb128 0xe
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 26
-
-
  1155 031f 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 26
+
+
  1156 0320 50       		.byte	0x50
  1157 0321 04       		.uleb128 0x4
  1158 0322 91       		.byte	0x91
@@ -1558,10 +1557,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1209 035e 01       		.uleb128 0x1
  1210 035f 34       		.byte	0x34
  1211 0360 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 27
-
-
  1212 0361 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 27
+
+
  1213 0362 0D       		.uleb128 0xd
  1214 0363 0E000000 		.4byte	.LVL13
  1215 0367 DB080000 		.4byte	0x8db
@@ -1618,10 +1617,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1266 03c7 03       		.uleb128 0x3
  1267 03c8 91       		.byte	0x91
  1268 03c9 A87F     		.sleb128 -88
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 28
-
-
  1269 03cb 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 28
+
+
  1270 03cc 0D       		.uleb128 0xd
  1271 03cd 3A000000 		.4byte	.LVL22
  1272 03d1 FC080000 		.4byte	0x8fc
@@ -1678,10 +1677,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1323 0427 3D040000 		.4byte	0x43d
  1324 042b 0E       		.uleb128 0xe
  1325 042c 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 29
-
-
  1326 042d 50       		.byte	0x50
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 29
+
+
  1327 042e 02       		.uleb128 0x2
  1328 042f 76       		.byte	0x76
  1329 0430 00       		.sleb128 0
@@ -1738,10 +1737,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1380 0477 0E       		.uleb128 0xe
  1381 0478 01       		.uleb128 0x1
  1382 0479 52       		.byte	0x52
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 30
-
-
  1383 047a 01       		.uleb128 0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 30
+
+
  1384 047b 38       		.byte	0x38
  1385 047c 00       		.byte	0
  1386 047d 0D       		.uleb128 0xd
@@ -1798,10 +1797,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1437 04ce 02       		.uleb128 0x2
  1438 04cf 74       		.byte	0x74
  1439 04d0 00       		.sleb128 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 31
-
-
  1440 04d1 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 31
+
+
  1441 04d2 0D       		.uleb128 0xd
  1442 04d3 2A010000 		.4byte	.LVL46
  1443 04d7 9B080000 		.4byte	0x89b
@@ -1858,10 +1857,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1494 052a 1B       		.uleb128 0x1b
  1495 052b 54000000 		.4byte	.LASF55
  1496 052f 01       		.byte	0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 32
-
-
  1497 0530 85       		.byte	0x85
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 32
+
+
  1498 0531 68000000 		.4byte	0x68
  1499 0535 00000000 		.4byte	.LFB37
  1500 0539 88010000 		.4byte	.LFE37-.LFB37
@@ -1918,10 +1917,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1551 05a0 96       		.byte	0x96
  1552 05a1 1A050000 		.4byte	0x51a
  1553 05a5 03       		.uleb128 0x3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 33
-
-
  1554 05a6 91       		.byte	0x91
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 33
+
+
  1555 05a7 B47C     		.sleb128 -460
  1556 05a9 12       		.uleb128 0x12
  1557 05aa 74010000 		.4byte	.LASF30
@@ -1978,10 +1977,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1608 0620 13       		.uleb128 0x13
  1609 0621 D8000000 		.4byte	.LVL65
  1610 0625 40010000 		.4byte	0x140
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 34
-
-
  1611 0629 0E       		.uleb128 0xe
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 34
+
+
  1612 062a 01       		.uleb128 0x1
  1613 062b 50       		.byte	0x50
  1614 062c 04       		.uleb128 0x4
@@ -2038,10 +2037,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1665 0668 52       		.byte	0x52
  1666 0669 01       		.uleb128 0x1
  1667 066a 34       		.byte	0x34
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 35
-
-
  1668 066b 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 35
+
+
  1669 066c 00       		.byte	0
  1670 066d 0D       		.uleb128 0xd
  1671 066e 10000000 		.4byte	.LVL49
@@ -2098,10 +2097,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1722 06da 51       		.byte	0x51
  1723 06db 05       		.uleb128 0x5
  1724 06dc 03       		.byte	0x3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 36
-
-
  1725 06dd 24000000 		.4byte	.LANCHOR0+36
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 36
+
+
  1726 06e1 0E       		.uleb128 0xe
  1727 06e2 01       		.uleb128 0x1
  1728 06e3 52       		.byte	0x52
@@ -2158,10 +2157,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1779 073d 00       		.sleb128 0
  1780 073e 00       		.byte	0
  1781 073f 0D       		.uleb128 0xd
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 37
-
-
  1782 0740 B4000000 		.4byte	.LVL63
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 37
+
+
  1783 0744 D2080000 		.4byte	0x8d2
  1784 0748 63070000 		.4byte	0x763
  1785 074c 0E       		.uleb128 0xe
@@ -2218,10 +2217,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1836 0797 06       		.byte	0x6
  1837 0798 0E       		.uleb128 0xe
  1838 0799 01       		.uleb128 0x1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 38
-
-
  1839 079a 51       		.byte	0x51
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 38
+
+
  1840 079b 01       		.uleb128 0x1
  1841 079c 30       		.byte	0x30
  1842 079d 0E       		.uleb128 0xe
@@ -2278,10 +2277,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1893 07ed 03       		.uleb128 0x3
  1894 07ee 91       		.byte	0x91
  1895 07ef F47C     		.sleb128 -396
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 39
-
-
  1896 07f1 0E       		.uleb128 0xe
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 39
+
+
  1897 07f2 01       		.uleb128 0x1
  1898 07f3 51       		.byte	0x51
  1899 07f4 03       		.uleb128 0x3
@@ -2338,10 +2337,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  1950 0849 0B       		.uleb128 0xb
  1951 084a C6000000 		.4byte	0xc6
  1952 084e 7F       		.byte	0x7f
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 40
-
-
  1953 084f 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 40
+
+
  1954 0850 0A       		.uleb128 0xa
  1955 0851 60080000 		.4byte	0x860
  1956 0855 60080000 		.4byte	0x860
@@ -2398,10 +2397,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2007 08c7 1D       		.uleb128 0x1d
  2008 08c8 9A010000 		.4byte	.LASF36
  2009 08cc 9A010000 		.4byte	.LASF36
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 41
-
-
  2010 08d0 0A       		.byte	0xa
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 41
+
+
  2011 08d1 06       		.byte	0x6
  2012 08d2 1E       		.uleb128 0x1e
  2013 08d3 59000000 		.4byte	.LASF41
@@ -2458,10 +2457,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2064 0948 79020000 		.4byte	.LASF48
  2065 094c 79020000 		.4byte	.LASF48
  2066 0950 09       		.byte	0x9
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 42
-
-
  2067 0951 21       		.byte	0x21
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 42
+
+
  2068 0952 00       		.byte	0
  2069              		.section	.debug_abbrev,"",%progbits
  2070              	.Ldebug_abbrev0:
@@ -2518,10 +2517,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2121 0032 03       		.uleb128 0x3
  2122 0033 08       		.uleb128 0x8
  2123 0034 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 43
-
-
  2124 0035 00       		.byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 43
+
+
  2125 0036 05       		.uleb128 0x5
  2126 0037 16       		.uleb128 0x16
  2127 0038 00       		.byte	0
@@ -2578,10 +2577,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2178 006b 49       		.uleb128 0x49
  2179 006c 13       		.uleb128 0x13
  2180 006d 38       		.uleb128 0x38
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 44
-
-
  2181 006e 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 44
+
+
  2182 006f 00       		.byte	0
  2183 0070 00       		.byte	0
  2184 0071 0A       		.uleb128 0xa
@@ -2638,10 +2637,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2235 00a7 13       		.uleb128 0x13
  2236 00a8 00       		.byte	0
  2237 00a9 00       		.byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 45
-
-
  2238 00aa 0E       		.uleb128 0xe
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 45
+
+
  2239 00ab 8A8201   		.uleb128 0x410a
  2240 00ae 00       		.byte	0
  2241 00af 02       		.uleb128 0x2
@@ -2698,10 +2697,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2292 00e5 0B       		.uleb128 0xb
  2293 00e6 3B       		.uleb128 0x3b
  2294 00e7 0B       		.uleb128 0xb
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 46
-
-
  2295 00e8 49       		.uleb128 0x49
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 46
+
+
  2296 00e9 13       		.uleb128 0x13
  2297 00ea 02       		.uleb128 0x2
  2298 00eb 18       		.uleb128 0x18
@@ -2758,10 +2757,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2349 0121 34       		.uleb128 0x34
  2350 0122 00       		.byte	0
  2351 0123 03       		.uleb128 0x3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 47
-
-
  2352 0124 08       		.uleb128 0x8
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 47
+
+
  2353 0125 3A       		.uleb128 0x3a
  2354 0126 0B       		.uleb128 0xb
  2355 0127 3B       		.uleb128 0x3b
@@ -2818,10 +2817,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2406 015a 2E       		.uleb128 0x2e
  2407 015b 01       		.byte	0x1
  2408 015c 3F       		.uleb128 0x3f
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 48
-
-
  2409 015d 19       		.uleb128 0x19
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 48
+
+
  2410 015e 03       		.uleb128 0x3
  2411 015f 0E       		.uleb128 0xe
  2412 0160 3A       		.uleb128 0x3a
@@ -2878,10 +2877,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2463 0195 3C       		.uleb128 0x3c
  2464 0196 19       		.uleb128 0x19
  2465 0197 6E       		.uleb128 0x6e
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 49
-
-
  2466 0198 0E       		.uleb128 0xe
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 49
+
+
  2467 0199 03       		.uleb128 0x3
  2468 019a 0E       		.uleb128 0xe
  2469 019b 00       		.byte	0
@@ -2938,10 +2937,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2520 006f 52       		.byte	0x52
  2521 0070 9F       		.byte	0x9f
  2522 0071 00000000 		.4byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 50
-
-
  2523 0075 00000000 		.4byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 50
+
+
  2524              	.LLST3:
  2525 0079 00000000 		.4byte	.LVL3
  2526 007d 0C000000 		.4byte	.LVL4
@@ -2998,10 +2997,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2577 0102 0100     		.2byte	0x1
  2578 0104 56       		.byte	0x56
  2579 0105 00000000 		.4byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 51
-
-
  2580 0109 00000000 		.4byte	0
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 51
+
+
  2581              	.LLST7:
  2582 010d 88000000 		.4byte	.LVL27
  2583 0111 BC000000 		.4byte	.LVL33
@@ -3058,10 +3057,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2634              	.LLST11:
  2635 019d 20000000 		.4byte	.LVL54
  2636 01a1 23000000 		.4byte	.LVL55-1
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 52
-
-
  2637 01a5 0100     		.2byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 52
+
+
  2638 01a7 50       		.byte	0x50
  2639 01a8 23000000 		.4byte	.LVL55-1
  2640 01ac 88010000 		.4byte	.LFE37
@@ -3118,10 +3117,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2691 0236 55       		.byte	0x55
  2692 0237 DE000000 		.4byte	.LVL68
  2693 023b E6000000 		.4byte	.LVL70
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 53
-
-
  2694 023f 0100     		.2byte	0x1
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 53
+
+
  2695 0241 55       		.byte	0x55
  2696 0242 00000000 		.4byte	0
  2697 0246 00000000 		.4byte	0
@@ -3178,10 +3177,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2748 0078 B8000000 		.4byte	.LBB12
  2749 007c DC000000 		.4byte	.LBE12
  2750 0080 DE000000 		.4byte	.LBB13
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 54
-
-
  2751 0084 E2000000 		.4byte	.LBE13
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 54
+
+
  2752 0088 00000000 		.4byte	0
  2753 008c 00000000 		.4byte	0
  2754 0090 00000000 		.4byte	.LFB35
@@ -3238,10 +3237,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2784      00
  2785              	.LASF41:
  2786 0059 6D656D63 		.ascii	"memcpy\000"
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 55
-
-
  2786      707900
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 55
+
+
  2787              	.LASF25:
  2788 0060 656D7074 		.ascii	"empty\000"
  2788      7900
@@ -3298,10 +3297,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2810      20696E74 
  2810      00
  2811              	.LASF47:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 56
-
-
  2812 0151 5553425F 		.ascii	"USB_UART_Start\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 56
+
+
  2812      55415254 
  2812      5F537461 
  2812      727400
@@ -3358,10 +3357,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2835      65727275 
  2835      707400
  2836              	.LASF8:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 57
-
-
  2837 0213 756E7369 		.ascii	"unsigned int\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 57
+
+
  2837      676E6564 
  2837      20696E74 
  2837      00
@@ -3418,10 +3417,10 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 1
  2863 02a8 6D61696E 		.ascii	"main.c\000"
  2863      2E6300
  2864              	.LASF16:
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA1fenx.s 			page 58
-
-
  2865 02af 72656738 		.ascii	"reg8\000"
+ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccAdOOxg.s 			page 58
+
+
  2865      00
  2866              	.LASF26:
  2867 02b4 6D657373 		.ascii	"message\000"
