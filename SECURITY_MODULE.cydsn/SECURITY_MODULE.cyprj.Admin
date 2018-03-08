@@ -349,6 +349,9 @@
 <dep name=".\Generated_Source\PSoC4\cypins.h" />
 <dep name=".\Generated_Source\PSoC4\cytypes.h" />
 <dep name=".\Generated_Source\PSoC4\project.h" />
+<dep name=".\SuperFastHash.h" />
+<dep name=".\SuperSecretHash.h" />
+<dep name=".\aes.h" />
 <dep name=".\main.c" />
 <dep name=".\usbserialprotocol.h" />
 </file>
@@ -387,8 +390,21 @@
 <file name=".\Generated_Source\PSoC4\cypins.h" />
 <file name=".\Generated_Source\PSoC4\cytypes.h" />
 <file name=".\Generated_Source\PSoC4\project.h" />
+<file name=".\SuperFastHash.h" />
+<file name=".\SuperSecretHash.h" />
+<file name=".\aes.h" />
 <file name=".\main.c" />
 <file name=".\usbserialprotocol.h" />
+<file name=".\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o">
+<dep name=".\SuperFastHash.c" />
+<dep name=".\SuperFastHash.h" />
+</file>
+<file name=".\SuperFastHash.c" />
+<file name=".\CortexM0\ARM_GCC_541\Debug\aes.o">
+<dep name=".\aes.c" />
+<dep name=".\aes.h" />
+</file>
+<file name=".\aes.c" />
 <file name=".\CortexM0\ARM_GCC_541\Debug\CARD_UART.o">
 <dep name=".\Generated_Source\PSoC4\CARD_UART.c" />
 <dep name=".\Generated_Source\PSoC4\CARD_UART.h" />
@@ -815,6 +831,8 @@
 <file name=".\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.hex">
 <dep name=".\CortexM0\ARM_GCC_541\Debug\main.o" />
 <dep name=".\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o" />
+<dep name=".\CortexM0\ARM_GCC_541\Debug\aes.o" />
+<dep name=".\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o" />
 <dep name=".\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o" />
 <dep name=".\CortexM0\ARM_GCC_541\Debug\cymetadata.o" />
 <dep name=".\CortexM0\ARM_GCC_541\Debug\DB_UART.o" />
@@ -893,6 +911,8 @@
 <name_val_pair name="Generated_Source\PSoC4\cyutils.c" v="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og" />
 <name_val_pair name="Generated_Source\PSoC4\CyLFClk.c" v="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og" />
 <name_val_pair name="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.hex" v="-mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects" />
+<name_val_pair name="aes.c" v="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og" />
+<name_val_pair name="SuperFastHash.c" v="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og" />
 </name>
 </genericCmdLineData>
 <codeGenCmdLineTag v="-.appdatapath &quot;C:\Users\Admin\AppData\Local\Cypress Semiconductor\PSoC Creator\4.1&quot; -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\SECURITY_MODULE.cyprj -d CY8C4245AXI-483 -s C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE" />
@@ -901,9 +921,14 @@
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
 <link_deps_times>
-<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM0" v="131645956361014311" />
+<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM0" v="131649293321685803" />
 </link_deps_times>
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
+</dataGuid>
+<dataGuid v="504337dd-7d07-4bc7-9057-90e60cf6c469">
+<CyGuid_504337dd-7d07-4bc7-9057-90e60cf6c469 type_name="CyDesigner.Common.Debugger.CyBreakpointList" version="1">
+<debugger_breakpoint_list />
+</CyGuid_504337dd-7d07-4bc7-9057-90e60cf6c469>
 </dataGuid>
 </userData>
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>

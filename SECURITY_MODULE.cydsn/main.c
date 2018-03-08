@@ -113,10 +113,7 @@ void provision()
                 
             }
         }
-        if(x % 4 == 0)
-        {
-            memcpy(&AESkey[x*4], buf, 4);
-        }
+        memcpy(&AESkey[x*4], buf, 4);
     }
     pushMessage(AESkey, 32);
 
@@ -169,10 +166,7 @@ void decrypt(uint8 data)
                 
             }
         }
-        if(x % 4 == 0)
-        {
-            memcpy(&AESkey[x*4], buf, 4);
-        }
+        memcpy(&AESkey[x*4], buf, 4);
     }
     memset(keyValues, 0, 32);
     memset(temp, 0, 4);
@@ -259,19 +253,19 @@ int main(void)
         
         //Check to see if message has a starting valid bill
         token = strtok((char *)message, ",");
-        if((uint8) *token == bills_dispensed)
+        if(atoi(token) == bills_dispensed)
         {
             temptoken = strtok((char *)message, ",");
-            if((uint8) temptoken + (uint8) token > (uint8) BILLS_LEFT)
+            if((uint8) atoi(temptoken) +  (uint8) atoi(token) > (uint8) BILLS_LEFT)
             {
                 pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
             }
             else
             {
-                for (uint8 i = (uint8) token; i < (uint8) temptoken; i++)
+                for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
                 {
                     dispenseBill();
-                    bills_left = *BILLS_LEFT - ((uint8) temptoken - (uint8) token);
+                    bills_left = *BILLS_LEFT - ((uint8) atoi(temptoken) - (uint8) atoi(token));
                     PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                 }
             }

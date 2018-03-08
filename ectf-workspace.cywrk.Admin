@@ -39,7 +39,6 @@
 <v>ectf-workspace\CARD\Source Files\usbserialprotocol.c</v>
 <v>ectf-workspace\CARD\Generated_Source</v>
 <v>ectf-workspace\CARD\Generated_Source\PSoC4</v>
-<v>ectf-workspace\SECURITY_MODULE</v>
 <v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
@@ -68,39 +67,6 @@
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD</v>
 <v>ectf-workspace\SECURITY_MODULE</v>
-<v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Analog</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Clocks</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Interrupts</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\System</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Directives</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Flash Security</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\aes.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\cyapicallbacks.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\pstdint.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\SuperFastHash.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\SuperSecretHash.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\usbserialprotocol.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\aes.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\main.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\SuperFastHash.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\usbserialprotocol.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\CARD_UART</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\CARD_UART_IntClock</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\cy_boot</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\cy_lfclk</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\DB_UART</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\DB_UART_rx</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\DB_UART_SCB_IRQ</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\DB_UART_SCBCLK</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\DB_UART_tx</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source\PSoC4\PIGGY_BANK</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace">
@@ -179,6 +145,7 @@
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\aes.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\CARD_UART.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\CARD_UART_BOOT.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\CARD_UART_INT.lst</v>
@@ -209,6 +176,7 @@
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\PIGGY_BANK.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\Reset_isr.lst</v>
+<v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\SuperFastHash.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\SW1.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\SW1_PM.lst</v>
 <v>ectf-workspace\SECURITY_MODULE\CortexM0\ARM_GCC_541\Debug\Listing Files\usbserialprotocol.lst</v>
@@ -222,40 +190,6 @@
 <VisibleNodeIds>
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD</v>
-<v>ectf-workspace\CARD\CortexM0</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\aes.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\ATM_UART.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\ATM_UART_BOOT.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\ATM_UART_INT.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\ATM_UART_IntClock.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\ATM_UART_PM.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\Cm0Start.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\CyLFClk.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\Reset_isr.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\SuperFastHash.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\SW1.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\SW1_PM.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_BOOT.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_PM.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_rx.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_rx_PM.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_SCB_IRQ.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_SCBCLK.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_SPI_UART.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_SPI_UART_INT.lst</v>
-<v>ectf-workspace\CARD\CortexM0\ARM_GCC_541\Debug\Listing Files\USB_UART_tx.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>

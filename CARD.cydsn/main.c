@@ -55,8 +55,7 @@ CY_ISR(Reset_ISR)
 // provisions card (should only ever be called once)
 void provision()
 {
-    uint8 message[64];
-    struct AES_ctx ctx;
+    uint8 message[36];
     unsigned char AESkey[32];
     //Hashing shit
     char *buf = malloc(8*sizeof(char));
@@ -107,25 +106,17 @@ void provision()
                 
             }
         }
-        if(x % 4 == 0)
-        {
-            memcpy(&AESkey[x*4], buf, 4);
-        }
+        memcpy(&AESkey[x*4], buf, 4);
     }
     //Get rid of our previous data
     memset(keyValues, 0, 32);
     memset(buf, 0, 8);
-    memset(temp, 0, 8);
-    //Do AES
-    AES_init_ctx(&ctx, AESkey);
-    AES_ECB_encrypt(&ctx, message);
-    //Get rid of our AESKey
-    
+    memset(temp, 0, 8);    
 
     //Check the message that was received
     if(message[0] == '3')
     {
-        pushMessage((uint8*)AESkey, 32); // Public Key
+        pushMessage(AESkey, 32); // Public Key
     }
     memset(AESkey, 0, 32);
 }
@@ -140,14 +131,14 @@ int main(void)
     
     /* Declare vairables here */
     uint8 i;
-    uint8 message[128];
+    uint8 message[32];
     //AES shit
     struct AES_ctx ctx;
-    unsigned char AESkey[32];
+    unsigned char AESkey[32] ="";
     //Hashing shit
     char *buf = malloc(8*sizeof(char));
     char *temp = malloc(4*sizeof(char));
-    unsigned char keyValues[32];
+    unsigned char keyValues[8] ="";
     
     // local EEPROM read variable
     static const uint8 PROVISIONED[1] = {0x00};
@@ -213,10 +204,7 @@ int main(void)
                         }
                     }
                 }
-                if(x % 4 == 0)
-                {
-                    memcpy(&AESkey[x*4], buf, 4);
-                }
+                memcpy(&AESkey[x*4], buf, 4);
             }
             //Get rid of our previous data
             memset(keyValues, 0, 32);
@@ -225,10 +213,12 @@ int main(void)
             //Do AES
             AES_init_ctx(&ctx, AESkey);
             AES_ECB_encrypt(&ctx, message);
+            AES_ECB_encrypt(&ctx, &message[16]);
             //Get rid of our AESKey
             memset(AESkey, 0, 32);
             //Send Message
             pushMessage(message, strlen((char *) message));
+            memset(message, 0, 32);
         }
     }
 }
