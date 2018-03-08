@@ -15,8 +15,8 @@ class Bank:
         port (int): Port to connect to
     """
 
-    def __init__(self, address='https://127.0.0.1/', port=1337):
-        self.ip_address = address + ':' + port
+    def __init__(self, address='172.17.0.2', port="1337"):
+        self.ip_address = 'https://' + str(address) + ':' + str(port)
 
     def check_balance(self, card_id, encrypted_response, pin):
         """Requests the balance of the account associated with the card_id
@@ -86,14 +86,15 @@ class Bank:
             return response.json()['OK']
 
     def provision_card(self, card_id, pin, key):
+        print card_id
         logging.info('provisioning_card: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
-                        'card_id': card_id,
-                        'new_pin': pin,
-                        'key': key
+                        'card_id': str(card_id),
+                        'new_pin': str(pin),
+                        'key': str(key)
                        }
-        response = requests.post(self.ip_address + 'initalize_card', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/initalize_card', headers=headers, data=json.dumps(data_to_send),verify=False)
         if response.status_code == 403:
             return False
         else:
@@ -107,7 +108,7 @@ class Bank:
                         'key': key,
                         'num_bills' : num_bills
                        }
-        response = requests.post(self.ip_address + 'initalize_atm', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/initalize_atm', headers=headers, data=json.dumps(data_to_send))
         if response.status_code == 403:
             return False
         else:

@@ -114,6 +114,11 @@ class HSM(Psoc):
             self._vp('HSM hasn\'t accepted number of bills', logging.error)
         self._vp('HSM accepted number of bills')
 
+        key = ''
+        while len(key) != 32:
+            key = self._pull_msg()
+            self._vp('Card hasn\'t sent', logging.error)
+
         for bill in bills:
             msg = bill.strip()
             self._vp('Sending bill \'%s\'' % msg.encode('hex'))
@@ -125,10 +130,7 @@ class HSM(Psoc):
 
         self._vp('All bills sent!')
 
-        key = ''
-        while len(key) != 32:
-            key = self._pull_msg()
-            self._vp('Card hasn\'t sent', logging.error)
+
 
         self._vp('Provisioning complete')
 

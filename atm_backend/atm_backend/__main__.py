@@ -100,7 +100,7 @@ import sys
 import SimpleXMLRPCServer
 import yaml
 from . import ATM, ProvisionTool
-from . import Bank, Card, HSM, DummyCard, DummyHSM
+from . import Bank, Card, HSM, DummyHSM
 
 
 def main():

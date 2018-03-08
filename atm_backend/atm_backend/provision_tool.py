@@ -49,8 +49,8 @@ class ProvisionTool(object):
             logging.info('provision_card: generating card id')
             card_id = card_blob
             logging.info('provision_card: sending info to card')
-            key = self.card.provision(card_id)
-            if len(key) ==  32:
+            key = str(self.card.provision(card_id))
+            if len(key) ==  64:
                 success = self.bank.provision_card(card_id, pin, key)
                 return success
         except DeviceRemoved:

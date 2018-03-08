@@ -1,6 +1,7 @@
 from psoc import Psoc
 from serial_emulator import CardEmulator
 import logging
+import binascii
 
 
 class Card(Psoc):
@@ -80,7 +81,6 @@ class Card(Psoc):
             bool: True if provisioning succeeded, False otherwise
         """
         self._sync(True)
-
         msg = self._pull_msg()
         if msg != 'P':
             self._vp('Card alredy provisioned!', logging.error)
@@ -92,7 +92,6 @@ class Card(Psoc):
             self._vp('Card hasn\'t accepted uuid', logging.error)
         self._vp('Card accepted uuid')
 
-
         self._push_msg(str(self.GET_PUBLIC_KEY))
         key = ''
         while len(key) != 32:
@@ -101,17 +100,6 @@ class Card(Psoc):
 
         self._vp('Provisioning complete')
 
-        return key
+        return binascii.hexlify(key)
 
 
-class DummyCard(Card):
-    """Emulated ATM card for testing
-
-    Arguments:
-        verbose (bool, optional): Whether to print debug messages
-        provision (bool, optional): Whether to start the ATM card ready
-            for provisioning
-    """
-    def __init__(self, verbose=False, provision=False):
-        ser = CardEmulator(verbose=verbose, provision=provision)
-        super(DummyCard, self).__init__(ser, verbose)

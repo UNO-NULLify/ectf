@@ -79,7 +79,7 @@ class Bank(object):
             if account['num_bills'] is None:
                 time.sleep(2)
                 return response
-            #if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+            #if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
             #    time.sleep(2)
             #    return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -136,7 +136,7 @@ class Bank(object):
             time.sleep(2)
             return response
 
-        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY'],account['time']):
         #    time.sleep(2)
         #    return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -164,7 +164,7 @@ class Bank(object):
             time.sleep(2)
             return response
 
-        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
+        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY'],account['time']):
         #    time.sleep(2)
         #    return jsonify({'ERROR': 'Could not validate transaction'})
 
@@ -182,22 +182,27 @@ class Bank(object):
         response.status_code = 403
 
         if not request.json or not 'card_id' in request.json or not 'new_pin' in request.json or not 'key' in request.json:
-            time.sleep(2)
-        return response
-
-        account = db.get_account(request.json['card_id'])
-        if account is None:
+            print 'a'
             time.sleep(2)
             return response
 
-        if account['pin'] == None and account['key'] == None:
+        account = db.get_account(request.json['card_id'])
+        if account is None:
+            print 'b'
+            time.sleep(2)
+            return response
+
+        if account['pin'] == None and account['AES_KEY'] == None:
+            print 'c'
             success = db.initialize_card(request.json['card_id'], request.json['key'], request.json['new_pin'])
             if success:
+                print 'd'
                 return jsonify({'OK': 'Card has been provisioned!'})
             else:
+                print 'e'
                 time.sleep(2)
                 return response
-
+        print 'f'
         time.sleep(2)
         return response
 
@@ -243,9 +248,4 @@ class Bank(object):
         else:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction3'})
-
-
-    @server.route('/test')
-    def test():
-        return "Flask is working."
 

@@ -1,6 +1,6 @@
 import logging
 from interface.psoc import DeviceRemoved, NotProvisioned
-
+import binascii
 
 class ATM(object):
     """Interface for ATM xmlrpc server
@@ -39,7 +39,7 @@ class ATM(object):
             logging.info('check_balance: Requesting card_id using inputted pin')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            encrypted_response = self.card.get_encrypted_response(challenge)
+            encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
 
             # get balance from bank if card accepted PIN
             if (card_id is not None) and (encrypted_response is not None):
@@ -76,7 +76,7 @@ class ATM(object):
             logging.info('check_balance: Requesting pin change using inputted pin')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            encrypted_response = self.card.get_encrypted_response(challenge)
+            encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
 
             # get balance from bank if card accepted PIN
             if card_id is not None and encrypted_response is not None:
@@ -118,7 +118,7 @@ class ATM(object):
             logging.info('withdraw: Requesting card_id from card')
             card_id = self.card.get_uuid()
             challenge = self.bank.get_challenge()
-            encrypted_response = self.card.get_encrypted_response(challenge)
+            encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
 
             # request UUID from HSM if card accepts PIN
             if (card_id is not None) and (encrypted_response is not None) :
