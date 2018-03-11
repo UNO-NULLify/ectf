@@ -67,7 +67,7 @@ class DB(object):
         if atm is None:
             return None
         else:
-            return atm['atm_id']
+            return atm
 
     def get_account(self, card_id):
         """get card_id of account: card_id

@@ -38,9 +38,8 @@ class ATM(object):
         try:
             logging.info('check_balance: Requesting card_id using inputted pin')
             card_id = self.card.get_uuid()
-            challenge = self.bank.get_challenge()
+            challenge = self.bank.get_challenge(card_id)
             encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
-
             # get balance from bank if card accepted PIN
             if (card_id is not None) and (encrypted_response is not None):
                 logging.info('check_balance: Requesting balance from Bank')
@@ -75,7 +74,7 @@ class ATM(object):
         try:
             logging.info('check_balance: Requesting pin change using inputted pin')
             card_id = self.card.get_uuid()
-            challenge = self.bank.get_challenge()
+            challenge = self.bank.get_challenge(card_id)
             encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
 
             # get balance from bank if card accepted PIN
@@ -116,19 +115,19 @@ class ATM(object):
 
         try:
             logging.info('withdraw: Requesting card_id from card')
+            atm_id = self.hsm.get_uuid()
             card_id = self.card.get_uuid()
-            challenge = self.bank.get_challenge()
+            challenge = self.bank.get_challenge(card_id)
             encrypted_response = binascii.hexlify(self.card.get_encrypted_response(challenge))
 
             # request UUID from HSM if card accepts PIN
             if (card_id is not None) and (encrypted_response is not None) :
                 logging.info('withdraw: Requesting hsm_id from hsm')
-                response = self.bank.withdraw(self, card_id, encrypted_response, pin, amount)
-                if 'Error' not in response:
-                    logging.info('withdraw: Requesting withdrawal from bank')
-                    bills = self.bank.withdraw(response)
-                    if bills != 'Error':
-                        return bills
+                response = self.bank.withdraw(atm_id, card_id, encrypted_response, pin, amount)
+                if response is not False:
+                    bills = self.hsm.withdraw(response)
+                    return bills
+
             logging.info('withdraw failed')
             return False
         except ValueError:

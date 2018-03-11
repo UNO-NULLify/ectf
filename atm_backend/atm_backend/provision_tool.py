@@ -84,7 +84,7 @@ class ProvisionTool(object):
             atm_id = hsm_blob
             key = self.hsm.provision(hsm_blob, bills)
             num_bills = len(bills)
-            if len(key) == 32:
+            if len(key) == 64:
                 self.bank.provision_atm(atm_id, key, num_bills)
                 logging.info('provision_atm: provisioned hsm with inputted bills')
                 return True

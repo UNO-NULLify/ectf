@@ -5,6 +5,7 @@ import sys
 import socket
 import requests
 import json
+import binascii
 
 
 class Bank:
@@ -29,47 +30,48 @@ class Bank:
             bool: False on failure
         """
         logging.info('check_balance: Sending request to Bank')
-        print card_id
         headers = {'content-type': 'application/json'}
-        data_to_send = {'card_id': card_id,
-                        'encrypted_response': encrypted_response,
-                        'pin':pin
+        data_to_send = {'card_id': str(card_id),
+                        'encrypted_response': str(encrypted_response),
+                        'pin':str(pin)
                        }
 
-        response = requests.post(self.ip_address + 'balance', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/balance', headers=headers, data=json.dumps(data_to_send),verify=False)
 
         if response.status_code == 403:
-            return 'Transaction could not be verified.'
+            return False
         else:
-            return response.json()['balance']
+             return str(response.json()['OK'])
         return False
 
-    def withdraw(self, card_id, encrypted_response, pin, amount):
+    def withdraw(self, atm_id, card_id, encrypted_response, pin, amount):
         logging.info('withdraw: Sending request to Bank')
         headers = {'content-type': 'application/json'}
-        data_to_send = {'card_id': card_id,
-                        'signed_message': encrypted_response,
-                        'pin':pin,
-                        'amount': amount
+        data_to_send = {
+                        'atm_id': str(atm_id),
+                        'card_id': str(card_id),
+                        'encrypted_response': str(encrypted_response),
+                        'pin':str(pin),
+                        'num_bills': str(amount)
                        }
 
-        response = requests.post(self.ip_address + 'withdraw', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/withdraw', headers=headers, data=json.dumps(data_to_send),verify=False)
 
         if response.status_code == 403:
-            return 'Transaction could not be verified.'
+            return False
         else:
-            return response.json()['OK']
+            return binascii.unhexlify(response.json()['OK'])
         return False
 
     def change_pin(self, card_id, encrypted_response, pin, new_pin):
         logging.info('change pin: Sending request to Bank')
         headers = {'content-type': 'application/json'}
-        data_to_send = {'card_id': card_id,
-                        'encrypted_response': encrypted_response,
-                        'pin':pin,
-                        'new_pin': new_pin
+        data_to_send = {'card_id': str(card_id),
+                        'encrypted_response': str(encrypted_response),
+                        'pin':str(pin),
+                        'new_pin': str(new_pin)
                        }
-        response = requests.post(self.ip_address + 'change_pin', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/change_pin', headers=headers, data=json.dumps(data_to_send),verify=False)
         if response.status_code == 403:
             return 'Transaction could not be verified.'
         else:
@@ -79,11 +81,11 @@ class Bank:
         logging.info('getting challenge: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {'card_id': card_id}
-        response = requests.post(self.ip_address + 'get_challenge', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/get_challenge', headers=headers, data=json.dumps(data_to_send),verify=False)
         if response.status_code == 403:
-            return 'Transaction could not be verified.'
+            return False
         else:
-            return response.json()['OK']
+            return str(response.json()['OK'])
 
     def provision_card(self, card_id, pin, key):
         print card_id
@@ -104,11 +106,11 @@ class Bank:
         logging.info('provisioning_card: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
-                        'atm_id': atm_id,
-                        'key': key,
-                        'num_bills' : num_bills
+                        'atm_id': str(atm_id),
+                        'key': str(key),
+                        'num_bills' : str(num_bills)
                        }
-        response = requests.post(self.ip_address + '/initalize_atm', headers=headers, data=json.dumps(data_to_send))
+        response = requests.post(self.ip_address + '/initalize_atm', headers=headers, data=json.dumps(data_to_send),verify=False)
         if response.status_code == 403:
             return False
         else:

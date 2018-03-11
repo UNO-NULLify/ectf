@@ -102,4 +102,3 @@ class Card(Psoc):
 
         return binascii.hexlify(key)
 
-
