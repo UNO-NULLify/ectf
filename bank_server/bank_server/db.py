@@ -23,10 +23,12 @@ class DB(object):
     # BANK INTERFACE FUNCTIONS #
     ############################
 
-    def verify_challenge(self, challenge, encrypted_response, AES_KEY):
-        key = AES_KEY
-        cipher = AES.new(key, AES.MODE_ECB, 0x00)
-        decrypted_response = cipher.decrypt(encrypted_response)
+    def verify_challenge(self, challenge, encrypted_response, AES_KEY, time):
+        if datetime.datetime.now() > time:
+            return False
+        key = str(bytearray.fromhex(AES_KEY))
+        cipher = AES.new(key, AES.MODE_ECB, '')
+        decrypted_response = cipher.decrypt(str(bytearray.fromhex(encrypted_response)))
         return challenge == decrypted_response
 
     def set_balance(self, card_id, balance):
@@ -65,7 +67,7 @@ class DB(object):
         if atm is None:
             return None
         else:
-            return atm['atm_id']
+            return atm
 
     def get_account(self, card_id):
         """get card_id of account: card_id
@@ -167,8 +169,11 @@ class DB(object):
             return False
 
     def initialize_card(self, card_id, key, new_pin):
-        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'key': key,'pin': self.hash_pin(card_id, new_pin) }})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'AES_KEY': key,'pin': self.hash_pin(card_id, new_pin) }})
         return updated.acknowledged and updated.raw_result['updatedExisting']
+
+
+
     '''
     def verify_challenge(self, card_id, chall_sig):
         account = self.get_account(card_id)

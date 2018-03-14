@@ -3,6 +3,9 @@ import struct
 from serial_emulator import HSMEmulator
 import logging
 import time
+import binascii
+import traceback
+
 
 
 class HSM(Psoc):
@@ -23,42 +26,42 @@ class HSM(Psoc):
         while not self.connected and not dummy:
             time.sleep(2)
         self._vp('Initialized')
+        self.GET_UUID = 1
+        self.WITHDRAW = 2
 
-    def _authenticate(self, uuid):
-        """Requests authentication from the HSM
+
+    def _send_op(self, op):
+        """Sends requested operation to ATM card
 
         Args:
-            uuid (str): Challenge UUID of HSM
-
-        Returns:
-            bool: True if HSM verified authentication, False otherwise
+            op (int): Operation to send from [self.CHECK_BAL, self.WITHDRAW,
+                self.CHANGE_PIN]
         """
-        self._vp('Sending UUID %s' % uuid)
-        self._push_msg('%s\00' % uuid)
+        self._vp('Sending op %d' % op)
+        self._push_msg(str(op))
 
-        resp = self._pull_msg()
-        self._vp('Received response %s from HSM' % resp)
-
-        return resp == 'K'
+        while self._pull_msg() != 'K':
+            self._vp('Card hasn\'t received op', logging.error)
+        self._vp('Card received op')
 
     def get_uuid(self):
-        """Retrieves the UUID from the HSM
+        """Requests for a pin to be changed
+
+        Args:
+            old_pin (str): Challenge PIN
+            new_pin (str): New PIN to change to
 
         Returns:
-            str: UUID of HSM
+            bool: True if PIN was changed, False otherwise
         """
         self._sync(False)
+        self._send_op(self.GET_UUID)
+        self._vp('Getting Pin')
         uuid = self._pull_msg()
-
-        if uuid == 'P':
-            self._vp('Security module not yet provisioned!', logging.error)
-            return None
-
-        self._vp('Got UUID %s' % uuid)
-
+        self._vp('Card sent response %s' % uuid)
         return uuid
 
-    def withdraw(self, uuid, amount):
+    def withdraw(self, message):
         """Attempts to withdraw bills from the HSM
 
         Args:
@@ -71,23 +74,27 @@ class HSM(Psoc):
                  'Not enough bills in ATM' if HSM doesn't have enough bills
                     to complete request
         """
-        if not self._authenticate(uuid):
-            return 'Insufficient funds'
+        self._sync(False)
+        self._send_op(self.WITHDRAW)
+        try:
+            self._push_msg(message)
 
-        msg = struct.pack('B', amount)
-        self._push_msg(msg)
+            while self._pull_msg() != 'K':
+                self._vp('Card hasn\'t accepted uuid', logging.error)
 
-        msg = self._pull_msg()
-        self._vp('Secmod replied %s' % msg)
-        if msg == 'BAD':
-            return 'Not enough bills in ATM'
-
-        bills = []
-        for i in range(amount):
+            self._vp('a')
+            bills = []
             bill = self._pull_msg()
-            self._vp('Received bill %d/%d: \'%s\'' % (i + 1, amount, bill))
+            self._vp('b')
+            while bill != 'K':
+                self._vp('c')
+                bills.append(bill)
+                self._vp('1 - Received bill ' + bill)
+                bill = self._pull_msg()
+                self._vp('2- Received bill ' + bill)
 
-            bills.append(bill)
+        except:
+            self._vp(traceback.print_exc())
 
         return bills
 
@@ -109,10 +116,19 @@ class HSM(Psoc):
             return False
         self._vp('HSM sent provisioning message')
 
+        self._push_msg('%s\00' % uuid)
+        while self._pull_msg() != 'K':
+            self._vp('Card hasn\'t accepted uuid', logging.error)
+
         self._push_msg(struct.pack('B', len(bills)))
         while self._pull_msg() != 'K':
             self._vp('HSM hasn\'t accepted number of bills', logging.error)
         self._vp('HSM accepted number of bills')
+
+        key = ''
+        while len(key) != 32:
+            key = self._pull_msg()
+            self._vp('Card hasn\'t sent', logging.error)
 
         for bill in bills:
             msg = bill.strip()
@@ -125,23 +141,8 @@ class HSM(Psoc):
 
         self._vp('All bills sent!')
 
-        key = ''
-        while len(key) != 32:
-            key = self._pull_msg()
-            self._vp('Card hasn\'t sent', logging.error)
+
 
         self._vp('Provisioning complete')
 
-        return key
-
-class DummyHSM(HSM):
-    """Emulated HSM for testing
-
-    Arguments:
-        verbose (bool, optional): Whether to print debug messages
-        provision (bool, optional): Whether to start the HSM ready
-            for provisioning
-    """
-    def __init__(self, verbose=False, provision=False):
-        ser = HSMEmulator(verbose=verbose, provision=provision)
-        super(DummyHSM, self).__init__(port=ser, verbose=verbose, dummy=True)
+        return binascii.hexlify(key)

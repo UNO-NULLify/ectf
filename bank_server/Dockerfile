@@ -15,7 +15,14 @@ EXPOSE 1338
 WORKDIR /bank
 ADD bank_server ./bank_server
 RUN mkdir /bank/bank_server/logs
-RUN python -m pip install pymongo pyyaml nose flask pyopenssl passlib argon2_cffi pycrypto
+RUN python -m pip install pymongo
+RUN python -m pip install pyyaml
+RUN python -m pip install nose
+RUN python -m pip install flask
+RUN python -m pip install pyopenssl
+RUN python -m pip install passlib
+RUN python -m pip install argon2_cffi
+RUN python -m pip install pycrypto
 RUN mkdir -p /data/certs
 RUN openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=NE/L=Omaha/O=Nullify/CN=localhost" -keyout /data/certs/key.pem -out /data/certs/cert.pem
 ADD setup.py ./setup.py

@@ -30,6 +30,9 @@ import uuid
 import time
 from flask import Flask, jsonify, request
 from Crypto.Cipher import AES
+import traceback
+import binascii
+
 
 from bank_server import DB
 
@@ -67,39 +70,49 @@ class Bank(object):
         response = jsonify({'ERROR': 'Could not validate transaction'})
         response.status_code = 403
         try:
-            if not request.json or not 'atm_id' in request.json or not 'pin' not in request.json or not 'card_id' in request.json or not 'num_bills' in request.json: #and not 'encrypted_response' in request.json:
+            if not request.json or not 'atm_id' in request.json or 'pin' not in request.json or 'card_id' not in request.json or 'num_bills' not in request.json or 'encrypted_response' not in request.json:
+                print 'a'
                 time.sleep(2)
                 return response
 
             account = db.get_account(request.json['card_id'])
             if account is None:
+                print 'b'
                 time.sleep(2)
                 return response
 
-            if account['num_bills'] is None:
+            if account['AES_KEY'] is None or account['time'] is None:
+                print 'c'
                 time.sleep(2)
                 return response
-            #if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
-            #    time.sleep(2)
-            #    return jsonify({'ERROR': 'Could not validate transaction'})
+
+            if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
+                print 'd'
+                time.sleep(2)
+                return jsonify({'ERROR': 'Could not validate transaction'})
 
             atm = db.get_atm(request.json['atm_id'])
             if atm is None:
+                print 'e'
                 time.sleep(2)
                 return response
 
             if atm['num_bills'] is None:
+                print 'f'
                 time.sleep(2)
                 return response
 
             if int(atm['num_bills']) < int(request.json['num_bills']):
+                print 'g'
                 time.sleep(2)
                 return response
             if int(account['balance']) < int(request.json['num_bills']):
+                print 'h'
                 time.sleep(2)
                 return response
 
             if not db.verify_pin(request.json['pin'], request.json['card_id'], account):
+                print 'i'
                 time.sleep(2)
                 return response
 
@@ -107,23 +120,27 @@ class Bank(object):
             # OK To Dispense
 
             db.set_balance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
-            db.set_atm_num_bills(request.json['atm_id'], str(int(atm['num_bills']) - str(request.json['num_bills'])))
+            db.set_atm_num_bills(request.json['atm_id'], str(int(atm['num_bills']) - int(request.json['num_bills'])))
             dispensed_bills_old = int(atm['num_dispensed_bills'])
             dispensed_bills_now = int(request.json['num_bills']) + dispensed_bills_old
-            db.set_atm_num_dispensed_bills(str(dispensed_bills_now))
-            key = atm['AES_KEY']
-            cipher = AES.new(key, AES.MODE_ECB, 0x00)
-            encrypted_message = cipher.encrypt("{0},{1}".format(dispensed_bills_old,dispensed_bills_now))
-            return jsonify({'OK': encrypted_message})
+            db.set_atm_num_dispensed_bills(str(request.json['atm_id']),str(dispensed_bills_now))
+            key =  str(bytearray.fromhex(atm['AES_KEY']))
+            cipher = AES.new(key, AES.MODE_ECB, '')
+            message = "{0},{1}".format(dispensed_bills_old,dispensed_bills_now)
+            while len(message) != 16:
+                message += '\x00'
+            encrypted_message = cipher.encrypt(message)
+            return jsonify({'OK': binascii.hexlify(encrypted_message)})
 
-        except:
-            return response
+        except Exception as e:
+            f
+        return response
 
     @server.route('/balance', methods = ['POST'])
     def check_balance():
         response = jsonify({'ERROR': 'Could not validate transaction'})
         response.status_code = 403
-        if not request.json or not 'card_id' in request.json or not 'pin' in request.json: #or not 'encrypted_response' in request.json:
+        if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'encrypted_response' in request.json:
             time.sleep(2)
             return response
 
@@ -136,9 +153,9 @@ class Bank(object):
             time.sleep(2)
             return response
 
-        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
-        #    time.sleep(2)
-        #    return jsonify({'ERROR': 'Could not validate transaction'})
+        if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'],account['time']):
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
         if db.verify_pin(request.json['pin'], request.json['card_id'], account):
             return jsonify({'OK': str(account['balance'])})
@@ -151,7 +168,7 @@ class Bank(object):
         response = jsonify({'ERROR': 'Could not validate transaction'})
         response.status_code = 403
 
-        if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json:# or not 'encrypted_response' in request.json:
+        if not request.json or not 'card_id' in request.json or not 'pin' in request.json or not 'new_pin' in request.json or not 'encrypted_response' in request.json:
             time.sleep(2)
             return response
 
@@ -164,9 +181,9 @@ class Bank(object):
             time.sleep(2)
             return response
 
-        # if not db.verify_challenge(account['challenge'], request.json['encrypted_response'], account['AES_KEY']):
-        #    time.sleep(2)
-        #    return jsonify({'ERROR': 'Could not validate transaction'})
+        if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'],account['time']):
+            time.sleep(2)
+            return jsonify({'ERROR': 'Could not validate transaction'})
 
 
         if db.verify_pin(request.json['pin'],request.json['card_id'], account):
@@ -183,21 +200,20 @@ class Bank(object):
 
         if not request.json or not 'card_id' in request.json or not 'new_pin' in request.json or not 'key' in request.json:
             time.sleep(2)
-        return response
+            return response
 
         account = db.get_account(request.json['card_id'])
         if account is None:
             time.sleep(2)
             return response
 
-        if account['pin'] == None and account['key'] == None:
+        if account['pin'] == None and account['AES_KEY'] == None:
             success = db.initialize_card(request.json['card_id'], request.json['key'], request.json['new_pin'])
             if success:
                 return jsonify({'OK': 'Card has been provisioned!'})
             else:
                 time.sleep(2)
                 return response
-
         time.sleep(2)
         return response
 
@@ -208,14 +224,14 @@ class Bank(object):
 
         if not request.json or not 'atm_id' in request.json or not 'key' in request.json or not 'num_bills' in request.json:
             time.sleep(2)
-        return response
+            return response
 
         atm = db.get_atm(request.json['atm_id'])
         if atm is None:
             time.sleep(2)
             return response
 
-        if atm['key'] == None:
+        if atm['AES_KEY'] == None:
             success = db.initialize_atm(request.json['key'], request.json['num_bills'], request.json['atm_id'])
             if success:
                 return jsonify({'OKAY': 'HSM has been provisioned!'})
@@ -243,9 +259,4 @@ class Bank(object):
         else:
             time.sleep(2)
             return jsonify({'ERROR': 'Could not validate transaction3'})
-
-
-    @server.route('/test')
-    def test():
-        return "Flask is working."
 
