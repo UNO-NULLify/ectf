@@ -17,6 +17,7 @@
 #include "Reset_isr.h"
 #include "aes.h"
 #include "SuperSecretHash.h"
+#include <stdio.h>
 
 #define CARD_ID_LEN 36
 #define PROV_MSG "P"
@@ -58,9 +59,9 @@ void provision()
     uint8 message[36];
     unsigned char AESkey[32];
     //Hashing shit
-    char *buf = malloc(8*sizeof(char));
-    char *temp = malloc(4*sizeof(char));
-    unsigned char keyValues[32];
+    char buf[8]="";
+    char temp[4]="";
+    unsigned char keyValues[8];
     
     // synchronize with bank
     syncConnection(SYNC_PROV);
@@ -98,20 +99,19 @@ void provision()
                 for(int w=0; w < 8; w=w+1)
                 {
                     memcpy(&temp[0], &keyValues[x],1);
-                    memcpy(&temp[2], &keyValues[y],1);
-                    memcpy(&temp[3], &keyValues[z],1);
-                    memcpy(&temp[4], &keyValues[w],1);
-                    SALT_HASaltH_SALT(buf, temp, 4, 32);
-                }
-                
+                    memcpy(&temp[1], &keyValues[y],1);
+                    memcpy(&temp[2], &keyValues[z],1);
+                    memcpy(&temp[3], &keyValues[w],1);
+                    SALT_HASaltH_SALT(buf, temp, 4, 8);
+                }            
             }
         }
         memcpy(&AESkey[x*4], buf, 4);
     }
     //Get rid of our previous data
-    memset(keyValues, 0, 32);
+    memset(keyValues, 0, 8);
     memset(buf, 0, 8);
-    memset(temp, 0, 8);    
+    memset(temp, 0, 4);    
 
     //Check the message that was received
     if(message[0] == '3')
@@ -134,11 +134,11 @@ int main(void)
     uint8 message[32];
     //AES shit
     struct AES_ctx ctx;
-    unsigned char AESkey[32] ="";
+    unsigned char AESkey[32]="";
     //Hashing shit
-    char *buf = malloc(8*sizeof(char));
-    char *temp = malloc(4*sizeof(char));
-    unsigned char keyValues[8] ="";
+    char buf[8]="";
+    char temp[4]="";
+    unsigned char keyValues[8]="";
     
     // local EEPROM read variable
     static const uint8 PROVISIONED[1] = {0x00};
@@ -167,15 +167,19 @@ int main(void)
         // syncronize communication with bank
         syncConnection(SYNC_NORM);
         
-        // receive pin number from ATM
+        // Receive OpCode
         pullMessage(message);
+        // Send back a muther fuckign K
+        pushMessage((uint8*)RECV_K, strlen(RECV_K));
         // change PIN or broadcast UUID
         if(message[0] == GIVE_CARD_ID)
         {
             pushMessage(CARD_ID, CARD_ID_LEN);
         }
-        if(message[1] == GIVE_SIG)
+        // Get the bloody 2
+        if(message[0] == GIVE_SIG)
         {
+            // Pull dat phat chall
             pullMessage(message);
             keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
             keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
@@ -197,27 +201,27 @@ int main(void)
                         for(int w=0; w < 8; w=w+1)
                         {
                             memcpy(&temp[0], &keyValues[x],1);
-                            memcpy(&temp[2], &keyValues[y],1);
-                            memcpy(&temp[3], &keyValues[z],1);
-                            memcpy(&temp[4], &keyValues[w],1);
-                            SALT_HASaltH_SALT(buf, temp, 4, 32);
+                            memcpy(&temp[1], &keyValues[y],1);
+                            memcpy(&temp[2], &keyValues[z],1);
+                            memcpy(&temp[3], &keyValues[w],1);
+                            SALT_HASaltH_SALT(buf, temp, 4, 8);
                         }
                     }
                 }
                 memcpy(&AESkey[x*4], buf, 4);
             }
             //Get rid of our previous data
-            memset(keyValues, 0, 32);
+            memset(keyValues, 0, 8);
             memset(buf, 0, 8);
-            memset(temp, 0, 8);
+            memset(temp, 0, 4);
             //Do AES
             AES_init_ctx(&ctx, AESkey);
             AES_ECB_encrypt(&ctx, message);
             AES_ECB_encrypt(&ctx, &message[16]);
             //Get rid of our AESKey
             memset(AESkey, 0, 32);
-            //Send Message
-            pushMessage(message, strlen((char *) message));
+            //Push AES encrypted chall
+            pushMessage(message, 32);
             memset(message, 0, 32);
         }
     }

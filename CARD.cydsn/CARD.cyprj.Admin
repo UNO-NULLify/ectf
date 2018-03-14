@@ -93,11 +93,6 @@
 <file name=".\aes.h" />
 <file name=".\main.c" />
 <file name=".\usbserialprotocol.h" />
-<file name=".\CortexM0\ARM_GCC_541\Debug\aes.o">
-<dep name=".\aes.c" />
-<dep name=".\aes.h" />
-</file>
-<file name=".\aes.c" />
 <file name=".\CortexM0\ARM_GCC_541\Debug\ATM_UART.o">
 <dep name=".\Generated_Source\PSoC4\ATM_UART.c" />
 <dep name=".\Generated_Source\PSoC4\ATM_UART.h" />
@@ -470,6 +465,11 @@
 <dep name=".\SuperFastHash.h" />
 </file>
 <file name=".\SuperFastHash.c" />
+<file name=".\CortexM0\ARM_GCC_541\Debug\aes.o">
+<dep name=".\aes.c" />
+<dep name=".\aes.h" />
+</file>
+<file name=".\aes.c" />
 <file name=".\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o">
 <dep name=".\Generated_Source\PSoC4\cmsis_armcc.h" />
 <dep name=".\Generated_Source\PSoC4\cmsis_gcc.h" />
@@ -912,7 +912,7 @@
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\warp\lib\common\stdlogic\rtlpkg.vif</v>
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\warp\lib\common\stdlogic\cy_psoc3.vif</v>
 </warp_dep>
-<deps_time v="131645904547731585" />
+<deps_time v="131651966639988035" />
 <top_block v="TopDesign" />
 <last_generation v="5" />
 <pdl_path v="" />
@@ -922,7 +922,7 @@
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
 <link_deps_times>
-<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM0" v="131649415847086316" />
+<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM0" v="131652044696233931" />
 </link_deps_times>
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>

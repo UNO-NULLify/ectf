@@ -45,6 +45,7 @@
 // global EEPROM read variables
 static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
 static const uint8 BILLS_LEFT[1] = {0x00};
+static const uint8 ATM_UUID[36]={};
 
 
 // reset interrupt on button press
@@ -60,14 +61,15 @@ CY_ISR(Reset_ISR)
 void provision()
 {
     int i;
-    uint8 message[64], numbills;
+    uint8 message[36]="";
+    uint8 numbills;
     //AES shit
     struct AES_ctx ctx;
     unsigned char AESkey[32];
     //Hashing shit
-    char *buf = malloc(8*sizeof(char));
-    char *temp = malloc(4*sizeof(char));
-    unsigned char keyValues[32];
+    char buf[8]="";
+    char temp[4]="";
+    unsigned char keyValues[8];
     
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
@@ -75,13 +77,17 @@ void provision()
     
     // synchronize with atm
     syncConnection(SYNC_PROV);
- 
-    memset(message, 0u, 64);
     strcpy((char*)message, PROV_MSG);
     pushMessage(message, (uint8)strlen(PROV_MSG));
     
+    // atm
+    pullMessage(message);
+    PIGGY_BANK_Write(message,ATM_UUID, 36);
+    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+    
     // Get numbills
     pullMessage(message);
+    pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     numbills = message[0];
     PIGGY_BANK_Write(&numbills, BILLS_LEFT, 1u);
     
@@ -95,7 +101,7 @@ void provision()
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-    memcpy(buf, "prof", 4);
+    memcpy(buf, ATM_UUID, 4);
     for(int x=0; x < 8; x=x+1)
     {
         for(int y=0; y < 8; y=y+1)
@@ -105,10 +111,10 @@ void provision()
                 for(int w=0; w < 8; w=w+1)
                 {
                     memcpy(&temp[0], &keyValues[x],1);
-                    memcpy(&temp[2], &keyValues[y],1);
-                    memcpy(&temp[3], &keyValues[z],1);
-                    memcpy(&temp[4], &keyValues[w],1);
-                    SALT_HASaltH_SALT(buf, temp, 4, 32);
+                    memcpy(&temp[1], &keyValues[y],1);
+                    memcpy(&temp[2], &keyValues[z],1);
+                    memcpy(&temp[3], &keyValues[w],1);
+                    SALT_HASaltH_SALT(buf, temp, 4, 8);
                 }
                 
             }
@@ -116,25 +122,24 @@ void provision()
         memcpy(&AESkey[x*4], buf, 4);
     }
     pushMessage(AESkey, 32);
-
+    AES_init_ctx(&ctx, AESkey);
     // Load bills
     for (i = 0; i < numbills; i++) {
-        pullMessage(message);
-        AES_init_ctx(&ctx, AESkey);
+        pullMessage(message);    
         AES_ECB_encrypt(&ctx, message);
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     }
 }
 
-void decrypt(uint8 data)
+void decrypt(uint8 *data)
 {
     //AES shit
     struct AES_ctx ctx;
     unsigned char AESkey[32];
     //Hashing shit
-    char *buf = malloc(8*sizeof(char));
-    char *temp = malloc(4*sizeof(char));
+    char buf[8]="";
+    char temp[4]="";
     unsigned char keyValues[32];
     
     keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
@@ -147,7 +152,7 @@ void decrypt(uint8 data)
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-    memcpy(buf, "prof", 4);
+    memcpy(buf, ATM_UUID, 4);
     for(int x=0; x < 8; x=x+1)
     {
         for(int y=0; y < 8; y=y+1)
@@ -157,10 +162,10 @@ void decrypt(uint8 data)
                 for(int w=0; w < 8; w=w+1)
                 {
                     memcpy(&temp[0], &keyValues[x],1);
-                    memcpy(&temp[2], &keyValues[y],1);
-                    memcpy(&temp[3], &keyValues[z],1);
-                    memcpy(&temp[4], &keyValues[w],1);
-                    SALT_HASaltH_SALT(buf, temp, 4, 32);
+                    memcpy(&temp[1], &keyValues[y],1);
+                    memcpy(&temp[2], &keyValues[z],1);
+                    memcpy(&temp[3], &keyValues[w],1);
+                    SALT_HASaltH_SALT(buf, temp, 4, 8);
                     memset(temp, 0, 4);
                 }
                 
@@ -168,11 +173,11 @@ void decrypt(uint8 data)
         }
         memcpy(&AESkey[x*4], buf, 4);
     }
-    memset(keyValues, 0, 32);
+    memset(keyValues, 0, 8);
     memset(temp, 0, 4);
     memset(buf, 0 , 8);
     AES_init_ctx(&ctx, AESkey);
-    AES_ECB_decrypt(&ctx, &data);
+    AES_ECB_decrypt(&ctx, data);
     memset(AESkey, 0, 32);
     memset(&ctx, 0, sizeof(struct AES_ctx));
 }
@@ -181,13 +186,13 @@ void dispenseBill()
 {
     static uint8 stackloc = 0;
     uint8 message[16];
-    volatile const uint8* ptr; 
+    volatile const uint8* ptr;
     
     ptr = MONEY[stackloc];
     
     memset(message, 0u, 16);
     memcpy(message, (void*)ptr, BILL_LEN);
-    decrypt(*message);
+    decrypt(message);
     pushMessage(message, BILL_LEN);
     
     PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
@@ -207,9 +212,8 @@ int main(void)
     uint8 message[64];
     char * token;
     char * temptoken;
-    uint8 bills_dispensed;
+    uint8 last_bill=0;
     
-    bills_dispensed = 128;
     
     /*
      * Note:
@@ -245,30 +249,43 @@ int main(void)
         // synchronize with bank
         syncConnection(SYNC_NORM);
         
-        //Get the range
+        //Get task
         pullMessage(message);
-        
-        //Decrypt the message
-        decrypt(*message);
-        
-        //Check to see if message has a starting valid bill
-        token = strtok((char *)message, ",");
-        if(atoi(token) == bills_dispensed)
+        pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+        //Push ATM_UUID
+        if(message[0] == '1')
         {
-            temptoken = strtok((char *)message, ",");
-            if((uint8) atoi(temptoken) +  (uint8) atoi(token) > (uint8) BILLS_LEFT)
+            pushMessage(ATM_UUID, 36);
+        }
+        //Dispense
+        if(message[0] == '2')
+        {
+            memset(message, 0, 64);
+            pullMessage(message);
+            pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+            //Decrypt the message
+            decrypt(message);
+            //Check to see if message has a starting valid bill
+            token = strtok((char *)message, ",");
+            if(atoi(token) == last_bill)
             {
-                pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
-            }
-            else
-            {
-                for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
+                temptoken = strtok(NULL, ",");
+                last_bill = (uint8) atoi(temptoken);
+                if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) BILLS_LEFT)
                 {
-                    dispenseBill();
-                    bills_left = *BILLS_LEFT - ((uint8) atoi(temptoken) - (uint8) atoi(token));
-                    PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+                    pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+                }
+                else
+                {
+                    for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
+                    {
+                        dispenseBill();
+                        bills_left = *BILLS_LEFT - 1;
+                        PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+                    }
                 }
             }
+            pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
         }
     }
 }

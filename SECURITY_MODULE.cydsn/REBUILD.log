@@ -1,6 +1,8 @@
---------------- Rebuild Started: 03/03/2018 16:41:31 Project: SECURITY_MODULE, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Rebuild Started: 03/10/2018 20:00:46 Project: SECURITY_MODULE, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\main.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\aes.o"
+Deleting file ".\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\cymetadata.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\DB_UART.o"
@@ -58,7 +60,13 @@ API Generation...
 Dependency Generation...
 Cleanup...
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
+main.c: In function 'main':
+main.c:264:65: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+             if((uint8) atoi(temptoken) +  (uint8) atoi(token) > (uint8) BILLS_LEFT)
+                                                                 ^
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/usbserialprotocol.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c usbserialprotocol.c -o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/aes.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c aes.c -o .\CortexM0\ARM_GCC_541\Debug\aes.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/SuperFastHash.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c SuperFastHash.c -o .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cyfitter_cfg.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cyfitter_cfg.c -o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/cymetadata.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\cymetadata.c -o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/DB_UART.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -Og -c Generated_Source\PSoC4\DB_UART.c -o .\CortexM0\ARM_GCC_541\Debug\DB_UART.o
@@ -92,9 +100,9 @@ arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-
 arm-none-eabi-as.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=.\CortexM0\ARM_GCC_541\Debug/CyBootAsmGnu.lst -g -W -o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o Generated_Source\PSoC4\CyBootAsmGnu.s
 arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a .\CortexM0\ARM_GCC_541\Debug\DB_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SPI_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SPI_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_UART.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_PM.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_INT.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_BOOT.o .\CortexM0\ARM_GCC_541\Debug\PIGGY_BANK.o .\CortexM0\ARM_GCC_541\Debug\Reset_isr.o .\CortexM0\ARM_GCC_541\Debug\SW1.o .\CortexM0\ARM_GCC_541\Debug\SW1_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SCBCLK.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_tx.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_tx_PM.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_SCB_IRQ.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_rx.o .\CortexM0\ARM_GCC_541\Debug\DB_UART_rx_PM.o .\CortexM0\ARM_GCC_541\Debug\CARD_UART_IntClock.o .\CortexM0\ARM_GCC_541\Debug\CyFlash.o .\CortexM0\ARM_GCC_541\Debug\CyLib.o .\CortexM0\ARM_GCC_541\Debug\cyPm.o .\CortexM0\ARM_GCC_541\Debug\cyutils.o .\CortexM0\ARM_GCC_541\Debug\CyLFClk.o .\CortexM0\ARM_GCC_541\Debug\CyBootAsmGnu.o
 arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a
-arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/SECURITY_MODULE.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
+arm-none-eabi-gcc.exe -Wl,--start-group -o C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf .\CortexM0\ARM_GCC_541\Debug\main.o .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o .\CortexM0\ARM_GCC_541\Debug\aes.o .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_541\Debug\cymetadata.o .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o .\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_541\Debug/SECURITY_MODULE.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects -Wl,--end-group
 cyelftool.exe -C C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf --flash_row_size 128 --flash_size 32768 --flash_offset 0x00000000
 cyelftool.exe -S C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\CortexM0\ARM_GCC_541\Debug\SECURITY_MODULE.elf
-Flash used: 7464 of 32768 bytes (22.8%).
-SRAM used: 2200 of 4096 bytes (53.7%). Stack: 1024 bytes. Heap: 496 bytes.
---------------- Rebuild Succeeded: 03/03/2018 16:42:12 ---------------
+Flash used: 11328 of 32768 bytes (34.6%).
+SRAM used: 2224 of 4096 bytes (54.3%). Stack: 1024 bytes. Heap: 496 bytes.
+--------------- Rebuild Succeeded: 03/10/2018 20:01:16 ---------------
