@@ -95,8 +95,12 @@ class HSM(Psoc):
 
         except:
             self._vp(traceback.print_exc())
+            return False
 
-        return bills
+        if 'BAD' in bills:
+            return False
+        else:
+            return bills
 
     def provision(self, uuid, bills):
         """Attempts to provision HSM

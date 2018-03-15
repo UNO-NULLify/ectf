@@ -53,12 +53,15 @@ class ProvisionTool(object):
             if len(key) ==  64:
                 success = self.bank.provision_card(card_id, pin, key)
                 return success
+            else:
+                logging.error('provision_card: Invalid key returned')
         except DeviceRemoved:
             logging.error('provision_card: card was removed!')
             return False
         except AlreadyProvisioned:
             logging.error('provision_card: card was already provisioned!')
             return False
+        return False
 
     def provision_atm(self, hsm_blob, bills):
         """Attempts to provision an HSM
@@ -85,14 +88,16 @@ class ProvisionTool(object):
             key = self.hsm.provision(hsm_blob, bills)
             num_bills = len(bills)
             if len(key) == 64:
-                self.bank.provision_atm(atm_id, key, num_bills)
+                success = self.bank.provision_atm(atm_id, key, num_bills)
                 logging.info('provision_atm: provisioned hsm with inputted bills')
-                return True
-            logging.error('provision_atm: provision failed!')
-            return False
+                return success
+            else:
+                logging.error('provision_atm: provision failed!')
+
         except DeviceRemoved:
             logging.error('provision_atm: HSM was removed!')
             return False
         except AlreadyProvisioned:
             logging.error('provision_atm: HSM was already provisioned!')
             return False
+        return False

@@ -162,7 +162,7 @@ class DB(object):
 
     def get_challenge(self, card_id):
         chall = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
-        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'chall': chall, 'time': datetime.datetime.now() + datetime.timedelta(seconds=15)}})
+        updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'chall': chall, 'time': datetime.datetime.now() + datetime.timedelta(seconds=5)}})
         if updated.acknowledged and updated.raw_result['updatedExisting']:
             return chall
         else:

@@ -32,6 +32,7 @@ from flask import Flask, jsonify, request
 from Crypto.Cipher import AES
 import traceback
 import binascii
+import os
 
 
 from bank_server import DB
@@ -71,53 +72,45 @@ class Bank(object):
         response.status_code = 403
         try:
             if not request.json or not 'atm_id' in request.json or 'pin' not in request.json or 'card_id' not in request.json or 'num_bills' not in request.json or 'encrypted_response' not in request.json:
-                print 'a'
                 time.sleep(2)
                 return response
 
             account = db.get_account(request.json['card_id'])
             if account is None:
-                print 'b'
                 time.sleep(2)
                 return response
 
             if account['AES_KEY'] is None or account['time'] is None:
-                print 'c'
                 time.sleep(2)
                 return response
 
             if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
-                print 'd'
                 time.sleep(2)
                 return jsonify({'ERROR': 'Could not validate transaction'})
 
             atm = db.get_atm(request.json['atm_id'])
             if atm is None:
-                print 'e'
                 time.sleep(2)
                 return response
 
             if atm['num_bills'] is None:
-                print 'f'
                 time.sleep(2)
                 return response
 
             if int(atm['num_bills']) < int(request.json['num_bills']):
-                print 'g'
                 time.sleep(2)
                 return response
             if int(account['balance']) < int(request.json['num_bills']):
-                print 'h'
                 time.sleep(2)
                 return response
 
             if not db.verify_pin(request.json['pin'], request.json['card_id'], account):
-                print 'i'
                 time.sleep(2)
                 return response
 
 
             # OK To Dispense
+            message  = ''
 
             db.set_balance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
             db.set_atm_num_bills(request.json['atm_id'], str(int(atm['num_bills']) - int(request.json['num_bills'])))
@@ -126,14 +119,17 @@ class Bank(object):
             db.set_atm_num_dispensed_bills(str(request.json['atm_id']),str(dispensed_bills_now))
             key =  str(bytearray.fromhex(atm['AES_KEY']))
             cipher = AES.new(key, AES.MODE_ECB, '')
-            message = "{0},{1}".format(dispensed_bills_old,dispensed_bills_now)
-            while len(message) != 16:
-                message += '\x00'
+            bill_message = '{0},{1}'.format(dispensed_bills_old,dispensed_bills_now) + '\x00'
+            needed_bytes = 16 - len(bill_message)
+            for i in range(0,4):
+                message += bill_message
+                message += os.urandom(needed_bytes)
+
             encrypted_message = cipher.encrypt(message)
             return jsonify({'OK': binascii.hexlify(encrypted_message)})
 
         except Exception as e:
-            f
+            traceback.print_exc()
         return response
 
     @server.route('/balance', methods = ['POST'])
