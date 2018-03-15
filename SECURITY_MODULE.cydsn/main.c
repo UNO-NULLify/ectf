@@ -46,6 +46,7 @@
 static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
 static const uint8 BILLS_LEFT[1] = {0x00};
 static const uint8 ATM_UUID[36]={};
+static const uint8 FLAG=0;
 
 
 // reset interrupt on button press
@@ -60,17 +61,19 @@ CY_ISR(Reset_ISR)
 // provisions HSM (should only ever be called once)
 void provision()
 {
+    //General variables
     int i;
     uint8 message[36]="";
     uint8 numbills;
-    //AES shit
+    //AES variables
     struct AES_ctx ctx;
     unsigned char AESkey[32];
-    //Hashing shit
+    //Hashing variables
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
     
+    //Initialize the stack of money
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
     }
@@ -80,7 +83,7 @@ void provision()
     strcpy((char*)message, PROV_MSG);
     pushMessage(message, (uint8)strlen(PROV_MSG));
     
-    // atm
+    // Pull the atm UUID
     pullMessage(message);
     PIGGY_BANK_Write(message,ATM_UUID, 36);
     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
@@ -90,7 +93,7 @@ void provision()
     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     numbills = message[0];
     PIGGY_BANK_Write(&numbills, BILLS_LEFT, 1u);
-    
+    // Grab the some what unique values of the PSOC card
     keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
     keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
     keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
@@ -100,7 +103,7 @@ void provision()
     keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
-    //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
+    //Generate our AES Key
     memcpy(buf, ATM_UUID, 4);
     for(int x=0; x < 8; x=x+1)
     {
@@ -110,10 +113,12 @@ void provision()
             {
                 for(int w=0; w < 8; w=w+1)
                 {
+                    //Copy over the specific key values
                     memcpy(&temp[0], &keyValues[x],1);
                     memcpy(&temp[1], &keyValues[y],1);
                     memcpy(&temp[2], &keyValues[z],1);
                     memcpy(&temp[3], &keyValues[w],1);
+                    //Call this awesome function to do magic
                     SALT_HASaltH_SALT(buf, temp, 4, 8);
                 }
                 
@@ -121,6 +126,7 @@ void provision()
         }
         memcpy(&AESkey[x*4], buf, 4);
     }
+    //Send our AES Key to the bank
     pushMessage(AESkey, 32);
     AES_init_ctx(&ctx, AESkey);
     // Load bills
@@ -134,71 +140,134 @@ void provision()
 
 void decrypt(uint8 *data)
 {
-    //AES shit
-    struct AES_ctx ctx;
+    //AES variables
+    static struct AES_ctx ctx;
+    static int flag=0;
     unsigned char AESkey[32];
-    //Hashing shit
+    //Hashing variables
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[32];
     
-    keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
-    keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
-    keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
-    keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
-
-    keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
-    keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
-    keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
-    keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
-    //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-    memcpy(buf, ATM_UUID, 4);
-    for(int x=0; x < 8; x=x+1)
+    if(flag == 0)
     {
-        for(int y=0; y < 8; y=y+1)
+        //Grab our key values
+        keyValues[0]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT0) ;
+        keyValues[1] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT1  ) ;
+        keyValues[2] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_LOT2  ) ;
+        keyValues[3] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_WAFER ) ;
+
+        keyValues[4]  =  (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_X   ) ;
+        keyValues[5] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_Y     ) ;
+        keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
+        keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
+        //Generate our AES Key
+        memcpy(buf, ATM_UUID, 4);
+        for(int x=0; x < 8; x=x+1)
         {
-            for(int z=0; z < 8; z=z+1)
+            for(int y=0; y < 8; y=y+1)
             {
-                for(int w=0; w < 8; w=w+1)
+                for(int z=0; z < 8; z=z+1)
                 {
-                    memcpy(&temp[0], &keyValues[x],1);
-                    memcpy(&temp[1], &keyValues[y],1);
-                    memcpy(&temp[2], &keyValues[z],1);
-                    memcpy(&temp[3], &keyValues[w],1);
-                    SALT_HASaltH_SALT(buf, temp, 4, 8);
-                    memset(temp, 0, 4);
+                    for(int w=0; w < 8; w=w+1)
+                    {
+                        memcpy(&temp[0], &keyValues[x],1);
+                        memcpy(&temp[1], &keyValues[y],1);
+                        memcpy(&temp[2], &keyValues[z],1);
+                        memcpy(&temp[3], &keyValues[w],1);
+                        SALT_HASaltH_SALT(buf, temp, 4, 8);
+                        memset(temp, 0, 4);
+                    }
+                    
                 }
-                
             }
+            memcpy(&AESkey[x*4], buf, 4);
         }
-        memcpy(&AESkey[x*4], buf, 4);
+        memset(keyValues, 0, 8);
+        memset(temp, 0, 4);
+        memset(buf, 0 , 8);
+        AES_init_ctx(&ctx, AESkey);
+        memset(AESkey, 0, 32);
+        flag = 1;
     }
-    memset(keyValues, 0, 8);
-    memset(temp, 0, 4);
-    memset(buf, 0 , 8);
-    AES_init_ctx(&ctx, AESkey);
-    AES_ECB_decrypt(&ctx, data);
-    memset(AESkey, 0, 32);
-    memset(&ctx, 0, sizeof(struct AES_ctx));
+    if(FLAG == 0)
+    {
+        AES_ECB_decrypt(&ctx, data);
+    }
+    else
+    {
+        memset(&ctx, 0, sizeof(struct AES_ctx));
+        PIGGY_BANK_Write((uint8*)&FLAG, (uint8*) 0, 1);
+        flag = 0;
+    }
 }
 
 void dispenseBill()
 {
-    static uint8 stackloc = 0;
-    uint8 message[16];
-    volatile const uint8* ptr;
+    static const uint8 STACKLOC[1] = {0x00};
+    uint8 message[64];
+    volatile const uint8* stackptr = STACKLOC;
+    volatile const uint8* billptr;
+    uint8 stackloc;
+    int matching = 0;
+    uint8 flag[3];
     
-    ptr = MONEY[stackloc];
+    stackloc = *stackptr;
+    billptr = MONEY[stackloc];
     
-    memset(message, 0u, 16);
-    memcpy(message, (void*)ptr, BILL_LEN);
+    memset(message, 0u, 64);
+    memcpy(message, (void*)billptr, BILL_LEN);
     decrypt(message);
-    pushMessage(message, BILL_LEN);
-    
-    PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
-    stackloc = (stackloc + 1) % 128;
-}
+    decrypt(&message[16]);
+    decrypt(&message[32]);
+    decrypt(&message[48]);
 
+    if (memcmp(&message[0],&message[16],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+
+    if (memcmp(&message[0],&message[32],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+
+    if (memcmp(&message[0],&message[48],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+
+    if (memcmp(&message[16],&message[32],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+
+    if (memcmp(&message[16],&message[48],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+
+    if (memcmp(&message[32],&message[48],16) == 0)
+        memcpy(flag, WITH_BAD, 3);
+  
+    matching += abs(memcmp(&message[0],&message[16],1));
+    matching += abs(memcmp(&message[0],&message[32],1));
+    matching += abs(memcmp(&message[0],&message[48],1));
+    matching += abs(memcmp(&message[1],&message[17],1));
+    matching += abs(memcmp(&message[1],&message[33],1));
+    matching += abs(memcmp(&message[1],&message[49],1));
+    matching += abs(memcmp(&message[2],&message[18],1));
+    matching += abs(memcmp(&message[2],&message[34],1));
+    matching += abs(memcmp(&message[2],&message[50],1));
+    matching += abs(memcmp(&message[3],&message[19],1));
+    matching += abs(memcmp(&message[3],&message[35],1));
+    matching += abs(memcmp(&message[3],&message[51],1));
+
+    if(matching != 0)
+      memcpy(flag, WITH_BAD, 3);
+    
+    if(flag[0] == 'B')
+    {
+        pushMessage(message, BILL_LEN);
+        PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
+        stackloc = (stackloc + 1) % 128;
+        PIGGY_BANK_Write(&stackloc, STACKLOC, 1);
+    }
+    else
+    {
+        pushMessage(flag, 3);
+    }
+}
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
@@ -209,29 +278,20 @@ int main(void)
     /* Declare vairables here */
     
     uint8 i, bills_left;
-    uint8 message[64];
+    uint8 message[64] = "";
     char * token;
     char * temptoken;
     uint8 last_bill=0;
     
-    
-    /*
-     * Note:
-     *  To write to EEPROM, write to static const uint8 []
-     *  To read from EEPROM, read from volatile const uint8 * 
-     *      set to write variable
-     *
-     * PSoC EEPROM is very finnicky if this format is not followed
-     */
     static const uint8 PROVISIONED[1] = {0x00}; // write variable
-    volatile const uint8* ptr = PROVISIONED;    // read variable
-    
+    volatile const uint8* ptr;    // read variable
     
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     
     PIGGY_BANK_Start();
     DB_UART_Start();
     
+    ptr = PROVISIONED;
     // provision security module on first boot
     if(*ptr == 0x00)
     {
@@ -283,11 +343,11 @@ int main(void)
                         bills_left = *BILLS_LEFT - 1;
                         PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                     }
+                    PIGGY_BANK_Write((uint8*)&FLAG, (uint8*) 1, 1);
                 }
             }
             pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
         }
     }
 }
-
 /* [] END OF FILE */

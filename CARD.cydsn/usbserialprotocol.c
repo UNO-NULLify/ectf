@@ -68,12 +68,12 @@ uint8 pullMessage(uint8 data[])
  */
 void syncConnection(int prov) 
 {
-    uint8 message[32];
-    
+    uint8 message[6];
+    memset(message,0,6);
     // marco-polo with bank until connection is in sync
     do {
         pullMessage(message);                               // 1)
-        
+        pushMessage(message, 6);
         if (strcmp((char*)message, RDY_MSG_RECV)) {
             pushMessage(message, strlen((char*)message));   // 2) bad
             strcpy((char*)message, RDY_BAD);

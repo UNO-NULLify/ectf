@@ -1,0 +1,7 @@
+C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\SECURITY_MODULE.cyprj|12d33c2f-ae27-4a23-9503-81f7f989ba9a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|f863c6e8-e741-4980-90df-d4f13f6f27a8
+C:\Users\Admin\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|5ad98a28-ac44-4daf-8a17-78e1c67d7594
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|9563e9bc-390e-42fa-adde-be558bab648f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|d0a2ed6b-09a4-40b8-9ffd-62f20aad2c9b
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|18d643ee-2f5e-46a2-b878-cfa3672fb18c
+C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\CARD.cyprj|1af17a60-06d4-4b57-994b-d4a70555e7d4

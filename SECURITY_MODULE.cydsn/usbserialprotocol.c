@@ -68,23 +68,23 @@ uint8 pullMessage(uint8 data[])
  */
 void syncConnection(int prov) 
 {
-    uint8 message[32];
-    
+    uint8 message[6];
+    memset(message,0,6);    
     // marco-polo with bank until connection is in sync
     do {
         pullMessage(message);                               // 1)
-        
-        if (strcmp((char*)message, RDY_MSG_RECV)) {
-            pushMessage(message, strlen((char*)message));   // 2) bad
+        pushMessage(message, 6);
+        if ( strcmp((char*)message, RDY_MSG_RECV) ) {
+            pushMessage(message, 6);   // 2) bad
             strcpy((char*)message, RDY_BAD);
         } else if (prov) {
             pushMessage((uint8*)RDY_MSG_PROV, 
-                        strlen(RDY_MSG_PROV));              // 2) good prov
+                        5);              // 2) good prov
             
             pullMessage(message);                           // 3)
         } else {
-            pushMessage((uint8*)RDY_MSG_NORM, 
-                        strlen(RDY_MSG_NORM));              // 2) good norm
+            pushMessage((uint8*)"HSM_N", 
+                        5);              // 2) good norm
             
             pullMessage(message);                           // 3
         }
