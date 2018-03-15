@@ -78,6 +78,7 @@ class Psoc(object):
         """
         hdr = self.read(1)
         if len(hdr) != 1:
+
             self._vp("RECEIVED BAD HEADER: \'%s\'" % hdr, logging.error)
             return ''
         pkt_len = struct.unpack('B', hdr)[0]
@@ -88,8 +89,13 @@ class Psoc(object):
         while resp not in names:
             self._vp('Sending ready message')
             self._push_msg("READY\00")
+
+
+            x = self._pull_msg()
+            self._vp('(1) Got response \'%s\', want something from \'%s\'' % (x, str(names)))
+
             resp = self._pull_msg()
-            self._vp('Got response \'%s\', want something from \'%s\'' % (resp, str(names)))
+            self._vp('(2) Got response \'%s\', want something from \'%s\'' % (resp, str(names)))
 
             # if in wrong state (provisioning/normal)
             if len(names) == 1 and resp != names[0] and resp[:-1] == names[0][:-1]:
@@ -119,7 +125,7 @@ class Psoc(object):
         self._vp("Connection synced")
 
     def open(self):
-        time.sleep(.1)
+        time.sleep(.3)
         self.ser = serial.Serial(self.port, baudrate=self.baudrate, timeout=1)
         resp = self._sync_once(['CARD_N', 'CARD_P', 'HSM_N', 'HSM_P'])
         if resp == self.sync_name_p or resp == self.sync_name_n:

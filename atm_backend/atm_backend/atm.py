@@ -43,17 +43,16 @@ class ATM(object):
             # get balance from bank if card accepted PIN
             if (card_id is not None) and (encrypted_response is not None):
                 logging.info('check_balance: Requesting balance from Bank')
-                response = self.bank.check_balance(card_id, encrypted_response, pin)
-                if response:
-                    return response
-            logging.info('check_balance failed')
-            return False
+                return self.bank.check_balance(card_id, encrypted_response, pin)
         except DeviceRemoved:
             logging.info('ATM card was removed!')
             return False
         except NotProvisioned:
             logging.info('ATM card has not been provisioned!')
             return False
+
+        logging.info('check_balance failed')
+        return False
 
     def change_pin(self, old_pin, new_pin):
         """Tries to change the PIN of the connected ATM card
@@ -80,17 +79,17 @@ class ATM(object):
             # get balance from bank if card accepted PIN
             if card_id is not None and encrypted_response is not None:
                 logging.info('check_balance: Requesting balance from Bank')
-                response = self.bank.change_pin(card_id, encrypted_response, old_pin, new_pin)
-                if response:
-                    return response
-            logging.info('change_pin failed')
-            return False
+                return self.bank.change_pin(card_id, encrypted_response, old_pin, new_pin)
+
         except DeviceRemoved:
             logging.info('ATM card was removed!')
             return False
         except NotProvisioned:
             logging.info('ATM card has not been provisioned!')
             return False
+
+        logging.info('change_pin failed')
+        return False
 
     def withdraw(self, pin, amount):
         """Tries to withdraw money from the account associated with the
@@ -124,9 +123,8 @@ class ATM(object):
             if (card_id is not None) and (encrypted_response is not None) :
                 logging.info('withdraw: Requesting hsm_id from hsm')
                 response = self.bank.withdraw(atm_id, card_id, encrypted_response, pin, amount)
-                if response is not False:
-                    bills = self.hsm.withdraw(response)
-                    return bills
+                if response != False:
+                    return self.hsm.withdraw(response)
 
             logging.info('withdraw failed')
             return False
