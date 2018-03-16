@@ -147,7 +147,7 @@ void decrypt(uint8 *data)
     //Hashing variables
     char buf[8]="";
     char temp[4]="";
-    unsigned char keyValues[32];
+    unsigned char keyValues[8];
     
     if(flag == 0)
     {
