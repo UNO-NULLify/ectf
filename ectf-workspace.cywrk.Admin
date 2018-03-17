@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace\SECURITY_MODULE">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace\CARD">
 <ExpandedNodeIds>
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD\TopDesign</v>
@@ -24,7 +24,6 @@
 <v>ectf-workspace\CARD\CARD.cydwr\System</v>
 <v>ectf-workspace\CARD\CARD.cydwr\Directives</v>
 <v>ectf-workspace\CARD\CARD.cydwr\Flash Security</v>
-<v>ectf-workspace\CARD\Header Files</v>
 <v>ectf-workspace\CARD\Header Files\aes.h</v>
 <v>ectf-workspace\CARD\Header Files\cyapicallbacks.h</v>
 <v>ectf-workspace\CARD\Header Files\pstdint.h</v>
@@ -36,6 +35,7 @@
 <v>ectf-workspace\CARD\Source Files\SuperFastHash.c</v>
 <v>ectf-workspace\CARD\Source Files\usbserialprotocol.c</v>
 <v>ectf-workspace\CARD\Generated_Source\PSoC4</v>
+<v>ectf-workspace\SECURITY_MODULE</v>
 <v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
@@ -45,14 +45,12 @@
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\System</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Directives</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Flash Security</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\aes.h</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\cyapicallbacks.h</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\pstdint.h</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\SuperFastHash.h</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\SuperSecretHash.h</v>
 <v>ectf-workspace\SECURITY_MODULE\Header Files\usbserialprotocol.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files</v>
 <v>ectf-workspace\SECURITY_MODULE\Source Files\aes.c</v>
 <v>ectf-workspace\SECURITY_MODULE\Source Files\main.c</v>
 <v>ectf-workspace\SECURITY_MODULE\Source Files\SuperFastHash.c</v>
@@ -63,6 +61,18 @@
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD</v>
 <v>ectf-workspace\SECURITY_MODULE</v>
+<v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Analog</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Clocks</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Interrupts</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\System</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Directives</v>
+<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Flash Security</v>
+<v>ectf-workspace\SECURITY_MODULE\Header Files</v>
+<v>ectf-workspace\SECURITY_MODULE\Source Files</v>
+<v>ectf-workspace\SECURITY_MODULE\Generated_Source</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace">
@@ -298,7 +308,9 @@
 <Unloaded />
 <OpenDocs>
 <name v=".\SECURITY_MODULE.cydsn\main.c" />
-<name v=".\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\DB_UART_SPI_UART.c" />
+<name v=".\SECURITY_MODULE.cydsn\SuperSecretHash.h" />
+<name v=".\CARD.cydsn\main.c" />
+<name v=".\CARD.cydsn\SuperSecretHash.h" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -306,7 +318,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Vertical"><TabbedMdiContainer Size="1112, 455" SelectedTabbedMdiWindow="169dd082-21e1-473b-af12-183e639e3c91"><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\main.c" Guid="169dd082-21e1-473b-af12-183e639e3c91" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\DB_UART_SPI_UART.c" Guid="ca593d46-9b0b-484b-9f54-fef1f8e46a99" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="1154c7c7-1af1-4308-9452-8035c14f8f52" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Vertical"><TabbedMdiContainer Size="1112, 455" SelectedTabbedMdiWindow="59ddfb60-bb93-4375-90b0-cfb277ffe14f"><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\main.c" Guid="169dd082-21e1-473b-af12-183e639e3c91" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\SuperSecretHash.h" Guid="a865958a-51cf-46a6-a9bd-b4977465689d" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\main.c" Guid="59ddfb60-bb93-4375-90b0-cfb277ffe14f" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\SuperSecretHash.h" Guid="0a540abb-8c82-4d18-82ce-5e548122ce21" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

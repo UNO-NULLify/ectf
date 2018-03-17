@@ -62,6 +62,7 @@ void provision()
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
+    volatile const uint8* CARD_IDPtr = CARD_ID;
     
     // synchronize with bank
     syncConnection(SYNC_PROV);
@@ -89,14 +90,17 @@ void provision()
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-    memcpy(buf, CARD_ID, 4);
+    buf[0] = CARD_IDPtr[0];
+    buf[1] = CARD_IDPtr[1];
+    buf[2] = CARD_IDPtr[2];
+    buf[3] = CARD_IDPtr[3];
     for(int x=0; x < 8; x=x+1)
     {
-        for(int y=0; y < 8; y=y+1)
+        for(int y=0; y < 7; y=y+1)
         {
-            for(int z=0; z < 8; z=z+1)
+            for(int z=0; z < 7; z=z+1)
             {
-                for(int w=0; w < 8; w=w+1)
+                for(int w=0; w < 7; w=w+1)
                 {
                     memcpy(&temp[0], &keyValues[x],1);
                     memcpy(&temp[1], &keyValues[y],1);
@@ -139,6 +143,7 @@ int main(void)
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8]="";
+    volatile const uint8* CARD_IDPtr = CARD_ID;
     
     // local EEPROM read variable
     static const uint8 PROVISIONED[1] = {0x00};
@@ -191,7 +196,10 @@ int main(void)
             keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
             keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
             //Take UniqueId and grab the eight bytes and store them somehow and then hash stuff to expand it
-            memcpy(buf, CARD_ID, 4);
+            buf[0] = CARD_IDPtr[0];
+            buf[1] = CARD_IDPtr[1];
+            buf[2] = CARD_IDPtr[2];
+            buf[3] = CARD_IDPtr[3];
             for(int x=0; x < 8; x=x+1)
             {
                 for(int y=0; y < 8; y=y+1)
