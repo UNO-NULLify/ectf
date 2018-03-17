@@ -233,19 +233,19 @@ int main(void)
     /* Declare vairables here */
     
     uint8 i;
-    volatile const uint8 *bills_leftptr= BILLS_LEFT;
-    volatile const uint8 *last_billptr = LAST_BILL;
-    uint8 bills_left=0;
-    uint8 last_bill=0;
+    volatile const uint8* bills_leftptr= BILLS_LEFT;
+    volatile const uint8* last_billptr = LAST_BILL;
+    uint8 bills_left;
+    uint8 last_bill;
     uint8 message[64] = "";
     char * token;
     char * temptoken;
     int matching = 0;
-    uint8 flag[3];
+    uint8 flag[3]="";
     
     bills_left = *bills_leftptr;
     last_bill = *last_billptr;
-    memcpy(&bills_left, BILLS_LEFT,1);
+    
     static const uint8 PROVISIONED[1] = {0x00}; // write variable
     volatile const uint8* ptr;    // read variable
     
@@ -340,7 +340,7 @@ int main(void)
                 {
                     temptoken = strtok(NULL, ",");
                     last_bill = (uint8) atoi(temptoken);
-                    if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) BILLS_LEFT)
+                    if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) bills_left)
                     {
                         pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
                     }
@@ -349,8 +349,8 @@ int main(void)
                         for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
                         {
                             dispenseBill();
-                            bills_left = *BILLS_LEFT - 1;
-                            PIGGY_BANK_Write(&bills_left, BILLS_LEFT-1, 0x01);
+                            bills_left = bills_left - 1;
+                            PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                         }
                         PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
                         PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
