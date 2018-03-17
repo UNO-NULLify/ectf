@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
   28:Generated_Source\PSoC4/CARD_UART_IntClock.c **** * Summary:
   29:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *  Starts the clock, aligned to the specified running clock.
   30:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 2
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 2
 
 
   31:Generated_Source\PSoC4/CARD_UART_IntClock.c **** * Parameters:
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
   39 000a 1360     		str	r3, [r2]
   74:Generated_Source\PSoC4/CARD_UART_IntClock.c **** }
   40              		.loc 1 74 0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 3
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 3
 
 
   41              		@ sp needed
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  107:Generated_Source\PSoC4/CARD_UART_IntClock.c ****         ((uint32)CARD_UART_IntClock_CMD_DISABLE_MASK);
  108:Generated_Source\PSoC4/CARD_UART_IntClock.c **** 
  109:Generated_Source\PSoC4/CARD_UART_IntClock.c **** #else
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 4
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 4
 
 
  110:Generated_Source\PSoC4/CARD_UART_IntClock.c **** 
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
   91              		@ link register save eliminated.
   92              	.LVL0:
  136:Generated_Source\PSoC4/CARD_UART_IntClock.c ****     uint32 maskVal;
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 5
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 5
 
 
  137:Generated_Source\PSoC4/CARD_UART_IntClock.c ****     uint32 regVal;
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  162:Generated_Source\PSoC4/CARD_UART_IntClock.c **** * Function Name: CARD_UART_IntClock_GetDividerRegister
  163:Generated_Source\PSoC4/CARD_UART_IntClock.c **** ********************************************************************************
  164:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 6
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 6
 
 
  165:Generated_Source\PSoC4/CARD_UART_IntClock.c **** * Summary:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  192:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *
  193:Generated_Source\PSoC4/CARD_UART_IntClock.c **** * Returns:
  194:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *  Fractional Divide value of the clock
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 7
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 7
 
 
  195:Generated_Source\PSoC4/CARD_UART_IntClock.c **** *  0 if the fractional divider is not in use.
@@ -396,17 +396,17 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  168 0006 00000000 		.4byte	.Ldebug_abbrev0
  169 000a 04       		.byte	0x4
  170 000b 01       		.uleb128 0x1
- 171 000c 4C010000 		.4byte	.LASF24
+ 171 000c 87010000 		.4byte	.LASF24
  172 0010 0C       		.byte	0xc
- 173 0011 DA010000 		.4byte	.LASF25
- 174 0015 49020000 		.4byte	.LASF26
+ 173 0011 15020000 		.4byte	.LASF25
+ 174 0015 0C010000 		.4byte	.LASF26
  175 0019 00000000 		.4byte	.Ldebug_ranges0+0
  176 001d 00000000 		.4byte	0
  177 0021 00000000 		.4byte	.Ldebug_line0
  178 0025 02       		.uleb128 0x2
  179 0026 01       		.byte	0x1
  180 0027 06       		.byte	0x6
- 181 0028 3D020000 		.4byte	.LASF0
+ 181 0028 78020000 		.4byte	.LASF0
  182 002c 02       		.uleb128 0x2
  183 002d 01       		.byte	0x1
  184 002e 08       		.byte	0x8
@@ -414,18 +414,18 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  186 0033 02       		.uleb128 0x2
  187 0034 02       		.byte	0x2
  188 0035 05       		.byte	0x5
- 189 0036 0B020000 		.4byte	.LASF2
+ 189 0036 46020000 		.4byte	.LASF2
  190 003a 02       		.uleb128 0x2
  191 003b 02       		.byte	0x2
  192 003c 07       		.byte	0x7
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 8
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 8
 
 
  193 003d C8000000 		.4byte	.LASF3
  194 0041 02       		.uleb128 0x2
  195 0042 04       		.byte	0x4
  196 0043 05       		.byte	0x5
- 197 0044 1B020000 		.4byte	.LASF4
+ 197 0044 56020000 		.4byte	.LASF4
  198 0048 02       		.uleb128 0x2
  199 0049 04       		.byte	0x4
  200 004a 07       		.byte	0x7
@@ -437,7 +437,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  206 0056 02       		.uleb128 0x2
  207 0057 08       		.byte	0x8
  208 0058 07       		.byte	0x7
- 209 0059 35010000 		.4byte	.LASF7
+ 209 0059 70010000 		.4byte	.LASF7
  210 005d 03       		.uleb128 0x3
  211 005e 04       		.byte	0x4
  212 005f 05       		.byte	0x5
@@ -445,19 +445,19 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  214 0064 02       		.uleb128 0x2
  215 0065 04       		.byte	0x4
  216 0066 07       		.byte	0x7
- 217 0067 28010000 		.4byte	.LASF8
+ 217 0067 63010000 		.4byte	.LASF8
  218 006b 04       		.uleb128 0x4
- 219 006c 15020000 		.4byte	.LASF9
+ 219 006c 50020000 		.4byte	.LASF9
  220 0070 02       		.byte	0x2
  221 0071 B901     		.2byte	0x1b9
  222 0073 2C000000 		.4byte	0x2c
  223 0077 04       		.uleb128 0x4
- 224 0078 1A010000 		.4byte	.LASF10
+ 224 0078 55010000 		.4byte	.LASF10
  225 007c 02       		.byte	0x2
  226 007d BA01     		.2byte	0x1ba
  227 007f 3A000000 		.4byte	0x3a
  228 0083 04       		.uleb128 0x4
- 229 0084 21010000 		.4byte	.LASF11
+ 229 0084 5C010000 		.4byte	.LASF11
  230 0088 02       		.byte	0x2
  231 0089 BB01     		.2byte	0x1bb
  232 008b 48000000 		.4byte	0x48
@@ -468,23 +468,23 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  237 0096 02       		.uleb128 0x2
  238 0097 08       		.byte	0x8
  239 0098 04       		.byte	0x4
- 240 0099 FE000000 		.4byte	.LASF13
+ 240 0099 05010000 		.4byte	.LASF13
  241 009d 02       		.uleb128 0x2
  242 009e 01       		.byte	0x1
  243 009f 08       		.byte	0x8
- 244 00a0 06020000 		.4byte	.LASF14
+ 244 00a0 41020000 		.4byte	.LASF14
  245 00a4 04       		.uleb128 0x4
  246 00a5 0E000000 		.4byte	.LASF15
  247 00a9 02       		.byte	0x2
  248 00aa 6502     		.2byte	0x265
  249 00ac B0000000 		.4byte	0xb0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 9
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 9
 
 
  250 00b0 05       		.uleb128 0x5
  251 00b1 83000000 		.4byte	0x83
  252 00b5 06       		.uleb128 0x6
- 253 00b6 24020000 		.4byte	.LASF16
+ 253 00b6 5F020000 		.4byte	.LASF16
  254 00ba 01       		.byte	0x1
  255 00bb 46       		.byte	0x46
  256 00bc 00000000 		.4byte	.LFB0
@@ -492,7 +492,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  258 00c4 01       		.uleb128 0x1
  259 00c5 9C       		.byte	0x9c
  260 00c6 06       		.uleb128 0x6
- 261 00c7 E6000000 		.4byte	.LASF17
+ 261 00c7 ED000000 		.4byte	.LASF17
  262 00cb 01       		.byte	0x1
  263 00cc 5F       		.byte	0x5f
  264 00cd 00000000 		.4byte	.LFB1
@@ -509,14 +509,14 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  275 00e7 9C       		.byte	0x9c
  276 00e8 23010000 		.4byte	0x123
  277 00ec 08       		.uleb128 0x8
- 278 00ed DB000000 		.4byte	.LASF18
+ 278 00ed E2000000 		.4byte	.LASF18
  279 00f1 01       		.byte	0x1
  280 00f2 86       		.byte	0x86
  281 00f3 77000000 		.4byte	0x77
  282 00f7 01       		.uleb128 0x1
  283 00f8 50       		.byte	0x50
  284 00f9 08       		.uleb128 0x8
- 285 00fa 0C010000 		.4byte	.LASF19
+ 285 00fa 47010000 		.4byte	.LASF19
  286 00fe 01       		.byte	0x1
  287 00ff 86       		.byte	0x86
  288 0100 6B000000 		.4byte	0x6b
@@ -529,7 +529,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  295 010d 83000000 		.4byte	0x83
  296 0111 00000000 		.4byte	.LLST0
  297 0115 0A       		.uleb128 0xa
- 298 0116 05010000 		.4byte	.LASF21
+ 298 0116 DB000000 		.4byte	.LASF21
  299 011a 01       		.byte	0x1
  300 011b 89       		.byte	0x89
  301 011c 83000000 		.4byte	0x83
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  304 0122 00       		.byte	0
  305 0123 0B       		.uleb128 0xb
  306 0124 4C000000 		.4byte	.LASF22
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 10
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 10
 
 
  307 0128 01       		.byte	0x1
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  361 0023 3E       		.uleb128 0x3e
  362 0024 0B       		.uleb128 0xb
  363 0025 03       		.uleb128 0x3
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 11
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 11
 
 
  364 0026 08       		.uleb128 0x8
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  418 005d 0B       		.uleb128 0xb
  419 005e 3B       		.uleb128 0x3b
  420 005f 0B       		.uleb128 0xb
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 12
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 12
 
 
  421 0060 27       		.uleb128 0x27
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  475 0097 13       		.uleb128 0x13
  476 0098 02       		.uleb128 0x2
  477 0099 18       		.uleb128 0x18
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 13
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 13
 
 
  478 009a 00       		.byte	0
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  532 0034 04000000 		.4byte	.LFE4-.LFB4
  533 0038 00000000 		.4byte	0
  534 003c 00000000 		.4byte	0
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 14
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 14
 
 
  535              		.section	.debug_ranges,"",%progbits
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  567 00a8 756E7369 		.ascii	"unsigned char\000"
  567      676E6564 
  567      20636861 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 15
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 15
 
 
  567      7200
@@ -854,102 +854,101 @@ ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 1
  571      7369676E 
  571      65642069 
  571      6E7400
- 572              	.LASF18:
- 573 00db 636C6B44 		.ascii	"clkDivider\000"
- 573      69766964 
- 573      657200
- 574              	.LASF17:
- 575 00e6 43415244 		.ascii	"CARD_UART_IntClock_Stop\000"
- 575      5F554152 
- 575      545F496E 
- 575      74436C6F 
- 575      636B5F53 
- 576              	.LASF13:
- 577 00fe 646F7562 		.ascii	"double\000"
- 577      6C6500
- 578              	.LASF21:
- 579 0105 72656756 		.ascii	"regVal\000"
- 579      616C00
- 580              	.LASF19:
- 581 010c 636C6B46 		.ascii	"clkFractional\000"
- 581      72616374 
- 581      696F6E61 
- 581      6C00
- 582              	.LASF10:
- 583 011a 75696E74 		.ascii	"uint16\000"
- 583      313600
- 584              	.LASF11:
- 585 0121 75696E74 		.ascii	"uint32\000"
- 585      333200
- 586              	.LASF8:
- 587 0128 756E7369 		.ascii	"unsigned int\000"
- 587      676E6564 
- 587      20696E74 
- 587      00
- 588              	.LASF7:
- 589 0135 6C6F6E67 		.ascii	"long long unsigned int\000"
- 589      206C6F6E 
- 589      6720756E 
- 589      7369676E 
- 589      65642069 
- 590              	.LASF24:
- 591 014c 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 591      43313120 
- 591      352E342E 
- 591      31203230 
- 591      31363036 
-ARM GAS  C:\Users\NIGHDR~1\AppData\Local\Temp\ccA5YNpL.s 			page 16
+ 572              	.LASF21:
+ 573 00db 72656756 		.ascii	"regVal\000"
+ 573      616C00
+ 574              	.LASF18:
+ 575 00e2 636C6B44 		.ascii	"clkDivider\000"
+ 575      69766964 
+ 575      657200
+ 576              	.LASF17:
+ 577 00ed 43415244 		.ascii	"CARD_UART_IntClock_Stop\000"
+ 577      5F554152 
+ 577      545F496E 
+ 577      74436C6F 
+ 577      636B5F53 
+ 578              	.LASF13:
+ 579 0105 646F7562 		.ascii	"double\000"
+ 579      6C6500
+ 580              	.LASF26:
+ 581 010c 433A5C55 		.ascii	"C:\\Users\\Admin\\Documents\\GitHub\\ectf\\SECURITY"
+ 581      73657273 
+ 581      5C41646D 
+ 581      696E5C44 
+ 581      6F63756D 
+ 582 0139 5F4D4F44 		.ascii	"_MODULE.cydsn\000"
+ 582      554C452E 
+ 582      63796473 
+ 582      6E00
+ 583              	.LASF19:
+ 584 0147 636C6B46 		.ascii	"clkFractional\000"
+ 584      72616374 
+ 584      696F6E61 
+ 584      6C00
+ 585              	.LASF10:
+ 586 0155 75696E74 		.ascii	"uint16\000"
+ 586      313600
+ 587              	.LASF11:
+ 588 015c 75696E74 		.ascii	"uint32\000"
+ 588      333200
+ 589              	.LASF8:
+ 590 0163 756E7369 		.ascii	"unsigned int\000"
+ 590      676E6564 
+ 590      20696E74 
+ 590      00
+ 591              	.LASF7:
+ 592 0170 6C6F6E67 		.ascii	"long long unsigned int\000"
+ARM GAS  C:\Users\Admin\AppData\Local\Temp\ccZc2LfF.s 			page 16
 
 
- 592 017f 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
- 592      20726576 
- 592      6973696F 
- 592      6E203233 
- 592      37373135 
- 593 01b2 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 593      66756E63 
- 593      74696F6E 
- 593      2D736563 
- 593      74696F6E 
- 594              	.LASF25:
- 595 01da 47656E65 		.ascii	"Generated_Source\\PSoC4\\CARD_UART_IntClock.c\000"
- 595      72617465 
- 595      645F536F 
- 595      75726365 
- 595      5C50536F 
- 596              	.LASF14:
- 597 0206 63686172 		.ascii	"char\000"
- 597      00
- 598              	.LASF2:
- 599 020b 73686F72 		.ascii	"short int\000"
- 599      7420696E 
- 599      7400
- 600              	.LASF9:
- 601 0215 75696E74 		.ascii	"uint8\000"
- 601      3800
- 602              	.LASF4:
- 603 021b 6C6F6E67 		.ascii	"long int\000"
- 603      20696E74 
- 603      00
- 604              	.LASF16:
- 605 0224 43415244 		.ascii	"CARD_UART_IntClock_Start\000"
- 605      5F554152 
- 605      545F496E 
- 605      74436C6F 
- 605      636B5F53 
- 606              	.LASF0:
- 607 023d 7369676E 		.ascii	"signed char\000"
- 607      65642063 
- 607      68617200 
- 608              	.LASF26:
- 609 0249 433A5C55 		.ascii	"C:\\Users\\Nighdragon\\Documents\\GitHub\\ectf\\SEC"
- 609      73657273 
- 609      5C4E6967 
- 609      68647261 
- 609      676F6E5C 
- 610 0276 55524954 		.ascii	"URITY_MODULE.cydsn\000"
- 610      595F4D4F 
- 610      44554C45 
- 610      2E637964 
- 610      736E00
+ 592      206C6F6E 
+ 592      6720756E 
+ 592      7369676E 
+ 592      65642069 
+ 593              	.LASF24:
+ 594 0187 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 594      43313120 
+ 594      352E342E 
+ 594      31203230 
+ 594      31363036 
+ 595 01ba 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 595      20726576 
+ 595      6973696F 
+ 595      6E203233 
+ 595      37373135 
+ 596 01ed 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 596      66756E63 
+ 596      74696F6E 
+ 596      2D736563 
+ 596      74696F6E 
+ 597              	.LASF25:
+ 598 0215 47656E65 		.ascii	"Generated_Source\\PSoC4\\CARD_UART_IntClock.c\000"
+ 598      72617465 
+ 598      645F536F 
+ 598      75726365 
+ 598      5C50536F 
+ 599              	.LASF14:
+ 600 0241 63686172 		.ascii	"char\000"
+ 600      00
+ 601              	.LASF2:
+ 602 0246 73686F72 		.ascii	"short int\000"
+ 602      7420696E 
+ 602      7400
+ 603              	.LASF9:
+ 604 0250 75696E74 		.ascii	"uint8\000"
+ 604      3800
+ 605              	.LASF4:
+ 606 0256 6C6F6E67 		.ascii	"long int\000"
+ 606      20696E74 
+ 606      00
+ 607              	.LASF16:
+ 608 025f 43415244 		.ascii	"CARD_UART_IntClock_Start\000"
+ 608      5F554152 
+ 608      545F496E 
+ 608      74436C6F 
+ 608      636B5F53 
+ 609              	.LASF0:
+ 610 0278 7369676E 		.ascii	"signed char\000"
+ 610      65642063 
+ 610      68617200 
  611              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

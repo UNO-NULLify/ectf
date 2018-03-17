@@ -47,6 +47,7 @@ static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
 static const uint8 BILLS_LEFT[1] = {0x00};
 static const uint8 ATM_UUID[36]={};
 static const uint8 FLAG=0;
+static const uint8 LAST_BILL[1]={0x00};
 
 
 // reset interrupt on button press
@@ -213,7 +214,7 @@ void dispenseBill()
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
     
-    memset(message, 0u, 64);
+    memset(message, 0u, 16);
     memcpy(message, (void*)billptr, BILL_LEN);
     decrypt(message);
     pushMessage(message, BILL_LEN);
@@ -231,14 +232,20 @@ int main(void)
     
     /* Declare vairables here */
     
-    uint8 i, bills_left;
+    uint8 i;
+    volatile const uint8 *bills_leftptr= BILLS_LEFT;
+    volatile const uint8 *last_billptr = LAST_BILL;
+    uint8 bills_left=0;
+    uint8 last_bill=0;
     uint8 message[64] = "";
     char * token;
     char * temptoken;
-    uint8 last_bill=0;
     int matching = 0;
     uint8 flag[3];
     
+    bills_left = *bills_leftptr;
+    last_bill = *last_billptr;
+    memcpy(&bills_left, BILLS_LEFT,1);
     static const uint8 PROVISIONED[1] = {0x00}; // write variable
     volatile const uint8* ptr;    // read variable
     
@@ -343,9 +350,10 @@ int main(void)
                         {
                             dispenseBill();
                             bills_left = *BILLS_LEFT - 1;
-                            PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+                            PIGGY_BANK_Write(&bills_left, BILLS_LEFT-1, 0x01);
                         }
                         PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
+                        PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
                     }
                 }
                 pushMessage((uint8*)RECV_OK, strlen(RECV_OK));

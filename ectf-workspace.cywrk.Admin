@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace\SECURITY_MODULE\Source Files\main.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace\SECURITY_MODULE">
 <ExpandedNodeIds>
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD\TopDesign</v>
@@ -36,7 +36,6 @@
 <v>ectf-workspace\CARD\Source Files\SuperFastHash.c</v>
 <v>ectf-workspace\CARD\Source Files\usbserialprotocol.c</v>
 <v>ectf-workspace\CARD\Generated_Source\PSoC4</v>
-<v>ectf-workspace\SECURITY_MODULE</v>
 <v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
 <v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
@@ -64,28 +63,6 @@
 <v>ectf-workspace</v>
 <v>ectf-workspace\CARD</v>
 <v>ectf-workspace\SECURITY_MODULE</v>
-<v>ectf-workspace\SECURITY_MODULE\TopDesign</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Pins</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Analog</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Clocks</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Interrupts</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\System</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Directives</v>
-<v>ectf-workspace\SECURITY_MODULE\SECURITY_MODULE.cydwr\Flash Security</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\aes.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\cyapicallbacks.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\pstdint.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\SuperFastHash.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\SuperSecretHash.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Header Files\usbserialprotocol.h</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\aes.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\main.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\SuperFastHash.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Source Files\usbserialprotocol.c</v>
-<v>ectf-workspace\SECURITY_MODULE\Generated_Source</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="ectf-workspace">
@@ -325,6 +302,9 @@
 <name v=".\CARD.cydsn\SuperFastHash.c" />
 <name v=".\SECURITY_MODULE.cydsn\usbserialprotocol.c" />
 <name v=".\SECURITY_MODULE.cydsn\main.c" />
+<name v=".\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\DB_UART_SPI_UART.c" />
+<name v=".\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\Cm0Start.c" />
+<name v=".\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\CyFlash.c" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -332,7 +312,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Vertical"><TabbedMdiContainer Size="1112, 455" SelectedTabbedMdiWindow="c0931388-3309-416d-bb91-699fefb9f51a"><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\SuperSecretHash.h" Guid="ee69d7e4-d4f2-4f00-a0e0-3a32a085984f" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\usbserialprotocol.c" Guid="b417b69d-2f65-4d48-86a2-189e89deb40d" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\SuperFastHash.c" Guid="3fe775a8-08af-465f-8246-b79c6c1594ac" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\usbserialprotocol.c" Guid="c0931388-3309-416d-bb91-699fefb9f51a" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\main.c" Guid="2a47c026-50ca-4419-b5f0-9241599ef137" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="1154c7c7-1af1-4308-9452-8035c14f8f52" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Vertical"><TabbedMdiContainer Size="1112, 455" SelectedTabbedMdiWindow="2a47c026-50ca-4419-b5f0-9241599ef137"><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\SuperSecretHash.h" Guid="ee69d7e4-d4f2-4f00-a0e0-3a32a085984f" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\usbserialprotocol.c" Guid="b417b69d-2f65-4d48-86a2-189e89deb40d" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\SuperFastHash.c" Guid="3fe775a8-08af-465f-8246-b79c6c1594ac" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\usbserialprotocol.c" Guid="c0931388-3309-416d-bb91-699fefb9f51a" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\main.c" Guid="2a47c026-50ca-4419-b5f0-9241599ef137" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\DB_UART_SPI_UART.c" Guid="d5f6cb1b-6517-4915-9792-95bfa2077388" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\Cm0Start.c" Guid="a1d6f5e5-58dc-4c57-a44c-31a9cee2b609" /><DocumentWindow Key="C:\Users\Admin\Documents\GitHub\ectf\SECURITY_MODULE.cydsn\Generated_Source\PSoC4\CyFlash.c" Guid="23c7822c-d370-40ec-b312-e3c2a386da4a" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

@@ -901,7 +901,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x4d07
+.debug_info     0x00000000     0x4d02
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x896 .\CortexM0\ARM_GCC_541\Debug\main.o
  .debug_info    0x00000896      0x339 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
@@ -919,8 +919,8 @@ END GROUP
  .debug_info    0x00002fb8      0x33d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
  .debug_info    0x000032f5      0xb0b .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
  .debug_info    0x00003e00      0xcfe .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
- .debug_info    0x00004afe       0x83 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
- .debug_info    0x00004b81      0x186 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
+ .debug_info    0x00004afe       0x7e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
+ .debug_info    0x00004b7c      0x186 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
 
 .debug_abbrev   0x00000000     0x16a8
  *(.debug_abbrev)
@@ -990,42 +990,42 @@ END GROUP
  .debug_frame   0x0000121c       0x20 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
  .debug_frame   0x0000123c       0x20 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcmp.o)
 
-.debug_str      0x00000000     0x18dd
+.debug_str      0x00000000     0x190d
  *(.debug_str)
- .debug_str     0x00000000      0x298 .\CortexM0\ARM_GCC_541\Debug\main.o
-                                0x2ee (size before relaxing)
- .debug_str     0x00000298       0x8c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                                0x247 (size before relaxing)
- .debug_str     0x00000324       0x85 .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .debug_str     0x00000000      0x293 .\CortexM0\ARM_GCC_541\Debug\main.o
+                                0x2e9 (size before relaxing)
+ .debug_str     0x00000293       0x8c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                                0x242 (size before relaxing)
+ .debug_str     0x0000031f       0xba .\CortexM0\ARM_GCC_541\Debug\aes.o
                                 0x25b (size before relaxing)
- .debug_str     0x000003a9       0x24 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
+ .debug_str     0x000003d9       0x24 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
                                 0x1aa (size before relaxing)
- .debug_str     0x000003cd      0x176 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
-                                0x327 (size before relaxing)
- .debug_str     0x00000543       0x59 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
-                                0x1bb (size before relaxing)
- .debug_str     0x0000059c      0x13a .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                                0x2f4 (size before relaxing)
- .debug_str     0x000006d6       0xa9 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
-                                0x249 (size before relaxing)
- .debug_str     0x0000077f      0x1c4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
-                                0x367 (size before relaxing)
- .debug_str     0x00000943      0x1d7 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
-                                0x3b8 (size before relaxing)
- .debug_str     0x00000b1a       0xf1 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
-                                0x3de (size before relaxing)
- .debug_str     0x00000c0b      0x160 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                                0x315 (size before relaxing)
- .debug_str     0x00000d6b       0x8f .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
-                                0x21b (size before relaxing)
- .debug_str     0x00000dfa      0x133 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
-                                0x321 (size before relaxing)
- .debug_str     0x00000f2d      0x44e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                                0x6b7 (size before relaxing)
- .debug_str     0x0000137b      0x51d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
-                                0x730 (size before relaxing)
- .debug_str     0x00001898       0x45 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
-                                0x2a4 (size before relaxing)
+ .debug_str     0x000003fd      0x176 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+                                0x322 (size before relaxing)
+ .debug_str     0x00000573       0x59 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
+                                0x1b6 (size before relaxing)
+ .debug_str     0x000005cc      0x13a .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                                0x2ef (size before relaxing)
+ .debug_str     0x00000706       0xa9 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
+                                0x244 (size before relaxing)
+ .debug_str     0x000007af      0x1c4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+                                0x362 (size before relaxing)
+ .debug_str     0x00000973      0x1d7 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+                                0x3b3 (size before relaxing)
+ .debug_str     0x00000b4a       0xf1 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+                                0x3d9 (size before relaxing)
+ .debug_str     0x00000c3b      0x160 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                                0x310 (size before relaxing)
+ .debug_str     0x00000d9b       0x8f .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
+                                0x216 (size before relaxing)
+ .debug_str     0x00000e2a      0x133 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+                                0x31c (size before relaxing)
+ .debug_str     0x00000f5d      0x44e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                                0x6b2 (size before relaxing)
+ .debug_str     0x000013ab      0x51d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                                0x72b (size before relaxing)
+ .debug_str     0x000018c8       0x45 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
+                                0x29f (size before relaxing)
 
 .debug_loc      0x00000000     0x252c
  *(.debug_loc)
@@ -1175,4 +1175,4 @@ END GROUP
 
 /DISCARD/
  *(.note.GNU-stack)
-OUTPUT(C:\Users\Nighdragon\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf elf32-littlearm)
+OUTPUT(C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf elf32-littlearm)
