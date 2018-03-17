@@ -2,7 +2,7 @@
 --	Conversion of SECURITY_MODULE.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Sat Mar 10 20:00:48 2018
+--	Fri Mar 16 23:07:34 2018
 --
 
 USE cypress.cypress.all;

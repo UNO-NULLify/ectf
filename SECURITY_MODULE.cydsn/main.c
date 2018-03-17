@@ -197,7 +197,7 @@ void decrypt(uint8 *data)
     else
     {
         memset(&ctx, 0, sizeof(struct AES_ctx));
-        PIGGY_BANK_Write((uint8*)&FLAG, (uint8*) 0, 1);
+        PIGGY_BANK_Write((uint8*)0, (uint8*)&FLAG, 1);
         flag = 0;
     }
 }
@@ -205,12 +205,10 @@ void decrypt(uint8 *data)
 void dispenseBill()
 {
     static const uint8 STACKLOC[1] = {0x00};
-    uint8 message[64];
+    uint8 message[16];
     volatile const uint8* stackptr = STACKLOC;
     volatile const uint8* billptr;
     uint8 stackloc;
-    int matching = 0;
-    uint8 flag[3];
     
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
@@ -218,56 +216,12 @@ void dispenseBill()
     memset(message, 0u, 64);
     memcpy(message, (void*)billptr, BILL_LEN);
     decrypt(message);
-    decrypt(&message[16]);
-    decrypt(&message[32]);
-    decrypt(&message[48]);
-
-    if (memcmp(&message[0],&message[16],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-
-    if (memcmp(&message[0],&message[32],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-
-    if (memcmp(&message[0],&message[48],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-
-    if (memcmp(&message[16],&message[32],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-
-    if (memcmp(&message[16],&message[48],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-
-    if (memcmp(&message[32],&message[48],16) == 0)
-        memcpy(flag, WITH_BAD, 3);
-  
-    matching += abs(memcmp(&message[0],&message[16],1));
-    matching += abs(memcmp(&message[0],&message[32],1));
-    matching += abs(memcmp(&message[0],&message[48],1));
-    matching += abs(memcmp(&message[1],&message[17],1));
-    matching += abs(memcmp(&message[1],&message[33],1));
-    matching += abs(memcmp(&message[1],&message[49],1));
-    matching += abs(memcmp(&message[2],&message[18],1));
-    matching += abs(memcmp(&message[2],&message[34],1));
-    matching += abs(memcmp(&message[2],&message[50],1));
-    matching += abs(memcmp(&message[3],&message[19],1));
-    matching += abs(memcmp(&message[3],&message[35],1));
-    matching += abs(memcmp(&message[3],&message[51],1));
-
-    if(matching != 0)
-      memcpy(flag, WITH_BAD, 3);
-    
-    if(flag[0] == 'B')
-    {
-        pushMessage(message, BILL_LEN);
-        PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
-        stackloc = (stackloc + 1) % 128;
-        PIGGY_BANK_Write(&stackloc, STACKLOC, 1);
-    }
-    else
-    {
-        pushMessage(flag, 3);
-    }
+    pushMessage(message, BILL_LEN);
+    PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[stackloc], 16);
+    stackloc = (stackloc + 1) % 128;
+    PIGGY_BANK_Write(&stackloc, STACKLOC, 1);
 }
+
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
@@ -282,6 +236,8 @@ int main(void)
     char * token;
     char * temptoken;
     uint8 last_bill=0;
+    int matching = 0;
+    uint8 flag[3];
     
     static const uint8 PROVISIONED[1] = {0x00}; // write variable
     volatile const uint8* ptr;    // read variable
@@ -305,7 +261,7 @@ int main(void)
     // Go into infinite loop
     while (1) {
         /* Place your application code here. */
-
+        memset(message, 0, 64);
         // synchronize with bank
         syncConnection(SYNC_NORM);
         
@@ -325,28 +281,75 @@ int main(void)
             pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
             //Decrypt the message
             decrypt(message);
-            //Check to see if message has a starting valid bill
-            token = strtok((char *)message, ",");
-            if(atoi(token) == last_bill)
+            decrypt(&message[16]);
+            decrypt(&message[32]);
+            decrypt(&message[48]);
+            
+            if (memcmp(&message[0],&message[16],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+
+            if (memcmp(&message[0],&message[32],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+
+            if (memcmp(&message[0],&message[48],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+
+            if (memcmp(&message[16],&message[32],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+
+            if (memcmp(&message[16],&message[48],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+
+            if (memcmp(&message[32],&message[48],16) == 0)
+	            memcpy(flag, WITH_BAD, 3);
+            
+                
+            matching += abs(memcmp(&message[0],&message[16],1));
+            matching += abs(memcmp(&message[0],&message[32],1));
+            matching += abs(memcmp(&message[0],&message[48],1));
+            matching += abs(memcmp(&message[1],&message[17],1));
+            matching += abs(memcmp(&message[1],&message[33],1));
+            matching += abs(memcmp(&message[1],&message[49],1));
+            matching += abs(memcmp(&message[2],&message[18],1));
+            matching += abs(memcmp(&message[2],&message[34],1));
+            matching += abs(memcmp(&message[2],&message[50],1));
+            matching += abs(memcmp(&message[3],&message[19],1));
+            matching += abs(memcmp(&message[3],&message[35],1));
+            matching += abs(memcmp(&message[3],&message[51],1));
+            
+            if(matching != 0)
+                memcpy(flag, WITH_BAD, 3);
+            
+            if(flag[0] == 'B' && flag[1] == 'A' && flag[2] == 'D')
             {
-                temptoken = strtok(NULL, ",");
-                last_bill = (uint8) atoi(temptoken);
-                if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) BILLS_LEFT)
-                {
-                    pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
-                }
-                else
-                {
-                    for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
-                    {
-                        dispenseBill();
-                        bills_left = *BILLS_LEFT - 1;
-                        PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
-                    }
-                    PIGGY_BANK_Write((uint8*)&FLAG, (uint8*) 1, 1);
-                }
+                pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+                memset(flag, 0, 3);
             }
-            pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+            else
+            {
+                //Check to see if message has a starting valid bill
+                token = strtok((char *)message, ",");
+                if(atoi(token) == last_bill)
+                {
+                    temptoken = strtok(NULL, ",");
+                    last_bill = (uint8) atoi(temptoken);
+                    if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) BILLS_LEFT)
+                    {
+                        pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+                    }
+                    else
+                    {
+                        for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
+                        {
+                            dispenseBill();
+                            bills_left = *BILLS_LEFT - 1;
+                            PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
+                        }
+                        PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
+                    }
+                }
+                pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
+            }
         }
     }
 }
