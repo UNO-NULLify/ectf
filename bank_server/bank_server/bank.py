@@ -87,7 +87,6 @@ class Bank(object):
                 time.sleep(2)
                 return response
 
-            # authenticate the card
             print account['chall']
             print request.json['encrypted_response']
             print account['AES_KEY']
@@ -95,7 +94,7 @@ class Bank(object):
             cipher = AES.new(key, AES.MODE_ECB, '')
             decrypted_response = cipher.decrypt(str(bytearray.fromhex(request.json['encrypted_response'])))
             print decrypted_response
-
+            # authenticate the card
             if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
                 time.sleep(2)
                 return response
@@ -131,8 +130,7 @@ class Bank(object):
             message  = ''
 
             # some math
-            db.\
-                return responseance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
+            db.set_balance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
             db.set_atm_num_bills(request.json['atm_id'], str(int(atm['num_bills']) - int(request.json['num_bills'])))
             dispensed_bills_old = int(atm['num_dispensed_bills'])
             dispensed_bills_now = int(request.json['num_bills']) + dispensed_bills_old
