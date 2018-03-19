@@ -33,14 +33,10 @@ class Card(Psoc):
         self._vp('Card received op')
 
     def get_uuid(self):
-        """Requests for a pin to be changed
-
-        Args:
-            old_pin (str): Challenge PIN
-            new_pin (str): New PIN to change to
+        """gets card uuid
 
         Returns:
-            bool: True if PIN was changed, False otherwise
+            str: card uuid
         """
         self._sync(False)
         self._send_op(self.GET_UUID)
@@ -53,11 +49,10 @@ class Card(Psoc):
         """Requests for a pin to be changed
 
         Args:
-            old_pin (str): Challenge PIN
-            new_pin (str): New PIN to change to
+            challenge (str): 32 alphanumeric challenge
 
         Returns:
-            bool: True if PIN was changed, False otherwise
+            bytes: the encypted 32 alphanumeric challenge
         """
         self._sync(False)
 
@@ -75,10 +70,9 @@ class Card(Psoc):
 
         Args:
             uuid (str): New UUID for ATM card
-            pin (str): Initial PIN for ATM card
 
         Returns:
-            bool: True if provisioning succeeded, False otherwise
+            str: hex representation of the cards AES_KEY
         """
         self._sync(True)
         msg = self._pull_msg()

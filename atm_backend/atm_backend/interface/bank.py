@@ -24,7 +24,8 @@ class Bank:
 
         Args:
             card_id (str): UUID of the ATM card to look up
-
+            encrypted_response (str): hex representation of cards encrypted response to a challenge
+            pin (str): pin corresponding with the UUID/account
         Returns:
             str: Balance of account on success
             bool: False on failure
@@ -47,6 +48,20 @@ class Bank:
             return False
 
     def withdraw(self, atm_id, card_id, encrypted_response, pin, amount):
+        """Requests a encrypted string that contains bills to dispense
+
+        Args:
+            atm_id (str): the uuid of the hsm that will dispense bills
+            card_id (str): UUID of the ATM card to look up
+            encrypted_response (str): hex representation of cards encrypted response to a challenge
+            pin (str): pin corresponding with the UUID/account
+            amount (str): the number of bills to dispesnse
+
+        Returns:
+            str: encrypted response from bank that contains bills to dispense
+            bool: False on failure
+        """
+
         logging.info('withdraw: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
@@ -67,6 +82,17 @@ class Bank:
             return False
 
     def change_pin(self, card_id, encrypted_response, pin, new_pin):
+        """Requests a new pin for an account
+
+        Args:
+            card_id (str): UUID of the ATM card to look up
+            encrypted_response (str): hex representation of cards encrypted response to a challenge
+            pin (str): pin corresponding with the UUID/account
+            new_pin (str): the new pin for the card/account
+
+        Returns:
+            bool: True on success, False on failure
+        """
         logging.info('change pin: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
@@ -84,6 +110,14 @@ class Bank:
             return False
 
     def get_challenge(self, card_id):
+        """Requests a challenge for a card_id
+
+        Args:
+            card_id (str): UUID of the ATM card to look up
+
+        Returns:
+            str: 32 charecter alphanumeric string
+        """
         logging.info('getting challenge: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {'card_id': card_id}
@@ -96,6 +130,17 @@ class Bank:
             return False
 
     def provision_card(self, card_id, pin, key):
+        """Requests to provision a card
+
+        Args:
+            card_id (str): UUID of the ATM card to look up
+            pin (str): pin for card/account
+            key: AES_KEY for card/account
+
+        Returns:
+             bool: True on success, False on failure
+
+        """
         logging.info('provisioning_card: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
@@ -112,6 +157,16 @@ class Bank:
             return False
 
     def provision_atm(self, atm_id, key, num_bills):
+        """Requests to provision a atm (hsm)
+
+        Args:
+            atm_id (str): UUID of the ATM card to look up
+            key: AES_KEY for card/account
+            num_bills: the number of bills in the provision bill file
+
+        Returns:
+             bool: True on success, False on failure
+        """
         logging.info('provisioning_card: Sending request to Bank')
         headers = {'content-type': 'application/json'}
         data_to_send = {
