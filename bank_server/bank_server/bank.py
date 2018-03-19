@@ -90,7 +90,7 @@ class Bank(object):
             # authenticate the card
             if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
                 time.sleep(2)
-                return jsonify({'ERROR': 'Could not validate transaction'})
+                return response
 
             # get atm
             atm = db.get_atm(request.json['atm_id'])
@@ -123,7 +123,8 @@ class Bank(object):
             message  = ''
 
             # some math
-            db.set_balance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
+            db.\
+                return responseance(request.json['card_id'], str(int(account['balance']) - int(request.json['num_bills'])))
             db.set_atm_num_bills(request.json['atm_id'], str(int(atm['num_bills']) - int(request.json['num_bills'])))
             dispensed_bills_old = int(atm['num_dispensed_bills'])
             dispensed_bills_now = int(request.json['num_bills']) + dispensed_bills_old
