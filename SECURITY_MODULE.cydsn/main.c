@@ -129,7 +129,7 @@ void provision()
     }
     //Send our AES Key to the bank
     pushMessage(AESkey, 32);
-    memset(AESkey, 0, 32);
+    
     AES_init_ctx(&ctx, AESkey);
     // Load bills
     for (i = 0; i < numbills; i++) {
@@ -138,7 +138,6 @@ void provision()
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     }
-    memset(&ctx, 0, sizeof(struct AES_ctx));
 }
 
 void decrypt(uint8 *data)
@@ -293,7 +292,7 @@ int main(void)
             decrypt(&message[16]);
             decrypt(&message[32]);
             decrypt(&message[48]);
-            memcpy(flag, 0, 3);
+            memset(flag, 0, 3);
             
             if (memcmp(&message[0],&message[16],16) == 0)
 	            memcpy(flag, WITH_BAD, 3);
