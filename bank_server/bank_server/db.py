@@ -24,6 +24,11 @@ class DB(object):
     ############################
 
     def verify_challenge(self, challenge, encrypted_response, AES_KEY, time):
+        """verify the response to a challenge from a card
+
+        Returns:
+            (bool): Returns True on Success. False otherwise.
+        """
         if datetime.datetime.now() > time:
             return False
         key = str(bytearray.fromhex(AES_KEY))
@@ -32,7 +37,7 @@ class DB(object):
         return challenge == decrypted_response
 
     def set_balance(self, card_id, balance):
-        """set balance of account: card_id
+        """set balance of account
 
         Returns:
             (bool): Returns True on Success. False otherwise.
@@ -40,24 +45,17 @@ class DB(object):
         updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'balance': balance}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
-    def get_balance(self, card_id):
-        """get balance of account: card_id
+    def set_pin(self, card_id, new_pin):
+        """set the pin for account: card_id
 
         Returns:
-            (string or None): Returns balance on Success. None otherwise.
+            (bool): Returns True on Success. False otherwise.
         """
-        account = self.users.find_one({'card_id':self.hash_card(card_id)})
-        if account is None:
-            return False
-        else:
-            return account['balance']
-
-    def set_pin(self, card_id, new_pin):
         updated = self.users.update_one({'card_id': self.hash_card(card_id)}, {"$set": {'pin': self.hash_pin(card_id, new_pin)}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def get_atm(self, atm_id):
-        """get atm_id of atm: atm_id
+        """get atm_id of atm
         this is an obviously dumb function but maybe it can be expanded...
 
         Returns:
@@ -70,8 +68,7 @@ class DB(object):
             return atm
 
     def get_account(self, card_id):
-        """get card_id of account: card_id
-        this is an obviously dumb function but maybe it can be expanded...
+        """get account with card_id
 
         Returns:
             (string or None): Returns atm_id on Success. None otherwise.
@@ -83,7 +80,7 @@ class DB(object):
             return account
 
     def get_atm_num_bills(self, atm_id):
-        """get number of bills in atm: atm_id
+        """get number of bills in atm
 
         Returns:
             (string or None): Returns atm_id on Success. None otherwise.
@@ -94,7 +91,7 @@ class DB(object):
         return atm['num_bills']
 
     def set_atm_num_bills(self, atm_id, num_bills):
-        """set number of bills in atm: atm_id
+        """set number of bills in atm
 
         Returns:
             (bool): Returns True on Success. False otherwise.
@@ -103,7 +100,7 @@ class DB(object):
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
     def set_atm_num_dispensed_bills(self, atm_id, num_bills):
-        """set number of bills in atm: atm_id
+        """set number of dispensed bills in atm
 
         Returns:
             (bool): Returns True on Success. False otherwise.
@@ -111,9 +108,8 @@ class DB(object):
         updated = self.atms.update_one({'atm_id':atm_id},{"$set": {'num_dispensed_bills': num_bills}})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
-
     def initialize_atm(self, key, num_bills, atm_id):
-        """set number of bills in atm: atm_id
+        """initalize a card by settings its AES_KEY and num_bills
 
         Returns:
             (bool): Returns True on Success. False otherwise.
@@ -139,7 +135,7 @@ class DB(object):
         hash = argon2.using(salt=bytes(card_id),digest_size=64,rounds=50).hash(str(pin))
         return hash[-86:]
 
-    def verify_pin(self, pin, card_id,account):
+    def verify_pin(self, pin, card_id, account):
         """verifies if pin matches database
 
         Returns:
@@ -153,14 +149,13 @@ class DB(object):
             return False
         return argon2.using(salt=bytes(card_id),digest_size=64,rounds=50).hash(str(pin))[-86:] == account['pin']
 
-    def get_time(self, card_id):
-        account = self.get_account(card_id)
-        if account is None:
-            return None
-        else:
-            return account['time']
-
     def get_challenge(self, card_id):
+        """creates a random challenge for a card id
+
+        Returns:
+            (str,bool): Returns 32 charecter alphanumeric challenges on Success. False otherwise.
+        """
+
         chall = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
         updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'chall': chall, 'time': datetime.datetime.now() + datetime.timedelta(seconds=5)}})
         if updated.acknowledged and updated.raw_result['updatedExisting']:
@@ -169,24 +164,14 @@ class DB(object):
             return False
 
     def initialize_card(self, card_id, key, new_pin):
+        """initializes a card by setting its pin and AES_KEY
+
+        Returns:
+            (bool): Returns True on Success. False otherwise.
+        """
         updated = self.users.update_one({'card_id': self.hash_card(card_id)},{"$set": {'AES_KEY': key,'pin': self.hash_pin(card_id, new_pin) }})
         return updated.acknowledged and updated.raw_result['updatedExisting']
 
-
-
-    '''
-    def verify_challenge(self, card_id, chall_sig):
-        account = self.get_account(card_id)
-        if datetime.datetime.now() <= account['time']:
-            verifying_key = ed25519.VerifyingKey(account['key'], encoding="hex")
-            try:
-                verifying_key.verify(chall_sig, account['chall'], encoding="base64")
-                return True
-            except ed25519.BadSignatureError:
-                return False
-        else:
-            return False
-'''
 
     #############################
     # ADMIN INTERFACE FUNCTIONS #

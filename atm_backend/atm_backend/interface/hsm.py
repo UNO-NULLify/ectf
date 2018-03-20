@@ -34,8 +34,7 @@ class HSM(Psoc):
         """Sends requested operation to ATM card
 
         Args:
-            op (int): Operation to send from [self.CHECK_BAL, self.WITHDRAW,
-                self.CHANGE_PIN]
+            op (int): Operation to send from [self.GET_UUID, self.WITHDRAW]
         """
         self._vp('Sending op %d' % op)
         self._push_msg(str(op))
@@ -65,14 +64,11 @@ class HSM(Psoc):
         """Attempts to withdraw bills from the HSM
 
         Args:
-            uuid (str): Challenge UUID of HSM
-            amount (int): Number of bills to withdraw from HSM
+            message (str): encrypted string from the bank that contains first and last bill to dispense.
 
         Returns:
             list of str: List of dispensed bills on success
-            str: 'Insufficient funds' if the UUID was incorrect
-                 'Not enough bills in ATM' if HSM doesn't have enough bills
-                    to complete request
+            bool: False if the bills cannot be dispensed.
         """
         self._sync(False)
         self._send_op(self.WITHDRAW)
@@ -110,7 +106,7 @@ class HSM(Psoc):
             bills (list of str): List of bills to store in HSM
 
         Returns:
-            bool: True if HSM provisioned, False otherwise
+            str: hex representation of the cards AES_KEY
         """
         self._sync(True)
 

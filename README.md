@@ -1,62 +1,52 @@
 # NULLify eCTF 2018 Documentation
-  As a general approach, we modified the insecure example rather then starting from scratch. Details on each component are below.
+  As a general approach, we modified the insecure example rather then starting from scratch. Details on changes to each component are below.
 
+  The high-level flow of a typical transaction is the following:
+    - a transaction is initiated on the atm_interface (XMLRPC)
+    - the users card_id retrieved from the card and sent to the Bank by the atm (https/json)
+      - The bank generates a 32 byte challenge for the card to "sign"
+      - the mongoDB document for that account is updated with the challenge, and an expire time for the challenge (5 seconds)
+      - the bank sends back the challenge
+    - the card is sent the challenge by the atm
+      - the card uses its unique AES_KEY to encrypt the challenge
+      - the card sends the encrypted bytes back to the atm
+    - the encrypted response, pin and other necessary transaction data is sent to the Bank (https/json)
+    - The bank verifies the encrypted response and pin, and completes the transaction if is valid.
+      - An encrypted response is valid if it:
+        - is given within 5 seconds of when the challenge was requested.
+        - The bank can use the saved AES_KEY to decrypt the encrypted_challenge and verify it is the same as the unencrypted challenge stored in the accounts mongoDB document.
 
-## ATM
-  - The general structure of our ATM is similar to the provided example. The major changes are discussed below.
-  ##### bank.py
-  - Instead of using XMLRPC, we use the requests module to make post requests to our bank applicable
-  - We added three additional requests to the bank.py
-    - get_challenge
-        - requests a challenge for a particular bank card from the Bank
-    - initialize_card
-        - sends the necessary info to the bank to provision a card
-    - initialize_hsm
-        - sends the necessary info to the bank to provsion a atm/hsm
+## ATM Changes
 
-    ##### hsm.py
-      - Provision process was changed
-          - a uuid is sent and stored on the cards
-          - the card returns its unqiue AES_KEY
-          - The card loads bills from the bill file
-      - the withdraw function was changed
-          - it now only sends a encrypted 64 byte message that when decrypted, tells the hsm what to dispense
+##### The provision process for the ATM/HSM has changed.
+  1. A uuid is sent to an HSM and stored. (hsm.py)
+  2. The card loads bills from the bill file. (hsm.py)
+  3. The card returns its unqiue AES_KEY. (hsm.py)
+  4. The AES_KEY and number of bills are sent to the bank server and stored. (new function in bank.py)
 
-    #### card.py
-      - Almost all major functions were changed/removed.
-      - Provision process has changed
-        - a uuid is sent and stored on the cards
-        - the card returns its unique AES_KEY
-      - A function was added to have the card encrypt a challenge with an AES_KEY and return the result
+##### The provision process for bank cards has changed.
 
-    #### atm.py
-      - No significant flow changes have added.
-      - For each possible operation, the atm facilitates retrieving a challenge from the bank, sending it to the card, getting a response from the card, and sending the response to the correct bank function (allow with the pin, card_id, and any operation specific data)
+  1. A uuid is sent to the card and stored.
+  2. the card returns its unique AES_KEY
+  3. The unique AES_KEY and pin for the account is sent to the bank and stored. (new function in bank.py)
 
+##### Challenge Capabilities
+  1. A function was added to bank.py to request a 32 byte alphanumeric challenge from the bank for a given card_id.
+  2. A function was added on card.py to request that a challenge be encrypted and return the result
 
+##### Withdraws
+  1. The function to withdraw bills from the HSM now accepts a 64 byte message that the HSM will use to decrypt and send the appropriate bills.
 
 ## Bank Server
 
-### How requests are handled
 
-- Instead of using XMLRPC, we are using a REST-like json interface.
-- The server listens only for https requests
-- When a request is made, it is checked to ensure all needed fields are present
-- If all fields are present, the applicable account/atm will be retrieved, and the values will be checked to ensure they are appropriate and correct.
-- ###### Each request must successfully pass the challenge/response  test
-  - When a request is made, the atm first notifies the bank requesting a challenge
-  - The bank updates the profiles document with a new challenge and timestamp
-  - A card must encrypt that unique challenge with its AES_KEY and send it back to the Bank
-  - If a card takes too long to respond (3 seconds), the challenge is invalidated
-  - The bank also has the cards AES_KEY so if it can verify it was encrypted correctly.
-
-- If all the above are correct/succeed , the request finishes.
 
 ### Database
 - Instead of using a sqlite database, we used mongoDB. There is no particular reason for this other then flexibility of documents, and my previous experience with mongoDB and lack thereof with sqlite
 
 - There are two types of documents in the database, each having its own collection.
 
+#### Account Collection
 - An account is initialized with the following format:
 ```
 new_account = {
@@ -70,7 +60,6 @@ new_account = {
 }
 ```
 
-#### Account Fields
 
 ###### Fields provided/generated at creation
  - account_name: the plaintext account_name provided by an admin when the account is created
@@ -81,11 +70,19 @@ new_account = {
  - AES_KEY: a key generated on the PSOC during each request
  - pin: The pin salted with the plaintext card_id and hashed using argon2
 
-###### Fields changed when an initial request is made
+###### Fields always updated when an request is initiated
  - chall: a 32 byte alphanumeric string
  - time: the time a the current chall will expire
- - balance (if applicable)
 
+###### Fields updated on successful withdraw
+ - balance: The plaintext balance of an account
+
+###### Fields updated on successful change pin
+ - pin: The pin salted with the plaintext card_id and hashed using argon2
+
+
+
+ #### ATM Fields
 
 - An ATM is initialized with the following format
 ```
@@ -96,14 +93,14 @@ new_atm = {
        'AES_KEY' : None
    }
 ```
-#### ATM Fields
+
 ###### Fields provided at creation
  - atm_id: The atm_id (hsm_id) in plaintext
 
 ###### Fields generated at provision time
  - AES_KEY: a key generated on the PSOC during each withdraw request
- - num_bills: The number of bills loaded onto the HSM
+ - num_bills: The number of bills remaining on the HSM
 
- ####### Fields changed when a request is made
+####### Fields changed when a withdraw request is made
  - num_dispensed_bills: The number of bills the hsm has dispensed so far.
- - num_bills: Any withdrawn bills will be subtracted
+ - num_bills: The number of bills remaining on the HSM
