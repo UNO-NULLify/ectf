@@ -29,17 +29,17 @@
 #define EMPTY "EMPTY"
 #define EMPTY_BILL "*****EMPTY*****"
 
-/* 
+/*
  * How to read from EEPROM (persistent memory):
- * 
+ *
  * // read variable:
  * static const uint8 EEPROM_BUF_VAR[len] = { val1, val2, ... };
  * // write variable:
  * volatile const uint8 *ptr = EEPROM_BUF_VAR;
- * 
+ *
  * uint8 val1 = *ptr;
  * uint8 buf[4] = { 0x01, 0x02, 0x03, 0x04 };
- * USER_INFO_Write(message, EEPROM_BUF_VAR, 4u); 
+ * USER_INFO_Write(message, EEPROM_BUF_VAR, 4u);
  */
 
 // global EEPROM read variables
@@ -65,32 +65,30 @@ void provision()
     //General variables
     int i;
     uint8 message[36]="";
-    uint8 numbills=0x00;
+    uint8 numbills;
     //AES variables
     struct AES_ctx ctx;
-    unsigned char AESkey[32]="";
+    unsigned char AESkey[32];
     //Hashing variables
     char buf[8]="";
     char temp[4]="";
-    unsigned char keyValues[8]="";
-    //Pointer
-    volatile const uint8 * ATM_UUIDptr = ATM_UUID;
-    
+    unsigned char keyValues[8];
+
     //Initialize the stack of money
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
     }
-    
+
     // synchronize with atm
     syncConnection(SYNC_PROV);
     strcpy((char*)message, PROV_MSG);
     pushMessage(message, (uint8)strlen(PROV_MSG));
-    
+
     // Pull the atm UUID
     pullMessage(message);
     PIGGY_BANK_Write(message,ATM_UUID, 36);
     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
-    
+
     // Get numbills
     pullMessage(message);
     pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
@@ -107,17 +105,14 @@ void provision()
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Generate our AES Key
-    buf[0] = ATM_UUIDptr[0];
-    buf[1] = ATM_UUIDptr[1];
-    buf[2] = ATM_UUIDptr[2];
-    buf[3] = ATM_UUIDptr[3];
+    memcpy(buf, ATM_UUID, 4);
     for(int x=0; x < 8; x=x+1)
     {
-        for(int y=0; y < 7; y=y+1)
+        for(int y=0; y < 8; y=y+1)
         {
-            for(int z=0; z < 7; z=z+1)
+            for(int z=0; z < 8; z=z+1)
             {
-                for(int w=0; w < 7; w=w+1)
+                for(int w=0; w < 8; w=w+1)
                 {
                     //Copy over the specific key values
                     memcpy(&temp[0], &keyValues[x],1);
@@ -127,18 +122,17 @@ void provision()
                     //Call this awesome function to do magic
                     SALT_HASaltH_SALT(buf, temp, 4, 8);
                 }
-                
+
             }
         }
         memcpy(&AESkey[x*4], buf, 4);
     }
     //Send our AES Key to the bank
     pushMessage(AESkey, 32);
-    
     AES_init_ctx(&ctx, AESkey);
     // Load bills
     for (i = 0; i < numbills; i++) {
-        pullMessage(message);    
+        pullMessage(message);
         AES_ECB_encrypt(&ctx, message);
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
@@ -150,13 +144,12 @@ void decrypt(uint8 *data)
     //AES variables
     static struct AES_ctx ctx;
     static int flag=0;
-    unsigned char AESkey[32]="";
+    unsigned char AESkey[32];
     //Hashing variables
     char buf[8]="";
     char temp[4]="";
-    unsigned char keyValues[8]="";
-    volatile const uint8 * ATM_UUIDptr = ATM_UUID;
-    
+    unsigned char keyValues[8];
+
     if(flag == 0)
     {
         //Grab our key values
@@ -170,17 +163,14 @@ void decrypt(uint8 *data)
         keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
         keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
         //Generate our AES Key
-        buf[0] = ATM_UUIDptr[0];
-        buf[1] = ATM_UUIDptr[1];
-        buf[2] = ATM_UUIDptr[2];
-        buf[3] = ATM_UUIDptr[3];
+        memcpy(buf, ATM_UUID, 4);
         for(int x=0; x < 8; x=x+1)
         {
-            for(int y=0; y < 7; y=y+1)
+            for(int y=0; y < 8; y=y+1)
             {
-                for(int z=0; z < 7; z=z+1)
+                for(int z=0; z < 8; z=z+1)
                 {
-                    for(int w=0; w < 7; w=w+1)
+                    for(int w=0; w < 8; w=w+1)
                     {
                         memcpy(&temp[0], &keyValues[x],1);
                         memcpy(&temp[1], &keyValues[y],1);
@@ -189,7 +179,7 @@ void decrypt(uint8 *data)
                         SALT_HASaltH_SALT(buf, temp, 4, 8);
                         memset(temp, 0, 4);
                     }
-                    
+
                 }
             }
             memcpy(&AESkey[x*4], buf, 4);
@@ -198,6 +188,7 @@ void decrypt(uint8 *data)
         memset(temp, 0, 4);
         memset(buf, 0 , 8);
         AES_init_ctx(&ctx, AESkey);
+        memset(AESkey, 0, 32);
         flag = 1;
     }
     if(FLAG == 0)
@@ -215,14 +206,14 @@ void decrypt(uint8 *data)
 void dispenseBill()
 {
     static const uint8 STACKLOC[1] = {0x00};
-    uint8 message[16]="";
+    uint8 message[16];
     volatile const uint8* stackptr = STACKLOC;
     volatile const uint8* billptr;
-    uint8 stackloc=0x00;
-    
+    uint8 stackloc;
+
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
-    
+
     memset(message, 0u, 16);
     memcpy(message, (void*)billptr, BILL_LEN);
     decrypt(message);
@@ -235,52 +226,52 @@ void dispenseBill()
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-    
+
     // start reset button
     Reset_isr_StartEx(Reset_ISR);
-    
+
     /* Declare vairables here */
-    
-    uint8 i = 0x00;
+
+    uint8 i;
     volatile const uint8* bills_leftptr= BILLS_LEFT;
     volatile const uint8* last_billptr = LAST_BILL;
-    uint8 bills_left=0;
-    uint8 last_bill=0;
+    uint8 bills_left;
+    uint8 last_bill;
     uint8 message[64] = "";
-    char * token = 0x00;
-    char * temptoken = 0x00;
+    char * token;
+    char * temptoken;
     int matching = 0;
     uint8 flag[3]="";
-    
+
     bills_left = *bills_leftptr;
     last_bill = *last_billptr;
-    
+
     static const uint8 PROVISIONED[1] = {0x00}; // write variable
     volatile const uint8* ptr;    // read variable
-    
+
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    
+
     PIGGY_BANK_Start();
     DB_UART_Start();
-    
+
     ptr = PROVISIONED;
     // provision security module on first boot
     if(*ptr == 0x00)
     {
         provision();
-        
+
         // Mark as provisioned
         i = 0x01;
         PIGGY_BANK_Write(&i, PROVISIONED, 1u);
     }
-    
+
     // Go into infinite loop
     while (1) {
         /* Place your application code here. */
         memset(message, 0, 64);
         // synchronize with bank
         syncConnection(SYNC_NORM);
-        
+
         //Get task
         pullMessage(message);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
@@ -300,8 +291,7 @@ int main(void)
             decrypt(&message[16]);
             decrypt(&message[32]);
             decrypt(&message[48]);
-            memset(flag, 0, 3);
-            
+
             if (memcmp(&message[0],&message[16],16) == 0)
 	            memcpy(flag, WITH_BAD, 3);
 
@@ -319,8 +309,8 @@ int main(void)
 
             if (memcmp(&message[32],&message[48],16) == 0)
 	            memcpy(flag, WITH_BAD, 3);
-            
-                
+
+
             matching += abs(memcmp(&message[0],&message[16],1));
             matching += abs(memcmp(&message[0],&message[32],1));
             matching += abs(memcmp(&message[0],&message[48],1));
@@ -333,10 +323,10 @@ int main(void)
             matching += abs(memcmp(&message[3],&message[19],1));
             matching += abs(memcmp(&message[3],&message[35],1));
             matching += abs(memcmp(&message[3],&message[51],1));
-            
+
             if(matching != 0)
                 memcpy(flag, WITH_BAD, 3);
-            
+
             if(flag[0] == 'B' && flag[1] == 'A' && flag[2] == 'D')
             {
                 pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
@@ -357,13 +347,12 @@ int main(void)
                     else
                     {
                         for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
-                        {   
+                        {
                             dispenseBill();
                             bills_left = bills_left - 1;
                             PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                         }
                         PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
-                        decrypt(message);
                         PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
                     }
                 }
