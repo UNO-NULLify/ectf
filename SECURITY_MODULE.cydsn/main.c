@@ -65,14 +65,16 @@ void provision()
     //General variables
     int i;
     uint8 message[36]="";
-    uint8 numbills;
+    uint8 numbills=0x00;
     //AES variables
     struct AES_ctx ctx;
-    unsigned char AESkey[32];
+    unsigned char AESkey[32]="";
     //Hashing variables
     char buf[8]="";
     char temp[4]="";
-    unsigned char keyValues[8];
+    unsigned char keyValues[8]="";
+    //Pointer
+    volatile const uint8 * ATM_UUIDptr = ATM_UUID;
     
     //Initialize the stack of money
     for(i = 0; i < 128; i++) {
@@ -105,7 +107,10 @@ void provision()
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Generate our AES Key
-    memcpy(buf, ATM_UUID, 4);
+    buf[0] = ATM_UUIDptr[0];
+    buf[1] = ATM_UUIDptr[1];
+    buf[2] = ATM_UUIDptr[2];
+    buf[3] = ATM_UUIDptr[3];
     for(int x=0; x < 8; x=x+1)
     {
         for(int y=0; y < 7; y=y+1)
@@ -145,11 +150,12 @@ void decrypt(uint8 *data)
     //AES variables
     static struct AES_ctx ctx;
     static int flag=0;
-    unsigned char AESkey[32];
+    unsigned char AESkey[32]="";
     //Hashing variables
     char buf[8]="";
     char temp[4]="";
-    unsigned char keyValues[8];
+    unsigned char keyValues[8]="";
+    volatile const uint8 * ATM_UUIDptr = ATM_UUID;
     
     if(flag == 0)
     {
@@ -164,7 +170,10 @@ void decrypt(uint8 *data)
         keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
         keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
         //Generate our AES Key
-        memcpy(buf, ATM_UUID, 4);
+        buf[0] = ATM_UUIDptr[0];
+        buf[1] = ATM_UUIDptr[1];
+        buf[2] = ATM_UUIDptr[2];
+        buf[3] = ATM_UUIDptr[3];
         for(int x=0; x < 8; x=x+1)
         {
             for(int y=0; y < 7; y=y+1)
@@ -189,7 +198,6 @@ void decrypt(uint8 *data)
         memset(temp, 0, 4);
         memset(buf, 0 , 8);
         AES_init_ctx(&ctx, AESkey);
-        memset(AESkey, 0, 32);
         flag = 1;
     }
     if(FLAG == 0)
@@ -207,10 +215,10 @@ void decrypt(uint8 *data)
 void dispenseBill()
 {
     static const uint8 STACKLOC[1] = {0x00};
-    uint8 message[16];
+    uint8 message[16]="";
     volatile const uint8* stackptr = STACKLOC;
     volatile const uint8* billptr;
-    uint8 stackloc;
+    uint8 stackloc=0x00;
     
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
@@ -233,14 +241,14 @@ int main(void)
     
     /* Declare vairables here */
     
-    uint8 i;
+    uint8 i = 0x00;
     volatile const uint8* bills_leftptr= BILLS_LEFT;
     volatile const uint8* last_billptr = LAST_BILL;
-    uint8 bills_left;
-    uint8 last_bill;
+    uint8 bills_left=0;
+    uint8 last_bill=0;
     uint8 message[64] = "";
-    char * token;
-    char * temptoken;
+    char * token = 0x00;
+    char * temptoken = 0x00;
     int matching = 0;
     uint8 flag[3]="";
     
@@ -355,6 +363,7 @@ int main(void)
                             PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                         }
                         PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
+                        decrypt(message);
                         PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
                     }
                 }

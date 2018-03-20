@@ -8,7 +8,7 @@
 void SALT_HASaltH_SALT(char* data, char* extra_data, int extra_data_len, int len){
     uint32 output;
     char empty[4] = "";
-    strncat(&data[4], extra_data,  extra_data_len);
+    memcpy(&data[4], extra_data,  extra_data_len);
     output = hash(data, len);
     memcpy(data, &output, 4);
     memcpy(&data[4], empty, 4);
