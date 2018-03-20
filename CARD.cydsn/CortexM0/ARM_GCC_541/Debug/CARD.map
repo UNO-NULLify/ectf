@@ -432,7 +432,7 @@ END GROUP
                 0x00000001                cy_project_type_bootloader = (appl_start == 0x0)?0x1:0x0
                 0x00000000                cy_project_type_app_for_stack_and_copier = (CY_APP_FOR_STACK_AND_COPIER == 0x1)?0x1:0x0
 
-.text           0x00000000     0x1544
+.text           0x00000000     0x154c
  CREATE_OBJECT_SYMBOLS
                 0x00000000                PROVIDE (__cy_interrupt_vector, RomVectors)
  *(.romvectors)
@@ -460,273 +460,273 @@ END GROUP
  .text.provision
                 0x000002d4      0x13c .\CortexM0\ARM_GCC_541\Debug\main.o
                 0x000002d4                provision
- .text.main     0x00000410      0x1a0 .\CortexM0\ARM_GCC_541\Debug\main.o
+ .text.main     0x00000410      0x1a8 .\CortexM0\ARM_GCC_541\Debug\main.o
                 0x00000410                main
  .text.getValidByte
-                0x000005b0       0x14 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                0x000005b0                getValidByte
+                0x000005b8       0x14 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                0x000005b8                getValidByte
  .text.pushMessage
-                0x000005c4       0x20 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                0x000005c4                pushMessage
+                0x000005cc       0x20 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                0x000005cc                pushMessage
  .text.pullMessage
-                0x000005e4       0x28 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                0x000005e4                pullMessage
+                0x000005ec       0x28 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                0x000005ec                pullMessage
  .text.syncConnection
-                0x0000060c       0x84 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
-                0x0000060c                syncConnection
+                0x00000614       0x84 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                0x00000614                syncConnection
  .text.KeyExpansion
-                0x00000690       0xd8 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x00000698       0xd8 .\CortexM0\ARM_GCC_541\Debug\aes.o
  .text.AddRoundKey
-                0x00000768       0x30 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x00000770       0x30 .\CortexM0\ARM_GCC_541\Debug\aes.o
  .text.SubBytes
-                0x00000798       0x2c .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x000007a0       0x2c .\CortexM0\ARM_GCC_541\Debug\aes.o
  .text.ShiftRows
-                0x000007c4       0x34 .\CortexM0\ARM_GCC_541\Debug\aes.o
- .text.xtime    0x000007f8       0x14 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x000007cc       0x34 .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .text.xtime    0x00000800       0x14 .\CortexM0\ARM_GCC_541\Debug\aes.o
  .text.MixColumns
-                0x0000080c       0x84 .\CortexM0\ARM_GCC_541\Debug\aes.o
- .text.Cipher   0x00000890       0x50 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x00000814       0x84 .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .text.Cipher   0x00000898       0x50 .\CortexM0\ARM_GCC_541\Debug\aes.o
  .text.AES_init_ctx
-                0x000008e0        0x8 .\CortexM0\ARM_GCC_541\Debug\aes.o
-                0x000008e0                AES_init_ctx
+                0x000008e8        0x8 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x000008e8                AES_init_ctx
  .text.AES_ECB_encrypt
-                0x000008e8       0x10 .\CortexM0\ARM_GCC_541\Debug\aes.o
-                0x000008e8                AES_ECB_encrypt
+                0x000008f0       0x10 .\CortexM0\ARM_GCC_541\Debug\aes.o
+                0x000008f0                AES_ECB_encrypt
  .text.hash_inc
-                0x000008f8       0xa4 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
-                0x000008f8                hash_inc
- .text.hash     0x0000099c        0xc .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
-                0x0000099c                hash
+                0x00000900       0xa4 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
+                0x00000900                hash_inc
+ .text.hash     0x000009a4        0xc .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
+                0x000009a4                hash
  .text.cfg_write_bytes32
-                0x000009a8       0x34 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000009b0       0x34 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.CYMEMZERO
-                0x000009dc        0xc .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000009e4        0xc .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.CYCONFIGCPYCODE
-                0x000009e8        0x8 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000009f0        0x8 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.IntDefaultHandler
-                0x000009f0       0x10 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                0x000009f0                IntDefaultHandler
- .text.Start_c  0x00000a00       0x48 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                0x00000a00                Start_c
+                0x000009f8       0x10 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                0x000009f8                IntDefaultHandler
+ .text.Start_c  0x00000a08       0x48 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                0x00000a08                Start_c
  .text.initialize_psoc
-                0x00000a48       0x40 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                0x00000a48                initialize_psoc
+                0x00000a50       0x40 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                0x00000a50                initialize_psoc
  .text.USER_INFO_Start
-                0x00000a88        0x4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
-                0x00000a88                USER_INFO_Start
+                0x00000a90        0x4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
+                0x00000a90                USER_INFO_Start
  .text.USER_INFO_Write
-                0x00000a8c       0x84 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
-                0x00000a8c                USER_INFO_Write
+                0x00000a94       0x84 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
+                0x00000a94                USER_INFO_Write
  .text.USB_UART_ScbEnableIntr
-                0x00000b10        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+                0x00000b18        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
  .text.USB_UART_ScbModePostEnable
-                0x00000b1c        0x8 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
- .text.USB_UART_Init
                 0x00000b24        0x8 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
-                0x00000b24                USB_UART_Init
+ .text.USB_UART_Init
+                0x00000b2c        0x8 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+                0x00000b2c                USB_UART_Init
  .text.USB_UART_Enable
-                0x00000b2c       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
-                0x00000b2c                USB_UART_Enable
+                0x00000b34       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+                0x00000b34                USB_UART_Enable
  .text.USB_UART_Start
-                0x00000b48       0x20 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
-                0x00000b48                USB_UART_Start
+                0x00000b50       0x20 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+                0x00000b50                USB_UART_Start
  .text.USB_UART_SpiUartReadRxData
-                0x00000b68       0x34 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
-                0x00000b68                USB_UART_SpiUartReadRxData
+                0x00000b70       0x34 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+                0x00000b70                USB_UART_SpiUartReadRxData
  .text.USB_UART_SpiUartGetRxBufferSize
-                0x00000b9c       0x28 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
-                0x00000b9c                USB_UART_SpiUartGetRxBufferSize
+                0x00000ba4       0x28 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+                0x00000ba4                USB_UART_SpiUartGetRxBufferSize
  .text.USB_UART_SpiUartWriteTxData
-                0x00000bc4       0x70 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
-                0x00000bc4                USB_UART_SpiUartWriteTxData
+                0x00000bcc       0x70 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+                0x00000bcc                USB_UART_SpiUartWriteTxData
  .text.USB_UART_UartInit
-                0x00000c34       0xdc .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
-                0x00000c34                USB_UART_UartInit
+                0x00000c3c       0xdc .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+                0x00000c3c                USB_UART_UartInit
  .text.USB_UART_UartPostEnable
-                0x00000d10       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
-                0x00000d10                USB_UART_UartPostEnable
+                0x00000d18       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+                0x00000d18                USB_UART_UartPostEnable
  .text.USB_UART_UartGetByte
-                0x00000d34       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
-                0x00000d34                USB_UART_UartGetByte
+                0x00000d3c       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+                0x00000d3c                USB_UART_UartGetByte
  .text.Reset_isr_SetVector
-                0x00000d80        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                0x00000d80                Reset_isr_SetVector
+                0x00000d88        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                0x00000d88                Reset_isr_SetVector
  .text.Reset_isr_SetPriority
-                0x00000d8c       0x20 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                0x00000d8c                Reset_isr_SetPriority
+                0x00000d94       0x20 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                0x00000d94                Reset_isr_SetPriority
  .text.Reset_isr_Enable
-                0x00000dac        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                0x00000dac                Reset_isr_Enable
+                0x00000db4        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                0x00000db4                Reset_isr_Enable
  .text.Reset_isr_Disable
-                0x00000db8        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                0x00000db8                Reset_isr_Disable
+                0x00000dc0        0xc .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                0x00000dc0                Reset_isr_Disable
  .text.Reset_isr_StartEx
-                0x00000dc4       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
-                0x00000dc4                Reset_isr_StartEx
+                0x00000dcc       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+                0x00000dcc                Reset_isr_StartEx
  .text.SW1_ClearInterrupt
-                0x00000de0       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
-                0x00000de0                SW1_ClearInterrupt
+                0x00000de8       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
+                0x00000de8                SW1_ClearInterrupt
  .text.CySysFlashClockBackup
-                0x00000df4       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+                0x00000dfc       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
  .text.CySysFlashClockRestore
-                0x00000e08       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+                0x00000e10       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
  .text.CySysFlashWriteRow
-                0x00000e1c      0x208 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
-                0x00000e1c                CySysFlashWriteRow
+                0x00000e24      0x208 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+                0x00000e24                CySysFlashWriteRow
  .text.CyIntEnable
-                0x00001024       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x00001024                CyIntEnable
+                0x0000102c       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x0000102c                CyIntEnable
  .text.CyIntDisable
-                0x00001038       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x00001038                CyIntDisable
- .text.CyHalt   0x0000104c        0x4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x0000104c                CyHalt
+                0x00001040       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x00001040                CyIntDisable
+ .text.CyHalt   0x00001054        0x4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x00001054                CyHalt
  .text.CyIntSetVector
-                0x00001050       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x00001050                CyIntSetVector
+                0x00001058       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x00001058                CyIntSetVector
  .text.CyIntSetPriority
-                0x00001074       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x00001074                CyIntSetPriority
+                0x0000107c       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x0000107c                CyIntSetPriority
  .text.CySoftwareReset
-                0x000010c0       0x18 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x000010c0                CySoftwareReset
+                0x000010c8       0x18 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x000010c8                CySoftwareReset
  .text.CyDelayUs
-                0x000010d8       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x000010d8                CyDelayUs
+                0x000010e0       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x000010e0                CyDelayUs
  .text.CySysClkWriteImoFreq
-                0x000010ec      0x164 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x000010ec                CySysClkWriteImoFreq
+                0x000010f4      0x164 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x000010f4                CySysClkWriteImoFreq
  .text.CySysWdtLocked
-                0x00001250       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                0x00001258       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
  .text.CySysWdtLock
-                0x00001264       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
-                0x00001264                CySysWdtLock
+                0x0000126c       0x1c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                0x0000126c                CySysWdtLock
  .text.CySysWdtUnlock
-                0x00001280       0x30 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
-                0x00001280                CySysWdtUnlock
+                0x00001288       0x30 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                0x00001288                CySysWdtUnlock
  .text.CySysWdtClearInterrupt
-                0x000012b0       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
-                0x000012b0                CySysWdtClearInterrupt
+                0x000012b8       0x4c .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                0x000012b8                CySysWdtClearInterrupt
  .text.CySysWdtIsr
-                0x000012fc       0xa4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
-                0x000012fc                CySysWdtIsr
- .text          0x000013a0       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
-                0x000013a0                CyDelayCycles
-                0x000013b4                CyEnterCriticalSection
-                0x000013bc                CyExitCriticalSection
+                0x00001304       0xa4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+                0x00001304                CySysWdtIsr
+ .text          0x000013a8       0x24 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
+                0x000013a8                CyDelayCycles
+                0x000013bc                CyEnterCriticalSection
+                0x000013c4                CyExitCriticalSection
  .text.USB_UART_SPI_UART_ISR
-                0x000013c4       0xe4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
-                0x000013c4                USB_UART_SPI_UART_ISR
- .text.__errno  0x000014a8        0xc c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
-                0x000014a8                __errno
+                0x000013cc       0xe4 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
+                0x000013cc                USB_UART_SPI_UART_ISR
+ .text.__errno  0x000014b0        0xc c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+                0x000014b0                __errno
  .text.__libc_init_array
-                0x000014b4       0x4c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
-                0x000014b4                __libc_init_array
- .text.memcpy   0x00001500       0x12 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
-                0x00001500                memcpy
- .text.memset   0x00001512       0x10 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
-                0x00001512                memset
- .text          0x00001522       0x14 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcmp.o)
-                0x00001522                strcmp
- .text          0x00001536        0xe c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strlen.o)
-                0x00001536                strlen
+                0x000014bc       0x4c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+                0x000014bc                __libc_init_array
+ .text.memcpy   0x00001508       0x12 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+                0x00001508                memcpy
+ .text.memset   0x0000151a       0x10 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+                0x0000151a                memset
+ .text          0x0000152a       0x14 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcmp.o)
+                0x0000152a                strcmp
+ .text          0x0000153e        0xe c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strlen.o)
+                0x0000153e                strlen
  *(.plt)
  *(.gnu.warning)
  *(.glue_7t)
- .glue_7t       0x00001544        0x0 linker stubs
+ .glue_7t       0x0000154c        0x0 linker stubs
  *(.glue_7)
- .glue_7        0x00001544        0x0 linker stubs
+ .glue_7        0x0000154c        0x0 linker stubs
  *(.vfp11_veneer)
- .vfp11_veneer  0x00001544        0x0 linker stubs
+ .vfp11_veneer  0x0000154c        0x0 linker stubs
  *(.bootloader)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
  *(.gcc_except_table)
 
-.v4_bx          0x00001544        0x0
- .v4_bx         0x00001544        0x0 linker stubs
+.v4_bx          0x0000154c        0x0
+ .v4_bx         0x0000154c        0x0 linker stubs
 
-.iplt           0x00001544        0x0
- .iplt          0x00001544        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x0000154c        0x0
+ .iplt          0x0000154c        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
 .eh_frame_hdr
  *(.eh_frame_hdr)
 
-.eh_frame       0x00001544        0x4
+.eh_frame       0x0000154c        0x4
  *(.eh_frame)
- .eh_frame      0x00001544        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
- .eh_frame      0x00001544        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ .eh_frame      0x0000154c        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .eh_frame      0x0000154c        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
                 [!provide]                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x00001548                __exidx_end = .
+                0x00001550                __exidx_end = .
 
-.rodata         0x00001548      0x5c8
+.rodata         0x00001550      0x5c8
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00001548       0x25 .\CortexM0\ARM_GCC_541\Debug\main.o
- *fill*         0x0000156d        0x3 
+ .rodata        0x00001550       0x25 .\CortexM0\ARM_GCC_541\Debug\main.o
+ *fill*         0x00001575        0x3 
  .rodata.str1.4
-                0x00001570       0x16 .\CortexM0\ARM_GCC_541\Debug\main.o
- *fill*         0x00001586        0x2 
+                0x00001578       0x16 .\CortexM0\ARM_GCC_541\Debug\main.o
+ *fill*         0x0000158e        0x2 
  .rodata.str1.4
-                0x00001588       0x1c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+                0x00001590       0x1c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
                                  0x1b (size before relaxing)
- .rodata        0x000015a4      0x20c .\CortexM0\ARM_GCC_541\Debug\aes.o
- .rodata        0x000017b0      0x2f8 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
- .rodata        0x00001aa8       0x2e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
-                0x00001aa8                cyImoFreqMhz2Reg
+ .rodata        0x000015ac      0x20c .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .rodata        0x000017b8      0x2f8 .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .rodata        0x00001ab0       0x2e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+                0x00001ab0                cyImoFreqMhz2Reg
  .rodata.str1.1
-                0x00001ad6        0x2 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
-                0x00001ad8                . = ALIGN (0x4)
+                0x00001ade        0x2 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+                0x00001ae0                . = ALIGN (0x4)
  *(.init)
- .init          0x00001ad8        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00001ad8                _init
- .init          0x00001adc        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
-                0x00001ae4                . = ALIGN (0x4)
-                0x00001ae4                __preinit_array_start = .
+ .init          0x00001ae0        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x00001ae0                _init
+ .init          0x00001ae4        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+                0x00001aec                . = ALIGN (0x4)
+                0x00001aec                __preinit_array_start = .
  *(.preinit_array)
-                0x00001ae4                __preinit_array_end = .
-                0x00001ae4                . = ALIGN (0x4)
-                0x00001ae4                __init_array_start = .
+                0x00001aec                __preinit_array_end = .
+                0x00001aec                . = ALIGN (0x4)
+                0x00001aec                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x00001ae4        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
- .init_array    0x00001ae8        0x4 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
-                0x00001aec                __init_array_end = .
-                0x00001aec                . = ALIGN (0x4)
+ .init_array    0x00001aec        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .init_array    0x00001af0        0x4 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+                0x00001af4                __init_array_end = .
+                0x00001af4                . = ALIGN (0x4)
  *(.fini)
- .fini          0x00001aec        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00001aec                _fini
- .fini          0x00001af0        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
-                0x00001af8                . = ALIGN (0x4)
-                0x00001af8                __fini_array_start = .
+ .fini          0x00001af4        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x00001af4                _fini
+ .fini          0x00001af8        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+                0x00001b00                . = ALIGN (0x4)
+                0x00001b00                __fini_array_start = .
  *(.fini_array)
- .fini_array    0x00001af8        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .fini_array    0x00001b00        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
  *(SORT(.fini_array.*))
-                0x00001afc                __fini_array_end = .
-                0x00001afc                . = ALIGN (0x4)
+                0x00001b04                __fini_array_end = .
+                0x00001b04                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x00001afc                . = ALIGN (0x4)
+                0x00001b04                . = ALIGN (0x4)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x00001afc                . = ALIGN (0x4)
-                0x00001afc                __cy_regions = .
-                0x00001afc        0x4 LONG 0x1b10 __cy_region_init_ram
-                0x00001b00        0x4 LONG 0x200000c0 __cy_region_start_data
-                0x00001b04        0x4 LONG 0x80 __cy_region_init_size_ram
-                0x00001b08        0x4 LONG 0x160 __cy_region_zero_size_ram
-                0x00001b0c                __cy_regions_end = .
-                0x00001b10                . = ALIGN (0x8)
- *fill*         0x00001b0c        0x4 
-                0x00001b10                _etext = .
+                0x00001b04                . = ALIGN (0x4)
+                0x00001b04                __cy_regions = .
+                0x00001b04        0x4 LONG 0x1b18 __cy_region_init_ram
+                0x00001b08        0x4 LONG 0x200000c0 __cy_region_start_data
+                0x00001b0c        0x4 LONG 0x80 __cy_region_init_size_ram
+                0x00001b10        0x4 LONG 0x160 __cy_region_zero_size_ram
+                0x00001b14                __cy_regions_end = .
+                0x00001b18                . = ALIGN (0x8)
+ *fill*         0x00001b14        0x4 
+                0x00001b18                _etext = .
 
 .cy_checksum_exclude
-                0x00001b10        0x0
+                0x00001b18        0x0
  *(.cy_checksum_exclude)
 
 .ramvectors     0x20000000       0xc0
@@ -738,7 +738,7 @@ END GROUP
 .noinit
  *(.noinit)
 
-.data           0x200000c0       0x80 load address 0x00001b10
+.data           0x200000c0       0x80 load address 0x00001b18
                 0x200000c0                __cy_region_start_data = .
  *(.jcr)
  .jcr           0x200000c0        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
@@ -763,10 +763,10 @@ END GROUP
  *(.ram)
                 0x20000140                _edata = .
 
-.igot.plt       0x20000140        0x0 load address 0x00001b90
+.igot.plt       0x20000140        0x0 load address 0x00001b98
  .igot.plt      0x20000140        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x20000140      0x160 load address 0x00001b90
+.bss            0x20000140      0x160 load address 0x00001b98
                 0x20000140                PROVIDE (__bss_start__, .)
  *(.shbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
@@ -794,11 +794,11 @@ END GROUP
                 0x200002a0                __end = .
                 0x200002a0                PROVIDE (end, .)
                 0x200002a0                PROVIDE (__bss_end__, .)
-                0x00001b10                __cy_region_init_ram = LOADADDR (.data)
+                0x00001b18                __cy_region_init_ram = LOADADDR (.data)
                 0x00000080                __cy_region_init_size_ram = (_edata - ADDR (.data))
                 0x00000160                __cy_region_zero_size_ram = (_end - _edata)
 
-.heap           0x200002a0      0x1f0 load address 0x00001b90
+.heap           0x200002a0      0x1f0 load address 0x00001b98
                 0x200002a0                . = _end
                 0x20000490                . = (. + 0x1f0)
  *fill*         0x200002a0      0x1f0 
@@ -838,8 +838,8 @@ END GROUP
                 0x90600000        0x1 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
                 0x90600000                cy_meta_chipprotect
 
-.rel.dyn        0x00001b90        0x0 load address 0x90600004
- .rel.iplt      0x00001b90        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x00001b98        0x0 load address 0x90600004
+ .rel.iplt      0x00001b98        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
 .stab
  *(.stab)
@@ -901,26 +901,26 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x4d26
+.debug_info     0x00000000     0x4d46
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x8ba .\CortexM0\ARM_GCC_541\Debug\main.o
- .debug_info    0x000008ba      0x339 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
- .debug_info    0x00000bf3      0x82b .\CortexM0\ARM_GCC_541\Debug\aes.o
- .debug_info    0x0000141e      0x170 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
- .debug_info    0x0000158e      0x51a .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_info    0x00001aa8       0xf8 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
- .debug_info    0x00001ba0      0x39c .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
- .debug_info    0x00001f3c      0x1e0 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
- .debug_info    0x0000211c      0x2fb .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
- .debug_info    0x00002417      0x372 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
- .debug_info    0x00002789      0x3b1 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
- .debug_info    0x00002b3a      0x305 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
- .debug_info    0x00002e3f      0x19d .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
- .debug_info    0x00002fdc      0x33d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
- .debug_info    0x00003319      0xb0b .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
- .debug_info    0x00003e24      0xcfe .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
- .debug_info    0x00004b22       0x7e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
- .debug_info    0x00004ba0      0x186 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
+ .debug_info    0x00000000      0x8da .\CortexM0\ARM_GCC_541\Debug\main.o
+ .debug_info    0x000008da      0x339 .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+ .debug_info    0x00000c13      0x82b .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .debug_info    0x0000143e      0x170 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
+ .debug_info    0x000015ae      0x51a .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_info    0x00001ac8       0xf8 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
+ .debug_info    0x00001bc0      0x39c .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+ .debug_info    0x00001f5c      0x1e0 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
+ .debug_info    0x0000213c      0x2fb .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+ .debug_info    0x00002437      0x372 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+ .debug_info    0x000027a9      0x3b1 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+ .debug_info    0x00002b5a      0x305 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+ .debug_info    0x00002e5f      0x19d .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
+ .debug_info    0x00002ffc      0x33d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+ .debug_info    0x00003339      0xb0b .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+ .debug_info    0x00003e44      0xcfe .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+ .debug_info    0x00004b42       0x7e .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
+ .debug_info    0x00004bc0      0x186 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
 
 .debug_abbrev   0x00000000     0x16a8
  *(.debug_abbrev)
@@ -943,26 +943,26 @@ END GROUP
  .debug_abbrev  0x000015fa       0x14 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
  .debug_abbrev  0x0000160e       0x9a .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
 
-.debug_line     0x00000000     0x2152
+.debug_line     0x00000000     0x2153
  *(.debug_line)
- .debug_line    0x00000000      0x30b .\CortexM0\ARM_GCC_541\Debug\main.o
- .debug_line    0x0000030b      0x15c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
- .debug_line    0x00000467      0x3b1 .\CortexM0\ARM_GCC_541\Debug\aes.o
- .debug_line    0x00000818      0x199 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
- .debug_line    0x000009b1      0x19f .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_line    0x00000b50      0x141 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
- .debug_line    0x00000c91      0x235 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
- .debug_line    0x00000ec6       0xcd .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
- .debug_line    0x00000f93      0x163 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
- .debug_line    0x000010f6      0x156 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
- .debug_line    0x0000124c      0x184 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
- .debug_line    0x000013d0      0x151 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
- .debug_line    0x00001521       0xbb .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
- .debug_line    0x000015dc      0x18d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
- .debug_line    0x00001769      0x460 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
- .debug_line    0x00001bc9      0x466 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
- .debug_line    0x0000202f       0x69 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
- .debug_line    0x00002098       0xba .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
+ .debug_line    0x00000000      0x30c .\CortexM0\ARM_GCC_541\Debug\main.o
+ .debug_line    0x0000030c      0x15c .\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o
+ .debug_line    0x00000468      0x3b1 .\CortexM0\ARM_GCC_541\Debug\aes.o
+ .debug_line    0x00000819      0x199 .\CortexM0\ARM_GCC_541\Debug\SuperFastHash.o
+ .debug_line    0x000009b2      0x19f .\CortexM0\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_line    0x00000b51      0x141 .\CortexM0\ARM_GCC_541\Debug\cymetadata.o
+ .debug_line    0x00000c92      0x235 .\CortexM0\ARM_GCC_541\Debug\Cm0Start.o
+ .debug_line    0x00000ec7       0xcd .\CortexM0\ARM_GCC_541\Debug\CARD.a(USER_INFO.o)
+ .debug_line    0x00000f94      0x163 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART.o)
+ .debug_line    0x000010f7      0x156 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART.o)
+ .debug_line    0x0000124d      0x184 .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_UART.o)
+ .debug_line    0x000013d1      0x151 .\CortexM0\ARM_GCC_541\Debug\CARD.a(Reset_isr.o)
+ .debug_line    0x00001522       0xbb .\CortexM0\ARM_GCC_541\Debug\CARD.a(SW1.o)
+ .debug_line    0x000015dd      0x18d .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyFlash.o)
+ .debug_line    0x0000176a      0x460 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLib.o)
+ .debug_line    0x00001bca      0x466 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyLFClk.o)
+ .debug_line    0x00002030       0x69 .\CortexM0\ARM_GCC_541\Debug\CARD.a(CyBootAsmGnu.o)
+ .debug_line    0x00002099       0xba .\CortexM0\ARM_GCC_541\Debug\CARD.a(USB_UART_SPI_UART_INT.o)
 
 .debug_frame    0x00000000     0x1260
  *(.debug_frame)

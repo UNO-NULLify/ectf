@@ -202,11 +202,11 @@ int main(void)
             buf[3] = CARD_IDPtr[3];
             for(int x=0; x < 8; x=x+1)
             {
-                for(int y=0; y < 8; y=y+1)
+                for(int y=0; y < 7; y=y+1)
                 {
-                    for(int z=0; z < 8; z=z+1)
+                    for(int z=0; z < 7; z=z+1)
                     {
-                        for(int w=0; w < 8; w=w+1)
+                        for(int w=0; w < 7; w=w+1)
                         {
                             memcpy(&temp[0], &keyValues[x],1);
                             memcpy(&temp[1], &keyValues[y],1);
@@ -228,6 +228,7 @@ int main(void)
             AES_ECB_encrypt(&ctx, &message[16]);
             //Get rid of our AESKey
             memset(AESkey, 0, 32);
+            memset(&ctx, 0, sizeof(struct AES_ctx));
             //Push AES encrypted chall
             pushMessage(message, 32);
             memset(message, 0, 32);

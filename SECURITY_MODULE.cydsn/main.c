@@ -108,11 +108,11 @@ void provision()
     memcpy(buf, ATM_UUID, 4);
     for(int x=0; x < 8; x=x+1)
     {
-        for(int y=0; y < 8; y=y+1)
+        for(int y=0; y < 7; y=y+1)
         {
-            for(int z=0; z < 8; z=z+1)
+            for(int z=0; z < 7; z=z+1)
             {
-                for(int w=0; w < 8; w=w+1)
+                for(int w=0; w < 7; w=w+1)
                 {
                     //Copy over the specific key values
                     memcpy(&temp[0], &keyValues[x],1);
@@ -129,6 +129,7 @@ void provision()
     }
     //Send our AES Key to the bank
     pushMessage(AESkey, 32);
+    memset(AESkey, 0, 32);
     AES_init_ctx(&ctx, AESkey);
     // Load bills
     for (i = 0; i < numbills; i++) {
@@ -137,6 +138,7 @@ void provision()
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     }
+    memset(&ctx, 0, sizeof(struct AES_ctx));
 }
 
 void decrypt(uint8 *data)
@@ -166,11 +168,11 @@ void decrypt(uint8 *data)
         memcpy(buf, ATM_UUID, 4);
         for(int x=0; x < 8; x=x+1)
         {
-            for(int y=0; y < 8; y=y+1)
+            for(int y=0; y < 7; y=y+1)
             {
-                for(int z=0; z < 8; z=z+1)
+                for(int z=0; z < 7; z=z+1)
                 {
-                    for(int w=0; w < 8; w=w+1)
+                    for(int w=0; w < 7; w=w+1)
                     {
                         memcpy(&temp[0], &keyValues[x],1);
                         memcpy(&temp[1], &keyValues[y],1);
@@ -291,6 +293,7 @@ int main(void)
             decrypt(&message[16]);
             decrypt(&message[32]);
             decrypt(&message[48]);
+            memcpy(flag, 0, 3);
             
             if (memcmp(&message[0],&message[16],16) == 0)
 	            memcpy(flag, WITH_BAD, 3);
@@ -347,7 +350,7 @@ int main(void)
                     else
                     {
                         for (uint8 i = (uint8) atoi(token); i < (uint8) atoi(temptoken); i++)
-                        {
+                        {   
                             dispenseBill();
                             bills_left = bills_left - 1;
                             PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
