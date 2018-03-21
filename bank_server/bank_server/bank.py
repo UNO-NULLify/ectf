@@ -87,13 +87,7 @@ class Bank(object):
                 time.sleep(2)
                 return response
 
-            print account['chall']
-            print request.json['encrypted_response']
-            print account['AES_KEY']
-            key = str(bytearray.fromhex(account['AES_KEY']))
-            cipher = AES.new(key, AES.MODE_ECB, '')
-            decrypted_response = cipher.decrypt(str(bytearray.fromhex(request.json['encrypted_response'])))
-            print decrypted_response
+
             # authenticate the card
             if not db.verify_challenge(account['chall'], request.json['encrypted_response'], account['AES_KEY'], account['time']):
                 time.sleep(2)
