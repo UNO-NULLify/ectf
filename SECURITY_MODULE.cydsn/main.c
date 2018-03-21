@@ -73,6 +73,7 @@ void provision()
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
+    volatile const uint8* ATM_UUIDptr = ATM_UUID;
 
     //Initialize the stack of money
     for(i = 0; i < 128; i++) {
@@ -105,7 +106,10 @@ void provision()
     keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
     keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
     //Generate our AES Key
-    memcpy(buf, ATM_UUID, 4);
+    buf[0] = ATM_UUIDptr[0];
+    buf[1] = ATM_UUIDptr[1];
+    buf[2] = ATM_UUIDptr[2];
+    buf[3] = ATM_UUIDptr[3];
     for(int x=0; x < 8; x=x+1)
     {
         for(int y=0; y < 8; y=y+1)
@@ -151,6 +155,7 @@ void decrypt(uint8 *data)
     char temp[4]="";
     unsigned char keyValues[8];
     volatile const uint8 *FLAGptr = FLAG;
+    volatile const uint8 *ATM_UUIDptr = ATM_UUID;
 
     if(flag == 0)
     {
@@ -165,7 +170,10 @@ void decrypt(uint8 *data)
         keyValues[6] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_SORT  ) ;
         keyValues[7] = (unsigned char)(* (reg8 *) CYREG_SFLASH_DIE_MINOR ) ;
         //Generate our AES Key
-        memcpy(buf, ATM_UUID, 4);
+        buf[0] = ATM_UUIDptr[0];
+        buf[1] = ATM_UUIDptr[1];
+        buf[2] = ATM_UUIDptr[2];
+        buf[3] = ATM_UUIDptr[3];
         for(int x=0; x < 8; x=x+1)
         {
             for(int y=0; y < 8; y=y+1)
@@ -181,7 +189,6 @@ void decrypt(uint8 *data)
                         SALT_HASaltH_SALT(buf, temp, 4, 8);
                         memset(temp, 0, 4);
                     }
-
                 }
             }
             memcpy(&AESkey[x*4], buf, 4);
