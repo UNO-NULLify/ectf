@@ -73,7 +73,11 @@ void provision()
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> parent of ea88020... HSM
     //Initialize the stack of money
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
@@ -149,7 +153,11 @@ void decrypt(uint8 *data)
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> parent of ea88020... HSM
     if(flag == 0)
     {
         //Grab our key values
@@ -210,7 +218,11 @@ void dispenseBill()
     volatile const uint8* stackptr = STACKLOC;
     volatile const uint8* billptr;
     uint8 stackloc;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> parent of ea88020... HSM
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
 
@@ -231,7 +243,11 @@ int main(void)
     Reset_isr_StartEx(Reset_ISR);
 
     /* Declare vairables here */
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> parent of ea88020... HSM
     uint8 i;
     volatile const uint8* bills_leftptr= BILLS_LEFT;
     volatile const uint8* last_billptr = LAST_BILL;
