@@ -137,6 +137,7 @@ void provision()
         PIGGY_BANK_Write(message, MONEY[i], BILL_LEN);
         pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
     }
+    memset(&ctx,0, sizeof(struct AES_ctx));
 }
 
 void decrypt(uint8 *data)
@@ -265,6 +266,7 @@ int main(void)
         i = 0x01;
         PIGGY_BANK_Write(&i, PROVISIONED, 1u);
     }
+    //grab some pointer stuff for later
     bills_left = *bills_leftptr;
     last_bill = *last_billptr;
     // Go into infinite loop
@@ -295,6 +297,7 @@ int main(void)
             decrypt(&message[48]);
             
             memset(flag, 0, 3);
+            //Do some checking for replay attacks and bruteforcing
             if (memcmp(&message[0],&message[16],16) == 0)
             {
 	            memcpy(flag, WITH_BAD, 3);
@@ -345,7 +348,7 @@ int main(void)
 
             if(flag[0] == 'B' && flag[1] == 'A' && flag[2] == 'D')
             {
-                pushMessage((uint8*)"THIS", 4);
+                pushMessage((uint8*)WITH_BAD, 4);
                 memset(flag, 0, 3);
             }
             else
@@ -356,9 +359,10 @@ int main(void)
                 {
                     temptoken = strtok(NULL, ",");
                     last_bill = (uint8) atoi(temptoken);
+                    //make sure things match up.  Shouldn't trigger since bank takes care of this
                     if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) bills_left)
                     {
-                        pushMessage((uint8*)"FUCK", 4);
+                        pushMessage((uint8*)WITH_BAD, 4);
                     }
                     else
                     {
@@ -368,11 +372,15 @@ int main(void)
                             bills_left = bills_left - 1;
                             PIGGY_BANK_Write(&bills_left, BILLS_LEFT, 0x01);
                         }
+                        //Update the flag to get rid of our AES ctx.
                         PIGGY_BANK_Write((uint8*)1, (uint8*)&FLAG, 1);
+                        //Call decrpt on garbage to then get rid of AES ctx.
+                        decrypt(message);
                         PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
                     }
                 }
             }
+            //Tell the atm we are done or it was and resync
             pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
         }
     }

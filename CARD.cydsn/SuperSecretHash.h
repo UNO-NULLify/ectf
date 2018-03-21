@@ -4,7 +4,7 @@
 #include "usbserialprotocol.h"
 #include "SW1.h"
 #include "Reset_isr.h"
-
+//Takes 8 bytes in and produces 4 bytes through hashing
 void SALT_HASaltH_SALT(char* data, char* extra_data, int extra_data_len, int len){
     uint32 output;
     char empty[4] = "";

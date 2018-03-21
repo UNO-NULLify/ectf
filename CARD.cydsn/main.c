@@ -58,7 +58,7 @@ void provision()
 {
     uint8 message[36];
     unsigned char AESkey[32];
-    //Hashing shit
+    //Hashing
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
@@ -136,10 +136,10 @@ int main(void)
     /* Declare vairables here */
     uint8 i;
     uint8 message[32];
-    //AES shit
+    //AES
     struct AES_ctx ctx;
     unsigned char AESkey[32]="";
-    //Hashing shit
+    //Hashing
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8]="";
