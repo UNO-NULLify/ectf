@@ -2,19 +2,28 @@
   As a general approach, we modified the insecure example rather then starting from scratch. Details on changes to each component are below.
 
   The high-level flow of a typical transaction is the following:
-    - a transaction is initiated on the atm_interface (XMLRPC)
-    - the users card_id retrieved from the card and sent to the Bank by the atm (https/json)
-      - The bank generates a 32 byte challenge for the card to "sign"
-      - the mongoDB document for that account is updated with the challenge, and an expire time for the challenge (5 seconds)
-      - the bank sends back the challenge
-    - the card is sent the challenge by the atm
-      - the card uses its unique AES_KEY to encrypt the challenge
-      - the card sends the encrypted bytes back to the atm
-    - the encrypted response, pin and other necessary transaction data is sent to the Bank (https/json)
-    - The bank verifies the encrypted response and pin, and completes the transaction if is valid.
-      - An encrypted response is valid if it:
-        - is given within 5 seconds of when the challenge was requested.
-        - The bank can use the saved AES_KEY to decrypt the encrypted_challenge and verify it is the same as the unencrypted challenge stored in the accounts mongoDB document.
+  ```
+  - a transaction is initiated on the atm_interface (XMLRPC)
+  - the users card_id retrieved from the card and sent to the Bank by the atm (https/json)
+    - The bank generates a 32 byte challenge for the card to "sign"
+    - the mongoDB document for that account is updated with the challenge, and an expire time for the challenge (5 seconds)
+    - the bank sends back the challenge
+  - the card is sent the challenge by the atm
+    - the card uses its unique AES_KEY to encrypt the challenge
+    - the card sends the encrypted bytes back to the atm
+  - the encrypted response, pin and other necessary transaction data is sent to the Bank (https/json)
+  - The bank verifies the encrypted response and pin, and completes the transaction if is valid.
+    - An encrypted response is valid if it:
+      - is given within 5 seconds of when the challenge was requested.
+      - The bank can use the saved AES_KEY to decrypt the encrypted_challenge and verify it is the same as the unencrypted challenge stored in the accounts mongoDB document.
+```
+
+## HSM and Bank Card Changes
+1. Both the HSM and the Bank use static hardware values and SuperFastHash to generate a 32 byte AES key. This is stored on the bank at provision time.
+2. Every time a transaction is initiated, the card receives a challenge, and "signs" it with its AES key. The bank verifies this since the AES_KEY is on the bank as well.
+3. Whenever a withdraw is initiated, the bank will send a 64 byte encrypted message. This message is encrypted with the HSMs AES_KEY. The format of this message is {first_bill_to_dispense},{last_bill_to_dispense}\x00 + random bytes.
+The HSM will ensure each 16 byte block is different, and that the first n bytes of the message are the same and follow this format before proceeding to allow a transaction to occur. Additionally, in order to work correctly, the first bill to dispense must match what is saved on the HSM as the next bill to dispense.
+
 
 ## ATM Changes
 
