@@ -46,7 +46,7 @@
 static const uint8 MONEY[MAX_BILLS][BILL_LEN] = {EMPTY_BILL};
 static const uint8 BILLS_LEFT[1] = {0x00};
 static const uint8 ATM_UUID[36]={};
-static const uint8 FLAG=0;
+static const uint8 FLAG[1]={0x00};
 static const uint8 LAST_BILL[1]={0x00};
 
 
@@ -73,11 +73,7 @@ void provision()
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> parent of ea88020... HSM
     //Initialize the stack of money
     for(i = 0; i < 128; i++) {
         PIGGY_BANK_Write((uint8*)EMPTY_BILL, MONEY[i], BILL_LEN);
@@ -153,11 +149,8 @@ void decrypt(uint8 *data)
     char buf[8]="";
     char temp[4]="";
     unsigned char keyValues[8];
-<<<<<<< HEAD
+    volatile const uint8 *FLAGptr = FLAG;
 
-=======
-    
->>>>>>> parent of ea88020... HSM
     if(flag == 0)
     {
         //Grab our key values
@@ -199,7 +192,7 @@ void decrypt(uint8 *data)
         memset(AESkey, 0, 32);
         flag = 1;
     }
-    if(FLAG == 0)
+    if(*FLAGptr == 0)
     {
         AES_ECB_decrypt(&ctx, data);
     }
@@ -218,11 +211,7 @@ void dispenseBill()
     volatile const uint8* stackptr = STACKLOC;
     volatile const uint8* billptr;
     uint8 stackloc;
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> parent of ea88020... HSM
     stackloc = *stackptr;
     billptr = MONEY[stackloc];
 
@@ -243,11 +232,7 @@ int main(void)
     Reset_isr_StartEx(Reset_ISR);
 
     /* Declare vairables here */
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> parent of ea88020... HSM
     uint8 i;
     volatile const uint8* bills_leftptr= BILLS_LEFT;
     volatile const uint8* last_billptr = LAST_BILL;
@@ -280,7 +265,8 @@ int main(void)
         i = 0x01;
         PIGGY_BANK_Write(&i, PROVISIONED, 1u);
     }
-
+    bills_left = *bills_leftptr;
+    last_bill = *last_billptr;
     // Go into infinite loop
     while (1) {
         /* Place your application code here. */
@@ -307,25 +293,37 @@ int main(void)
             decrypt(&message[16]);
             decrypt(&message[32]);
             decrypt(&message[48]);
-
+            
+            memset(flag, 0, 3);
             if (memcmp(&message[0],&message[16],16) == 0)
+            {
 	            memcpy(flag, WITH_BAD, 3);
+            }
 
             if (memcmp(&message[0],&message[32],16) == 0)
-	            memcpy(flag, WITH_BAD, 3);
+            {
+                memcpy(flag, WITH_BAD, 3);
+            }
+                
 
             if (memcmp(&message[0],&message[48],16) == 0)
+            {
 	            memcpy(flag, WITH_BAD, 3);
+            }
 
             if (memcmp(&message[16],&message[32],16) == 0)
+            {    
 	            memcpy(flag, WITH_BAD, 3);
-
+            }
             if (memcmp(&message[16],&message[48],16) == 0)
+            {
 	            memcpy(flag, WITH_BAD, 3);
+            }
 
             if (memcmp(&message[32],&message[48],16) == 0)
+            {
 	            memcpy(flag, WITH_BAD, 3);
-
+            }
 
             matching += abs(memcmp(&message[0],&message[16],1));
             matching += abs(memcmp(&message[0],&message[32],1));
@@ -341,11 +339,13 @@ int main(void)
             matching += abs(memcmp(&message[3],&message[51],1));
 
             if(matching != 0)
+            {
                 memcpy(flag, WITH_BAD, 3);
+            }
 
             if(flag[0] == 'B' && flag[1] == 'A' && flag[2] == 'D')
             {
-                pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+                pushMessage((uint8*)"THIS", 4);
                 memset(flag, 0, 3);
             }
             else
@@ -358,7 +358,7 @@ int main(void)
                     last_bill = (uint8) atoi(temptoken);
                     if((uint8) atoi(temptoken) -  (uint8) atoi(token) > (uint8) bills_left)
                     {
-                        pushMessage((uint8*)WITH_BAD, strlen(WITH_BAD));
+                        pushMessage((uint8*)"FUCK", 4);
                     }
                     else
                     {
@@ -372,8 +372,8 @@ int main(void)
                         PIGGY_BANK_Write(&last_bill, LAST_BILL, 0x01);
                     }
                 }
-                pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
             }
+            pushMessage((uint8*)RECV_OK, strlen(RECV_OK));
         }
     }
 }

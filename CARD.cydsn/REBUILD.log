@@ -1,4 +1,4 @@
---------------- Rebuild Started: 03/19/2018 20:10:21 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Rebuild Started: 03/21/2018 14:10:29 Project: CARD, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\main.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\usbserialprotocol.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\aes.o"
@@ -101,4 +101,4 @@ cyelftool.exe -C C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GC
 cyelftool.exe -S C:\Users\Admin\Documents\GitHub\ectf\CARD.cydsn\CortexM0\ARM_GCC_541\Debug\CARD.elf
 Flash used: 7064 of 32768 bytes (21.6%).
 SRAM used: 2192 of 4096 bytes (53.5%). Stack: 1024 bytes. Heap: 496 bytes.
---------------- Rebuild Succeeded: 03/19/2018 20:11:17 ---------------
+--------------- Rebuild Succeeded: 03/21/2018 14:11:05 ---------------
