@@ -2,7 +2,7 @@ build: Dockerfile bank_server/*
 	docker build -t new_bank.img .
 
 start: build
-	-docker run -p 1337:1337 -p 1338:1338 -t --name new_bank.cont new_bank.img
+	-docker container start new_bank.cont || docker run -p 1337:1337 -p 1338:1338 -t --name new_bank.cont new_bank.img
 
 stop:
 	-docker container stop new_bank.cont
