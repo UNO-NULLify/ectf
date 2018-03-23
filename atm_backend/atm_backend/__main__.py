@@ -99,6 +99,7 @@ from logging import handlers
 import sys
 import SimpleXMLRPCServer
 import yaml
+import threading
 from . import ATM, ProvisionTool
 from . import Bank, Card, HSM
 
@@ -182,8 +183,16 @@ def main():
     logging.info('ATM xmlrpc interface initialized.')
     logging.info('ATM listening on %s:%s' % (config['devices']['atm']['host'], str(config['devices']['atm']['port'])))
     # Start xmlrpc server
-    server.serve_forever()
 
+    t = threading.Thread(target=server.serve_forever)
+    t.daemon = True
+    t.start()
+
+
+    hsm.initialize()
+    card.initialize()
+
+    t.join()
 
 if __name__ == '__main__':
     main()

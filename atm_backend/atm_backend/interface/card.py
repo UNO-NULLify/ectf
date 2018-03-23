@@ -12,11 +12,17 @@ class Card(Psoc):
             Default is dynamic card acquisition
         verbose (bool, optional): Whether to print debug messages
     """
+
     def __init__(self, port=None, verbose=False):
-        super(Card, self).__init__('CARD', port, verbose)
+        self.port = port
+        self.verbose = verbose
+
+    def initialize(self):
+        super(Card, self).__init__('CARD', self.port, self.verbose)
         self.GET_UUID = 1
         self.SIGNED_RESPONSE = 2
         self.GET_PUBLIC_KEY = 3
+
 
     def _send_op(self, op):
         """Sends requested operation to ATM card
